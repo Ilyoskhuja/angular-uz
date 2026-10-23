@@ -70,7 +70,10 @@ jobs:
           cp -RL "$SRC"/. "$OUT"/
           chmod -R u+w "$OUT"
           if [ "$BASE_HREF" != "/" ]; then
-            find "$OUT" -name '*.html' -exec sed -i "s|<base href=\"/\" */>|<base href=\"$BASE_HREF\" />|" {} +
+            # Match <base href="/">, <base href="/"/> and <base href="/" /> (the CLI minifies the tag).
+            find "$OUT" -name '*.html' -exec sed -i -E "s|<base href=\"/\" ?/?>|<base href=\"$BASE_HREF\">|" {} +
+            echo "rewritten: $(grep -l "<base href=\"$BASE_HREF\">" -r "$OUT" --include='*.html' | wc -l) html files"
+            grep -o '<base[^>]*>' "$OUT/index.html"
           fi
           # SPA fallback for client-side routes on GitHub Pages
           cp "$OUT/index.html" "$OUT/404.html"
