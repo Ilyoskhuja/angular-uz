@@ -1,19 +1,19 @@
-# Data fetching with resources
+# Resource'lar bilan maʼlumot olish
 
-The Angular Router integrates with Angular signals through the `resources` route configuration. This allows you to fetch data reactively using `Resource` APIs.
+Angular Router `resources` marshrut konfiguratsiyasi orqali Angular signallari bilan integratsiyalashadi. Bu `Resource` API'lari yordamida maʼlumotlarni reaktiv tarzda olish (data fetching) imkonini beradi.
 
-## Why use route resources?
+## Nega marshrut resource'laridan foydalanish kerak? {#why-use-route-resources}
 
-Route resources offer several advantages over traditional [data resolvers](/guide/routing/data-resolvers):
+Marshrut resource'lari anʼanaviy [maʼlumot resolver'lariga](/guide/routing/data-resolvers) nisbatan bir qancha afzalliklarga ega:
 
-- **Parallel execution**: Route resources across all matched routes load concurrently instead of one route at a time.
-- **Non-blocking data loading**: Use `nonBlocking()` to activate the route immediately and render loading skeletons or UI states while data loads in the background.
-- **Reload without renavigation**: Call `.reload()` on individual resources or update signal parameters to refresh data without rerunning guards or rematching routes.
-- **Reactive data fetching**: Resources integrate directly with Angular signals, automatically re-evaluating when signal dependencies change and exposing reactive status signals like `isLoading()` and `error()`.
+- **Parallel bajarilish**: Barcha mos kelgan marshrutlardagi marshrut resource'lari bir vaqtning oʻzida bitta marshrut oʻrniga parallel yuklanadi.
+- **Bloklamaydigan maʼlumot yuklash**: Marshrutni darhol faollashtirish va maʼlumot fonda yuklanayotganda yuklanish skeletlari yoki UI holatlarini render qilish uchun `nonBlocking()` dan foydalaning.
+- **Qayta navigatsiyasiz qayta yuklash**: Guard'larni qayta ishga tushirmasdan yoki marshrutlarni qayta moslashtirmasdan maʼlumotni yangilash uchun alohida resource'larda `.reload()` ni chaqiring yoki signal parametrlarini yangilang.
+- **Reaktiv maʼlumot olish**: Resource'lar Angular signallari bilan bevosita integratsiyalashadi, signal bogʻliqliklari oʻzgarganda avtomatik qayta hisoblanadi va `isLoading()` va `error()` kabi reaktiv holat signallarini taqdim etadi.
 
-## Enabling route resources
+## Marshrut resource'larini yoqish {#enabling-route-resources}
 
-To enable route resources, provide `withRouterResources()` to your router configuration:
+Marshrut resource'larini yoqish uchun router konfiguratsiyangizga `withRouterResources()` ni taqdim eting:
 
 ```ts
 import {provideRouter, withComponentInputBinding, withRouterResources} from '@angular/router';
@@ -23,11 +23,11 @@ bootstrapApplication(App, {
 });
 ```
 
-TIP: Enable `withComponentInputBinding()` so the router can bind resolved resources directly to component inputs.
+TIP: Router hal qilingan resource'larni bevosita komponent input'lariga bogʻlay olishi uchun `withComponentInputBinding()` ni yoqing.
 
-## Defining route resources
+## Marshrut resource'larini aniqlash {#defining-route-resources}
 
-You define resources on a route with the `resources` function. The function runs in an injection context, so you can use `inject()` to access services, API clients, or stores directly inside the route definition.
+Marshrutdagi resource'larni `resources` funksiyasi bilan aniqlaysiz. Funksiya inyeksiya kontekstida ishlaydi, shuning uchun servislar, API klientlari yoki store'larga bevosita marshrut taʼrifi ichida `inject()` orqali murojaat qilishingiz mumkin.
 
 ```angular-ts
 import {Component, inject, input, resource} from '@angular/core';
@@ -59,13 +59,13 @@ export class UserProfile {
 }
 ```
 
-### The `ResourceContext` object
+### `ResourceContext` obyekti {#the-resourcecontext-object}
 
-The `resources` function receives a `ResourceContext` that provides access to reactive route signals: `params`, `queryParams`, `fragment`, and `data`.
+`resources` funksiyasi reaktiv marshrut signallariga — `params`, `queryParams`, `fragment` va `data` — kirish imkonini beruvchi `ResourceContext` ni qabul qiladi.
 
-### Supported resource implementations
+### Qoʻllab-quvvatlanadigan resource implementatsiyalari {#supported-resource-implementations}
 
-The `resources` function can return any Angular `Resource` implementation, such as `resource()`, `rxResource()`, or a custom resource.
+`resources` funksiyasi `resource()`, `rxResource()` yoki maxsus resource kabi har qanday Angular `Resource` implementatsiyasini qaytarishi mumkin.
 
 ```ts
 import {Routes} from '@angular/router';
@@ -85,9 +85,9 @@ const routes: Routes = [
 ];
 ```
 
-NOTE: `rxResource` uses the `stream` property instead of `loader` to accept a function that returns an Observable.
+NOTE: `rxResource` Observable qaytaruvchi funksiyani qabul qilish uchun `loader` oʻrniga `stream` xususiyatidan foydalanadi.
 
-The `resources` function can also be `async` and return a `Promise` if you need to perform asynchronous setup or dynamic imports before configuring resources:
+Resource'larni sozlashdan oldin asinxron tayyorgarlik yoki dinamik importlarni bajarish kerak boʻlsa, `resources` funksiyasi `async` boʻlishi va `Promise` qaytarishi ham mumkin:
 
 ```ts
 resources: async (ctx) => {
@@ -103,9 +103,9 @@ resources: async (ctx) => {
 },
 ```
 
-## Fine-grained change tracking with signals
+## Signallar bilan nozik oʻzgarishlarni kuzatish {#fine-grained-change-tracking-with-signals}
 
-A resource tracks the signals that its `params` function reads. Read the exact value you need so that the resource refetches only when that value changes:
+Resource oʻzining `params` funksiyasi oʻqiydigan signallarni kuzatadi. Resource faqat oʻsha qiymat oʻzgarganda qayta yuklanishi uchun aynan kerakli qiymatni oʻqing:
 
 ```ts
 resources: (ctx) => ({
@@ -117,23 +117,23 @@ resources: (ctx) => ({
 }),
 ```
 
-A navigation that changes an unrelated query parameter, such as `?sort=desc` or `?page=2`, leaves `category` unchanged, so the resource does not refetch.
+`?sort=desc` yoki `?page=2` kabi aloqasi boʻlmagan soʻrov parametrini oʻzgartiruvchi navigatsiya `category` ni oʻzgartirmaydi, shuning uchun resource qayta yuklanmaydi.
 
-TIP: Read specific properties, such as `ctx.params()['id']`, instead of returning an entire parameters object, such as `ctx.params()`. The router creates a new object on every navigation, so returning the whole object refetches the resource even when the individual values are unchanged.
+TIP: `ctx.params()` kabi butun parametrlar obyektini qaytarish oʻrniga `ctx.params()['id']` kabi aniq xususiyatlarni oʻqing. Router har bir navigatsiyada yangi obyekt yaratadi, shuning uchun butun obyektni qaytarish alohida qiymatlar oʻzgarmagan boʻlsa ham resource'ni qayta yuklaydi.
 
-## Parallel execution
+## Parallel bajarilish {#parallel-execution}
 
-Data resolvers execute sequentially from parent route to child route. If a parent route resolver takes 200ms and a child route resolver takes 300ms, the navigation is blocked for 500ms.
+Maʼlumot resolver'lari ota marshrutdan bola marshrutga ketma-ket bajariladi. Agar ota marshrut resolver'i 200ms, bola marshrut resolver'i esa 300ms vaqt olsa, navigatsiya 500ms davomida bloklanadi.
 
-Route resources across the matched route hierarchy run concurrently, so the same navigation completes in 300ms, the time of the slowest resource.
+Mos kelgan marshrut ierarxiyasidagi marshrut resource'lari parallel ishlaydi, shuning uchun oʻsha navigatsiya 300ms — eng sekin resource vaqti — ichida yakunlanadi.
 
-## Blocking and non-blocking resources
+## Bloklaydigan va bloklamaydigan resource'lar {#blocking-and-non-blocking-resources}
 
-By default, every resource returned from `resources` is blocking: the router waits until the data is fully loaded before it activates the route and the component.
+Sukut boʻyicha `resources` dan qaytarilgan har bir resource bloklaydigan hisoblanadi: router marshrut va komponentni faollashtirishdan oldin maʼlumot toʻliq yuklanishini kutadi.
 
-For a blocking resource, the router binds the resolved value to the component input, so the input type is `T` instead of `Resource<T>`. The component never observes a `loading` state because the router blocks navigation until the resource loads, and it never observes an `error` state because the router cancels the navigation when the resource errors.
+Bloklaydigan resource uchun router hal qilingan qiymatni komponent input'iga bogʻlaydi, shuning uchun input turi `Resource<T>` oʻrniga `T` boʻladi. Komponent hech qachon `loading` holatini kuzatmaydi, chunki router resource yuklanishigacha navigatsiyani bloklaydi, va hech qachon `error` holatini kuzatmaydi, chunki resource'da xato yuz berganda router navigatsiyani bekor qiladi.
 
-To handle loading states in the UI instead, wrap the resource in `nonBlocking()`. The router activates the component immediately and binds the full `Resource<T>` object to the component input, which gives you access to `isLoading()`, `error()`, and the other resource signals.
+Buning oʻrniga yuklanish holatlarini UI'da boshqarish uchun resource'ni `nonBlocking()` ga oʻrang. Router komponentni darhol faollashtiradi va toʻliq `Resource<T>` obyektini komponent input'iga bogʻlaydi; bu sizga `isLoading()`, `error()` va boshqa resource signallariga kirish imkonini beradi.
 
 ```angular-ts
 import {Component, input, Resource, resource} from '@angular/core';
@@ -169,11 +169,11 @@ export class Reports {
 }
 ```
 
-NOTE: If a blocking resource errors, the router cancels the navigation and emits a `NavigationError` event. A resource wrapped in `nonBlocking()` completes the navigation and exposes the failure through its `error()` signal.
+NOTE: Agar bloklaydigan resource'da xato yuz bersa, router navigatsiyani bekor qiladi va `NavigationError` hodisasini yuboradi. `nonBlocking()` ga oʻralgan resource navigatsiyani yakunlaydi va xatoni oʻzining `error()` signali orqali taqdim etadi.
 
-### Redirecting from a resource
+### Resource'dan qayta yoʻnaltirish {#redirecting-from-a-resource}
 
-If a blocking resource needs to redirect the user (for example, if an item is not found), throw a `RedirectCommand` inside the resource loader. The router cancels the current navigation and redirects to the specified URL:
+Agar bloklaydigan resource foydalanuvchini qayta yoʻnaltirishi kerak boʻlsa (masalan, element topilmaganda), resource loader'i ichida `RedirectCommand` ni throw qiling. Router joriy navigatsiyani bekor qiladi va koʻrsatilgan URL'ga qayta yoʻnaltiradi:
 
 ```ts
 import {inject, resource} from '@angular/core';
@@ -203,16 +203,16 @@ const routes: Routes = [
 ];
 ```
 
-## Reloading resources without renavigation
+## Resource'larni qayta navigatsiyasiz qayta yuklash {#reloading-resources-without-renavigation}
 
-With data resolvers, refetching data requires a route navigation (for example, navigating with `onSameUrlNavigation: 'reload'`), which rematches routes and reruns guards and resolvers.
+Maʼlumot resolver'lari bilan maʼlumotni qayta olish marshrut navigatsiyasini talab qiladi (masalan, `onSameUrlNavigation: 'reload'` bilan navigatsiya qilish), bu esa marshrutlarni qayta moslashtiradi va guard'lar hamda resolver'larni qayta ishga tushiradi.
 
-Route resources support two ways to refresh data in place:
+Marshrut resource'lari maʼlumotni joyida yangilashning ikki usulini qoʻllab-quvvatlaydi:
 
-1. **Programmatic reload**: Call `.reload()` on the `Resource` instance.
-2. **Reactive reload**: Update a signal that the resource's `params` function reads, such as an application filter or state signal, which reruns the loader.
+1. **Dasturiy qayta yuklash**: `Resource` nusxasida `.reload()` ni chaqiring.
+2. **Reaktiv qayta yuklash**: Resource'ning `params` funksiyasi oʻqiydigan signalni, masalan, ilova filtri yoki holat signalini yangilang; bu loader'ni qayta ishga tushiradi.
 
-Because the router binds only the value of a blocking resource to a component input, read the `Resource` instance from `ActivatedRoute` or `ActivatedRouteSnapshot` when you need to call `.reload()` or inspect status signals:
+Router bloklaydigan resource'ning faqat qiymatini komponent input'iga bogʻlagani uchun, `.reload()` ni chaqirish yoki holat signallarini koʻrish kerak boʻlganda `Resource` nusxasini `ActivatedRoute` yoki `ActivatedRouteSnapshot` dan oʻqing:
 
 ```angular-ts
 import {Component, inject, input} from '@angular/core';
@@ -235,18 +235,18 @@ export class UserProfile {
 }
 ```
 
-## Transitional states during pending navigations
+## Kutilayotgan navigatsiyalar davomidagi oʻtish holatlari {#transitional-states-during-pending-navigations}
 
-While a navigation is pending, the router freezes the resources that it exposes on `ActivatedRoute`, which masks intermediate `loading` and `reloading` states.
+Navigatsiya kutilayotgan paytda router `ActivatedRoute` da taqdim etadigan resource'larni muzlatib qoʻyadi, bu esa oraliq `loading` va `reloading` holatlarini yashiradi.
 
-If you navigate from `/user/1` to `/user/2` and the router reuses the `UserProfile` component, the component keeps rendering the data from `/user/1` until `/user/2` resolves. The router then unfreezes the resources and the UI transitions directly to the new data with no loading flash.
+Agar `/user/1` dan `/user/2` ga navigatsiya qilsangiz va router `UserProfile` komponentini qayta ishlatsa, komponent `/user/2` hal qilinmaguncha `/user/1` maʼlumotlarini render qilishda davom etadi. Keyin router resource'larni muzlatishdan chiqaradi va UI yuklanish miltillashisiz bevosita yangi maʼlumotlarga oʻtadi.
 
-The router exposes these resources as read-only, even when the `resources` function returns a writable resource such as `resource()`. You can read the resource signals and call `reload()`, but not `set()` or `update()`. A `reload()` call during an active navigation or during rollback recovery returns `false` so that it cannot interrupt the router's transition tracking.
+Router bu resource'larni faqat oʻqish uchun (read-only) taqdim etadi, hatto `resources` funksiyasi `resource()` kabi yozish mumkin boʻlgan resource qaytarsa ham. Resource signallarini oʻqishingiz va `reload()` ni chaqirishingiz mumkin, lekin `set()` yoki `update()` ni emas. Faol navigatsiya yoki orqaga qaytarish (rollback) tiklanishi davomida chaqirilgan `reload()` router oʻtishini kuzatishga xalaqit bera olmasligi uchun `false` qaytaradi.
 
-### Rollback recovery on cancellation
+### Bekor qilishda orqaga qaytarish orqali tiklanish {#rollback-recovery-on-cancellation}
 
-If a navigation is cancelled (for example, by a guard), the router reverts the state tree to the previous state. This reversion can cause the resource's signal dependencies, such as route parameters, to revert to their previous values.
+Agar navigatsiya bekor qilinsa (masalan, guard tomonidan), router holat daraxtini oldingi holatga qaytaradi. Bu qaytarish resource'ning signal bogʻliqliklari, masalan, marshrut parametrlarining oldingi qiymatlariga qaytishiga sabab boʻlishi mumkin.
 
-Because the parameters changed back, the resource might automatically trigger a new load to fetch data for the old parameters. To prevent flashing a loading state for data that was already visible, the router retains the previous resource snapshot in the UI until the resource has settled in the reverted state.
+Parametrlar orqaga qaytgani uchun resource eski parametrlar uchun maʼlumot olish maqsadida avtomatik yangi yuklashni ishga tushirishi mumkin. Allaqachon koʻrinib turgan maʼlumot uchun yuklanish holati miltillashining oldini olish maqsadida router resource qaytarilgan holatda barqarorlashmaguncha oldingi resource suratini (snapshot) UI'da saqlab qoladi.
 
-TIP: Forward the `abortSignal` provided by the resource loader to your asynchronous calls (like `fetch`). When the router rolls back parameters or supersedes navigations, the pending request is cleanly aborted: `loader: ({params: id, abortSignal}) => fetchUser(id, {signal: abortSignal})`.
+TIP: Resource loader'i taqdim etgan `abortSignal` ni asinxron chaqiruvlaringizga (masalan, `fetch`) uzating. Router parametrlarni orqaga qaytarganda yoki navigatsiyalarni almashtirganda kutilayotgan soʻrov toza bekor qilinadi: `loader: ({params: id, abortSignal}) => fetchUser(id, {signal: abortSignal})`.

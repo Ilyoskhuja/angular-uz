@@ -1,25 +1,25 @@
-# Other common Routing Tasks
+# Boshqa keng tarqalgan marshrutlash vazifalari
 
-This guide covers some other common tasks associated with using Angular router in your application.
+Bu qoʻllanma ilovangizda Angular router'dan foydalanish bilan bogʻliq boshqa baʼzi keng tarqalgan vazifalarni qamrab oladi.
 
-## Getting route information
+## Marshrut maʼlumotlarini olish {#getting-route-information}
 
-Often, as a user navigates your application, you want to pass information from one component to another.
-For example, consider an application that displays a shopping list of grocery items.
-Each item in the list has a unique `id`.
-To edit an item, users click an Edit button, which opens an `EditGroceryItem` component.
-You want that component to retrieve the `id` for the grocery item so it can display the right information to the user.
+Koʻpincha foydalanuvchi ilovangiz boʻylab navigatsiya qilganda maʼlumotni bir komponentdan boshqasiga uzatishni xohlaysiz.
+Masalan, oziq-ovqat mahsulotlarining xarid roʻyxatini koʻrsatadigan ilovani koʻrib chiqaylik.
+Roʻyxatdagi har bir mahsulot noyob `id` ga ega.
+Mahsulotni tahrirlash uchun foydalanuvchilar Edit tugmasini bosadi, bu `EditGroceryItem` komponentini ochadi.
+Bu komponent foydalanuvchiga toʻgʻri maʼlumotni koʻrsata olishi uchun mahsulotning `id` sini olishini xohlaysiz.
 
-Use a route to pass this type of information to your application components.
-To do so, you use the `withComponentInputBinding` feature with `provideRouter` or the `bindToComponentInputs` option of `RouterModule.forRoot`.
+Bunday maʼlumotni ilova komponentlaringizga uzatish uchun marshrutdan foydalaning.
+Buning uchun `provideRouter` bilan `withComponentInputBinding` imkoniyatidan yoki `RouterModule.forRoot` ning `bindToComponentInputs` opsiyasidan foydalanasiz.
 
-To get information from a route:
+Marshrutdan maʼlumot olish uchun:
 
 <docs-workflow>
 
-<docs-step title="Add `withComponentInputBinding`">
+<docs-step title="`withComponentInputBinding` ni qoʻshing">
 
-Add the `withComponentInputBinding` feature to the `provideRouter` method.
+`provideRouter` metodiga `withComponentInputBinding` imkoniyatini qoʻshing.
 
 ```ts
 providers: [provideRouter(appRoutes, withComponentInputBinding())];
@@ -27,9 +27,9 @@ providers: [provideRouter(appRoutes, withComponentInputBinding())];
 
 </docs-step>
 
-<docs-step title="Add an `input` to the component">
+<docs-step title="Komponentga `input` qoʻshing">
 
-Update the component to have an `input()` property matching the name of the parameter.
+Komponentni parametr nomiga mos keladigan `input()` xususiyatiga ega boʻladigan tarzda yangilang.
 
 ```ts
 id = input.required<string>();
@@ -37,12 +37,12 @@ hero = computed(() => this.service.getHero(this.id()));
 ```
 
 </docs-step>
-<docs-step title="Optional: Use a default value">
-The router assigns values to all inputs based on the current route when `withComponentInputBinding` is enabled.
-The router assigns `undefined` if no route data matches the input key, such as when an optional query parameter is missing.
-You should include `undefined` in the `input`'s type when there's a possibility that an input might not be matched by the route.
+<docs-step title="Ixtiyoriy: Sukut boʻyicha qiymatdan foydalaning">
+`withComponentInputBinding` yoqilganda router joriy marshrutga asoslanib barcha input'larga qiymat tayinlaydi.
+Agar input kalitiga mos marshrut maʼlumoti boʻlmasa, masalan, ixtiyoriy soʻrov parametri yoʻq boʻlsa, router `undefined` tayinlaydi.
+Input marshrutga mos kelmasligi ehtimoli boʻlganda `input` turiga `undefined` ni kiritishingiz kerak.
 
-Provide a default value by either using the `transform` option on the input or managing a local state with a `linkedSignal`.
+Sukut boʻyicha qiymatni input'dagi `transform` opsiyasidan foydalanib yoki `linkedSignal` bilan lokal holatni boshqarib taqdim eting.
 
 ```ts
 id = input.required({
@@ -56,38 +56,38 @@ internalId = linkedSignal(() => this.id() ?? getDefaultId());
 </docs-step>
 </docs-workflow>
 
-NOTE: You can bind all route data with key-value pairs to component inputs: route resources, static or resolved route data, path parameters, matrix parameters, and query parameters.
+NOTE: Kalit-qiymat juftliklariga ega barcha marshrut maʼlumotlarini komponent input'lariga bogʻlashingiz mumkin: marshrut resource'lari, statik yoki hal qilingan marshrut maʼlumotlari, yoʻl parametrlari, matritsa parametrlari va soʻrov parametrlari.
 
-### Input binding priority
+### Input bogʻlash ustuvorligi {#input-binding-priority}
 
-When multiple route sources define identical keys, the router resolves collisions in the following priority order (from highest to lowest):
+Bir nechta marshrut manbalari bir xil kalitlarni aniqlasa, router toʻqnashuvlarni quyidagi ustuvorlik tartibida (eng yuqoridan eng pastga) hal qiladi:
 
-1. **Route resources**: Values defined in the route's `resources` map. Blocking resources bind their unwrapped value (`resource.value()`), while non-blocking resources bind the `Resource` instance.
-2. **Route data and resolvers**: Static data defined in `data` or values resolved via `resolve`.
-3. **Path parameters and matrix parameters**: Parameters from the URL path (such as `:id`) and matrix parameters.
-4. **Query parameters**: Parameters from the query string (such as `?id=123`).
+1. **Marshrut resource'lari**: Marshrutning `resources` xaritasida aniqlangan qiymatlar. Bloklaydigan resource'lar oʻzining ochilgan qiymatini (`resource.value()`) bogʻlaydi, bloklamaydigan resource'lar esa `Resource` nusxasini bogʻlaydi.
+2. **Marshrut maʼlumotlari va resolver'lar**: `data` da aniqlangan statik maʼlumotlar yoki `resolve` orqali hal qilingan qiymatlar.
+3. **Yoʻl parametrlari va matritsa parametrlari**: URL yoʻlidagi parametrlar (masalan, `:id`) va matritsa parametrlari.
+4. **Soʻrov parametrlari**: Soʻrov satridagi parametrlar (masalan, `?id=123`).
 
-For example, if a route has both a path parameter `:id` and a query parameter `?id=...`, the path parameter value is bound to the component's `id` input. If the route also defines a resource named `id`, the resource value takes precedence over both.
+Masalan, marshrutda `:id` yoʻl parametri ham, `?id=...` soʻrov parametri ham boʻlsa, komponentning `id` input'iga yoʻl parametri qiymati bogʻlanadi. Agar marshrut `id` nomli resource'ni ham aniqlasa, resource qiymati ikkalasidan ham ustun turadi.
 
-### Disable query parameter binding
+### Soʻrov parametrlarini bogʻlashni oʻchirish {#disable-query-parameter-binding}
 
-Use `ComponentInputBindingOptions` to disable query parameter binding if you manage query parameters separately:
+Soʻrov parametrlarini alohida boshqarsangiz, soʻrov parametrlarini bogʻlashni oʻchirish uchun `ComponentInputBindingOptions` dan foydalaning:
 
 ```ts
 provideRouter(appRoutes, withComponentInputBinding({queryParams: false}));
 ```
 
-### Configure behavior for inputs not available in router data
+### Router maʼlumotlarida mavjud boʻlmagan input'lar uchun xatti-harakatni sozlash {#configure-behavior-for-inputs-not-available-in-router-data}
 
-By default, the router sets an input to `undefined` if it was not available in the router data during a navigation. This ensures that stale data is not retained.
+Sukut boʻyicha, navigatsiya davomida input router maʼlumotlarida mavjud boʻlmasa, router uni `undefined` ga oʻrnatadi. Bu eskirgan maʼlumotlarning saqlanib qolmasligini taʼminlaydi.
 
-If you want to avoid setting `undefined` for inputs that have _never_ been available in the router data for the active component instance, you can set the `unmatchedInputBehavior` option to `'undefinedIfStale'`:
+Faol komponent nusxasi uchun router maʼlumotlarida _hech qachon_ mavjud boʻlmagan input'larga `undefined` oʻrnatilishidan qochmoqchi boʻlsangiz, `unmatchedInputBehavior` opsiyasini `'undefinedIfStale'` ga oʻrnatishingiz mumkin:
 
 ```ts
 provideRouter(appRoutes, withComponentInputBinding({unmatchedInputBehavior: 'undefinedIfStale'}));
 ```
 
-When you combine `unmatchedInputBehavior: 'undefinedIfStale'` with `queryParams: false`, inputs retain their initial values unless they are explicitly provided by the router. The exception is matrix parameters: if a matrix parameter is provided in one navigation and removed in a subsequent one, the router will set the input to `undefined` to avoid retaining stale data.
+`unmatchedInputBehavior: 'undefinedIfStale'` ni `queryParams: false` bilan birlashtirganingizda, input'lar router tomonidan aniq taqdim etilmaguncha oʻzining boshlangʻich qiymatlarini saqlab qoladi. Istisno — matritsa parametrlari: agar matritsa parametri bir navigatsiyada taqdim etilib, keyingisida olib tashlansa, router eskirgan maʼlumotlarning saqlanib qolishidan qochish uchun input'ni `undefined` ga oʻrnatadi.
 
 ```ts
 provideRouter(
@@ -99,21 +99,21 @@ provideRouter(
 );
 ```
 
-### Inherit parent route data
+### Ota marshrut maʼlumotlarini meros qilib olish {#inherit-parent-route-data}
 
-By default, child routes inherit parameters and data from parent routes (equivalent to `paramsInheritanceStrategy: 'always'`). This means you can access parent route info directly in child components.
+Sukut boʻyicha bola marshrutlar ota marshrutlardan parametrlar va maʼlumotlarni meros qilib oladi (`paramsInheritanceStrategy: 'always'` ga teng). Bu bola komponentlarda ota marshrut maʼlumotlariga bevosita murojaat qilishingiz mumkinligini anglatadi.
 
-If you need to restore the legacy behavior where parameters were only inherited from empty path routes, you can set `paramsInheritanceStrategy` to `'emptyOnly'`:
+Parametrlar faqat boʻsh yoʻlli marshrutlardan meros qilib olinadigan eski xatti-harakatni tiklash kerak boʻlsa, `paramsInheritanceStrategy` ni `'emptyOnly'` ga oʻrnatishingiz mumkin:
 
 ```ts
 provideRouter(routes, withRouterConfig({paramsInheritanceStrategy: 'emptyOnly'}));
 ```
 
-See [router configuration options](guide/routing/customizing-route-behavior#router-configuration-options) for details on other available settings.
+Boshqa mavjud sozlamalar haqida batafsil maʼlumot uchun [router konfiguratsiya opsiyalariga](guide/routing/customizing-route-behavior#router-configuration-options) qarang.
 
-## Displaying a 404 page
+## 404 sahifasini koʻrsatish {#displaying-a-404-page}
 
-To display a 404 page, set up a [wildcard route](guide/routing/define-routes#wildcards) with the `component` property set to the component you'd like to use for your 404 page as follows:
+404 sahifasini koʻrsatish uchun `component` xususiyati 404 sahifangiz uchun ishlatmoqchi boʻlgan komponentga oʻrnatilgan [wildcard marshrutini](guide/routing/define-routes#wildcards) quyidagicha sozlang:
 
 ```ts
 const routes: Routes = [
@@ -123,23 +123,23 @@ const routes: Routes = [
 ];
 ```
 
-The last route with the `path` of `**` is a wildcard route.
-The router selects this route if the requested URL doesn't match any of the paths earlier in the list and sends the user to the `PageNotFound`.
+`path` qiymati `**` boʻlgan oxirgi marshrut — wildcard marshrut.
+Soʻralgan URL roʻyxatdagi oldingi yoʻllarning hech biriga mos kelmasa, router shu marshrutni tanlaydi va foydalanuvchini `PageNotFound` ga yuboradi.
 
-## Link parameters array
+## Havola parametrlari massivi {#link-parameters-array}
 
-A link parameters array holds the following ingredients for router navigation:
+Havola parametrlari massivi router navigatsiyasi uchun quyidagi tarkibiy qismlarni oʻz ichiga oladi:
 
-- The path of the route to the destination component
-- Required and optional route parameters that go into the route URL
+- Maqsad komponentga olib boradigan marshrut yoʻli
+- Marshrut URL'iga kiradigan majburiy va ixtiyoriy marshrut parametrlari
 
-Bind the `RouterLink` directive to such an array like this:
+`RouterLink` direktivasini bunday massivga quyidagicha bogʻlang:
 
 ```angular-html
 <a [routerLink]="['/heroes']">Heroes</a>
 ```
 
-The following is a two-element array when specifying a route parameter:
+Quyida marshrut parametri koʻrsatilgan ikki elementli massiv:
 
 ```angular-html
 <a [routerLink]="['/hero', hero.id]">
@@ -148,44 +148,44 @@ The following is a two-element array when specifying a route parameter:
 </a>
 ```
 
-Provide optional route parameters in an object, as in `{ foo: 'foo' }`:
+Ixtiyoriy marshrut parametrlarini `{ foo: 'foo' }` kabi obyektda taqdim eting:
 
 ```angular-html
 <a [routerLink]="['/crisis-center', {foo: 'foo'}]">Crisis Center</a>
 ```
 
-This syntax passes matrix parameters, which are optional parameters associated with a specific URL segment. Learn more about [matrix parameters](/guide/routing/read-route-state#matrix-parameters).
+Bu sintaksis matritsa parametrlarini uzatadi — ular maʼlum URL segmentiga bogʻlangan ixtiyoriy parametrlardir. [Matritsa parametrlari](/guide/routing/read-route-state#matrix-parameters) haqida koʻproq bilib oling.
 
-These three examples cover the needs of an application with one level of routing.
-However, with a child router, such as in the crisis center, you create new link array possibilities.
+Bu uchta misol bir darajali marshrutlashga ega ilovaning ehtiyojlarini qoplaydi.
+Biroq, krizis markazidagi kabi bola router bilan yangi havola massivi imkoniyatlarini yaratasiz.
 
-The following minimal `RouterLink` example builds upon a specified default child route for the crisis center.
+Quyidagi minimal `RouterLink` misoli krizis markazi uchun koʻrsatilgan sukut boʻyicha bola marshrutga asoslanadi.
 
 ```angular-html
 <a [routerLink]="['/crisis-center']">Crisis Center</a>
 ```
 
-Review the following:
+Quyidagilarni koʻrib chiqing:
 
-- The first item in the array identifies the parent route \(`/crisis-center`\)
-- There are no parameters for this parent route
-- There is no default for the child route so you need to pick one
-- You're navigating to the `CrisisList`, whose route path is `/`, but you don't need to explicitly add the slash
+- Massivdagi birinchi element ota marshrutni aniqlaydi \(`/crisis-center`\)
+- Bu ota marshrut uchun parametrlar yoʻq
+- Bola marshrut uchun sukut boʻyicha qiymat yoʻq, shuning uchun birini tanlashingiz kerak
+- Marshrut yoʻli `/` boʻlgan `CrisisList` ga navigatsiya qilyapsiz, lekin qiya chiziqni aniq qoʻshishingiz shart emas
 
-Consider the following router link that navigates from the root of the application down to the Dragon Crisis:
+Ilovaning ildizidan Dragon Crisis'gacha navigatsiya qiladigan quyidagi router havolasini koʻrib chiqing:
 
 ```angular-html
 <a [routerLink]="['/crisis-center', 1]">Dragon Crisis</a>
 ```
 
-- The first item in the array identifies the parent route \(`/crisis-center`\)
-- There are no parameters for this parent route
-- The second item identifies the child route details about a particular crisis \(`/:id`\)
-- The details child route requires an `id` route parameter
-- You added the `id` of the Dragon Crisis as the second item in the array \(`1`\)
-- The resulting path is `/crisis-center/1`
+- Massivdagi birinchi element ota marshrutni aniqlaydi \(`/crisis-center`\)
+- Bu ota marshrut uchun parametrlar yoʻq
+- Ikkinchi element maʼlum krizis tafsilotlari uchun bola marshrutni aniqlaydi \(`/:id`\)
+- Tafsilotlar bola marshruti `id` marshrut parametrini talab qiladi
+- Dragon Crisis'ning `id` sini massivning ikkinchi elementi sifatida qoʻshdingiz \(`1`\)
+- Natijaviy yoʻl — `/crisis-center/1`
 
-You could also redefine the `App` template with Crisis Center routes exclusively:
+`App` shablonini faqat Crisis Center marshrutlari bilan qayta aniqlashingiz ham mumkin:
 
 ```angular-ts
 @Component({
@@ -202,38 +202,38 @@ You could also redefine the `App` template with Crisis Center routes exclusively
 export class App {}
 ```
 
-In summary, you can write applications with one, two or more levels of routing.
-The link parameters array affords the flexibility to represent any routing depth and any legal sequence of route paths, \(required\) router parameters, and \(optional\) route parameter objects.
+Xulosa qilib aytganda, bir, ikki yoki undan koʻp darajali marshrutlashga ega ilovalar yozishingiz mumkin.
+Havola parametrlari massivi har qanday marshrutlash chuqurligini va marshrut yoʻllari, \(majburiy\) router parametrlari va \(ixtiyoriy\) marshrut parametrlari obyektlarining har qanday ruxsat etilgan ketma-ketligini ifodalash uchun moslashuvchanlik beradi.
 
-## `LocationStrategy` and browser URL styles
+## `LocationStrategy` va brauzer URL uslublari {#locationstrategy-and-browser-url-styles}
 
-When the router navigates to a new component view, it updates the browser's location and history with a URL for that view.
+Router yangi komponent koʻrinishiga (view) navigatsiya qilganda, u brauzerning joylashuvi (location) va tarixini (history) oʻsha koʻrinish uchun URL bilan yangilaydi.
 
-Modern HTML5 browsers support [history.pushState](https://developer.mozilla.org/docs/Web/API/History_API/Working_with_the_History_API#adding_and_modifying_history_entries 'HTML5 browser history push-state'), a technique that changes a browser's location and history without triggering a server page request.
-The router can compose a "natural" URL that is indistinguishable from one that would otherwise require a page load.
+Zamonaviy HTML5 brauzerlari [history.pushState](https://developer.mozilla.org/docs/Web/API/History_API/Working_with_the_History_API#adding_and_modifying_history_entries 'HTML5 browser history push-state') ni qoʻllab-quvvatlaydi — bu serverga sahifa soʻrovini yubormasdan brauzerning joylashuvi va tarixini oʻzgartiradigan usul.
+Router boshqa holatda sahifani yuklashni talab qiladigan URL'dan farqlanmaydigan "tabiiy" URL tuzishi mumkin.
 
-Here's the Crisis Center URL in this "HTML5 pushState" style:
+Mana, Crisis Center URL'i shu "HTML5 pushState" uslubida:
 
 ```text
 localhost:3002/crisis-center
 ```
 
-Older browsers send page requests to the server when the location URL changes unless the change occurs after a "#" \(called the "hash"\).
-Routers can take advantage of this exception by composing in-application route URLs with hashes.
-Here's a "hash URL" that routes to the Crisis Center.
+Eski brauzerlar joylashuv URL'i oʻzgarganda, agar oʻzgarish "#" \("hash" deb ataladi\) dan keyin yuz bermasa, serverga sahifa soʻrovlarini yuboradi.
+Router'lar ilova ichidagi marshrut URL'larini hash'lar bilan tuzib, bu istisnodan foydalanishi mumkin.
+Mana, Crisis Center'ga marshrutlaydigan "hash URL":
 
 ```text
 localhost:3002/src/#/crisis-center
 ```
 
-The router supports both styles with two `LocationStrategy` providers:
+Router ikkala uslubni ham ikkita `LocationStrategy` provider'i bilan qoʻllab-quvvatlaydi:
 
-| Providers              | Details                              |
-| :--------------------- | :----------------------------------- |
-| `PathLocationStrategy` | The default "HTML5 pushState" style. |
-| `HashLocationStrategy` | The "hash URL" style.                |
+| Provider'lar           | Tafsilotlar                                   |
+| :--------------------- | :-------------------------------------------- |
+| `PathLocationStrategy` | Sukut boʻyicha "HTML5 pushState" uslubi.      |
+| `HashLocationStrategy` | "Hash URL" uslubi.                            |
 
-The `RouterModule.forRoot()` function sets the `LocationStrategy` to the `PathLocationStrategy`, which makes it the default strategy.
-You also have the option of switching to the `HashLocationStrategy` with an override during the bootstrapping process.
+`RouterModule.forRoot()` funksiyasi `LocationStrategy` ni `PathLocationStrategy` ga oʻrnatadi, bu uni sukut boʻyicha strategiya qiladi.
+Shuningdek, bootstrap jarayonida qayta aniqlash (override) orqali `HashLocationStrategy` ga oʻtish imkoniyatiga ham egasiz.
 
-HELPFUL: For more information on providers and the bootstrap process, see [Dependency Injection](guide/di/defining-dependency-providers).
+HELPFUL: Provider'lar va bootstrap jarayoni haqida koʻproq maʼlumot uchun [Bogʻliqliklarni inyeksiya qilish](guide/di/defining-dependency-providers) boʻlimiga qarang.

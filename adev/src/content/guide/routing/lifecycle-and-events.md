@@ -1,34 +1,34 @@
-# Router Lifecycle and Events
+# Router hayot sikli va hodisalari
 
-Angular Router provides a comprehensive set of lifecycle hooks and events that allow you to respond to navigation changes and execute custom logic during the routing process.
+Angular Router navigatsiya oʻzgarishlariga javob berish va marshrutlash jarayonida maxsus mantiqni bajarish imkonini beruvchi hayot sikli hook'lari va hodisalarining toʻliq toʻplamini taqdim etadi.
 
-## Common router events
+## Keng tarqalgan router hodisalari {#common-router-events}
 
-The Angular Router emits navigation events that you can subscribe to in order to track the navigation lifecycle. These events are available through the `Router.events` observable. This section covers common routing lifecycle events for navigation and error tracking (in chronological order).
+Angular Router navigatsiya hayot siklini kuzatish uchun obuna boʻlishingiz mumkin boʻlgan navigatsiya hodisalarini yuboradi. Bu hodisalar `Router.events` observable'i orqali mavjud. Bu boʻlim navigatsiya va xatolarni kuzatish uchun keng tarqalgan marshrutlash hayot sikli hodisalarini (xronologik tartibda) qamrab oladi.
 
-| Events                                              | Description                                                                                              |
+| Hodisalar                                           | Tavsif                                                                                                   |
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [`NavigationStart`](api/router/NavigationStart)     | Occurs when navigation begins and contains the requested URL.                                            |
-| [`RoutesRecognized`](api/router/RoutesRecognized)   | Occurs after the router determines which route matches the URL and contains the route state information. |
-| [`GuardsCheckStart`](api/router/GuardsCheckStart)   | Begins the route guard phase. The router evaluates route guards like `canActivate` and `canDeactivate`.  |
-| [`GuardsCheckEnd`](api/router/GuardsCheckEnd)       | Signals completion of guard evaluation. Contains the result (allowed/denied).                            |
-| [`ResolveStart`](api/router/ResolveStart)           | Begins the data resolution phase. Route resolvers and resources start fetching data.                     |
-| [`ResolveEnd`](api/router/ResolveEnd)               | Data resolution completes. All required data and blocking resources become available.                    |
-| [`NavigationEnd`](api/router/NavigationEnd)         | Final event when navigation completes successfully. The router updates the URL.                          |
-| [`NavigationSkipped`](api/router/NavigationSkipped) | Occurs when the router skips navigation (e.g., same URL navigation).                                     |
+| [`NavigationStart`](api/router/NavigationStart)     | Navigatsiya boshlanganda yuz beradi va soʻralgan URL'ni oʻz ichiga oladi.                                |
+| [`RoutesRecognized`](api/router/RoutesRecognized)   | Router URL'ga qaysi marshrut mos kelishini aniqlagandan keyin yuz beradi va marshrut holati maʼlumotini oʻz ichiga oladi. |
+| [`GuardsCheckStart`](api/router/GuardsCheckStart)   | Marshrut guard'lari bosqichini boshlaydi. Router `canActivate` va `canDeactivate` kabi marshrut guard'larini baholaydi. |
+| [`GuardsCheckEnd`](api/router/GuardsCheckEnd)       | Guard'larni baholash yakunlanganini bildiradi. Natijani (ruxsat berilgan/rad etilgan) oʻz ichiga oladi.  |
+| [`ResolveStart`](api/router/ResolveStart)           | Maʼlumotlarni hal qilish bosqichini boshlaydi. Marshrut resolver'lari va resource'lari maʼlumot olishni boshlaydi. |
+| [`ResolveEnd`](api/router/ResolveEnd)               | Maʼlumotlarni hal qilish yakunlanadi. Barcha kerakli maʼlumotlar va bloklaydigan resource'lar mavjud boʻladi. |
+| [`NavigationEnd`](api/router/NavigationEnd)         | Navigatsiya muvaffaqiyatli yakunlanganda yuz beradigan yakuniy hodisa. Router URL'ni yangilaydi.         |
+| [`NavigationSkipped`](api/router/NavigationSkipped) | Router navigatsiyani oʻtkazib yuborganda yuz beradi (masalan, bir xil URL'ga navigatsiya).               |
 
-The following are common error events:
+Quyidagilar keng tarqalgan xato hodisalari:
 
-| Event                                             | Description                                                                                                    |
+| Hodisa                                            | Tavsif                                                                                                         |
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [`NavigationCancel`](api/router/NavigationCancel) | Occurs when the router cancels navigation. Often due to a guard returning false.                               |
-| [`NavigationError`](api/router/NavigationError)   | Occurs when navigation fails. Could be due to invalid routes, resolver errors, or rejected blocking resources. |
+| [`NavigationCancel`](api/router/NavigationCancel) | Router navigatsiyani bekor qilganda yuz beradi. Koʻpincha guard false qaytargani sababli.                      |
+| [`NavigationError`](api/router/NavigationError)   | Navigatsiya muvaffaqiyatsiz boʻlganda yuz beradi. Notoʻgʻri marshrutlar, resolver xatolari yoki rad etilgan bloklaydigan resource'lar sabab boʻlishi mumkin. |
 
-For a list of all lifecycle events, check out the [complete table of this guide](#all-router-events).
+Barcha hayot sikli hodisalari roʻyxati uchun [bu qoʻllanmaning toʻliq jadvaliga](#all-router-events) qarang.
 
-## How to subscribe to router events
+## Router hodisalariga qanday obuna boʻlish {#how-to-subscribe-to-router-events}
 
-When you want to run code during specific navigation lifecycle events, you can do so by subscribing to the `router.events` and checking the instance of the event:
+Navigatsiya hayot siklining maʼlum hodisalari davomida kod bajarmoqchi boʻlsangiz, bunga `router.events` ga obuna boʻlib va hodisaning nusxasini (instance) tekshirib erishishingiz mumkin:
 
 ```ts
 // Example of subscribing to router events
@@ -56,13 +56,13 @@ export class RouterEvents {
 }
 ```
 
-NOTE: The [`Event`](api/router/Event) type from `@angular/router` is named the same as the regular global [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event) type, but it is different from the [`RouterEvent`](api/router/RouterEvent) type.
+NOTE: `@angular/router` dagi [`Event`](api/router/Event) turi odatiy global [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event) turi bilan bir xil nomlangan, lekin u [`RouterEvent`](api/router/RouterEvent) turidan farq qiladi.
 
-## How to debug routing events
+## Marshrutlash hodisalarini qanday tuzatish (debug) {#how-to-debug-routing-events}
 
-Debugging router navigation issues can be challenging without visibility into the event sequence. Angular provides a built-in debugging feature that logs all router events to the console, helping you understand the navigation flow and identify where issues occur.
+Hodisalar ketma-ketligini koʻrmasdan router navigatsiyasi muammolarini tuzatish (debug) qiyin boʻlishi mumkin. Angular barcha router hodisalarini konsolga yozib boradigan oʻrnatilgan debag imkoniyatini taqdim etadi; bu navigatsiya oqimini tushunish va muammolar qayerda yuz berayotganini aniqlashga yordam beradi.
 
-When you need to inspect a Router event sequence, you can enable logging for internal navigation events for debugging. You can configure this by passing a configuration option (`withDebugTracing()`) that enables detailed console logging of all routing events.
+Router hodisalari ketma-ketligini koʻrish kerak boʻlganda, tuzatish (debug) uchun ichki navigatsiya hodisalarini yozib borishni yoqishingiz mumkin. Buni barcha marshrutlash hodisalarining konsolga batafsil yozilishini yoqadigan konfiguratsiya opsiyasini (`withDebugTracing()`) uzatish orqali sozlashingiz mumkin.
 
 ```ts
 import {provideRouter, Routes, withDebugTracing} from '@angular/router';
@@ -73,15 +73,15 @@ bootstrapApplication(App, {
 });
 ```
 
-For more information, check out the official docs on [`withDebugTracing`](api/router/withDebugTracing).
+Koʻproq maʼlumot uchun [`withDebugTracing`](api/router/withDebugTracing) boʻyicha rasmiy hujjatlarga qarang.
 
-## Common use cases
+## Keng tarqalgan foydalanish holatlari {#common-use-cases}
 
-Router events enable many practical features in real-world applications. Here are some common patterns that are used with router events.
+Router hodisalari haqiqiy ilovalarda koʻplab amaliy imkoniyatlarni yaratish imkonini beradi. Quyida router hodisalari bilan ishlatiladigan baʼzi keng tarqalgan patternlar keltirilgan.
 
-### Loading indicators
+### Yuklanish indikatorlari {#loading-indicators}
 
-Show loading indicators during navigation:
+Navigatsiya davomida yuklanish indikatorlarini koʻrsatish:
 
 ```angular-ts
 import {Component, computed, inject} from '@angular/core';
@@ -102,9 +102,9 @@ export class App {
 }
 ```
 
-### Analytics tracking
+### Analitika kuzatuvi {#analytics-tracking}
 
-Track page views for analytics:
+Analitika uchun sahifa koʻrishlarini kuzatish:
 
 ```ts
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -134,9 +134,9 @@ export class AnalyticsService {
 }
 ```
 
-### Error handling
+### Xatolarni boshqarish {#error-handling}
 
-Handle navigation errors gracefully and provide user feedback:
+Navigatsiya xatolarini toʻgʻri boshqarish va foydalanuvchiga xabar berish:
 
 ```angular-ts
 import {Component, inject, signal} from '@angular/core';
@@ -186,55 +186,55 @@ export class ErrorHandler {
 }
 ```
 
-## All router events
+## Barcha router hodisalari {#all-router-events}
 
-For reference, here is the complete list of all router events available in Angular. These events are organized by category and listed in the order they typically occur during navigation.
+Maʼlumot uchun, quyida Angular'da mavjud barcha router hodisalarining toʻliq roʻyxati keltirilgan. Bu hodisalar toifalar boʻyicha guruhlangan va navigatsiya davomida odatda yuz berish tartibida joylashtirilgan.
 
-### Navigation events
+### Navigatsiya hodisalari {#navigation-events}
 
-These events track the core navigation process from start through route recognition, guard checks, and data resolution. They provide visibility into each phase of the navigation lifecycle.
+Bu hodisalar asosiy navigatsiya jarayonini boshidan marshrutni aniqlash, guard tekshiruvlari va maʼlumotlarni hal qilishgacha kuzatadi. Ular navigatsiya hayot siklining har bir bosqichini koʻrish imkonini beradi.
 
-| Event                                                     | Description                                                     |
+| Hodisa                                                    | Tavsif                                                          |
 | --------------------------------------------------------- | --------------------------------------------------------------- |
-| [`NavigationStart`](api/router/NavigationStart)           | Occurs when navigation starts                                   |
-| [`RouteConfigLoadStart`](api/router/RouteConfigLoadStart) | Occurs before lazy loading a route configuration                |
-| [`RouteConfigLoadEnd`](api/router/RouteConfigLoadEnd)     | Occurs after a lazy-loaded route configuration loads            |
-| [`RoutesRecognized`](api/router/RoutesRecognized)         | Occurs when the router parses the URL and recognizes the routes |
-| [`GuardsCheckStart`](api/router/GuardsCheckStart)         | Occurs at the start of the guard phase                          |
-| [`GuardsCheckEnd`](api/router/GuardsCheckEnd)             | Occurs at the end of the guard phase                            |
-| [`ResolveStart`](api/router/ResolveStart)                 | Occurs at the start of the resolve phase                        |
-| [`ResolveEnd`](api/router/ResolveEnd)                     | Occurs at the end of the resolve phase                          |
+| [`NavigationStart`](api/router/NavigationStart)           | Navigatsiya boshlanganda yuz beradi                             |
+| [`RouteConfigLoadStart`](api/router/RouteConfigLoadStart) | Marshrut konfiguratsiyasi lazy loading bilan yuklanishidan oldin yuz beradi |
+| [`RouteConfigLoadEnd`](api/router/RouteConfigLoadEnd)     | Lazy loading bilan yuklanadigan marshrut konfiguratsiyasi yuklangandan keyin yuz beradi |
+| [`RoutesRecognized`](api/router/RoutesRecognized)         | Router URL'ni tahlil qilib, marshrutlarni aniqlaganda yuz beradi |
+| [`GuardsCheckStart`](api/router/GuardsCheckStart)         | Guard bosqichining boshida yuz beradi                           |
+| [`GuardsCheckEnd`](api/router/GuardsCheckEnd)             | Guard bosqichining oxirida yuz beradi                           |
+| [`ResolveStart`](api/router/ResolveStart)                 | Hal qilish (resolve) bosqichining boshida yuz beradi            |
+| [`ResolveEnd`](api/router/ResolveEnd)                     | Hal qilish bosqichining oxirida yuz beradi                      |
 
-### Activation events
+### Faollashtirish hodisalari {#activation-events}
 
-These events occur during the activation phase when route components are being instantiated and initialized. Activation events fire for each route in the route tree, including parent and child routes.
+Bu hodisalar marshrut komponentlari yaratilayotgan va ishga tushirilayotgan faollashtirish bosqichida yuz beradi. Faollashtirish hodisalari marshrut daraxtidagi har bir marshrut, jumladan ota va bola marshrutlar uchun ishga tushadi.
 
-| Event                                                     | Description                                   |
+| Hodisa                                                    | Tavsif                                        |
 | --------------------------------------------------------- | --------------------------------------------- |
-| [`ActivationStart`](api/router/ActivationStart)           | Occurs at the start of route activation       |
-| [`ChildActivationStart`](api/router/ChildActivationStart) | Occurs at the start of child route activation |
-| [`ActivationEnd`](api/router/ActivationEnd)               | Occurs at the end of route activation         |
-| [`ChildActivationEnd`](api/router/ChildActivationEnd)     | Occurs at the end of child route activation   |
+| [`ActivationStart`](api/router/ActivationStart)           | Marshrutni faollashtirish boshida yuz beradi  |
+| [`ChildActivationStart`](api/router/ChildActivationStart) | Bola marshrutni faollashtirish boshida yuz beradi |
+| [`ActivationEnd`](api/router/ActivationEnd)               | Marshrutni faollashtirish oxirida yuz beradi  |
+| [`ChildActivationEnd`](api/router/ChildActivationEnd)     | Bola marshrutni faollashtirish oxirida yuz beradi |
 
-### Navigation completion events
+### Navigatsiya yakunlanish hodisalari {#navigation-completion-events}
 
-These events represent the final outcome of a navigation attempt. Every navigation will end with exactly one of these events, indicating whether it succeeded, was cancelled, failed, or was skipped.
+Bu hodisalar navigatsiya urinishining yakuniy natijasini ifodalaydi. Har bir navigatsiya aynan shu hodisalardan biri bilan tugaydi va u muvaffaqiyatli boʻlganini, bekor qilinganini, muvaffaqiyatsiz boʻlganini yoki oʻtkazib yuborilganini bildiradi.
 
-| Event                                               | Description                                                         |
+| Hodisa                                              | Tavsif                                                              |
 | --------------------------------------------------- | ------------------------------------------------------------------- |
-| [`NavigationEnd`](api/router/NavigationEnd)         | Occurs when navigation ends successfully                            |
-| [`NavigationCancel`](api/router/NavigationCancel)   | Occurs when the router cancels navigation                           |
-| [`NavigationError`](api/router/NavigationError)     | Occurs when navigation fails due to an unexpected error             |
-| [`NavigationSkipped`](api/router/NavigationSkipped) | Occurs when the router skips navigation (e.g., same URL navigation) |
+| [`NavigationEnd`](api/router/NavigationEnd)         | Navigatsiya muvaffaqiyatli tugaganda yuz beradi                     |
+| [`NavigationCancel`](api/router/NavigationCancel)   | Router navigatsiyani bekor qilganda yuz beradi                      |
+| [`NavigationError`](api/router/NavigationError)     | Kutilmagan xato sababli navigatsiya muvaffaqiyatsiz boʻlganda yuz beradi |
+| [`NavigationSkipped`](api/router/NavigationSkipped) | Router navigatsiyani oʻtkazib yuborganda yuz beradi (masalan, bir xil URL'ga navigatsiya) |
 
-### Other events
+### Boshqa hodisalar {#other-events}
 
-There is one additional event that occurs outside the main navigation lifecycle, but it is still part of the router's event system.
+Asosiy navigatsiya hayot siklidan tashqarida yuz beradigan, lekin router hodisalar tizimining bir qismi boʻlgan yana bitta qoʻshimcha hodisa mavjud.
 
-| Event                         | Description             |
-| ----------------------------- | ----------------------- |
-| [`Scroll`](api/router/Scroll) | Occurs during scrolling |
+| Hodisa                        | Tavsif                      |
+| ----------------------------- | --------------------------- |
+| [`Scroll`](api/router/Scroll) | Skroll qilish davomida yuz beradi |
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-Learn more about [route guards](/guide/routing/route-guards), [data fetching with resources](/guide/routing/data-fetching-with-resources), and [common router tasks](/guide/routing/common-router-tasks).
+[Marshrut guard'lari](/guide/routing/route-guards), [resource'lar bilan maʼlumot olish](/guide/routing/data-fetching-with-resources) va [keng tarqalgan router vazifalari](/guide/routing/common-router-tasks) haqida koʻproq bilib oling.
