@@ -1,23 +1,23 @@
-# Async operations
+# Asinxron operatsiyalar
 
-Some validation requires data from external sources like backend APIs or third-party services. Signal Forms provides two functions for asynchronous validation: `validateHttp()` for HTTP-based validation and `validateAsync()` for custom resource-based validation.
+Baʼzi validatsiyalar backend API'lar yoki uchinchi tomon servislari kabi tashqi manbalardan maʼlumot talab qiladi. Signal Forms asinxron validatsiya uchun ikkita funksiya taqdim etadi: HTTP'ga asoslangan validatsiya uchun `validateHttp()` va resource'ga asoslangan maxsus validatsiya uchun `validateAsync()`.
 
-## When to use async validation
+## Asinxron validatsiyadan qachon foydalanish kerak {#when-to-use-async-validation}
 
-Use async validation when your validation logic requires external data. Some common examples include:
+Validatsiya logikangiz tashqi maʼlumotlarni talab qilganda asinxron validatsiyadan foydalaning. Keng tarqalgan misollar:
 
-- **Uniqueness checks** - Verify usernames or emails don't already exist
-- **Database lookups** - Check values against server-side data
-- **External API validation** - Validate addresses, tax IDs, or other data with third-party services
-- **Server-side business rules** - Apply validation rules that only the server can verify
+- **Yagonalikni tekshirish** - Foydalanuvchi nomlari yoki email'lar allaqachon mavjud emasligini tekshirish
+- **Maʼlumotlar bazasidan qidirish** - Qiymatlarni server tomonidagi maʼlumotlar bilan solishtirish
+- **Tashqi API orqali validatsiya** - Manzillar, soliq identifikatorlari yoki boshqa maʼlumotlarni uchinchi tomon servislari orqali tekshirish
+- **Server tomonidagi biznes qoidalari** - Faqat server tekshira oladigan validatsiya qoidalarini qoʻllash
 
-Don't use async validation for checks you can perform synchronously on the client. Use synchronous validation rules like `pattern()`, `email()`, or `validate()` for format validation and static rules.
+Klientda sinxron bajarish mumkin boʻlgan tekshiruvlar uchun asinxron validatsiyadan foydalanmang. Format validatsiyasi va statik qoidalar uchun `pattern()`, `email()` yoki `validate()` kabi sinxron validatsiya qoidalaridan foydalaning.
 
-## How async validation works
+## Asinxron validatsiya qanday ishlaydi {#how-async-validation-works}
 
-Async validation runs only after all synchronous validation passes. While the validation executes, the field's `pending()` signal returns `true`. The validation can target errors to specific fields, and pending requests cancel automatically when field values change.
+Asinxron validatsiya faqat barcha sinxron validatsiyalar oʻtgandan keyin ishga tushadi. Validatsiya bajarilayotgan vaqtda maydonning `pending()` signali `true` qaytaradi. Validatsiya xatolarni muayyan maydonlarga yoʻnaltira oladi, maydon qiymatlari oʻzgarganda esa kutilayotgan soʻrovlar avtomatik bekor qilinadi.
 
-Here's an example checking username availability:
+Quyida foydalanuvchi nomining bandligini tekshiruvchi misol keltirilgan:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -73,22 +73,22 @@ export class Registration {
 }
 ```
 
-The validation flow works like this:
+Validatsiya jarayoni quyidagicha ishlaydi:
 
-1. User types a value
-2. Synchronous validation rules run first
-3. If synchronous validation fails, async validation doesn't run
-4. If synchronous validation passes, async validation starts and `pending()` becomes `true`
-5. The request completes and `pending()` becomes `false`
-6. Errors update based on the response
+1. Foydalanuvchi qiymat kiritadi
+2. Birinchi boʻlib sinxron validatsiya qoidalari ishga tushadi
+3. Agar sinxron validatsiya muvaffaqiyatsiz boʻlsa, asinxron validatsiya ishga tushmaydi
+4. Agar sinxron validatsiya oʻtsa, asinxron validatsiya boshlanadi va `pending()` `true` boʻladi
+5. Soʻrov yakunlanadi va `pending()` `false` boʻladi
+6. Xatolar javobga qarab yangilanadi
 
-## HTTP validation with validateHttp()
+## validateHttp() bilan HTTP validatsiyasi {#http-validation-with-validatehttp}
 
-The `validateHttp()` function provides the most common form of async validation. Use it when you need to validate against a REST API or any HTTP endpoint.
+`validateHttp()` funksiyasi asinxron validatsiyaning eng keng tarqalgan shaklini taqdim etadi. REST API yoki istalgan HTTP endpoint orqali validatsiya qilish kerak boʻlganda undan foydalaning.
 
-### Request function
+### Request funksiyasi {#request-function}
 
-The `request` function returns either a URL string or an `HttpResourceRequest` object. Return `undefined` to skip the validation:
+`request` funksiyasi URL satrini yoki `HttpResourceRequest` obyektini qaytaradi. Validatsiyani oʻtkazib yuborish uchun `undefined` qaytaring:
 
 ```ts
 import {Component, signal} from '@angular/core';
@@ -134,7 +134,7 @@ export class Registration {
 }
 ```
 
-For POST requests or custom headers, return an `HttpResourceRequest` object:
+POST soʻrovlari yoki maxsus header'lar uchun `HttpResourceRequest` obyektini qaytaring:
 
 ```ts
 request: ({value}) => ({
@@ -144,9 +144,9 @@ request: ({value}) => ({
 }) // prettier-ignore
 ```
 
-### Success and error handlers
+### Muvaffaqiyat va xato ishlov beruvchilari {#success-and-error-handlers}
 
-The `onSuccess` function receives the HTTP response and returns validation errors or `undefined` for valid values:
+`onSuccess` funksiyasi HTTP javobini qabul qiladi va validatsiya xatolarini yoki toʻgʻri qiymatlar uchun `undefined` qaytaradi:
 
 ```ts
 onSuccess: (response: { valid: boolean; message?: string }) => {
@@ -159,7 +159,7 @@ onSuccess: (response: { valid: boolean; message?: string }) => {
 } // prettier-ignore
 ```
 
-Return multiple errors when needed:
+Kerak boʻlganda bir nechta xato qaytaring:
 
 ```ts
 onSuccess: (response: { usernameTaken: boolean; profanity: boolean }) => {
@@ -180,7 +180,7 @@ onSuccess: (response: { usernameTaken: boolean; profanity: boolean }) => {
 } // prettier-ignore
 ```
 
-The type for `onSuccess` can be specified either directly in the parameter, or with the `parse` property of `validateHttp`'s `options`
+`onSuccess` uchun turni bevosita parametrning oʻzida yoki `validateHttp`'ning `options` ichidagi `parse` xususiyati orqali koʻrsatish mumkin
 
 ```ts
 onSuccess: (response: { usernameTaken: boolean; profanity: boolean }) => {
@@ -197,7 +197,7 @@ onSuccess: (response) => {
 } // prettier-ignore
 ```
 
-The `onError` function handles request failures like network errors or HTTP errors:
+`onError` funksiyasi tarmoq xatolari yoki HTTP xatolari kabi soʻrov muvaffaqiyatsizliklariga ishlov beradi:
 
 ```ts
 onError: (error) => {
@@ -209,9 +209,9 @@ onError: (error) => {
 } // prettier-ignore
 ```
 
-### HTTP options
+### HTTP parametrlari {#http-options}
 
-Customize the HTTP request by returning an `HttpResourceRequest` object from the `request` function:
+HTTP soʻrovini moslashtirish uchun `request` funksiyasidan `HttpResourceRequest` obyektini qaytaring:
 
 ```ts
 import {HttpHeaders} from '@angular/common/http';
@@ -238,24 +238,24 @@ validateHttp(schemaPath.field, {
 });
 ```
 
-TIP: See the [httpResource API documentation](api/common/http/httpResource) for all available options.
+TIP: Barcha mavjud parametrlar uchun [httpResource API hujjatlariga](api/common/http/httpResource) qarang.
 
-## Custom async validation with validateAsync()
+## validateAsync() bilan maxsus asinxron validatsiya {#custom-async-validation-with-validateasync}
 
-Most applications should use `validateHttp()` for async validation. It handles HTTP requests with minimal configuration and covers the majority of use cases.
+Koʻpchilik ilovalar asinxron validatsiya uchun `validateHttp()`'dan foydalanishi kerak. U HTTP soʻrovlarini minimal sozlash bilan bajaradi va foydalanish holatlarining aksariyatini qamrab oladi.
 
-`validateAsync()` is a lower-level API that exposes Angular's resource primitive directly. It offers complete control but requires more code and familiarity with Angular's resource API.
+`validateAsync()` — Angular'ning resource primitivini bevosita ochib beradigan quyi darajadagi API. U toʻliq nazoratni taqdim etadi, lekin koʻproq kod yozishni va Angular'ning resource API'si bilan tanish boʻlishni talab qiladi.
 
-Consider `validateAsync()` only when `validateHttp()` can't meet your needs. Some examples include:
+`validateAsync()`'ni faqat `validateHttp()` ehtiyojlaringizni qondira olmaganda koʻrib chiqing. Baʼzi misollar:
 
-- **Non-HTTP validation** - WebSocket connections, IndexedDB lookups, or Web Worker computations
-- **Custom caching strategies** - Application-specific caching beyond simple memoization
-- **Complex retry logic** - Custom backoff strategies or conditional retries
-- **Direct resource access** - When you need the full resource lifecycle
+- **HTTP boʻlmagan validatsiya** - WebSocket ulanishlari, IndexedDB'dan qidirish yoki Web Worker hisob-kitoblari
+- **Maxsus keshlash strategiyalari** - Oddiy memoizatsiyadan tashqari ilovaga xos keshlash
+- **Murakkab qayta urinish logikasi** - Maxsus backoff strategiyalari yoki shartli qayta urinishlar
+- **Resource'ga bevosita kirish** - Resource'ning toʻliq hayot sikli kerak boʻlganda
 
-### Creating a custom validation rule
+### Maxsus validatsiya qoidasini yaratish {#creating-a-custom-validation-rule}
 
-The `validateAsync()` function requires four properties: `params`, `factory`, `onSuccess`, and `onError`. The `params` function returns the parameters for your resource, while `factory` creates the resource:
+`validateAsync()` funksiyasi toʻrtta xususiyatni talab qiladi: `params`, `factory`, `onSuccess` va `onError`. `params` funksiyasi resource'ingiz uchun parametrlarni qaytaradi, `factory` esa resource'ni yaratadi:
 
 ```ts
 import {Component, inject, signal, resource, Signal} from '@angular/core';
@@ -321,11 +321,11 @@ export class Registration {
 }
 ```
 
-The `params` function runs on every value change. Return `undefined` to skip validation. The `factory` function runs once during setup and receives params as a signal. The resource updates automatically when params change.
+`params` funksiyasi har bir qiymat oʻzgarishida ishga tushadi. Validatsiyani oʻtkazib yuborish uchun `undefined` qaytaring. `factory` funksiyasi sozlash vaqtida bir marta ishga tushadi va parametrlarni signal sifatida qabul qiladi. Parametrlar oʻzgarganda resource avtomatik yangilanadi.
 
-### Using Observable-based services
+### Observable'ga asoslangan servislardan foydalanish {#using-observable-based-services}
 
-If your application has existing services that return Observables, use `rxResource` from `@angular/core/rxjs-interop`:
+Agar ilovangizda Observable qaytaradigan mavjud servislar boʻlsa, `@angular/core/rxjs-interop`'dan `rxResource`'dan foydalaning:
 
 ```ts
 import {Component, inject, signal, Signal} from '@angular/core';
@@ -365,15 +365,15 @@ export class Registration {
 }
 ```
 
-The `rxResource` function works directly with Observables and handles subscription cleanup automatically when the field value changes.
+`rxResource` funksiyasi Observable'lar bilan bevosita ishlaydi va maydon qiymati oʻzgarganda obunani tozalashni avtomatik bajaradi.
 
-## Debouncing
+## Debouncing {#debouncing}
 
-The `debounce` rule delays when a user's input is committed to the form model. You can think of it as the rule holding back values until the user pauses typing. This is useful when downstream behavior shouldn't react to every keystroke, such as expensive derived computations, validation that flashes errors mid-word, or search filters that reapply on each character.
+`debounce` qoidasi foydalanuvchi kiritgan qiymatning forma modeliga yozilish vaqtini kechiktiradi. Uni foydalanuvchi yozishni toʻxtatgunga qadar qiymatlarni ushlab turadigan qoida deb tasavvur qilishingiz mumkin. Bu keyingi xatti-harakat har bir tugma bosilishiga reaksiya qilmasligi kerak boʻlgan holatlarda foydali: masalan, qimmat hosilaviy hisob-kitoblar, soʻz oʻrtasida xatolarni koʻrsatib yuboradigan validatsiya yoki har bir belgida qayta qoʻllanadigan qidiruv filtrlari.
 
-Add the `debounce` rule inside a schema to delay how a form field's UI changes reach the form model. In its simplest form, `debounce(path, ms)` holds each UI change for the given number of milliseconds before writing it to the model. A new change within that window resets the timer.
+Forma maydonining UI oʻzgarishlari forma modeliga yetib borishini kechiktirish uchun sxema ichiga `debounce` qoidasini qoʻshing. Eng sodda koʻrinishida `debounce(path, ms)` har bir UI oʻzgarishini modelga yozishdan oldin koʻrsatilgan millisekund davomida ushlab turadi. Shu oyna ichidagi yangi oʻzgarish taymerni qayta boshlaydi.
 
-The following example applies `debounce` and `validateHttp` to the username field to delay the username availability check in a registration form until the user pauses typing:
+Quyidagi misolda roʻyxatdan oʻtish formasidagi foydalanuvchi nomi maydoniga `debounce` va `validateHttp` qoʻllanib, foydalanuvchi nomi bandligini tekshirish foydalanuvchi yozishni toʻxtatgunga qadar kechiktiriladi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -418,19 +418,19 @@ export class Registration {
 }
 ```
 
-With a 300 ms debounce, the model updates and validates only after the user pauses typing longer than the configured duration. For example, typing "signal forms" in a quick burst fires one validation request instead of twelve.
+300 ms debounce bilan model faqat foydalanuvchi sozlangan muddatdan uzoqroq toʻxtagandan keyin yangilanadi va validatsiya qilinadi. Masalan, "signal forms" soʻzini tez yozib yuborish oʻn ikkita oʻrniga bitta validatsiya soʻrovini yuboradi.
 
-### Touch flushes the model
+### Touch modelni darhol yangilaydi {#touch-flushes-the-model}
 
-Regardless of the debounce duration, the framework writes the field's `controlValue()` to the model immediately when the field becomes touched. Native inputs become touched on blur, so a user who finishes typing and tabs away doesn't have to wait for the debounce timer to expire. Custom controls can mark the field as touched in response to any event they choose.
+Debounce muddatidan qatʼi nazar, maydon touched holatiga oʻtganda freymvork maydonning `controlValue()` qiymatini modelga darhol yozadi. Native input'lar blur hodisasida touched boʻladi, shuning uchun yozishni tugatib Tab bilan keyingi maydonga oʻtgan foydalanuvchi debounce taymeri tugashini kutishi shart emas. Maxsus kontrollar maydonni oʻzlari tanlagan istalgan hodisaga javoban touched deb belgilashi mumkin.
 
-In the typical case, this matters for form submission. When the user clicks a submit button, the focused input blurs, which touches that field and flushes its pending debounce before the submission handler runs.
+Odatiy holatda bu forma yuborishda muhim. Foydalanuvchi submit tugmasini bosganda, fokusdagi input blur boʻladi, bu esa oʻsha maydonni touched qiladi va yuborish ishlov beruvchisi ishga tushishidan oldin uning kutilayotgan debounce qiymatini modelga yozadi.
 
-### Commit only on blur
+### Faqat blur'da yozish {#commit-only-on-blur}
 
-Some fields shouldn't update mid-typing at all, and instead should only update after the user has finished entering a value. For example, if you have a search filter that reapplies on every change or a form that triggers expensive derived state, it is often better for the model to wait until the user finishes typing.
+Baʼzi maydonlar yozish jarayonida umuman yangilanmasligi, aksincha, faqat foydalanuvchi qiymatni kiritib tugatgandan keyin yangilanishi kerak. Masalan, har bir oʻzgarishda qayta qoʻllanadigan qidiruv filtri yoki qimmat hosilaviy holatni ishga tushiradigan forma boʻlsa, model foydalanuvchi yozishni tugatishini kutishi koʻpincha maʼqulroq.
 
-In these scenarios, pass `'blur'` instead of a duration to defer all updates until the field becomes touched:
+Bunday holatlarda barcha yangilanishlarni maydon touched boʻlgunga qadar kechiktirish uchun muddat oʻrniga `'blur'` uzating:
 
 ```ts
 form(this.registrationModel, (schemaPath) => {
@@ -438,11 +438,11 @@ form(this.registrationModel, (schemaPath) => {
 });
 ```
 
-With `'blur'`, the model keeps its previous value while the user is typing. Sync and async validation, derived signals, and any reactive rules reading the field all see the previous value until the field becomes touched. This commonly occurs when the user blurs a native input, or when a custom control signals touch on its own.
+`'blur'` bilan foydalanuvchi yozayotgan vaqtda model oldingi qiymatini saqlab qoladi. Sinxron va asinxron validatsiya, hosilaviy signallar va maydonni oʻqiydigan har qanday reaktiv qoidalar maydon touched boʻlgunga qadar oldingi qiymatni koʻradi. Bu odatda foydalanuvchi native input'dan fokusni olib qoʻyganda (blur) yoki maxsus kontrol oʻzi touch haqida signal berganda yuz beradi.
 
-### Custom timing logic
+### Maxsus vaqt logikasi {#custom-timing-logic}
 
-For timing logic that a duration or `'blur'` can't express, pass a `Debouncer` function. The function receives the field context and an [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal), and returns a `Promise<void>` that resolves when the model should update:
+Muddat yoki `'blur'` bilan ifodalab boʻlmaydigan vaqt logikasi uchun `Debouncer` funksiyasini uzating. Funksiya maydon kontekstini va [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)'ni qabul qiladi va model yangilanishi kerak boʻlgan paytda resolve boʻladigan `Promise<void>` qaytaradi:
 
 ```ts
 import {debounce, type Debouncer} from '@angular/forms/signals';
@@ -469,11 +469,11 @@ const registrationForm = form(registrationModel, (schemaPath) => {
 });
 ```
 
-The `abortSignal` fires when the field is touched, or when its value changes before the debounce resolves. Resolve the promise on abort so your debouncer releases any pending timers. The framework writes the pending value to the model on touch, and discards it when a newer value arrives. See the [`debounce` API reference](api/forms/signals/debounce) for the full `Debouncer` signature.
+`abortSignal` maydon touched boʻlganda yoki debounce resolve boʻlishidan oldin uning qiymati oʻzgarganda ishga tushadi. Debouncer'ingiz kutilayotgan taymerlarni boʻshatishi uchun abort'da promise'ni resolve qiling. Freymvork touch'da kutilayotgan qiymatni modelga yozadi, yangiroq qiymat kelganda esa uni tashlab yuboradi. `Debouncer`'ning toʻliq signaturasi uchun [`debounce` API maʼlumotnomasiga](api/forms/signals/debounce) qarang.
 
-### Debouncing a single async validator
+### Bitta asinxron validatorni debounce qilish {#debouncing-a-single-async-validator}
 
-The `debounce` rule holds back every reaction to the field, from sync validation to derived signals to async validation. However, there are times when you want the opposite: cheap sync validators like `required` or `email` running immediately for instant feedback, while only the expensive async call waits for the user to settle. Both `validateHttp()` and `validateAsync()` accept their own [`debounce` option](api/forms/signals/validateAsync) that throttles just that validator:
+`debounce` qoidasi maydonga boʻlgan har bir reaksiyani — sinxron validatsiyadan hosilaviy signallargacha va asinxron validatsiyagacha — ushlab turadi. Biroq baʼzan aksi kerak boʻladi: `required` yoki `email` kabi arzon sinxron validatorlar tezkor fikr-mulohaza uchun darhol ishga tushsin, faqat qimmat asinxron chaqiruv foydalanuvchi toʻxtashini kutsin. `validateHttp()` ham, `validateAsync()` ham faqat oʻsha validatorni cheklaydigan oʻz [`debounce` parametrini](api/forms/signals/validateAsync) qabul qiladi:
 
 ```ts
 form(this.registrationModel, (schemaPath) => {
@@ -495,22 +495,22 @@ form(this.registrationModel, (schemaPath) => {
 });
 ```
 
-The model still updates on every keystroke, and any other rules attached to the field still react immediately. Only the HTTP request is debounced: each change waits 300 ms of quiet before firing, so a request only goes out once the user has paused typing.
+Model hamon har bir tugma bosilishida yangilanadi va maydonga biriktirilgan boshqa qoidalar hamon darhol reaksiya qiladi. Faqat HTTP soʻrovi debounce qilinadi: har bir oʻzgarish ishga tushishdan oldin 300 ms sukunatni kutadi, shuning uchun soʻrov faqat foydalanuvchi yozishni toʻxtatgandan keyin yuboriladi.
 
-Choose between the two layers based on scope:
+Ikki qatlam orasida qamrovga qarab tanlang:
 
-| Option                                                        | When to use                                                                                                                         |
+| Variant                                                       | Qachon foydalanish                                                                                                                  |
 | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `debounce()` rule                                             | Sync validation, derived state, and submission should all wait until the field commits. The whole field shouldn't react mid-typing. |
-| `validateHttp({ debounce })` or `validateAsync({ debounce })` | Cheap sync validators should give immediate feedback, but expensive async calls should wait for the user to pause.                  |
+| `debounce()` qoidasi                                          | Sinxron validatsiya, hosilaviy holat va yuborish — barchasi maydon qiymati yozilishini kutishi kerak. Butun maydon yozish jarayonida reaksiya qilmasligi kerak. |
+| `validateHttp({ debounce })` yoki `validateAsync({ debounce })` | Arzon sinxron validatorlar darhol fikr-mulohaza berishi, lekin qimmat asinxron chaqiruvlar foydalanuvchi toʻxtashini kutishi kerak. |
 
-Both options accept a duration in milliseconds. Their custom-timing callbacks differ: the form-level rule takes a `Debouncer`, and the validator-level option takes a `DebounceTimer` from `@angular/core`. The two signatures are not interchangeable.
+Ikkala variant ham millisekundlarda muddat qabul qiladi. Ularning maxsus vaqt callback'lari farq qiladi: forma darajasidagi qoida `Debouncer` oladi, validator darajasidagi parametr esa `@angular/core`'dan `DebounceTimer` oladi. Bu ikki signatura bir-birining oʻrnini bosa olmaydi.
 
-## Composing resources in async validation with a factory
+## Factory yordamida asinxron validatsiyada resource'larni kompozitsiya qilish {#composing-resources-in-async-validation-with-a-factory}
 
-The built-in [`debounce` option](api/forms/signals/validateAsync) covers throttling, but `validateAsync()` exposes a deeper composition point: the `factory` function. The factory receives the params as a signal and returns a resource. Between those two points, you're free to compose whatever you need.
+Oʻrnatilgan [`debounce` parametri](api/forms/signals/validateAsync) cheklashni qamrab oladi, lekin `validateAsync()` yanada chuqurroq kompozitsiya nuqtasini ochib beradi: `factory` funksiyasi. Factory parametrlarni signal sifatida qabul qiladi va resource qaytaradi. Shu ikki nuqta orasida siz kerakli har qanday narsani erkin kompozitsiya qilishingiz mumkin.
 
-In its simplest form, a factory wraps a single resource. A username-availability check can live as a method on the component class, and then be wired into `validateAsync` by reference:
+Eng sodda koʻrinishida factory bitta resource'ni oʻrab oladi. Foydalanuvchi nomi bandligini tekshirish komponent klassida metod sifatida yashashi va keyin havola orqali `validateAsync`'ga ulanishi mumkin:
 
 ```ts
 export class Registration {
@@ -542,11 +542,11 @@ export class Registration {
 }
 ```
 
-The `params` callback returns `undefined` for short usernames, signaling that validation should skip. With `debounce: 300` applied, the resource waits until the user pauses typing for 300 ms before acting on each change. It then runs the loader for valid usernames and stays idle once the debounced value settles to `undefined`.
+`params` callback'i qisqa foydalanuvchi nomlari uchun `undefined` qaytaradi, bu validatsiyani oʻtkazib yuborish kerakligini bildiradi. `debounce: 300` qoʻllanganda resource har bir oʻzgarishga javob berishdan oldin foydalanuvchi 300 ms yozishni toʻxtatishini kutadi. Keyin u toʻgʻri foydalanuvchi nomlari uchun loader'ni ishga tushiradi va debounce qilingan qiymat `undefined`'ga oʻtgach bekor turadi.
 
-### Combining debounce with additional logic
+### Debounce'ni qoʻshimcha logika bilan birlashtirish {#combining-debounce-with-additional-logic}
 
-When you need logic beyond a plain duration debounce, use a custom factory to combine debouncing with that logic. A common case is caching validated responses. For example, once the server has confirmed a username, you don't need to ask again on subsequent keystrokes that revisit the same value.
+Oddiy muddatli debounce'dan tashqari logika kerak boʻlganda, debounce'ni shu logika bilan birlashtirish uchun maxsus factory'dan foydalaning. Keng tarqalgan holat — validatsiya qilingan javoblarni keshlash. Masalan, server foydalanuvchi nomini bir marta tasdiqlagandan keyin, oʻsha qiymatga qaytib keladigan keyingi tugma bosilishlarida yana soʻrash shart emas.
 
 ```ts
 export class Registration {
@@ -588,18 +588,18 @@ export class Registration {
 }
 ```
 
-The `cache` lives in the factory's closure, so it persists for the field's lifetime. Once the user has typed a username the server has already checked, the loader reads from the cache instead of making a new network request.
+`cache` factory'ning closure'ida yashaydi, shuning uchun u maydonning butun hayot sikli davomida saqlanib qoladi. Foydalanuvchi server allaqachon tekshirgan foydalanuvchi nomini kiritgach, loader yangi tarmoq soʻrovi yuborish oʻrniga keshdan oʻqiydi.
 
-## Understanding pending state
+## Kutilmoqda (pending) holatini tushunish {#understanding-pending-state}
 
-When async validation runs, the field's `pending()` signal returns `true`. During this time:
+Asinxron validatsiya ishlayotganda maydonning `pending()` signali `true` qaytaradi. Shu vaqt davomida:
 
-- `valid()` returns `false`
-- `invalid()` returns `false`
-- `errors()` returns an empty array
-- `submit()` does not wait for it; by default the `action` runs anyway (see [`ignoreValidators`](guide/forms/signals/form-submission#controlling-validation-gating-with-ignorevalidators))
+- `valid()` `false` qaytaradi
+- `invalid()` `false` qaytaradi
+- `errors()` boʻsh massiv qaytaradi
+- `submit()` uni kutmaydi; sukut boʻyicha `action` baribir ishga tushadi ([`ignoreValidators`](guide/forms/signals/form-submission#controlling-validation-gating-with-ignorevalidators)'ga qarang)
 
-Show the pending state in your template to provide feedback:
+Fikr-mulohaza berish uchun shablonda kutilmoqda holatini koʻrsating:
 
 ```angular-html
 <input [formField]="loginForm.username" />
@@ -615,7 +615,7 @@ Show the pending state in your template to provide feedback:
 }
 ```
 
-Disable form submission while validation is pending:
+Validatsiya kutilayotgan vaqtda forma yuborishni oʻchirib qoʻying:
 
 ```angular-html
 <button type="submit" [disabled]="loginForm().pending()">
@@ -627,11 +627,11 @@ Disable form submission while validation is pending:
 </button>
 ```
 
-TIP: See the [Field State Management guide](guide/forms/signals/field-state-management) for more patterns using `pending()`, `valid()`, and `invalid()` signals.
+TIP: `pending()`, `valid()` va `invalid()` signallaridan foydalanishning koʻproq namunalari uchun [Maydon holatini boshqarish qoʻllanmasiga](guide/forms/signals/field-state-management) qarang.
 
-### Validation execution order
+### Validatsiya bajarilish tartibi {#validation-execution-order}
 
-Async validation only runs after synchronous validation passes. This prevents unnecessary server requests for invalid input:
+Asinxron validatsiya faqat sinxron validatsiya oʻtgandan keyin ishga tushadi. Bu notoʻgʻri kiritilgan qiymatlar uchun keraksiz server soʻrovlarining oldini oladi:
 
 ```ts
 import {form, required, minLength, validateHttp} from '@angular/forms/signals';
@@ -659,17 +659,17 @@ form(model, (schemaPath) => {
 });
 ```
 
-This execution order improves performance by reducing server load and catching format errors instantly.
+Bu bajarilish tartibi serverga yukni kamaytirish va format xatolarini darhol aniqlash orqali unumdorlikni oshiradi.
 
-### Request cancellation
+### Soʻrovni bekor qilish {#request-cancellation}
 
-When a field value changes, Signal Forms automatically cancels any pending async validation request for that field. This prevents race conditions and ensures validation always reflects the current value. You don't need to implement cancellation logic yourself.
+Maydon qiymati oʻzgarganda Signal Forms oʻsha maydon uchun kutilayotgan har qanday asinxron validatsiya soʻrovini avtomatik bekor qiladi. Bu poyga holatlarining (race condition) oldini oladi va validatsiya doimo joriy qiymatni aks ettirishini taʼminlaydi. Bekor qilish logikasini oʻzingiz yozishingiz shart emas.
 
-## Best practices
+## Eng yaxshi amaliyotlar {#best-practices}
 
-### Combine with synchronous validation
+### Sinxron validatsiya bilan birlashtiring {#combine-with-synchronous-validation}
 
-Always validate format before making async requests. This catches errors instantly and prevents unnecessary server requests:
+Asinxron soʻrovlar yuborishdan oldin doimo formatni tekshiring. Bu xatolarni darhol aniqlaydi va keraksiz server soʻrovlarining oldini oladi:
 
 ```ts
 import {form, required, email, validateHttp} from '@angular/forms/signals';
@@ -697,9 +697,9 @@ form(model, (schemaPath) => {
 });
 ```
 
-### Skip validation when appropriate
+### Oʻrinli boʻlganda validatsiyani oʻtkazib yuboring {#skip-validation-when-appropriate}
 
-Return `undefined` from the `request` function to skip validation. Use this to avoid validating empty fields or values that don't meet minimum requirements:
+Validatsiyani oʻtkazib yuborish uchun `request` funksiyasidan `undefined` qaytaring. Boʻsh maydonlar yoki minimal talablarga javob bermaydigan qiymatlarni validatsiya qilmaslik uchun bundan foydalaning:
 
 ```ts
 import {validateHttp} from '@angular/forms/signals';
@@ -726,9 +726,9 @@ validateHttp(schemaPath.username, {
 });
 ```
 
-### Handle errors gracefully
+### Xatolarga toʻgʻri ishlov bering {#handle-errors-gracefully}
 
-Provide clear, user-friendly error messages. Log technical details for debugging but show simple messages to users:
+Aniq, foydalanuvchiga tushunarli xato xabarlarini taqdim eting. Texnik tafsilotlarni debug qilish uchun log'ga yozing, foydalanuvchilarga esa sodda xabarlarni koʻrsating:
 
 ```ts
 import {validateHttp} from '@angular/forms/signals';
@@ -756,9 +756,9 @@ validateHttp(schemaPath.field, {
 });
 ```
 
-### Show clear feedback
+### Aniq fikr-mulohaza koʻrsating {#show-clear-feedback}
 
-Use the `pending()` signal to show when validation is happening. This helps users understand delays and provides better perceived performance:
+Validatsiya qachon bajarilayotganini koʻrsatish uchun `pending()` signalidan foydalaning. Bu foydalanuvchilarga kechikishlarni tushunishga yordam beradi va unumdorlik haqidagi taassurotni yaxshilaydi:
 
 ```angular-html
 @if (field().pending()) {
@@ -775,18 +775,18 @@ Use the `pending()` signal to show when validation is happening. This helps user
 }
 ```
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-This guide covered async validation with `validateHttp()` and `validateAsync()`. Related guides explore other aspects of Signal Forms:
+Bu qoʻllanma `validateHttp()` va `validateAsync()` bilan asinxron validatsiyani qamrab oldi. Tegishli qoʻllanmalar Signal Forms'ning boshqa jihatlarini yoritadi:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/validation" title="Validation"/>
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field State Management"/>
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya"/>
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish"/>
 </docs-pill-row>
 
-For detailed API documentation, see:
+Batafsil API hujjatlari uchun qarang:
 
-- [`validateHttp()`](api/forms/signals/validateHttp) - HTTP-based async validation
-- [`validateAsync()`](api/forms/signals/validateAsync) - Custom resource-based async validation
-- [`httpResource()`](api/common/http/httpResource) - Angular's HTTP resource API
-- [`resource()`](api/core/resource) - Angular's resource primitive
+- [`validateHttp()`](api/forms/signals/validateHttp) - HTTP'ga asoslangan asinxron validatsiya
+- [`validateAsync()`](api/forms/signals/validateAsync) - Resource'ga asoslangan maxsus asinxron validatsiya
+- [`httpResource()`](api/common/http/httpResource) - Angular'ning HTTP resource API'si
+- [`resource()`](api/core/resource) - Angular'ning resource primitivi

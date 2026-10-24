@@ -1,16 +1,16 @@
-# Testing Signal Forms
+# Signal Forms'ni testlash
 
-Forms are often critical to applications, and testing gives you confidence they behave correctly as the codebase changes. Signal Forms keeps most of its logic in the schema rather than the template, which means you can test the majority of form behavior without rendering a component.
+Formalar koʻpincha ilovalar uchun juda muhim, testlash esa kod bazasi oʻzgarganda ham ularning toʻgʻri ishlashiga ishonch beradi. Signal Forms logikasining katta qismini shablonda emas, sxemada saqlaydi, bu esa forma xatti-harakatining aksariyatini komponentni render qilmasdan testlash imkonini beradi.
 
-This guide walks through how to set up those tests, starting with isolated logic tests and then covering component-bound tests for cases where DOM interaction matters.
+Bu qoʻllanma shunday testlarni qanday sozlashni koʻrsatadi: avval alohida logika testlari, keyin DOM bilan oʻzaro aloqa muhim boʻlgan holatlar uchun komponentga bogʻlangan testlar yoritiladi.
 
-## Testing form logic in isolation
+## Forma logikasini alohida testlash {#testing-form-logic-in-isolation}
 
-When you only need to verify validation, disabled state, required state, or error output, test the form directly instead of rendering a component. Isolated tests keep the setup small and let the test focus on the form's behavior.
+Faqat validatsiya, oʻchirilgan (disabled) holat, majburiy (required) holat yoki xato chiqishini tekshirish kerak boʻlganda, komponentni render qilish oʻrniga formani bevosita testlang. Alohida testlar sozlashni kichik saqlaydi va testni formaning xatti-harakatiga qaratish imkonini beradi.
 
-The key requirement is the injector. Signal Forms needs an injection context during form creation. If a test calls `form()` without one, the call throws before the test can assert anything about the form.
+Asosiy talab — injector. Signal Forms forma yaratish vaqtida inyeksiya kontekstini talab qiladi. Agar test `form()`'ni usiz chaqirsa, chaqiruv test forma haqida biror narsani tekshirishga ulgurmasdan xato beradi.
 
-The most direct way to satisfy this requirement is to pass an injector explicitly. The following test creates a form with a `required` rule and verifies that the field becomes valid after receiving a value:
+Bu talabni qondirishning eng bevosita yoʻli — injector'ni aniq uzatish. Quyidagi test `required` qoidasi bilan forma yaratadi va maydon qiymat olgandan keyin valid boʻlishini tekshiradi:
 
 ```ts {header: 'profile-form.spec.ts'}
 import {Injector, signal} from '@angular/core';
@@ -41,9 +41,9 @@ describe('profile form', () => {
 });
 ```
 
-This pattern works well for most isolated tests because the injector requirement stays visible at the call site. It also mirrors how Signal Forms unit tests in Angular's source create forms.
+Bu namuna aksariyat alohida testlar uchun yaxshi ishlaydi, chunki injector talabi chaqiruv joyida koʻrinib turadi. Shuningdek, u Angular manba kodidagi Signal Forms unit testlarining formalarni qanday yaratishini ham aks ettiradi.
 
-When the code under test calls `form()` internally, you may not be able to pass the injector directly. In that case, wrap the call in an ambient injection context:
+Testlanayotgan kod `form()`'ni ichkarida chaqirsa, injector'ni bevosita uzata olmasligingiz mumkin. Bunday holda chaqiruvni atrofdagi (ambient) inyeksiya kontekstiga oʻrang:
 
 ```ts {header: 'profile-form.spec.ts'}
 import {signal} from '@angular/core';
@@ -66,15 +66,15 @@ describe('profile form', () => {
 });
 ```
 
-Both patterns produce the same kind of form. Passing `{injector}` is often the clearest choice when the test creates the form directly. `TestBed.runInInjectionContext()` is useful when the code under test calls `form()` internally and you need to supply the surrounding injection context.
+Ikkala namuna ham bir xil turdagi forma hosil qiladi. Test formani bevosita yaratganda `{injector}` uzatish koʻpincha eng tushunarli tanlov hisoblanadi. `TestBed.runInInjectionContext()` esa testlanayotgan kod `form()`'ni ichkarida chaqirganda va siz atrofdagi inyeksiya kontekstini taʼminlashingiz kerak boʻlganda foydali.
 
-Once the form exists, test it through field state signals. Common assertions include `valid()`, `invalid()`, `disabled()`, `required()`, and `errors()`. For most form logic, that is enough to verify the behavior without involving the DOM.
+Forma yaratilgach, uni maydon holati signallari orqali testlang. Keng tarqalgan tekshiruvlar `valid()`, `invalid()`, `disabled()`, `required()` va `errors()`'ni oʻz ichiga oladi. Aksariyat forma logikasi uchun bu xatti-harakatni DOM'ni jalb qilmasdan tekshirishga yetarli.
 
-## Testing a form with multiple rules
+## Bir nechta qoidali formani testlash {#testing-a-form-with-multiple-rules}
 
-After the injector setup is in place, a good next step is a complete test that exercises a few pieces of form logic together. This kind of test is still isolated, but it looks much closer to a real application form.
+Injector sozlangandan keyin yaxshi keyingi qadam — forma logikasining bir necha qismini birga sinaydigan toʻliq test. Bunday test hamon alohida, lekin u haqiqiy ilova formasiga ancha yaqinroq koʻrinadi.
 
-For example, this test verifies both a basic required rule and a conditional required rule that depends on another field:
+Masalan, bu test asosiy majburiylik qoidasini ham, boshqa maydonga bogʻliq boʻlgan shartli majburiylik qoidasini ham tekshiradi:
 
 ```ts {header: 'profile-form.spec.ts'}
 import {Injector, signal} from '@angular/core';
@@ -119,27 +119,27 @@ describe('profile form', () => {
 });
 ```
 
-This example shows an important testing pattern: update one field, then assert against the state of another field. Because Signal Forms rules are reactive, a field's validation can depend on sibling values, parent values, or other derived conditions. Tests should verify those relationships directly instead of only checking the field that changed.
+Bu misol muhim testlash namunasini koʻrsatadi: bir maydonni yangilang, keyin boshqa maydonning holatini tekshiring. Signal Forms qoidalari reaktiv boʻlgani uchun maydon validatsiyasi qoʻshni qiymatlarga, yuqori darajadagi (parent) qiymatlarga yoki boshqa hosilaviy shartlarga bogʻliq boʻlishi mumkin. Testlar faqat oʻzgargan maydonni tekshirish oʻrniga bu bogʻliqliklarni bevosita tekshirishi kerak.
 
-For validation-focused tests, `errors()` is usually the most useful assertion. `valid()` and `invalid()` tell you whether the field currently passes validation, but `errors()` shows which rule produced the failure. That becomes especially useful once a field has multiple validators or conditional rules.
+Validatsiyaga qaratilgan testlar uchun `errors()` odatda eng foydali tekshiruv hisoblanadi. `valid()` va `invalid()` maydon hozir validatsiyadan oʻtyaptimi-yoʻqmi ekanligini aytadi, `errors()` esa qaysi qoida muvaffaqiyatsizlikka sabab boʻlganini koʻrsatadi. Maydonda bir nechta validator yoki shartli qoidalar boʻlganda bu ayniqsa foydali boʻladi.
 
-The same structure works for most everyday form tests:
+Xuddi shu tuzilma aksariyat kundalik forma testlari uchun ishlaydi:
 
-1. Create a model signal with the smallest shape that reproduces the behavior.
-1. Build the form with an explicit injector.
-1. Assert the initial field state.
-1. Change a field with `.value.set(...)`, including sibling fields when testing cross-field rules.
-1. Assert the updated state signals, usually `errors()`, `valid()`, or `invalid()`.
+1. Xatti-harakatni takrorlaydigan eng kichik tuzilmali model signalini yarating.
+1. Formani aniq injector bilan quring.
+1. Maydonning dastlabki holatini tekshiring.
+1. Maydonni `.value.set(...)` bilan oʻzgartiring; maydonlararo qoidalarni testlashda qoʻshni maydonlarni ham oʻzgartiring.
+1. Yangilangan holat signallarini, odatda `errors()`, `valid()` yoki `invalid()`'ni tekshiring.
 
-When a test is about schema behavior rather than rendering, default to this isolated style. It is faster than a component test and makes it easier to see which rule is responsible when the behavior changes.
+Test render qilish haqida emas, sxema xatti-harakati haqida boʻlsa, sukut boʻyicha shu alohida uslubni tanlang. Bu komponent testidan tezroq va xatti-harakat oʻzgarganda qaysi qoida bunga javobgar ekanligini koʻrishni osonlashtiradi.
 
-## Testing forms bound to components
+## Komponentlarga bogʻlangan formalarni testlash {#testing-forms-bound-to-components}
 
-When you need to verify behavior that depends on template bindings, user interaction through `dispatchEvent`, or custom form controls that manage their own rendering, isolated tests are not enough. You need component-bound tests to render the template so that you can interact with actual DOM elements.
+Shablon bogʻlashlariga, `dispatchEvent` orqali foydalanuvchi oʻzaro aloqasiga yoki oʻz renderini oʻzi boshqaradigan maxsus forma kontrollariga bogʻliq xatti-harakatni tekshirish kerak boʻlganda alohida testlar yetarli emas. Haqiqiy DOM elementlari bilan oʻzaro aloqa qilish uchun shablonni render qiladigan komponentga bogʻlangan testlar kerak boʻladi.
 
-### Setting up a component test
+### Komponent testini sozlash {#setting-up-a-component-test}
 
-Component-bound tests render the component so you can interact with actual DOM elements. Create the component with `TestBed.createComponent()` and wait for rendering to complete before asserting:
+Komponentga bogʻlangan testlar komponentni render qiladi, shunda siz haqiqiy DOM elementlari bilan oʻzaro aloqa qila olasiz. Komponentni `TestBed.createComponent()` bilan yarating va tekshirishdan oldin render yakunlanishini kuting:
 
 ```angular-ts {header: 'profile-form.ts'}
 import {Component, signal} from '@angular/core';
@@ -184,31 +184,31 @@ describe('ProfileForm', () => {
 });
 ```
 
-Notice that the component uses `form()` without an explicit injector because the component's own injection context provides it automatically. After each change, `await fixture.whenStable()` waits for rendering and effects to complete before asserting.
+Eʼtibor bering, komponent `form()`'ni aniq injector'siz ishlatadi, chunki komponentning oʻz inyeksiya konteksti uni avtomatik taʼminlaydi. Har bir oʻzgarishdan keyin `await fixture.whenStable()` tekshirishdan oldin render va effect'lar yakunlanishini kutadi.
 
-The same pattern works for async operations such as async validators or server calls. Call `await fixture.whenStable()` after the async work resolves.
+Xuddi shu namuna asinxron validatorlar yoki server chaqiruvlari kabi asinxron operatsiyalar uchun ham ishlaydi. Asinxron ish yakunlangandan keyin `await fixture.whenStable()`'ni chaqiring.
 
-## When to use each approach
+## Har bir yondashuvdan qachon foydalanish kerak {#when-to-use-each-approach}
 
-| What you need to verify                              | Approach        |
+| Nimani tekshirish kerak                                | Yondashuv              |
 | ---------------------------------------------------- | --------------- |
-| Validation rules, `errors()`, `valid()`, `invalid()` | Isolated        |
-| Disabled, required, or readonly state                | Isolated        |
-| Cross-field reactive dependencies                    | Isolated        |
-| Conditional schemas (`applyWhen`, `applyWhenValue`)  | Isolated        |
-| Input values rendering in the DOM                    | Component-bound |
-| User typing updating the model                       | Component-bound |
-| Custom form controls with their own templates        | Component-bound |
-| Focus management or accessibility attributes         | Component-bound |
+| Validatsiya qoidalari, `errors()`, `valid()`, `invalid()` | Alohida        |
+| Oʻchirilgan, majburiy yoki faqat oʻqish uchun holat   | Alohida        |
+| Maydonlararo reaktiv bogʻliqliklar                    | Alohida        |
+| Shartli sxemalar (`applyWhen`, `applyWhenValue`)      | Alohida        |
+| Input qiymatlarining DOM'da render qilinishi          | Komponentga bogʻlangan |
+| Foydalanuvchi yozishining modelni yangilashi          | Komponentga bogʻlangan |
+| Oʻz shablonlariga ega maxsus forma kontrollari        | Komponentga bogʻlangan |
+| Fokusni boshqarish yoki accessibility atributlari     | Komponentga bogʻlangan |
 
-Most forms only need isolated tests. The form's logic (such as validation, disabled state, cross-field rules) lives in the schema, and schemas do not need a template to run. Component-bound tests add value when the behavior you care about crosses the boundary between the form and the DOM.
+Aksariyat formalarga faqat alohida testlar kifoya. Formaning logikasi (validatsiya, oʻchirilgan holat, maydonlararo qoidalar kabi) sxemada yashaydi, sxemalar esa ishlash uchun shablonga muhtoj emas. Komponentga bogʻlangan testlar sizni qiziqtirgan xatti-harakat forma va DOM oʻrtasidagi chegarani kesib oʻtganda qoʻshimcha qiymat beradi.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-This guide covered testing Signal Forms in isolation and with component templates. Here are related guides that explore other aspects of Signal Forms:
+Bu qoʻllanma Signal Forms'ni alohida va komponent shablonlari bilan testlashni qamrab oldi. Signal Forms'ning boshqa jihatlarini yorituvchi tegishli qoʻllanmalar:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/validation" title="Validation" />
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
-  <docs-pill href="guide/forms/signals/form-submission" title="Form submission" />
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya" />
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish" />
+  <docs-pill href="guide/forms/signals/form-submission" title="Forma yuborish" />
 </docs-pill-row>
