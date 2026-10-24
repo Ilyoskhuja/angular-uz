@@ -1,49 +1,49 @@
-# Use @for to list objects in component
+# Komponentda obyektlar roʻyxatini chiqarish uchun @for dan foydalanish
 
-This tutorial lesson demonstrates how to use `@for` block in Angular templates in order to display dynamically repeated data in a template.
+Bu dars shablonda dinamik takrorlanadigan maʼlumotlarni koʻrsatish uchun Angular shablonlarida `@for` blokidan qanday foydalanishni koʻrsatadi.
 
 <docs-video src="https://www.youtube.com/embed/eM3zi_n7lNs?si=MIl5NcRxvcLjYt5f&amp;start=477"/>
 
-NOTE: This video reflects an older syntax, but the main concepts remain valid.
+NOTE: Bu video eskiroq sintaksisni aks ettiradi, lekin asosiy tushunchalar oʻz kuchini saqlab qoladi.
 
-## What you'll learn
+## Nimalarni oʻrganasiz {#what-youll-learn}
 
-- You will have added a data set to the app
-- Your app will display a list of elements from the new data set using `@for`
+- Ilovaga maʼlumotlar toʻplamini qoʻshgan boʻlasiz
+- Ilovangiz `@for` yordamida yangi maʼlumotlar toʻplamidagi elementlar roʻyxatini koʻrsatadi
 
-## Conceptual preview of `@for`
+## `@for` haqida konseptual koʻrinish {#conceptual-preview-of-for}
 
-In Angular, `@for` is a specific type of [control flow block](/guide/templates/control-flow) used to dynamically repeat data in a template. In plain JavaScript you would use a for loop - `@for` provides similar functionality for Angular templates.
+Angular'da `@for` — shablonda maʼlumotlarni dinamik takrorlash uchun ishlatiladigan [boshqaruv oqimi blokining](/guide/templates/control-flow) alohida turi. Oddiy JavaScript'da siz for siklidan foydalanar edingiz — `@for` Angular shablonlari uchun shunga oʻxshash imkoniyat beradi.
 
-You can utilize `@for` to iterate over arrays and even asynchronous values. In this lesson, you'll add a new array of data to iterate over.
+`@for`'dan massivlar va hatto asinxron qiymatlar boʻylab takrorlash (iteratsiya) uchun foydalanishingiz mumkin. Bu darsda siz takrorlash uchun yangi maʼlumotlar massivini qoʻshasiz.
 
-For a more in depth explanation, please refer to the [control flow](guide/templates/control-flow#repeat-content-with-the-for-block) guide.
+Batafsilroq tushuntirish uchun [boshqaruv oqimi](guide/templates/control-flow#repeat-content-with-the-for-block) qoʻllanmasiga murojaat qiling.
 
 <docs-workflow>
 
-<docs-step title="Add housing data to the `Home`">
+<docs-step title="`Home`'ga turar joy maʼlumotlarini qoʻshing">
 
-In the `Home` there is only a single housing location. In this step, you will add an array of `HousingLocation` entries.
+`Home`'da faqat bitta turar joy mavjud. Bu qadamda siz `HousingLocation` yozuvlaridan iborat massiv qoʻshasiz.
 
-1. In `src/app/home/home.ts`, remove the `housingLocation` property from the `Home` class.
-1. Update the `Home` class to have a property called `housingLocationList`. Update your code to match the following code:
-   <docs-code language="angular-ts"  header="Add housingLocationList property in home.ts" path="adev/src/content/tutorials/first-app/steps/09-services/src/app/home/home.ts" visibleLines="[26,127]"/>
+1. `src/app/home/home.ts` faylida `Home` klassidan `housingLocation` xususiyatini olib tashlang.
+1. `Home` klassiga `housingLocationList` nomli xususiyat qoʻshing. Kodingizni quyidagi kodga moslab yangilang:
+   <docs-code language="angular-ts"  header="home.ts fayliga housingLocationList xususiyatini qoʻshish" path="adev/src/content/tutorials/first-app/steps/09-services/src/app/home/home.ts" visibleLines="[26,127]"/>
 
-   IMPORTANT: Do not remove the `@Component` decorator, you will update that code in an upcoming step.
+   IMPORTANT: `@Component` dekoratorini olib tashlamang, bu kodni keyingi qadamlardan birida yangilaysiz.
 
 </docs-step>
 
-<docs-step title="Update the `Home` template to use `@for`">
-Now the app has a dataset that you can use to display the entries in the browser using the `@for` block.
+<docs-step title="`Home` shablonini `@for` ishlatadigan qilib yangilang">
+Endi ilovada `@for` bloki yordamida yozuvlarni brauzerda koʻrsatish uchun foydalanishingiz mumkin boʻlgan maʼlumotlar toʻplami bor.
 
-1. Update the `<app-housing-location>` tag in the template code to this:
-   <docs-code language="angular-ts"  header="Add @for to Home template in home.ts" path="adev/src/content/tutorials/first-app/steps/09-services/src/app/home/home.ts" visibleLines="[15,19]"/>
+1. Shablon kodidagi `<app-housing-location>` tegini quyidagicha yangilang:
+   <docs-code language="angular-ts"  header="home.ts dagi Home shabloniga @for qoʻshish" path="adev/src/content/tutorials/first-app/steps/09-services/src/app/home/home.ts" visibleLines="[15,19]"/>
 
-   Note, in the code `[housingLocation] = "housingLocation"` the `housingLocation` value now refers to the variable used in the `@for` block. Before this change, it referred to the property on the `Home` class.
+   Eʼtibor bering, `[housingLocation] = "housingLocation"` kodida `housingLocation` qiymati endi `@for` blokida ishlatiladigan oʻzgaruvchiga ishora qiladi. Bu oʻzgarishdan oldin u `Home` klassidagi xususiyatga ishora qilar edi.
 
-1. Save all changes.
+1. Barcha oʻzgarishlarni saqlang.
 
-1. Refresh the browser and confirm that the app now renders a grid of housing locations.
+1. Brauzerni yangilang va ilova endi turar joylar toʻrini (grid) render qilayotganini tasdiqlang.
 
 <section class="lightbox">
 <img alt="browser frame of homes-app displaying logo, filter text input box, search button and a grid of housing location cards" src="assets/images/tutorials/first-app/homes-app-lesson-08-step-2.png">
@@ -53,14 +53,14 @@ Now the app has a dataset that you can use to display the entries in the browser
 
 </docs-workflow>
 
-SUMMARY: In this lesson, you used the `@for` block to repeat data dynamically in Angular templates. You also added a new array of data to be used in the Angular app. The application now dynamically renders a list of housing locations in the browser.
+SUMMARY: Bu darsda siz Angular shablonlarida maʼlumotlarni dinamik takrorlash uchun `@for` blokidan foydalandingiz. Shuningdek, Angular ilovasida ishlatish uchun yangi maʼlumotlar massivini qoʻshdingiz. Endi ilova brauzerda turar joylar roʻyxatini dinamik render qiladi.
 
-The app is taking shape, great job.
+Ilova shakllanib bormoqda, ajoyib ish.
 
-For more information about the topics covered in this lesson, visit:
+Bu darsda yoritilgan mavzular haqida koʻproq maʼlumot olish uchun quyidagilarga qarang:
 
 <docs-pill-row>
-  <docs-pill href="guide/templates/control-flow" title="Control flow blocks"/>
-  <docs-pill href="guide/templates/control-flow#repeat-content-with-the-for-block" title="@for guide"/>
+  <docs-pill href="guide/templates/control-flow" title="Boshqaruv oqimi bloklari"/>
+  <docs-pill href="guide/templates/control-flow#repeat-content-with-the-for-block" title="@for qoʻllanmasi"/>
   <docs-pill href="/api/core/@for" title="@for"/>
 </docs-pill-row>

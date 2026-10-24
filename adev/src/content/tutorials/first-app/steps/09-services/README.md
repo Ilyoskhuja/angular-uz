@@ -1,110 +1,110 @@
-# Angular services
+# Angular servislari
 
-This tutorial lesson demonstrates how to create an Angular service and use dependency injection to include it in your app.
+Bu dars Angular servisini qanday yaratishni va uni ilovangizga qoʻshish uchun bogʻliqliklarni inyeksiya qilishdan qanday foydalanishni koʻrsatadi.
 
 <docs-video src="https://www.youtube.com/embed/-jRxG84AzCI?si=rieGfJawp9xJ00Sz"/>
 
-## What you'll learn
+## Nimalarni oʻrganasiz {#what-youll-learn}
 
-Your app has a service to serve the data to your app.
-At the end of this lesson, the service reads data from local, static data.
-In a later lesson, you'll update the service to get data from a web service.
+Ilovangizda unga maʼlumotlarni yetkazib beruvchi servis boʻladi.
+Bu dars oxirida servis maʼlumotlarni lokal, statik maʼlumotlardan oʻqiydi.
+Keyingi darslardan birida servisni maʼlumotlarni veb-servisdan oladigan qilib yangilaysiz.
 
-## Conceptual preview of services
+## Servislar haqida konseptual koʻrinish {#conceptual-preview-of-services}
 
-This tutorial introduces Angular services and dependency injection.
+Bu darslik Angular servislari va bogʻliqliklarni inyeksiya qilish (dependency injection) bilan tanishtiradi.
 
-### Angular services
+### Angular servislari {#angular-services}
 
-_Angular services_ provide a way for you to separate Angular app data and functions that can be used by multiple components in your app.
-To be used by multiple components, a service must be made _injectable_.
-Services that are injectable and used by a component become dependencies of that component.
-The component depends on those services and can't function without them.
+_Angular servislari_ ilovangizdagi bir nechta komponent tomonidan ishlatilishi mumkin boʻlgan Angular ilovasi maʼlumotlari va funksiyalarini ajratib olish imkonini beradi.
+Bir nechta komponent tomonidan ishlatilishi uchun servis _inyeksiya qilinadigan (injectable)_ boʻlishi kerak.
+Inyeksiya qilinadigan va komponent tomonidan ishlatiladigan servislar oʻsha komponentning bogʻliqliklariga aylanadi.
+Komponent bu servislarga bogʻliq boʻladi va ularsiz ishlay olmaydi.
 
-### Dependency injection
+### Bogʻliqliklarni inyeksiya qilish {#dependency-injection}
 
-_Dependency injection_ is the mechanism that manages the dependencies of an app's components and the services that other components can use.
+_Bogʻliqliklarni inyeksiya qilish_ — ilova komponentlarining bogʻliqliklarini va boshqa komponentlar foydalana oladigan servislarni boshqaradigan mexanizm.
 
 <docs-workflow>
 
-<docs-step title="Create a new service for your app">
-This step creates an injectable service for your app.
+<docs-step title="Ilovangiz uchun yangi servis yarating">
+Bu qadam ilovangiz uchun inyeksiya qilinadigan servis yaratadi.
 
-In the **Terminal** pane of your IDE:
+IDE'ingizning **Terminal** panelida:
 
-1. In your project directory, navigate to the `first-app` directory.
-1. In the `first-app` directory, run this command to create the new service.
+1. Loyiha katalogingizda `first-app` katalogiga oʻting.
+1. `first-app` katalogida yangi servis yaratish uchun quyidagi buyruqni bajaring.
 
    ```shell
    ng generate service housing --skip-tests
    ```
 
-1. Run `ng serve` to build the app and serve it to `http://localhost:4200`.
-1. Confirm that the app builds without error.
-   Correct any errors before you continue to the next step.
+1. Ilovani build qilish va `http://localhost:4200` manzilida ishga tushirish (serve) uchun `ng serve`'ni bajaring.
+1. Ilova xatosiz build boʻlishini tasdiqlang.
+   Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
    </docs-step>
 
-<docs-step title="Add static data to the new service">
-This step adds some sample data to your new service.
-In a later lesson, you'll replace the static data with a web interface to get data as you might in a real app.
-For now, your app's new service uses the data that has, so far, been created locally in `Home`.
+<docs-step title="Yangi servisga statik maʼlumotlar qoʻshing">
+Bu qadam yangi servisingizga namunaviy maʼlumotlar qoʻshadi.
+Keyingi darslardan birida statik maʼlumotlarni haqiqiy ilovadagidek maʼlumot olish uchun veb-interfeys bilan almashtirasiz.
+Hozircha ilovangizning yangi servisi shu paytgacha `Home`'da lokal yaratilgan maʼlumotlardan foydalanadi.
 
-In the **Edit** pane of your IDE:
+IDE'ingizning **Edit** panelida:
 
-1. In `src/app/home/home.ts`, from `Home`, copy the `baseUrl` variable and the `housingLocationList` variable with its array value.
-1. In `src/app/housing.service.ts`:
-   1. Inside the `HousingService` class, paste the variables that you copied from `Home` in the previous step.
-   1. Inside the `HousingService` class, paste these functions after the data you just copied.
-      These functions allow dependencies to access the service's data.
+1. `src/app/home/home.ts` faylidagi `Home`'dan `baseUrl` oʻzgaruvchisini va `housingLocationList` oʻzgaruvchisini massiv qiymati bilan birga nusxalang.
+1. `src/app/housing.service.ts` faylida:
+   1. `HousingService` klassi ichiga oldingi qadamda `Home`'dan nusxalagan oʻzgaruvchilarni joylashtiring.
+   1. `HousingService` klassi ichiga, hozirgina nusxalagan maʼlumotlardan keyin, quyidagi funksiyalarni joylashtiring.
+      Bu funksiyalar bogʻliqliklarga servis maʼlumotlariga kirish imkonini beradi.
 
-      <docs-code header="Service functions in src/app/housing.service.ts" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing.service.ts" visibleLines="[110,116]"/>
+      <docs-code header="src/app/housing.service.ts dagi servis funksiyalari" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing.service.ts" visibleLines="[110,116]"/>
 
-      You will need these functions in a future lesson. For now, it is enough to understand that these functions return either a specific `HousingLocation` by id or the entire list.
+      Bu funksiyalar sizga kelgusi darsda kerak boʻladi. Hozircha bu funksiyalar id boʻyicha muayyan `HousingLocation`'ni yoki butun roʻyxatni qaytarishini tushunish kifoya.
 
-   1. Add a file level import for the `HousingLocation`.
+   1. `HousingLocation` uchun fayl darajasidagi import qoʻshing.
 
-      <docs-code header="Import HousingLocation type in  src/app/housing.service.ts" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing.service.ts" visibleLines="[2]"/>
+      <docs-code header="src/app/housing.service.ts fayliga HousingLocation turini import qilish" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing.service.ts" visibleLines="[2]"/>
 
-1. Confirm that the app builds without error.
-   Correct any errors before you continue to the next step.
+1. Ilova xatosiz build boʻlishini tasdiqlang.
+   Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
    </docs-step>
 
-<docs-step title="Inject the new service into `Home`">
-This step injects the new service into your app's `Home` so that it can read the app's data from a service.
-In a later lesson, you'll replace the static data with a live data source to get data as you might in a real app.
+<docs-step title="Yangi servisni `Home`'ga inyeksiya qiling">
+Bu qadam yangi servisni ilovangizning `Home`'iga inyeksiya qiladi, shunda u ilova maʼlumotlarini servisdan oʻqiy oladi.
+Keyingi darslardan birida statik maʼlumotlarni haqiqiy ilovadagidek maʼlumot olish uchun jonli maʼlumot manbai bilan almashtirasiz.
 
-In the **Edit** pane of your IDE, in `src/app/home/home.ts`:
+IDE'ingizning **Edit** panelida, `src/app/home/home.ts` faylida:
 
-1.  At the top of `src/app/home/home.ts`, add the `inject` to the items imported from `@angular/core`. This will import the `inject` function into the `Home` class.
+1.  `src/app/home/home.ts` faylining yuqori qismida `@angular/core`'dan import qilinadigan elementlarga `inject`'ni qoʻshing. Bu `inject` funksiyasini `Home` klassiga import qiladi.
 
-      <docs-code language="angular-ts" header="Update to src/app/home/home.ts" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/home/home.ts" visibleLines="[1]"/>
+      <docs-code language="angular-ts" header="src/app/home/home.ts faylini yangilash" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/home/home.ts" visibleLines="[1]"/>
 
-1.  Add a new file level import for the `HousingService`:
+1.  `HousingService` uchun yangi fayl darajasidagi import qoʻshing:
 
-      <docs-code language="angular-ts" header="Add import to src/app/home/home.ts" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/home/home.ts" visibleLines="[4]"/>
+      <docs-code language="angular-ts" header="src/app/home/home.ts fayliga import qoʻshish" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/home/home.ts" visibleLines="[4]"/>
 
-1.  From `Home`, delete the `baseUrl` variable, delete the `housingLocationList` array entries and assign `housingLocationList` the value of empty array (`[]`). In a few steps you will update the code to pull the data from the `HousingService`.
+1.  `Home`'dan `baseUrl` oʻzgaruvchisini oʻchiring, `housingLocationList` massivi yozuvlarini oʻchiring va `housingLocationList`'ga boʻsh massiv (`[]`) qiymatini bering. Bir necha qadamdan keyin kodni maʼlumotlarni `HousingService`'dan oladigan qilib yangilaysiz.
 
-1.  In `Home`, add the following code to inject the new service and initialize the data for the app. The `constructor` is the first function that runs when this component is created. The code in the `constructor` will assign the `housingLocationList` the value returned from the call to `getAllHousingLocations`.
+1.  `Home`'da yangi servisni inyeksiya qilish va ilova maʼlumotlarini initsializatsiya qilish uchun quyidagi kodni qoʻshing. `constructor` — bu komponent yaratilganda ishga tushadigan birinchi funksiya. `constructor`'dagi kod `housingLocationList`'ga `getAllHousingLocations` chaqiruvidan qaytgan qiymatni beradi.
 
-      <docs-code language="angular-ts" header="Initialize data from service in src/app/home/home.ts" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/home/home.ts" visibleLines="[23,30]"/>
+      <docs-code language="angular-ts" header="src/app/home/home.ts da maʼlumotlarni servisdan initsializatsiya qilish" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/home/home.ts" visibleLines="[23,30]"/>
 
-1.  Save the changes to `src/app/home/home.ts` and confirm your app builds without error.
-    Correct any errors before you continue to the next step.
+1.  `src/app/home/home.ts` fayliga kiritilgan oʻzgarishlarni saqlang va ilovangiz xatosiz build boʻlishini tasdiqlang.
+    Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
     </docs-step>
 
 </docs-workflow>
 
-SUMMARY: In this lesson, you added an Angular service to your app and injected it into the `Home` class.
-This compartmentalizes how your app gets its data.
-For now, the new service gets its data from a static array of data.
-In a later lesson, you'll refactor the service to get its data from an API endpoint.
+SUMMARY: Bu darsda siz ilovangizga Angular servisini qoʻshdingiz va uni `Home` klassiga inyeksiya qildingiz.
+Bu ilovangizning maʼlumotlarni qanday olishini alohida boʻlimga ajratadi.
+Hozircha yangi servis maʼlumotlarini statik maʼlumotlar massividan oladi.
+Keyingi darslardan birida servisni maʼlumotlarini API endpoint'idan oladigan qilib refaktoring qilasiz.
 
-For more information about the topics covered in this lesson, visit:
+Bu darsda yoritilgan mavzular haqida koʻproq maʼlumot olish uchun quyidagilarga qarang:
 
 <docs-pill-row>
-  <docs-pill href="guide/di/creating-and-using-services" title="Creating an injectable service"/>
-  <docs-pill href="guide/di" title="Dependency injection in Angular"/>
+  <docs-pill href="guide/di/creating-and-using-services" title="Inyeksiya qilinadigan servis yaratish"/>
+  <docs-pill href="guide/di" title="Angular'da bogʻliqliklarni inyeksiya qilish"/>
   <docs-pill href="cli/generate/service" title="ng generate service"/>
   <docs-pill href="cli/generate" title="ng generate"/>
 </docs-pill-row>

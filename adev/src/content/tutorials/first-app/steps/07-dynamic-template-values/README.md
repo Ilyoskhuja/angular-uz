@@ -7,7 +7,7 @@ Bu darslik darsi shablonda dinamik maʼlumotlarni koʻrsatish uchun Angular shab
 ## Nimalarni oʻrganasiz {#what-youll-learn}
 
 - Ilovangiz `HousingLocation` shablonida interpolyatsiya qilingan qiymatlarni koʻrsatadi.
-- Ilovangiz uy-joy manzili maʼlumotlarini brauzerda render qiladi.
+- Ilovangiz turar joy maʼlumotlarini brauzerda render qiladi.
 
 ## Interpolyatsiyaning konseptual koʻrinishi {#conceptual-preview-of-interpolation}
 

@@ -17,7 +17,7 @@ Angular qatʼiy tiplashtirilgan dasturlash muhitida ishlash afzalliklaridan foyd
 Qatʼiy tip tekshiruvi ilovangizdagi bir element boshqasiga notoʻgʻri formatlangan maʼlumot yuborish ehtimolini kamaytiradi.
 Bunday tiplar nomuvofiqligi xatolarini TypeScript kompilyatori ushlaydi va koʻplab shunday xatolarni IDE'ingizda ham aniqlash mumkin.
 
-Bu darsda bitta uy-joy manzili (housing location) haqidagi maʼlumotlarni ifodalovchi xususiyatlarni belgilash uchun interfeys yaratasiz.
+Bu darsda bitta turar joy (housing location) haqidagi maʼlumotlarni ifodalovchi xususiyatlarni belgilash uchun interfeys yaratasiz.
 
 <docs-workflow>
 
@@ -42,7 +42,7 @@ IDE'ingizning **Terminal** panelida:
    </docs-step>
 
 <docs-step title="Yangi interfeysga xususiyatlar qoʻshing">
-Bu qadam interfeysga ilovangiz uy-joy manzilini ifodalash uchun zarur boʻlgan xususiyatlarni qoʻshadi.
+Bu qadam interfeysga ilovangiz turar joyni ifodalash uchun zarur boʻlgan xususiyatlarni qoʻshadi.
 
 1.  IDE'ingizning **Terminal** panelida, agar hali ishlamayotgan boʻlsa, ilovani build qilish va `http://localhost:4200` manzilida ishga tushirish uchun `ng serve` buyrugʻini ishga tushiring.
 1.  IDE'ingizning **Edit** panelida `src/app/housinglocation.ts` faylini oching.
@@ -52,7 +52,7 @@ Bu qadam interfeysga ilovangiz uy-joy manzilini ifodalash uchun zarur boʻlgan x
 
 1.  Oʻzgarishlaringizni saqlang va ilova hech qanday xato koʻrsatmasligini tasdiqlang. Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
 
-Shu nuqtada siz uy-joy manzili haqidagi maʼlumotlarni — `id`, `name` va joylashuv maʼlumotlarini — ifodalovchi interfeysni belgiladingiz.
+Shu nuqtada siz turar joy haqidagi maʼlumotlarni — `id`, `name` va joylashuv maʼlumotlarini — ifodalovchi interfeysni belgiladingiz.
 </docs-step>
 
 <docs-step title="Ilovangiz uchun sinov uyini yarating">
