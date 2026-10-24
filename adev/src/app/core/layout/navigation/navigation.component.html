@@ -11,7 +11,7 @@
     <button
       type="button"
       class="adev-mobile-nav-button"
-      aria-label="Toggle mobile navigation"
+      aria-label="Mobil navigatsiyani ochish/yopish"
       (click)="openMobileNav($event)"
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 223 236" width="32">
@@ -70,7 +70,7 @@
       type="button"
       class="adev-close-nav"
       (click)="closeMobileNav()"
-      aria-label="Close navigation"
+      aria-label="Navigatsiyani yopish"
     >
       <docs-icon role="presentation">close</docs-icon>
     </button>
@@ -81,7 +81,7 @@
         class="adev-nav-item adev-nav-item--logo"
         [class.adev-nav-item--active]="activeRouteItem() === PAGE_PREFIX.HOME"
       >
-        <a aria-label="Angular homepage" routerLink="/">
+        <a aria-label="Angular bosh sahifasi" routerLink="/">
           <!-- Logo Symbol -->
           @if (!isUwu) {
             <svg
@@ -148,7 +148,7 @@
         <div class="adev-nav-item">
           <button
             type="button"
-            aria-label="Select Angular version"
+            aria-label="Angular versiyasini tanlash"
             role="menu"
             class="adev-version-button"
             [class.adev-mini-menu-open]="openedMenu() === 'version-picker'"
@@ -189,7 +189,7 @@
           class="adev-nav-button"
           type="button"
           (click)="toggleSearchDialog($event)"
-          title="Search docs"
+          title="Hujjatlardan qidirish"
           [aria-label]="'Open search dialog with ' + searchTitle"
         >
           <svg
@@ -227,7 +227,7 @@
               d="M3.645 13.792h6.708v-1.25H3.645v1.25Zm0-3.542h6.708V9H3.645v1.25Zm-2.063 7.083a1.2 1.2 0 0 1-.875-.375 1.2 1.2 0 0 1-.375-.875V1.917a1.2 1.2 0 0 1 .375-.875 1.2 1.2 0 0 1 .875-.375h7.52l4.563 4.562v10.854a1.2 1.2 0 0 1-.375.875 1.2 1.2 0 0 1-.875.375H1.582ZM8.478 5.792V1.917H1.582v14.166h10.833V5.792H8.478Z"
             />
           </svg>
-          <span class="adev-nav-item__label">Docs</span>
+          <span class="adev-nav-item__label">Hujjatlar</span>
         </a>
       </li>
 
@@ -248,7 +248,7 @@
               d="m5.668 10-5-5 5-5 1.187 1.188L3.022 5.02l3.813 3.812L5.668 10Zm6.667 0-1.188-1.188L14.98 4.98l-3.812-3.812L12.335 0l5 5-5 5Z"
             />
           </svg>
-          <span class="adev-nav-item__label">Tutorials</span>
+          <span class="adev-nav-item__label">Darsliklar</span>
         </a>
       </li>
 
@@ -284,7 +284,7 @@
               d="M3.645 13.792h6.708v-1.25H3.645v1.25Zm0-3.542h6.708V9H3.645v1.25Zm-2.063 7.083a1.2 1.2 0 0 1-.875-.375 1.2 1.2 0 0 1-.375-.875V1.917a1.2 1.2 0 0 1 .375-.875 1.2 1.2 0 0 1 .875-.375h7.52l4.563 4.562v10.854a1.2 1.2 0 0 1-.375.875 1.2 1.2 0 0 1-.875.375H1.582ZM8.478 5.792V1.917H1.582v14.166h10.833V5.792H8.478Z"
             />
           </svg>
-          <span class="adev-nav-item__label">Reference</span>
+          <span class="adev-nav-item__label">Maʼlumotnoma</span>
         </a>
       </li>
     </ul>
@@ -297,7 +297,7 @@
           type="button"
           [cdkMenuTriggerFor]="socialMiniMenu"
           [cdkMenuPosition]="bottomMiniMenuPositions"
-          aria-label="Open social media links"
+          aria-label="Ijtimoiy tarmoq havolalarini ochish"
           (cdkMenuClosed)="closeMenu()"
           (cdkMenuOpened)="openMenu('social')"
           aria-controls="social-mini-menu"
@@ -496,7 +496,7 @@
             cdkMenu
             id="theme-mini-menu"
             role="menu"
-            aria-label="Theme options"
+            aria-label="Mavzu sozlamalari"
           >
             <li role="none">
               <button
@@ -505,7 +505,7 @@
                 role="menuitemradio"
                 [aria-checked]="theme() === 'auto'"
                 (click)="setTheme('auto')"
-                aria-label="Set default system theme"
+                aria-label="Tizim mavzusini oʻrnatish"
               >
                 <docs-icon class="docs-icon_high-contrast" aria-hidden="true">routine</docs-icon>
                 <span>System</span>
@@ -518,7 +518,7 @@
                 role="menuitemradio"
                 [aria-checked]="theme() === 'dark'"
                 (click)="setTheme('dark')"
-                aria-label="Set dark theme"
+                aria-label="Qorongʻi mavzuni oʻrnatish"
               >
                 <docs-icon class="docs-icon_high-contrast" aria-hidden="true">dark_mode</docs-icon>
                 <span>Dark</span>
@@ -531,7 +531,7 @@
                 role="menuitemradio"
                 [aria-checked]="theme() === 'light'"
                 (click)="setTheme('light')"
-                aria-label="Set light theme"
+                aria-label="Yorugʻ mavzuni oʻrnatish"
               >
                 <docs-icon class="docs-icon_high-contrast" aria-hidden="true">light_mode</docs-icon>
                 <span>Light</span>
@@ -549,7 +549,7 @@
       <button type="button" (click)="openMobileNav($event)">
         <docs-icon class="docs-icon_high-contrast">menu</docs-icon>
         @if (activeRouteItem() === PAGE_PREFIX.DOCS) {
-          <span>Docs</span>
+          <span>Hujjatlar</span>
         }
         @if (activeRouteItem() === PAGE_PREFIX.REFERENCE) {
           <span>API</span>

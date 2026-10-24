@@ -124,70 +124,70 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
         ],
       },
       {
-        label: 'Components',
+        label: 'Komponentlar',
         children: [
           {
-            label: 'Anatomy of components',
+            label: 'Komponentlar anatomiyasi',
             path: 'guide/components',
             contentPath: 'guide/components/anatomy-of-components',
           },
           {
-            label: 'Selectors',
+            label: 'Selektorlar',
             path: 'guide/components/selectors',
             contentPath: 'guide/components/selectors',
           },
           {
-            label: 'Styling',
+            label: 'Stillar berish',
             path: 'guide/components/styling',
             contentPath: 'guide/components/styling',
           },
           {
-            label: 'Accepting data with input properties',
+            label: 'Input xususiyatlari orqali maʼlumot qabul qilish',
             path: 'guide/components/inputs',
             contentPath: 'guide/components/inputs',
           },
           {
-            label: 'Custom events with outputs',
+            label: 'Output\'lar bilan maxsus hodisalar',
             path: 'guide/components/outputs',
             contentPath: 'guide/components/outputs',
           },
           {
-            label: 'Content projection with ng-content',
+            label: 'ng-content bilan kontent proyeksiyasi',
             path: 'guide/components/content-projection',
             contentPath: 'guide/components/content-projection',
           },
           {
-            label: 'Host elements',
+            label: 'Host elementlar',
             path: 'guide/components/host-elements',
             contentPath: 'guide/components/host-elements',
           },
           {
-            label: 'Lifecycle',
+            label: 'Hayot sikli',
             path: 'guide/components/lifecycle',
             contentPath: 'guide/components/lifecycle',
           },
           {
-            label: 'Referencing component children with queries',
+            label: 'Soʻrovlar orqali komponent farzandlariga murojaat',
             path: 'guide/components/queries',
             contentPath: 'guide/components/queries',
           },
           {
-            label: 'Using DOM APIs',
+            label: 'DOM API\'laridan foydalanish',
             path: 'guide/components/dom-apis',
             contentPath: 'guide/components/dom-apis',
           },
           {
-            label: 'Inheritance',
+            label: 'Meros olish',
             path: 'guide/components/inheritance',
             contentPath: 'guide/components/inheritance',
           },
           {
-            label: 'Programmatically rendering components',
+            label: 'Komponentlarni dasturiy render qilish',
             path: 'guide/components/programmatic-rendering',
             contentPath: 'guide/components/programmatic-rendering',
           },
           {
-            label: 'Advanced configuration',
+            label: 'Kengaytirilgan konfiguratsiya',
             path: 'guide/components/advanced-configuration',
             contentPath: 'guide/components/advanced-configuration',
           },
@@ -1403,7 +1403,7 @@ export const TUTORIALS_SUB_NAVIGATION_DATA: NavigationItem[] = [
   {
     path: 'tutorials',
     contentPath: 'tutorials/home',
-    label: 'Tutorials',
+    label: 'Darsliklar',
   },
 ];
 
