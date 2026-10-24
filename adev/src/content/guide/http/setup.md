@@ -1,10 +1,10 @@
-# Setting up `HttpClient`
+# `HttpClient`'ni sozlash
 
-`HttpClient` is available for injection by default in Angular v21 and later.
+Angular v21 va undan keyingi versiyalarda `HttpClient` sukut boʻyicha inyeksiya qilish uchun mavjud.
 
-## Providing `HttpClient` through dependency injection
+## `HttpClient`'ni bogʻliqliklarni inyeksiya qilish orqali taqdim etish {#providing-httpclient-through-dependency-injection}
 
-You can use the `provideHttpClient` helper function to configure the default HTTP feature set or add features in the application `providers` in `app.config.ts`.
+`app.config.ts` faylidagi ilova `providers` roʻyxatida HTTP imkoniyatlarining standart toʻplamini sozlash yoki yangi imkoniyatlar qoʻshish uchun `provideHttpClient` yordamchi funksiyasidan foydalanishingiz mumkin.
 
 ```ts
 export const appConfig: ApplicationConfig = {
@@ -12,7 +12,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-If your app is using NgModule-based bootstrap instead, you can include `provideHttpClient` in the providers of your app's NgModule to configure the default HTTP feature set or add features:
+Agar ilovangiz NgModule'ga asoslangan bootstrap'dan foydalansa, HTTP imkoniyatlarining standart toʻplamini sozlash yoki imkoniyatlar qoʻshish uchun `provideHttpClient`'ni ilovangiz NgModule'ining provider'lariga kiritishingiz mumkin:
 
 ```ts
 @NgModule({
@@ -22,7 +22,7 @@ If your app is using NgModule-based bootstrap instead, you can include `provideH
 export class AppModule {}
 ```
 
-You can then inject the `HttpClient` service as a dependency of your components, services, or other classes:
+Soʻngra `HttpClient` servisini komponentlaringiz, servislaringiz yoki boshqa klasslaringizning bogʻliqligi sifatida inyeksiya qilishingiz mumkin:
 
 ```ts
 @Service()
@@ -32,9 +32,9 @@ export class ConfigService {
 }
 ```
 
-## Configuring features of `HttpClient`
+## `HttpClient` imkoniyatlarini sozlash {#configuring-features-of-httpclient}
 
-`provideHttpClient` accepts a list of optional feature configurations to enable or configure different aspects of the client. This section details the optional features and their usage.
+`provideHttpClient` klientning turli jihatlarini yoqish yoki sozlash uchun ixtiyoriy imkoniyat konfiguratsiyalari roʻyxatini qabul qiladi. Bu boʻlimda ixtiyoriy imkoniyatlar va ulardan foydalanish batafsil yoritilgan.
 
 ### `withXhr`
 
@@ -44,71 +44,71 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-By default, `HttpClient` uses the [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) API to make requests. The `withXhr` feature switches the client to use the [`XMLHttpRequest`](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest) API instead.
+Sukut boʻyicha `HttpClient` soʻrovlarni yuborish uchun [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) API'sidan foydalanadi. `withXhr` imkoniyati klientni oʻrniga [`XMLHttpRequest`](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest) API'sidan foydalanishga oʻtkazadi.
 
-`fetch` is a more modern API and is available in a few environments where `XMLHttpRequest` is not supported. It does have a few limitations, such as not producing upload progress events.
+`fetch` zamonaviyroq API boʻlib, `XMLHttpRequest` qoʻllab-quvvatlanmaydigan bir qancha muhitlarda mavjud. Uning bir nechta cheklovlari bor, masalan, u yuklash (upload) jarayoni hodisalarini hosil qilmaydi.
 
-<docs-callout critical title="Do not use `withXhr` in server-side rendering (SSR) environments">
+<docs-callout critical title="`withXhr`'ni server tomonida render qilish (SSR) muhitlarida ishlatmang">
 
-XHR support on the server is **deprecated** and is intended to be removed in Angular 23. The underlying `xhr2` library does not safely handle redirects: it can forward `Authorization` headers on cross-origin redirects and is susceptible to denial-of-service (DoS) via redirect loops. For SSR applications, use the default `fetch` backend instead.
+Serverda XHR qoʻllab-quvvatlanishi **eskirgan (deprecated)** va Angular 23 da olib tashlanishi koʻzda tutilgan. Asosidagi `xhr2` kutubxonasi yoʻnaltirishlarni (redirect) xavfsiz qayta ishlamaydi: u cross-origin yoʻnaltirishlarda `Authorization` sarlavhalarini uzatib yuborishi mumkin va yoʻnaltirish sikllari orqali xizmat koʻrsatishni rad etish (DoS) hujumiga moyil. SSR ilovalari uchun oʻrniga standart `fetch` backend'idan foydalaning.
 
 </docs-callout>
 
 ### `withInterceptors(...)`
 
-`withInterceptors` configures the set of interceptor functions which will process requests made through `HttpClient`. See the [interceptor guide](guide/http/interceptors) for more information.
+`withInterceptors` `HttpClient` orqali yuborilgan soʻrovlarni qayta ishlaydigan interceptor funksiyalari toʻplamini sozlaydi. Koʻproq maʼlumot uchun [interceptor qoʻllanmasiga](guide/http/interceptors) qarang.
 
 ### `withInterceptorsFromDi()`
 
-`withInterceptorsFromDi` includes the older style of class-based interceptors in the `HttpClient` configuration. See the [interceptor guide](guide/http/interceptors) for more information.
+`withInterceptorsFromDi` `HttpClient` konfiguratsiyasiga klassga asoslangan eski uslubdagi interceptor'larni kiritadi. Koʻproq maʼlumot uchun [interceptor qoʻllanmasiga](guide/http/interceptors) qarang.
 
-HELPFUL: Functional interceptors (through `withInterceptors`) have more predictable ordering and we recommend them over DI-based interceptors.
+HELPFUL: Funksional interceptor'lar (`withInterceptors` orqali) yanada oldindan aytib boʻladigan tartibga ega va biz ularni DI'ga asoslangan interceptor'lardan koʻra tavsiya qilamiz.
 
 ### `withRequestsMadeViaParent()`
 
-By default, when you configure `HttpClient` using `provideHttpClient` within a given injector, this configuration overrides any configuration for `HttpClient` which may be present in the parent injector.
+Sukut boʻyicha, muayyan injector ichida `HttpClient`'ni `provideHttpClient` yordamida sozlaganingizda, bu konfiguratsiya ota injector'da mavjud boʻlishi mumkin boʻlgan har qanday `HttpClient` konfiguratsiyasini bekor qiladi.
 
-When you add `withRequestsMadeViaParent()`, `HttpClient` is configured to instead pass requests up to the `HttpClient` instance in the parent injector, once they've passed through any configured interceptors at this level. This is useful if you want to _add_ interceptors in a child injector while still sending the request through the parent injector's interceptors.
+`withRequestsMadeViaParent()` qoʻshganingizda, `HttpClient` soʻrovlarni shu darajada sozlangan interceptor'lardan oʻtgandan soʻng ota injector'dagi `HttpClient` nusxasiga yuqoriga uzatadigan tarzda sozlanadi. Bu soʻrovni ota injector'ning interceptor'lari orqali yuborishni davom ettirgan holda bola injector'ga interceptor'lar _qoʻshmoqchi_ boʻlsangiz foydali.
 
-CRITICAL: You must configure an instance of `HttpClient` above the current injector, or this option is not valid and you'll get a runtime error when you try to use it.
+CRITICAL: Joriy injector'dan yuqorida `HttpClient` nusxasini sozlashingiz shart, aks holda bu variant yaroqsiz boʻladi va undan foydalanmoqchi boʻlganingizda ish vaqtida xato olasiz.
 
 ### `withJsonpSupport()`
 
-<docs-callout critical title="JSONP is deprecated">
+<docs-callout critical title="JSONP eskirgan (deprecated)">
 
-`withJsonpSupport`, `HttpClientJsonpModule`, and the `.jsonp()` method on `HttpClient` are deprecated because JSONP can cause cross-site scripting (XSS) vulnerabilities. Use standard HTTP requests with [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS) instead.
+`withJsonpSupport`, `HttpClientJsonpModule` va `HttpClient`'dagi `.jsonp()` metodi eskirgan, chunki JSONP saytlararo skripting (XSS) zaifliklariga sabab boʻlishi mumkin. Oʻrniga [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS) bilan standart HTTP soʻrovlaridan foydalaning.
 
 </docs-callout>
 
-Including `withJsonpSupport` enables the `.jsonp()` method on `HttpClient`, which makes a GET request via the [JSONP convention](https://en.wikipedia.org/wiki/JSONP) for cross-domain loading of data.
+`withJsonpSupport`'ni kiritish `HttpClient`'da `.jsonp()` metodini yoqadi, bu metod maʼlumotlarni domenlararo yuklash uchun [JSONP konvensiyasi](https://en.wikipedia.org/wiki/JSONP) orqali GET soʻrovini yuboradi.
 
-HELPFUL: Prefer using [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS) to make cross-domain requests instead of JSONP when possible.
+HELPFUL: Iloji boʻlsa, domenlararo soʻrovlar uchun JSONP oʻrniga [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS) dan foydalanishni afzal koʻring.
 
 ### `withXsrfConfiguration(...)`
 
-Including this option allows customization of `HttpClient`'s built-in XSRF security functionality. See the [security guide](best-practices/security) for more information.
+Bu variantni kiritish `HttpClient`'ning oʻrnatilgan XSRF xavfsizlik funksiyasini sozlash imkonini beradi. Koʻproq maʼlumot uchun [xavfsizlik qoʻllanmasiga](best-practices/security) qarang.
 
 ### `withNoXsrfProtection()`
 
-Including this option disables `HttpClient`'s built-in XSRF security functionality. See the [security guide](best-practices/security) for more information.
+Bu variantni kiritish `HttpClient`'ning oʻrnatilgan XSRF xavfsizlik funksiyasini oʻchiradi. Koʻproq maʼlumot uchun [xavfsizlik qoʻllanmasiga](best-practices/security) qarang.
 
-## `HttpClientModule`-based configuration
+## `HttpClientModule`'ga asoslangan konfiguratsiya {#httpclientmodule-based-configuration}
 
-Some applications may configure `HttpClient` using the older API based on NgModules.
+Baʼzi ilovalar `HttpClient`'ni NgModule'larga asoslangan eski API yordamida sozlashi mumkin.
 
-This table lists the NgModules available from `@angular/common/http` and how they relate to the provider configuration functions above.
+Bu jadvalda `@angular/common/http` dan mavjud NgModule'lar va ularning yuqoridagi provider konfiguratsiya funksiyalari bilan qanday bogʻliqligi keltirilgan.
 
-| **NgModule**                            | `provideHttpClient()` equivalent                         |
+| **NgModule**                            | `provideHttpClient()` ekvivalenti                         |
 | --------------------------------------- | -------------------------------------------------------- |
 | `HttpClientModule`                      | `provideHttpClient(withInterceptorsFromDi(), withXhr())` |
-| `HttpClientJsonpModule` (deprecated)    | `withJsonpSupport()` (deprecated)                        |
+| `HttpClientJsonpModule` (eskirgan)      | `withJsonpSupport()` (eskirgan)                          |
 | `HttpClientXsrfModule.withOptions(...)` | `withXsrfConfiguration(...)`                             |
 | `HttpClientXsrfModule.disable()`        | `withNoXsrfProtection()`                                 |
 
-NOTE: `HttpClientModule` and `HttpClientXsrfModule` are also deprecated. Use `provideHttpClient` with the corresponding features instead.
+NOTE: `HttpClientModule` va `HttpClientXsrfModule` ham eskirgan. Oʻrniga tegishli imkoniyatlar bilan `provideHttpClient`'dan foydalaning.
 
-<docs-callout important title="Use caution when using HttpClientModule in multiple injectors">
-When `HttpClientModule` is present in multiple injectors, the behavior of interceptors is poorly defined and depends on the exact options and provider/import ordering.
+<docs-callout important title="HttpClientModule'ni bir nechta injector'da ishlatganda ehtiyot boʻling">
+`HttpClientModule` bir nechta injector'da mavjud boʻlganda interceptor'larning xatti-harakati yomon aniqlangan boʻladi va aniq variantlar hamda provider/import tartibiga bogʻliq.
 
-Prefer `provideHttpClient` for multi-injector configurations, as it has more stable behavior. See the `withRequestsMadeViaParent` feature above.
+Koʻp injector'li konfiguratsiyalar uchun `provideHttpClient`'ni afzal koʻring, chunki uning xatti-harakati barqarorroq. Yuqoridagi `withRequestsMadeViaParent` imkoniyatiga qarang.
 </docs-callout>

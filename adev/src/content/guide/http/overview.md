@@ -1,19 +1,19 @@
-# Understanding communication with backend services using HTTP
+# HTTP orqali backend servislari bilan aloqani tushunish
 
-Most front-end applications need to communicate with a server over the HTTP protocol to download or upload data and access other back-end services. Angular provides a client HTTP API for Angular applications, the `HttpClient` service class in `@angular/common/http`.
+Koʻpchilik front-end ilovalar maʼlumotlarni yuklab olish yoki yuklash va boshqa back-end servislariga murojaat qilish uchun server bilan HTTP protokoli orqali aloqa qilishi kerak. Angular Angular ilovalari uchun HTTP klient API'sini — `@angular/common/http` ichidagi `HttpClient` servis klassini taqdim etadi.
 
-## HTTP client service features
+## HTTP klient servisining imkoniyatlari {#http-client-service-features}
 
-The HTTP client service offers the following major features:
+HTTP klient servisi quyidagi asosiy imkoniyatlarni taklif qiladi:
 
-- The ability to request [typed response values](guide/http/making-requests#fetching-json-data)
-- Streamlined [error handling](guide/http/making-requests#handling-request-failure)
-- Request and response [interception](guide/http/interceptors)
-- Robust [testing utilities](guide/http/testing)
+- [Tiplangan javob qiymatlarini](guide/http/making-requests#fetching-json-data) soʻrash imkoniyati
+- Soddalashtirilgan [xatolarni qayta ishlash](guide/http/making-requests#handling-request-failure)
+- Soʻrov va javobni [ushlab qolish (interception)](guide/http/interceptors)
+- Mustahkam [test vositalari](guide/http/testing)
 
-## What's next
+## Keyingi qadamlar {#whats-next}
 
 <docs-pill-row>
-  <docs-pill href="guide/http/setup" title="Setting up HttpClient"/>
-  <docs-pill href="guide/http/making-requests" title="Making HTTP requests"/>
+  <docs-pill href="guide/http/setup" title="HttpClient'ni sozlash"/>
+  <docs-pill href="guide/http/making-requests" title="HTTP soʻrovlarini yuborish"/>
 </docs-pill-row>

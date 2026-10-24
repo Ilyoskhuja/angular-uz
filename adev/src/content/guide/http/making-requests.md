@@ -1,16 +1,16 @@
-# Making HTTP requests
+# HTTP soʻrovlarini yuborish
 
-`HttpClient` has methods corresponding to the different HTTP verbs used to make requests, both to load data and to apply mutations on the server. Each method returns an [RxJS `Observable`](https://rxjs.dev/guide/observable) which, when subscribed, sends the request and then emits the results when the server responds.
+`HttpClient` maʼlumotlarni yuklash hamda serverda oʻzgartirishlar (mutation) kiritish uchun soʻrov yuborishda ishlatiladigan turli HTTP fe'llariga (verbs) mos metodlarga ega. Har bir metod [RxJS `Observable`](https://rxjs.dev/guide/observable) qaytaradi, u obuna boʻlinganda soʻrovni yuboradi va server javob berganda natijalarni emit qiladi.
 
-NOTE: `Observable`s created by `HttpClient` may be subscribed any number of times and will make a new backend request for each subscription.
+NOTE: `HttpClient` tomonidan yaratilgan `Observable`'larga istalgancha marta obuna boʻlish mumkin va har bir obuna uchun yangi backend soʻrovi yuboriladi.
 
-Through an options object passed to the request method, various properties of the request and the returned response type can be adjusted.
+Soʻrov metodiga uzatiladigan options obyekti orqali soʻrovning turli xususiyatlarini va qaytariladigan javob turini sozlash mumkin.
 
-## Fetching JSON data
+## JSON maʼlumotlarini olish {#fetching-json-data}
 
-Fetching data from a backend often requires making a GET request using the [`HttpClient.get()`](api/common/http/HttpClient#get) method. This method takes two arguments: the string endpoint URL from which to fetch, and an _optional options_ object to configure the request.
+Backend'dan maʼlumot olish koʻpincha [`HttpClient.get()`](api/common/http/HttpClient#get) metodi yordamida GET soʻrovini yuborishni talab qiladi. Bu metod ikkita argument qabul qiladi: maʼlumot olinadigan endpoint URL satri va soʻrovni sozlash uchun _ixtiyoriy options_ obyekti.
 
-For example, to fetch configuration data from a hypothetical API using the `HttpClient.get()` method:
+Masalan, `HttpClient.get()` metodi yordamida faraziy API'dan konfiguratsiya maʼlumotlarini olish:
 
 ```ts
 http.get<Config>('/api/config').subscribe((config) => {
@@ -18,24 +18,24 @@ http.get<Config>('/api/config').subscribe((config) => {
 });
 ```
 
-Note the generic type argument which specifies that the data returned by the server will be of type `Config`. This argument is optional, and if you omit it, the returned data will have type `Object`.
+Server qaytaradigan maʼlumotlar `Config` turida boʻlishini koʻrsatuvchi generik tur argumentiga eʼtibor bering. Bu argument ixtiyoriy va agar uni tushirib qoldirsangiz, qaytarilgan maʼlumot `Object` turiga ega boʻladi.
 
-TIP: When dealing with data of uncertain structure and potential `undefined` or `null` values, consider using the `unknown` type instead of `Object` as the response type.
+TIP: Tuzilmasi noaniq va `undefined` yoki `null` qiymatlar boʻlishi mumkin boʻlgan maʼlumotlar bilan ishlashda javob turi sifatida `Object` oʻrniga `unknown` turidan foydalanishni koʻrib chiqing.
 
-CRITICAL: The generic type of request methods is a type **assertion** about the data returned by the server. `HttpClient` does not verify that the actual return data matches this type.
+CRITICAL: Soʻrov metodlarining generik turi server qaytaradigan maʼlumotlar haqidagi tur **tasdigʻi** (assertion) hisoblanadi. `HttpClient` haqiqiy qaytarilgan maʼlumotning bu turga mos kelishini tekshirmaydi.
 
-## Fetching other types of data
+## Boshqa turdagi maʼlumotlarni olish {#fetching-other-types-of-data}
 
-By default, `HttpClient` assumes that servers will return JSON data. When interacting with a non-JSON API, you can tell `HttpClient` what response type to expect when making the request. This is done with the `responseType` option.
+Sukut boʻyicha `HttpClient` serverlar JSON maʼlumot qaytaradi deb hisoblaydi. JSON boʻlmagan API bilan ishlashda soʻrov yuborayotganda `HttpClient`'ga qanday javob turini kutish kerakligini aytishingiz mumkin. Bu `responseType` varianti orqali amalga oshiriladi.
 
-| **`responseType` value** | **Returned response type**                                                                                                                |
+| **`responseType` qiymati** | **Qaytariladigan javob turi**                                                                                                             |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `'json'` (default)       | JSON data of the given generic type                                                                                                       |
-| `'text'`                 | string data                                                                                                                               |
-| `'arraybuffer'`          | [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) containing the raw response bytes |
-| `'blob'`                 | [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob) instance                                                                        |
+| `'json'` (sukut boʻyicha) | Berilgan generik turdagi JSON maʼlumot                                                                                                   |
+| `'text'`                 | satr (string) maʼlumot                                                                                                                    |
+| `'arraybuffer'`          | Javobning xom baytlarini oʻz ichiga olgan [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) |
+| `'blob'`                 | [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob) nusxasi                                                                         |
 
-For example, you can ask `HttpClient` to download the raw bytes of a `.jpeg` image into an `ArrayBuffer`:
+Masalan, `HttpClient`'dan `.jpeg` tasvirining xom baytlarini `ArrayBuffer`'ga yuklab olishni soʻrashingiz mumkin:
 
 ```ts
 http.get('/images/dog.jpg', {responseType: 'arraybuffer'}).subscribe((buffer) => {
@@ -43,17 +43,17 @@ http.get('/images/dog.jpg', {responseType: 'arraybuffer'}).subscribe((buffer) =>
 });
 ```
 
-<docs-callout important title="Literal value for `responseType`">
-Because the value of `responseType` affects the type returned by `HttpClient`, it must have a literal type and not a `string` type.
+<docs-callout important title="`responseType` uchun literal qiymat">
+`responseType` qiymati `HttpClient` qaytaradigan turga taʼsir qilgani uchun u `string` turida emas, literal turda boʻlishi shart.
 
-This happens automatically if the options object passed to the request method is a literal object, but if you're extracting the request options out into a variable or helper method you might need to explicitly specify it as a literal, such as `responseType: 'text' as const`.
+Soʻrov metodiga uzatiladigan options obyekti literal obyekt boʻlsa, bu avtomatik sodir boʻladi, lekin soʻrov variantlarini oʻzgaruvchi yoki yordamchi metodga ajratib olayotgan boʻlsangiz, uni `responseType: 'text' as const` kabi aniq literal sifatida koʻrsatishingiz kerak boʻlishi mumkin.
 </docs-callout>
 
-## Mutating server state
+## Server holatini oʻzgartirish {#mutating-server-state}
 
-Server APIs that perform mutations often require making POST requests with a request body specifying the new state or the change to be made.
+Oʻzgartirishlar kiritadigan server API'lari koʻpincha yangi holatni yoki kiritiladigan oʻzgarishni koʻrsatuvchi soʻrov tanasi (body) bilan POST soʻrovlarini yuborishni talab qiladi.
 
-The [`HttpClient.post()`](api/common/http/HttpClient#post) method behaves similarly to `get()`, and accepts an additional `body` argument before its options:
+[`HttpClient.post()`](api/common/http/HttpClient#post) metodi `get()` kabi ishlaydi va options'dan oldin qoʻshimcha `body` argumentini qabul qiladi:
 
 ```ts
 http.post<Config>('/api/config', newConfig).subscribe((config) => {
@@ -61,24 +61,24 @@ http.post<Config>('/api/config', newConfig).subscribe((config) => {
 });
 ```
 
-Many different types of values can be provided as the request's `body`, and `HttpClient` will serialize them accordingly:
+Soʻrovning `body` qismi sifatida koʻp turdagi qiymatlarni berish mumkin va `HttpClient` ularni tegishli tarzda seriyalashtiradi:
 
-| **`body` type**                                                                                                               | **Serialized as**                                    |
+| **`body` turi**                                                                                                               | **Qanday seriyalashtiriladi**                        |
 | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| string                                                                                                                        | Plain text                                           |
-| number, boolean, array, or plain object                                                                                       | JSON                                                 |
-| [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)                       | raw data from the buffer                             |
-| [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob)                                                                     | raw data with the `Blob`'s content type              |
-| [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData)                                                             | `multipart/form-data` encoded data                   |
-| [`HttpParams`](api/common/http/HttpParams) or [`URLSearchParams`](https://developer.mozilla.org/docs/Web/API/URLSearchParams) | `application/x-www-form-urlencoded` formatted string |
+| string                                                                                                                        | Oddiy matn                                           |
+| number, boolean, massiv yoki oddiy obyekt                                                                                     | JSON                                                 |
+| [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)                       | buferdagi xom maʼlumot                               |
+| [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob)                                                                     | `Blob`'ning kontent turi bilan xom maʼlumot          |
+| [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData)                                                             | `multipart/form-data` koʻrinishida kodlangan maʼlumot |
+| [`HttpParams`](api/common/http/HttpParams) yoki [`URLSearchParams`](https://developer.mozilla.org/docs/Web/API/URLSearchParams) | `application/x-www-form-urlencoded` formatidagi satr |
 
-IMPORTANT: Remember to `.subscribe()` to mutation request `Observable`s in order to actually fire the request.
+IMPORTANT: Soʻrov haqiqatda yuborilishi uchun oʻzgartirish soʻrovlarining `Observable`'lariga `.subscribe()` qilishni unutmang.
 
-## Setting URL parameters
+## URL parametrlarini oʻrnatish {#setting-url-parameters}
 
-Specify request parameters that should be included in the request URL using the `params` option.
+Soʻrov URL'iga kiritilishi kerak boʻlgan soʻrov parametrlarini `params` varianti yordamida koʻrsating.
 
-Passing an object literal is the simplest way of configuring URL parameters:
+URL parametrlarini sozlashning eng oddiy yoʻli — obyekt literalini uzatish:
 
 ```ts
 http
@@ -90,9 +90,9 @@ http
   });
 ```
 
-Alternatively, pass an instance of `HttpParams` if you need more control over the construction or serialization of the parameters.
+Yoki parametrlarni tuzish yoki seriyalashtirish ustidan koʻproq nazorat kerak boʻlsa, `HttpParams` nusxasini uzating.
 
-IMPORTANT: Instances of `HttpParams` are _immutable_ and cannot be directly changed. Instead, mutation methods such as `append()` return a new instance of `HttpParams` with the mutation applied.
+IMPORTANT: `HttpParams` nusxalari _oʻzgarmas_ (immutable) va ularni bevosita oʻzgartirib boʻlmaydi. Oʻrniga `append()` kabi oʻzgartirish metodlari oʻzgarish qoʻllangan yangi `HttpParams` nusxasini qaytaradi.
 
 ```ts
 const baseParams = new HttpParams().set('filter', 'all');
@@ -106,13 +106,13 @@ http
   });
 ```
 
-You can instantiate `HttpParams` with a custom `HttpParameterCodec` that determines how `HttpClient` will encode the parameters into the URL.
+`HttpClient` parametrlarni URL'ga qanday kodlashini belgilaydigan maxsus `HttpParameterCodec` bilan `HttpParams` nusxasini yaratishingiz mumkin.
 
-### Custom parameter encoding
+### Parametrlarni maxsus kodlash {#custom-parameter-encoding}
 
-By default, `HttpParams` uses the built-in [`HttpUrlEncodingCodec`](api/common/http/HttpUrlEncodingCodec) to encode and decode parameter keys and values.
+Sukut boʻyicha `HttpParams` parametr kalitlari va qiymatlarini kodlash va dekodlash uchun oʻrnatilgan [`HttpUrlEncodingCodec`](api/common/http/HttpUrlEncodingCodec)'dan foydalanadi.
 
-You can provide your own implementation of [`HttpParameterCodec`](api/common/http/HttpParameterCodec) to customize how encoding and decoding are applied.
+Kodlash va dekodlash qanday qoʻllanishini sozlash uchun [`HttpParameterCodec`](api/common/http/HttpParameterCodec)'ning oʻz implementatsiyangizni taqdim etishingiz mumkin.
 
 ```ts
 import {HttpClient, HttpParams, HttpParameterCodec} from '@angular/common/http';
@@ -151,11 +151,11 @@ export class ApiService {
 }
 ```
 
-## Setting request headers
+## Soʻrov sarlavhalarini oʻrnatish {#setting-request-headers}
 
-Specify request headers that should be included in the request using the `headers` option.
+Soʻrovga kiritilishi kerak boʻlgan soʻrov sarlavhalarini `headers` varianti yordamida koʻrsating.
 
-Passing an object literal is the simplest way of configuring request headers:
+Soʻrov sarlavhalarini sozlashning eng oddiy yoʻli — obyekt literalini uzatish:
 
 ```ts
 http
@@ -169,9 +169,9 @@ http
   });
 ```
 
-Alternatively, pass an instance of `HttpHeaders` if you need more control over the construction of headers.
+Yoki sarlavhalarni tuzish ustidan koʻproq nazorat kerak boʻlsa, `HttpHeaders` nusxasini uzating.
 
-IMPORTANT: Instances of `HttpHeaders` are _immutable_ and cannot be directly changed. Instead, mutation methods such as `append()` return a new instance of `HttpHeaders` with the mutation applied.
+IMPORTANT: `HttpHeaders` nusxalari _oʻzgarmas_ (immutable) va ularni bevosita oʻzgartirib boʻlmaydi. Oʻrniga `append()` kabi oʻzgartirish metodlari oʻzgarish qoʻllangan yangi `HttpHeaders` nusxasini qaytaradi.
 
 ```ts
 const baseHeaders = new HttpHeaders().set('X-Debug-Level', 'minimal');
@@ -185,11 +185,11 @@ http
   });
 ```
 
-## Interacting with the server response events
+## Server javobi hodisalari bilan ishlash {#interacting-with-the-server-response-events}
 
-For convenience, `HttpClient` by default returns an `Observable` of the data returned by the server (the response body). Occasionally it's desirable to examine the actual response, for example to retrieve specific response headers.
+Qulaylik uchun `HttpClient` sukut boʻyicha server qaytargan maʼlumotning (javob tanasining) `Observable`'ini qaytaradi. Baʼzan haqiqiy javobni koʻrib chiqish, masalan, muayyan javob sarlavhalarini olish zarur boʻladi.
 
-To access the entire response, set the `observe` option to `'response'`:
+Javobning toʻliq oʻziga murojaat qilish uchun `observe` variantini `'response'` qiymatiga oʻrnating:
 
 ```ts
 http.get<Config>('/api/config', {observe: 'response'}).subscribe((res) => {
@@ -198,21 +198,21 @@ http.get<Config>('/api/config', {observe: 'response'}).subscribe((res) => {
 });
 ```
 
-<docs-callout important title="Literal value for `observe`">
-Because the value of `observe` affects the type returned by `HttpClient`, it must have a literal type and not a `string` type.
+<docs-callout important title="`observe` uchun literal qiymat">
+`observe` qiymati `HttpClient` qaytaradigan turga taʼsir qilgani uchun u `string` turida emas, literal turda boʻlishi shart.
 
-This happens automatically if the options object passed to the request method is a literal object, but if you're extracting the request options out into a variable or helper method you might need to explicitly specify it as a literal, such as `observe: 'response' as const`.
+Soʻrov metodiga uzatiladigan options obyekti literal obyekt boʻlsa, bu avtomatik sodir boʻladi, lekin soʻrov variantlarini oʻzgaruvchi yoki yordamchi metodga ajratib olayotgan boʻlsangiz, uni `observe: 'response' as const` kabi aniq literal sifatida koʻrsatishingiz kerak boʻlishi mumkin.
 </docs-callout>
 
-## Receiving raw progress events
+## Xom progress hodisalarini qabul qilish {#receiving-raw-progress-events}
 
-In addition to the response body or response object, `HttpClient` can also return a stream of raw _events_ corresponding to specific moments in the request lifecycle. These events include when the request is sent, when the response header is returned, and when the body is complete. These events can also include _progress events_ that report upload and download status for large request or response bodies.
+Javob tanasi yoki javob obyektidan tashqari, `HttpClient` soʻrov hayot siklining muayyan lahzalariga mos keluvchi xom _hodisalar_ oqimini ham qaytarishi mumkin. Bu hodisalar soʻrov yuborilgan, javob sarlavhasi qaytarilgan va tana toʻliq qabul qilingan vaqtlarni oʻz ichiga oladi. Bu hodisalar shuningdek katta hajmli soʻrov yoki javob tanalari uchun yuklash va yuklab olish holatini bildiruvchi _progress hodisalarini_ ham oʻz ichiga olishi mumkin.
 
-Progress events are disabled by default (as they have a performance cost) but can be enabled with the `reportUploadProgress` and `reportDownloadProgress` options.
+Progress hodisalari sukut boʻyicha oʻchirilgan (chunki ular unumdorlikka taʼsir qiladi), lekin ularni `reportUploadProgress` va `reportDownloadProgress` variantlari bilan yoqish mumkin.
 
-NOTE: The default fetch backend of `HttpClient` does not support _upload_ progress events and throws an error if you set `reportUploadProgress`. If your app needs upload progress events, configure `HttpClient` with `withXhr()` in `provideHttpClient(...)`.
+NOTE: `HttpClient`'ning standart fetch backend'i _yuklash_ (upload) progress hodisalarini qoʻllab-quvvatlamaydi va `reportUploadProgress`'ni oʻrnatsangiz xato tashlaydi. Agar ilovangizga yuklash progress hodisalari kerak boʻlsa, `provideHttpClient(...)` ichida `HttpClient`'ni `withXhr()` bilan sozlang.
 
-To observe the event stream, set the `observe` option to `'events'`:
+Hodisalar oqimini kuzatish uchun `observe` variantini `'events'` qiymatiga oʻrnating:
 
 ```ts
 http
@@ -232,44 +232,44 @@ http
   });
 ```
 
-<docs-callout important title="Literal value for `observe`">
-Because the value of `observe` affects the type returned by `HttpClient`, it must have a literal type and not a `string` type.
+<docs-callout important title="`observe` uchun literal qiymat">
+`observe` qiymati `HttpClient` qaytaradigan turga taʼsir qilgani uchun u `string` turida emas, literal turda boʻlishi shart.
 
-This happens automatically if the options object passed to the request method is a literal object, but if you're extracting the request options out into a variable or helper method you might need to explicitly specify it as a literal, such as `observe: 'events' as const`.
+Soʻrov metodiga uzatiladigan options obyekti literal obyekt boʻlsa, bu avtomatik sodir boʻladi, lekin soʻrov variantlarini oʻzgaruvchi yoki yordamchi metodga ajratib olayotgan boʻlsangiz, uni `observe: 'events' as const` kabi aniq literal sifatida koʻrsatishingiz kerak boʻlishi mumkin.
 </docs-callout>
 
-Each `HttpEvent` reported in the event stream has a `type` which distinguishes what the event represents:
+Hodisalar oqimida qaytarilgan har bir `HttpEvent` hodisa nimani ifodalashini ajratib beruvchi `type` xususiyatiga ega:
 
-| **`type` value**                 | **Event meaning**                                                                  |
+| **`type` qiymati**               | **Hodisa maʼnosi**                                                                 |
 | -------------------------------- | ---------------------------------------------------------------------------------- |
-| `HttpEventType.Sent`             | The request has been dispatched to the server                                      |
-| `HttpEventType.UploadProgress`   | An `HttpUploadProgressEvent` reporting progress on uploading the request body      |
-| `HttpEventType.ResponseHeader`   | The head of the response has been received, including status and headers           |
-| `HttpEventType.DownloadProgress` | An `HttpDownloadProgressEvent` reporting progress on downloading the response body |
-| `HttpEventType.Response`         | The entire response has been received, including the response body                 |
-| `HttpEventType.User`             | A custom event from an HTTP interceptor.                                           |
+| `HttpEventType.Sent`             | Soʻrov serverga joʻnatildi                                                         |
+| `HttpEventType.UploadProgress`   | Soʻrov tanasini yuklash jarayonini bildiruvchi `HttpUploadProgressEvent`           |
+| `HttpEventType.ResponseHeader`   | Javobning bosh qismi, jumladan status va sarlavhalar qabul qilindi                 |
+| `HttpEventType.DownloadProgress` | Javob tanasini yuklab olish jarayonini bildiruvchi `HttpDownloadProgressEvent`     |
+| `HttpEventType.Response`         | Javob toʻliq, jumladan javob tanasi ham qabul qilindi                              |
+| `HttpEventType.User`             | HTTP interceptor'dan kelgan maxsus hodisa.                                         |
 
-## Handling request failure
+## Soʻrov muvaffaqiyatsizligini qayta ishlash {#handling-request-failure}
 
-There are three ways an HTTP request can fail:
+HTTP soʻrovi uch xil yoʻl bilan muvaffaqiyatsiz boʻlishi mumkin:
 
-- A network or connection error can prevent the request from reaching the backend server.
-- A request didn't respond in time when the timeout option was set.
-- The backend can receive the request but fail to process it, and return an error response.
+- Tarmoq yoki ulanish xatosi soʻrovning backend serveriga yetib borishiga toʻsqinlik qilishi mumkin.
+- Timeout varianti oʻrnatilgan boʻlsa, soʻrov oʻz vaqtida javob bermagan boʻlishi mumkin.
+- Backend soʻrovni qabul qilishi, lekin uni qayta ishlay olmasligi va xato javobi qaytarishi mumkin.
 
-`HttpClient` captures all of the above kinds of errors in an `HttpErrorResponse` which it returns through the `Observable`'s error channel. Network and timeout errors have a `status` code of `0`. For timeouts, the `error` is a `DOMException` named `TimeoutError`; for network errors, it is the error thrown by `fetch` (or a [`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent) when using `withXhr()`). Backend errors have the failing `status` code returned by the backend, and the error response as the `error`. Inspect the response to identify the error's cause and the appropriate action to handle the error.
+`HttpClient` yuqoridagi barcha turdagi xatolarni `HttpErrorResponse` ichida ushlaydi va uni `Observable`'ning xato kanali orqali qaytaradi. Tarmoq va timeout xatolari `0` qiymatli `status` kodiga ega. Timeout'lar uchun `error` — `TimeoutError` nomli `DOMException`; tarmoq xatolari uchun u `fetch` tashlagan xato (yoki `withXhr()` ishlatilganda [`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent)). Backend xatolari backend qaytargan muvaffaqiyatsiz `status` kodiga va `error` sifatida xato javobiga ega. Xatoning sababini va xatoni bartaraf etish uchun tegishli harakatni aniqlash uchun javobni koʻrib chiqing.
 
-The [RxJS library](https://rxjs.dev/) offers several operators which can be useful for error handling.
+[RxJS kutubxonasi](https://rxjs.dev/) xatolarni qayta ishlash uchun foydali boʻlishi mumkin bir nechta operatorlarni taklif qiladi.
 
-You can use the `catchError` operator to transform an error response into a value for the UI. This value can tell the UI to display an error page or value, and capture the error's cause if necessary.
+Xato javobini UI uchun qiymatga aylantirish uchun `catchError` operatoridan foydalanishingiz mumkin. Bu qiymat UI'ga xato sahifasini yoki qiymatini koʻrsatishni aytishi va zarur boʻlsa xato sababini saqlab qolishi mumkin.
 
-Sometimes transient errors such as network interruptions can cause a request to fail unexpectedly, and simply retrying the request will allow it to succeed. RxJS provides several _retry_ operators which automatically re-subscribe to a failed `Observable` under certain conditions. For example, the `retry()` operator will automatically attempt to re-subscribe a specified number of times.
+Baʼzan tarmoq uzilishlari kabi vaqtinchalik xatolar soʻrovning kutilmaganda muvaffaqiyatsiz boʻlishiga olib kelishi mumkin va soʻrovni shunchaki qayta urinish uning muvaffaqiyatli bajarilishiga imkon beradi. RxJS muayyan shartlar ostida muvaffaqiyatsiz `Observable`'ga avtomatik qayta obuna boʻladigan bir nechta _retry_ operatorlarini taqdim etadi. Masalan, `retry()` operatori koʻrsatilgan marta avtomatik qayta obuna boʻlishga urinadi.
 
-### Timeouts
+### Timeout'lar {#timeouts}
 
-To set a timeout for a request, you can set the `timeout` option to a number of milliseconds along with other request options. If the backend request does not complete within the specified time, the request will be aborted and an error will be emitted.
+Soʻrov uchun timeout oʻrnatish uchun boshqa soʻrov variantlari bilan birga `timeout` variantini millisekundlardagi songa oʻrnatishingiz mumkin. Agar backend soʻrovi koʻrsatilgan vaqt ichida yakunlanmasa, soʻrov bekor qilinadi va xato emit qilinadi.
 
-NOTE: The timeout will only apply to the backend HTTP request itself. It is not a timeout for the entire request handling chain. Therefore, this option is not affected by any delay introduced by interceptors.
+NOTE: Timeout faqat backend HTTP soʻrovining oʻziga qoʻllanadi. Bu soʻrovni qayta ishlashning butun zanjiri uchun timeout emas. Shuning uchun bu variantga interceptor'lar kiritgan har qanday kechikish taʼsir qilmaydi.
 
 ```ts
 http
@@ -286,17 +286,17 @@ http
   });
 ```
 
-## Advanced fetch options
+## Kengaytirilgan fetch variantlari {#advanced-fetch-options}
 
-Angular's `HttpClient` supports advanced fetch API options that can improve performance and user experience. These options are available when using the fetch backend, which is the default.
+Angular'ning `HttpClient`'i unumdorlik va foydalanuvchi tajribasini yaxshilashi mumkin boʻlgan kengaytirilgan fetch API variantlarini qoʻllab-quvvatlaydi. Bu variantlar sukut boʻyicha ishlatiladigan fetch backend'idan foydalanilganda mavjud.
 
-### Fetch options
+### Fetch variantlari {#fetch-options}
 
-The following options provide fine-grained control over request behavior when using the fetch backend.
+Quyidagi variantlar fetch backend'idan foydalanilganda soʻrov xatti-harakati ustidan nozik nazoratni taʼminlaydi.
 
-#### Keep-alive connections
+#### Keep-alive ulanishlar {#keep-alive-connections}
 
-The `keepalive` option allows a request to outlive the page that initiated it. This is particularly useful for analytics or logging requests that need to complete even if the user navigates away from the page.
+`keepalive` varianti soʻrovga uni boshlagan sahifadan uzoqroq yashash imkonini beradi. Bu, ayniqsa, foydalanuvchi sahifadan chiqib ketganda ham yakunlanishi kerak boʻlgan analitika yoki jurnalga yozish (logging) soʻrovlari uchun foydali.
 
 ```ts
 http
@@ -306,9 +306,9 @@ http
   .subscribe();
 ```
 
-#### HTTP caching control
+#### HTTP keshlashni boshqarish {#http-caching-control}
 
-The `cache` option controls how the request interacts with the browser's HTTP cache, which can significantly improve performance for repeated requests.
+`cache` varianti soʻrovning brauzerning HTTP keshi bilan qanday ishlashini boshqaradi, bu takroriy soʻrovlar uchun unumdorlikni sezilarli yaxshilashi mumkin.
 
 ```ts
 //  Use cached response regardless of freshness
@@ -339,9 +339,9 @@ http
   });
 ```
 
-#### Request priority for Core Web Vitals
+#### Core Web Vitals uchun soʻrov ustuvorligi {#request-priority-for-core-web-vitals}
 
-The `priority` option allows you to indicate the relative importance of a request, helping browsers optimize resource loading for better Core Web Vitals scores.
+`priority` varianti soʻrovning nisbiy ahamiyatini koʻrsatish imkonini beradi va brauzerlarga yaxshiroq Core Web Vitals koʻrsatkichlari uchun resurslarni yuklashni optimallashtirishga yordam beradi.
 
 ```ts
 // High priority for critical resources
@@ -372,17 +372,17 @@ http
   });
 ```
 
-Available `priority` values:
+Mavjud `priority` qiymatlari:
 
-- `'high'`: High priority, loaded early (e.g., critical user data, above-the-fold content)
-- `'low'`: Low priority, loaded when resources are available (e.g., analytics, prefetch data)
-- `'auto'`: Browser determines priority based on request context (default)
+- `'high'`: Yuqori ustuvorlik, erta yuklanadi (masalan, muhim foydalanuvchi maʼlumotlari, ekranning yuqori qismidagi kontent)
+- `'low'`: Past ustuvorlik, resurslar boʻsh boʻlganda yuklanadi (masalan, analitika, oldindan yuklanadigan maʼlumotlar)
+- `'auto'`: Brauzer ustuvorlikni soʻrov kontekstiga qarab belgilaydi (sukut boʻyicha)
 
-TIP: Use `priority: 'high'` for requests that affect Largest Contentful Paint (LCP) and `priority: 'low'` for requests that don't impact initial user experience.
+TIP: Largest Contentful Paint (LCP)ga taʼsir qiluvchi soʻrovlar uchun `priority: 'high'` va dastlabki foydalanuvchi tajribasiga taʼsir qilmaydigan soʻrovlar uchun `priority: 'low'` dan foydalaning.
 
-#### Request mode
+#### Soʻrov rejimi {#request-mode}
 
-The `mode` option controls how the request handles cross-origin requests and determines the response type.
+`mode` varianti soʻrovning cross-origin soʻrovlarni qanday qayta ishlashini boshqaradi va javob turini belgilaydi.
 
 ```ts
 // Same-origin requests only
@@ -413,19 +413,19 @@ http
   });
 ```
 
-Available `mode` values:
+Mavjud `mode` qiymatlari:
 
-- `'same-origin'`: Only allow same-origin requests, fail for cross-origin requests
-- `'cors'`: Allow cross-origin requests with CORS (default)
-- `'no-cors'`: Allow simple cross-origin requests without CORS, response is opaque
+- `'same-origin'`: Faqat same-origin soʻrovlarga ruxsat beradi, cross-origin soʻrovlar muvaffaqiyatsiz boʻladi
+- `'cors'`: CORS bilan cross-origin soʻrovlarga ruxsat beradi (sukut boʻyicha)
+- `'no-cors'`: CORS'siz oddiy cross-origin soʻrovlarga ruxsat beradi, javob opaque (yopiq) boʻladi
 
-TIP: In the browser, use `mode: 'same-origin'` for sensitive requests that should never go cross-origin.
+TIP: Brauzerda hech qachon cross-origin boʻlmasligi kerak boʻlgan nozik soʻrovlar uchun `mode: 'same-origin'` dan foydalaning.
 
-IMPORTANT: During SSR on Node.js, `HttpClient` uses Node.js's [Undici-based Fetch implementation](https://nodejs.org/api/globals.html#fetch). [Undici does not enforce browser CORS checks](https://undici.nodejs.org/#cors), so `mode: 'same-origin'` does not restrict server-side requests. Validate user-influenced URLs against an allowlist.
+IMPORTANT: Node.js'da SSR vaqtida `HttpClient` Node.js'ning [Undici'ga asoslangan Fetch implementatsiyasidan](https://nodejs.org/api/globals.html#fetch) foydalanadi. [Undici brauzerning CORS tekshiruvlarini amalga oshirmaydi](https://undici.nodejs.org/#cors), shuning uchun `mode: 'same-origin'` server tomonidagi soʻrovlarni cheklamaydi. Foydalanuvchi taʼsir qila oladigan URL'larni ruxsat etilganlar roʻyxati (allowlist) boʻyicha tekshiring.
 
-#### Redirect handling
+#### Yoʻnaltirishlarni qayta ishlash {#redirect-handling}
 
-The `redirect` option specifies how to handle redirect responses from the server.
+`redirect` varianti serverdan kelgan yoʻnaltirish (redirect) javoblarini qanday qayta ishlashni belgilaydi.
 
 ```ts
 // Follow redirects automatically (default behavior)
@@ -461,17 +461,17 @@ http
   });
 ```
 
-Available `redirect` values:
+Mavjud `redirect` qiymatlari:
 
-- `'follow'`: Automatically follow redirects (default)
-- `'error'`: Treat redirects as errors
-- `'manual'`: Don't follow redirects automatically, return redirect response
+- `'follow'`: Yoʻnaltirishlarga avtomatik ergashadi (sukut boʻyicha)
+- `'error'`: Yoʻnaltirishlarni xato sifatida qabul qiladi
+- `'manual'`: Yoʻnaltirishlarga avtomatik ergashmaydi, yoʻnaltirish javobini qaytaradi
 
-TIP: Use `redirect: 'manual'` when you need to handle redirects with custom logic.
+TIP: Yoʻnaltirishlarni maxsus mantiq bilan qayta ishlash kerak boʻlganda `redirect: 'manual'` dan foydalaning.
 
-#### Credentials handling
+#### Hisob maʼlumotlarini (credentials) qayta ishlash {#credentials-handling}
 
-The `credentials` option controls whether cookies, authorization headers, and other credentials are sent with cross-origin requests. This is particularly important for authentication scenarios.
+`credentials` varianti cookie'lar, avtorizatsiya sarlavhalari va boshqa hisob maʼlumotlarining (credentials) cross-origin soʻrovlar bilan yuborilishini boshqaradi. Bu, ayniqsa, autentifikatsiya holatlari uchun muhim.
 
 ```ts
 // Include credentials for cross-origin requests
@@ -521,21 +521,21 @@ http
   });
 ```
 
-IMPORTANT: The `withCredentials` option takes precedence over the `credentials` option. If both are specified, `withCredentials: true` will always result in `credentials: 'include'`, regardless of the explicit `credentials` value.
+IMPORTANT: `withCredentials` varianti `credentials` variantidan ustun turadi. Agar ikkalasi ham koʻrsatilgan boʻlsa, `withCredentials: true` aniq koʻrsatilgan `credentials` qiymatidan qatʼi nazar har doim `credentials: 'include'` natijasini beradi.
 
-Available `credentials` values:
+Mavjud `credentials` qiymatlari:
 
-- `'omit'`: Never send credentials
-- `'same-origin'`: Send credentials only for same-origin requests (default)
-- `'include'`: Always send credentials, even for cross-origin requests
+- `'omit'`: Hisob maʼlumotlarini hech qachon yubormaydi
+- `'same-origin'`: Hisob maʼlumotlarini faqat same-origin soʻrovlar uchun yuboradi (sukut boʻyicha)
+- `'include'`: Hisob maʼlumotlarini har doim, hatto cross-origin soʻrovlar uchun ham yuboradi
 
-TIP: Use `credentials: 'include'` when you need to send authentication cookies or headers to a different domain that supports CORS. Avoid mixing `credentials` and `withCredentials` options to prevent confusion.
+TIP: CORS'ni qoʻllab-quvvatlaydigan boshqa domenga autentifikatsiya cookie'lari yoki sarlavhalarini yuborish kerak boʻlganda `credentials: 'include'` dan foydalaning. Chalkashlikning oldini olish uchun `credentials` va `withCredentials` variantlarini aralashtirib ishlatishdan qoching.
 
-IMPORTANT: During SSR on Node.js, `credentials: 'include'` does not automatically forward cookies from the incoming browser request. The `credentials` option does not remove `Cookie` or `Authorization` headers that you add explicitly. [Undici permits some headers that browsers forbid](https://undici.nodejs.org/#forbidden-and-safelisted-header-names), so only forward credential headers to trusted origins.
+IMPORTANT: Node.js'da SSR vaqtida `credentials: 'include'` kiruvchi brauzer soʻrovidagi cookie'larni avtomatik uzatmaydi. `credentials` varianti siz aniq qoʻshgan `Cookie` yoki `Authorization` sarlavhalarini olib tashlamaydi. [Undici brauzerlar taqiqlaydigan baʼzi sarlavhalarga ruxsat beradi](https://undici.nodejs.org/#forbidden-and-safelisted-header-names), shuning uchun hisob maʼlumotlari sarlavhalarini faqat ishonchli origin'larga uzating.
 
-#### Referrer
+#### Referrer {#referrer}
 
-The `referrer` option allows you to control what referrer information is sent with the request. This is important for privacy and security considerations.
+`referrer` varianti soʻrov bilan qanday referrer maʼlumoti yuborilishini boshqarish imkonini beradi. Bu maxfiylik va xavfsizlik nuqtai nazaridan muhim.
 
 ```ts
 // Send a specific referrer URL
@@ -557,17 +557,17 @@ http
   });
 ```
 
-The `referrer` option accepts:
+`referrer` varianti quyidagilarni qabul qiladi:
 
-- A valid URL string: Sets the specific referrer URL to send
-- An empty string `''`: Sends no referrer information
-- `'about:client'`: Uses the default referrer (current page URL)
+- Yaroqli URL satri: Yuboriladigan muayyan referrer URL'ini oʻrnatadi
+- Boʻsh satr `''`: Referrer maʼlumotini yubormaydi
+- `'about:client'`: Standart referrer'dan (joriy sahifa URL'i) foydalanadi
 
-TIP: Use `referrer: ''` for sensitive requests where you don't want to leak the referring page URL.
+TIP: Yoʻnaltiruvchi sahifa URL'ini oshkor qilishni istamagan nozik soʻrovlar uchun `referrer: ''` dan foydalaning.
 
-#### Referrer policy
+#### Referrer siyosati {#referrer-policy}
 
-The `referrerPolicy` option controls how much referrer information—the URL of the page making the request—is sent along with an HTTP request. This setting affects both privacy and analytics, allowing you to balance data visibility with security considerations.
+`referrerPolicy` varianti HTTP soʻrovi bilan birga qancha referrer maʼlumoti — soʻrov yuborayotgan sahifaning URL'i — yuborilishini boshqaradi. Bu sozlama maxfiylikka ham, analitikaga ham taʼsir qiladi va maʼlumotlar koʻrinishi bilan xavfsizlik mulohazalari oʻrtasida muvozanat oʻrnatish imkonini beradi.
 
 ```ts
 // Send no referrer information regardless of the current page
@@ -585,22 +585,22 @@ http
   .subscribe();
 ```
 
-The `referrerPolicy` option accepts:
+`referrerPolicy` varianti quyidagilarni qabul qiladi:
 
-- `'no-referrer'` Never send the `Referer` header.
-- `'no-referrer-when-downgrade'` Sends the referrer for same-origin and secure (HTTPS→HTTPS) requests, but omits it when navigating from a secure to a less secure origin (HTTPS→HTTP).
-- `'origin'` Sends only the origin (scheme, host, port) of the referrer, omitting path and query information.
-- `'origin-when-cross-origin'` Sends the full URL for same-origin requests, but only the origin for cross-origin requests.
-- `'same-origin'` Sends the full URL for same-origin requests and no referrer for cross-origin requests.
-- `'strict-origin'` Sends only the origin, and only if the protocol security level is not downgraded (e.g., HTTPS→HTTPS). Omits the referrer on downgrade.
-- `'strict-origin-when-cross-origin'` Default browser behavior. Sends the full URL for same-origin requests, the origin for cross-origin requests when not downgraded, and omits the referrer on downgrade.
-- `'unsafe-url'` Always sends the full URL (including path and query). This can expose sensitive data and should be used with caution.
+- `'no-referrer'` `Referer` sarlavhasini hech qachon yubormaydi.
+- `'no-referrer-when-downgrade'` Same-origin va xavfsiz (HTTPS→HTTPS) soʻrovlar uchun referrer'ni yuboradi, lekin xavfsiz origin'dan kamroq xavfsiz origin'ga (HTTPS→HTTP) oʻtishda uni tushirib qoldiradi.
+- `'origin'` Referrer'ning faqat origin'ini (sxema, host, port) yuboradi, yoʻl (path) va query maʼlumotlarini tushirib qoldiradi.
+- `'origin-when-cross-origin'` Same-origin soʻrovlar uchun toʻliq URL'ni, cross-origin soʻrovlar uchun esa faqat origin'ni yuboradi.
+- `'same-origin'` Same-origin soʻrovlar uchun toʻliq URL'ni yuboradi, cross-origin soʻrovlar uchun referrer yubormaydi.
+- `'strict-origin'` Faqat origin'ni va faqat protokol xavfsizlik darajasi pasaytirilmagan boʻlsa (masalan, HTTPS→HTTPS) yuboradi. Pasaytirishda referrer'ni tushirib qoldiradi.
+- `'strict-origin-when-cross-origin'` Brauzerning standart xatti-harakati. Same-origin soʻrovlar uchun toʻliq URL'ni, pasaytirilmagan cross-origin soʻrovlar uchun origin'ni yuboradi va pasaytirishda referrer'ni tushirib qoldiradi.
+- `'unsafe-url'` Har doim toʻliq URL'ni (yoʻl va query bilan) yuboradi. Bu nozik maʼlumotlarni oshkor qilishi mumkin va ehtiyotkorlik bilan ishlatilishi kerak.
 
-TIP: Prefer conservative values such as `'no-referrer'`, `'origin'`, or `'strict-origin-when-cross-origin'` for privacy-sensitive requests.
+TIP: Maxfiylik jihatidan nozik soʻrovlar uchun `'no-referrer'`, `'origin'` yoki `'strict-origin-when-cross-origin'` kabi konservativ qiymatlarni afzal koʻring.
 
-#### Integrity
+#### Yaxlitlik (integrity) {#integrity}
 
-The `integrity` option allows you to verify that the response hasn't been tampered with by providing a cryptographic hash of the expected content. This is particularly useful for loading scripts or other resources from CDNs.
+`integrity` varianti kutilayotgan kontentning kriptografik xeshini berish orqali javobning oʻzgartirilmaganligini tekshirish imkonini beradi. Bu, ayniqsa, CDN'lardan skriptlar yoki boshqa resurslarni yuklashda foydali.
 
 ```ts
 // Verify response integrity with SHA-256 hash
@@ -614,31 +614,31 @@ http
   });
 ```
 
-IMPORTANT: The `integrity` option requires an exact match between the response content and the provided hash. If the content doesn't match, the request will fail with a network error.
+IMPORTANT: `integrity` varianti javob kontenti bilan berilgan xesh oʻrtasida aniq moslikni talab qiladi. Agar kontent mos kelmasa, soʻrov tarmoq xatosi bilan muvaffaqiyatsiz boʻladi.
 
-CRITICAL: During SSR, the Fetch implementation reads the entire response body to verify `integrity` before returning a response, as required by the [Fetch Standard](https://fetch.spec.whatwg.org/#concept-main-fetch). Angular enforces [`maxResponseBodySize`](/guide/ssr#configuring-the-response-body-size-limit) only after Fetch returns a response, so this limit does not constrain the data buffered during integrity verification.
+CRITICAL: SSR vaqtida Fetch implementatsiyasi [Fetch standarti](https://fetch.spec.whatwg.org/#concept-main-fetch) talab qilganidek, javobni qaytarishdan oldin `integrity`'ni tekshirish uchun javob tanasini toʻliq oʻqiydi. Angular [`maxResponseBodySize`](/guide/ssr#configuring-the-response-body-size-limit) cheklovini faqat Fetch javob qaytargandan keyin qoʻllaydi, shuning uchun bu cheklov yaxlitlikni tekshirish vaqtida buferlangan maʼlumotlarni cheklamaydi.
 
-TIP: Use subresource integrity when loading critical resources from external sources to ensure they haven't been modified. Generate hashes using tools like `openssl`.
+TIP: Tashqi manbalardan muhim resurslarni yuklashda ularning oʻzgartirilmaganligini taʼminlash uchun subresource integrity'dan foydalaning. Xeshlarni `openssl` kabi vositalar yordamida yarating.
 
-## HTTP `Observable`s
+## HTTP `Observable`'lari {#http-observables}
 
-Each request method on `HttpClient` constructs and returns an `Observable` of the requested response type. Understanding how these `Observable`s work is important when using `HttpClient`.
+`HttpClient`'dagi har bir soʻrov metodi soʻralgan javob turidagi `Observable`'ni tuzadi va qaytaradi. `HttpClient`'dan foydalanishda bu `Observable`'lar qanday ishlashini tushunish muhim.
 
-`HttpClient` produces what RxJS calls "cold" `Observable`s, meaning that no actual request happens until the `Observable` is subscribed. Only then is the request actually dispatched to the server. Subscribing to the same `Observable` multiple times will trigger multiple backend requests. Each subscription is independent.
+`HttpClient` RxJS'da "sovuq" (cold) deb ataladigan `Observable`'larni hosil qiladi, yaʼni `Observable`'ga obuna boʻlinmaguncha haqiqiy soʻrov yuborilmaydi. Faqat shundan keyin soʻrov haqiqatda serverga joʻnatiladi. Bir xil `Observable`'ga bir necha marta obuna boʻlish bir nechta backend soʻrovini ishga tushiradi. Har bir obuna mustaqil.
 
-TIP: You can think of `HttpClient` `Observable`s as _blueprints_ for actual server requests.
+TIP: `HttpClient` `Observable`'larini haqiqiy server soʻrovlarining _chizmalari_ (blueprints) sifatida tasavvur qilishingiz mumkin.
 
-Once subscribed, unsubscribing will abort the in-progress request. This is very useful if the `Observable` is subscribed via the `async` pipe, as it will automatically cancel the request if the user navigates away from the current page. Additionally, if you use the `Observable` with an RxJS combinator like `switchMap`, this cancellation will clean up any stale requests.
+Obuna boʻlgandan soʻng, obunani bekor qilish bajarilayotgan soʻrovni toʻxtatadi. Bu `Observable`'ga `async` pipe orqali obuna boʻlingan boʻlsa juda foydali, chunki foydalanuvchi joriy sahifadan chiqib ketsa soʻrov avtomatik bekor qilinadi. Bundan tashqari, `Observable`'ni `switchMap` kabi RxJS kombinatori bilan ishlatsangiz, bu bekor qilish eskirgan soʻrovlarni tozalaydi.
 
-Once the response returns, `Observable`s from `HttpClient` usually complete (although interceptors can influence this).
+Javob qaytgach, `HttpClient`'dan olingan `Observable`'lar odatda yakunlanadi (garchi interceptor'lar bunga taʼsir qilishi mumkin boʻlsa ham).
 
-Because of the automatic completion, there is usually no risk of memory leaks if `HttpClient` subscriptions are not cleaned up. However, as with any async operation, we strongly recommend that you clean up subscriptions when the component using them is destroyed, as the subscription callback may otherwise run and encounter errors when it attempts to interact with the destroyed component.
+Avtomatik yakunlanish tufayli, `HttpClient` obunalari tozalanmasa ham, odatda xotira sizib chiqishi xavfi boʻlmaydi. Biroq, har qanday asinxron operatsiya kabi, ulardan foydalanayotgan komponent yoʻq qilinganda obunalarni tozalashni qatʼiy tavsiya qilamiz, chunki aks holda obuna callback'i ishga tushib, yoʻq qilingan komponent bilan ishlashga urinishda xatolarga duch kelishi mumkin.
 
-TIP: Using the `async` pipe or the `toSignal` operation to subscribe to `Observable`s ensures that subscriptions are disposed properly.
+TIP: `Observable`'larga obuna boʻlish uchun `async` pipe yoki `toSignal` operatsiyasidan foydalanish obunalarning toʻgʻri tozalanishini taʼminlaydi.
 
-## Best practices
+## Eng yaxshi amaliyotlar {#best-practices}
 
-While `HttpClient` can be injected and used directly from components, generally we recommend you create reusable, injectable services which isolate and encapsulate data access logic. For example, this `UserService` encapsulates the logic to request data for a user by their id:
+`HttpClient`'ni komponentlardan bevosita inyeksiya qilib ishlatish mumkin boʻlsa-da, umuman olganda maʼlumotlarga murojaat mantigʻini ajratib, inkapsulyatsiya qiluvchi qayta ishlatiladigan, inyeksiya qilinadigan servislar yaratishni tavsiya qilamiz. Masalan, bu `UserService` foydalanuvchi maʼlumotlarini uning id'si boʻyicha soʻrash mantigʻini inkapsulyatsiya qiladi:
 
 ```ts
 @Service()
@@ -651,7 +651,7 @@ export class UserService {
 }
 ```
 
-Within a component, you can combine `@if` with the `async` pipe to render the UI for the data only after it's finished loading:
+Komponent ichida maʼlumotlar uchun UI'ni faqat yuklash tugagandan keyin render qilish uchun `@if`'ni `async` pipe bilan birlashtirishingiz mumkin:
 
 ```angular-ts
 import {AsyncPipe} from '@angular/common';

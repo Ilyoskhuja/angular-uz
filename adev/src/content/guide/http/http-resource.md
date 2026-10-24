@@ -1,14 +1,14 @@
-# Reactive data fetching with `httpResource`
+# `httpResource` bilan reaktiv maʼlumot olish
 
-`httpResource` is a reactive wrapper around `HttpClient` that gives you the request status and response as signals. You can thus use these signals with `computed`, `effect`, `linkedSignal`, or any other reactive API. Because it's built on top of `HttpClient`, `httpResource` supports all the same features, such as interceptors.
+`httpResource` — bu `HttpClient` atrofidagi reaktiv oʻram boʻlib, sizga soʻrov holati va javobni signallar koʻrinishida beradi. Shunday qilib, bu signallarni `computed`, `effect`, `linkedSignal` yoki boshqa har qanday reaktiv API bilan ishlatishingiz mumkin. `HttpClient` asosida qurilgani uchun `httpResource` interceptor'lar kabi barcha bir xil imkoniyatlarni qoʻllab-quvvatlaydi.
 
-For more about Angular's `resource` pattern, see [Async reactivity with `resource`](/guide/signals/resource).
+Angular'ning `resource` patterni haqida koʻproq bilish uchun [`resource` bilan asinxron reaktivlik](/guide/signals/resource) boʻlimiga qarang.
 
-## `Using httpResource`
+## `httpResource`'dan foydalanish {#using-httpresource}
 
-TIP: `httpResource` uses the globally available `HttpClient`. Use `provideHttpClient(...)` only when you need to configure HTTP features, such as interceptors or XSRF options. See [Setting up HttpClient](/guide/http/setup) for details.
+TIP: `httpResource` global mavjud `HttpClient`'dan foydalanadi. `provideHttpClient(...)`'ni faqat interceptor'lar yoki XSRF variantlari kabi HTTP imkoniyatlarini sozlash kerak boʻlganda ishlating. Batafsil maʼlumot uchun [HttpClient'ni sozlash](/guide/http/setup) boʻlimiga qarang.
 
-You can define an HTTP resource by returning a url:
+HTTP resursini url qaytarish orqali aniqlashingiz mumkin:
 
 ```ts
 userId = input.required<string>();
@@ -16,13 +16,13 @@ userId = input.required<string>();
 user = httpResource(() => `/api/user/${userId()}`); // A reactive function as argument
 ```
 
-`httpResource` is reactive, meaning that whenever one of the signals it depends on changes (like `userId`), the resource will emit a new http request.
-If a request is already pending, the resource cancels the outstanding request before issuing a new one.
+`httpResource` reaktiv, yaʼni u bogʻliq boʻlgan signallardan biri (masalan, `userId`) oʻzgarganda resurs yangi http soʻrovini yuboradi.
+Agar soʻrov allaqachon kutilayotgan boʻlsa, resurs yangisini yuborishdan oldin tugallanmagan soʻrovni bekor qiladi.
 
-HELPFUL: `httpResource` differs from the `HttpClient` as it initiates the request _eagerly_. In contrast, the `HttpClient` only initiates requests upon subscription to the returned `Observable`.
+HELPFUL: `httpResource` `HttpClient`'dan farq qiladi, chunki u soʻrovni _darhol_ (eagerly) boshlaydi. Aksincha, `HttpClient` soʻrovlarni faqat qaytarilgan `Observable`'ga obuna boʻlingandan keyin boshlaydi.
 
-For more advanced requests, you can define a request object similar to the request taken by `HttpClient`.
-Each property of the request object that should be reactive should be composed by a signal.
+Murakkabroq soʻrovlar uchun `HttpClient` qabul qiladigan soʻrovga oʻxshash soʻrov obyektini aniqlashingiz mumkin.
+Soʻrov obyektining reaktiv boʻlishi kerak boʻlgan har bir xususiyati signal orqali tuzilishi kerak.
 
 ```ts
 user = httpResource(() => ({
@@ -48,9 +48,9 @@ user = httpResource(() => ({
 }));
 ```
 
-TIP: Avoid using `httpResource` for _mutations_ like `POST` or `PUT`. Instead, prefer directly using the underlying `HttpClient` APIs.
+TIP: `httpResource`'ni `POST` yoki `PUT` kabi _oʻzgartirishlar_ (mutations) uchun ishlatishdan qoching. Oʻrniga asosidagi `HttpClient` API'laridan bevosita foydalanishni afzal koʻring.
 
-The signals of the `httpResource` can be used in the template to control which elements should be displayed.
+`httpResource` signallarini shablonda qaysi elementlar koʻrsatilishini boshqarish uchun ishlatish mumkin.
 
 ```angular-html
 @if (user.hasValue()) {
@@ -62,11 +62,11 @@ The signals of the `httpResource` can be used in the template to control which e
 }
 ```
 
-HELPFUL: Reading the `value` signal on a `resource` that is in error state throws at runtime. It is recommended to guard `value` reads with `hasValue()`.
+HELPFUL: Xato holatidagi `resource`'ning `value` signalini oʻqish ish vaqtida xato tashlaydi. `value`'ni oʻqishni `hasValue()` bilan himoyalash tavsiya etiladi.
 
-### Response types
+### Javob turlari {#response-types}
 
-By default, `httpResource` returns and parses the response as JSON. However, you can specify an alternate return type with additional functions on `httpResource`:
+Sukut boʻyicha `httpResource` javobni JSON sifatida qaytaradi va tahlil qiladi. Biroq, `httpResource`'dagi qoʻshimcha funksiyalar yordamida boshqa qaytarish turini koʻrsatishingiz mumkin:
 
 ```ts
 httpResource.text(() => ({ … })); // returns a string in value()
@@ -76,9 +76,9 @@ httpResource.blob(() => ({ … })); // returns a Blob object in value()
 httpResource.arrayBuffer(() => ({ … })); // returns an ArrayBuffer in value()
 ```
 
-### Tracking download progress
+### Yuklab olish jarayonini kuzatish {#tracking-download-progress}
 
-Set `reportProgress: true` in the request object to track the download progress of the response. The latest `HttpProgressEvent` is available through the `progress` signal of the resource:
+Javobni yuklab olish jarayonini kuzatish uchun soʻrov obyektida `reportProgress: true` oʻrnating. Eng soʻnggi `HttpProgressEvent` resursning `progress` signali orqali mavjud:
 
 ```ts
 file = httpResource.blob(() => ({
@@ -89,13 +89,13 @@ file = httpResource.blob(() => ({
 downloaded = computed(() => this.file.progress()?.loaded ?? 0);
 ```
 
-NOTE: Unlike `HttpClient`, where `reportProgress` is deprecated in favor of `reportUploadProgress` and `reportDownloadProgress`, `httpResource` keeps the single `reportProgress` option. It only enables download progress events.
+NOTE: `reportProgress` `reportUploadProgress` va `reportDownloadProgress` foydasiga eskirgan `HttpClient`'dan farqli oʻlaroq, `httpResource` yagona `reportProgress` variantini saqlab qoladi. U faqat yuklab olish progress hodisalarini yoqadi.
 
-## Response parsing and validation
+## Javobni tahlil qilish va validatsiya {#response-parsing-and-validation}
 
-When fetching data, you may want to validate responses against a predefined schema, often using popular open-source libraries like [Zod](https://zod.dev) or [Valibot](https://valibot.dev). You can integrate validation libraries like this with `httpResource` by specifying a `parse` option. The return type of the `parse` function determines the type of the resource's `value`.
+Maʼlumotlarni olishda javoblarni oldindan belgilangan sxema boʻyicha, koʻpincha [Zod](https://zod.dev) yoki [Valibot](https://valibot.dev) kabi mashhur ochiq kodli kutubxonalar yordamida tekshirishni istashingiz mumkin. Bunday validatsiya kutubxonalarini `parse` variantini koʻrsatish orqali `httpResource` bilan integratsiya qilishingiz mumkin. `parse` funksiyasining qaytarish turi resursning `value` turini belgilaydi.
 
-The following example uses Zod to parse and validate the response from the [StarWars API](https://swapi.info/). The resource is then typed the same as the output type of Zod’s parsing.
+Quyidagi misol [StarWars API](https://swapi.info/)'dan kelgan javobni tahlil qilish va tekshirish uchun Zod'dan foydalanadi. Soʻngra resurs Zod tahlilining chiqish turi bilan bir xil tiplanadi.
 
 ```ts
 const starWarsPersonSchema = z.object({
@@ -114,11 +114,11 @@ export class CharacterViewer {
 }
 ```
 
-## Testing an httpResource
+## httpResource'ni testlash {#testing-an-httpresource}
 
-Because `httpResource` is a wrapper around `HttpClient`, you can test `httpResource` with the exact same APIs as `HttpClient`. See [HttpClient Testing](/guide/http/testing) for details.
+`httpResource` `HttpClient` atrofidagi oʻram boʻlgani uchun `httpResource`'ni `HttpClient` bilan bir xil API'lar yordamida testlashingiz mumkin. Batafsil maʼlumot uchun [HttpClient'ni testlash](/guide/http/testing) boʻlimiga qarang.
 
-The following example shows a unit test for code using `httpResource`.
+Quyidagi misolda `httpResource`'dan foydalanadigan kod uchun unit test koʻrsatilgan.
 
 ```ts
 TestBed.configureTestingModule({
