@@ -1,8 +1,8 @@
-# Validation
+# Validatsiya
 
-Forms need validation to ensure users provide correct, complete data before submission. Without validation, you would need to handle data quality issues on the server, provide poor user experience with unclear error messages, and manually check every constraint.
+Formalar foydalanuvchilar yuborishdan oldin toʻgʻri va toʻliq maʼlumot kiritishini taʼminlash uchun validatsiyaga muhtoj. Validatsiyasiz maʼlumotlar sifati bilan bogʻliq muammolarni serverda hal qilishingiz, noaniq xato xabarlari bilan foydalanuvchiga yomon tajriba taqdim etishingiz va har bir cheklovni qoʻlda tekshirishingiz kerak boʻlardi.
 
-Signal Forms provides a schema-based validation approach. Validation rules bind to fields using a schema function, run automatically when values change, and expose errors through field state signals. This enables reactive validation that updates as users interact with the form.
+Signal Forms sxemaga asoslangan validatsiya yondashuvini taqdim etadi. Validatsiya qoidalari sxema funksiyasi orqali maydonlarga bogʻlanadi, qiymatlar oʻzgarganda avtomatik ishga tushadi va xatolarni maydon holati signallari orqali ochib beradi. Bu foydalanuvchilar forma bilan ishlashi davomida yangilanib boradigan reaktiv validatsiyani taʼminlaydi.
 
 <docs-code-multifile preview hideCode path="adev/src/content/examples/signal-forms/src/login-validation-complete/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-validation-complete/app/app.ts"/>
@@ -10,13 +10,13 @@ Signal Forms provides a schema-based validation approach. Validation rules bind 
   <docs-code header="app.css" path="adev/src/content/examples/signal-forms/src/login-validation-complete/app/app.css"/>
 </docs-code-multifile>
 
-## Validation basics
+## Validatsiya asoslari {#validation-basics}
 
-Validation in Signal Forms is defined through a schema function passed as the second argument to `form()`.
+Signal Forms'da validatsiya `form()`'ga ikkinchi argument sifatida uzatiladigan sxema funksiyasi orqali aniqlanadi.
 
-### The schema function
+### Sxema funksiyasi {#the-schema-function}
 
-The schema function receives a `SchemaPathTree` object that lets you define your validation rules:
+Sxema funksiyasi validatsiya qoidalaringizni aniqlash imkonini beruvchi `SchemaPathTree` obyektini qabul qiladi:
 
 <docs-code
   header="app.ts"
@@ -25,54 +25,54 @@ The schema function receives a `SchemaPathTree` object that lets you define your
   highlight="[30,31,33]"
 />
 
-The schema function runs once during form initialization. Validation rules bind to fields using the schema path parameter (such as `schemaPath.email`, `schemaPath.password`), and validation runs automatically whenever field values change.
+Sxema funksiyasi forma ishga tushirilayotganda bir marta bajariladi. Validatsiya qoidalari sxema yoʻli parametri (masalan, `schemaPath.email`, `schemaPath.password`) yordamida maydonlarga bogʻlanadi va maydon qiymatlari oʻzgarganda validatsiya avtomatik ishga tushadi.
 
-NOTE: The schema callback parameter (`schemaPath` in these examples) is a `SchemaPathTree` object that provides paths to all fields in your form. You can name this parameter anything you like.
+NOTE: Sxema callback parametri (ushbu misollarda `schemaPath`) formangizdagi barcha maydonlarga yoʻllarni taqdim etuvchi `SchemaPathTree` obyektidir. Bu parametrni istalgancha nomlashingiz mumkin.
 
-### How validation works
+### Validatsiya qanday ishlaydi {#how-validation-works}
 
-Validation in Signal Forms follows this pattern:
+Signal Forms'da validatsiya quyidagi namunaga amal qiladi:
 
-1. **Define validation rules in schema** - Bind validation rules to fields in the schema function
-2. **Automatic execution** - Validation rules run when field values change
-3. **Error propagation** - Validation errors are exposed through field state signals
-4. **Reactive updates** - UI automatically updates when validation state changes
+1. **Validatsiya qoidalarini sxemada aniqlash** - Sxema funksiyasida validatsiya qoidalarini maydonlarga bogʻlang
+2. **Avtomatik bajarilish** - Validatsiya qoidalari maydon qiymatlari oʻzgarganda ishga tushadi
+3. **Xatolarning tarqalishi** - Validatsiya xatolari maydon holati signallari orqali ochib beriladi
+4. **Reaktiv yangilanishlar** - Validatsiya holati oʻzgarganda UI avtomatik yangilanadi
 
-Validation runs on every value change for interactive fields. Hidden and disabled fields don't run validation - their validation rules are skipped until the field becomes interactive again.
+Interaktiv maydonlar uchun validatsiya har bir qiymat oʻzgarishida ishga tushadi. Yashirin va oʻchirilgan maydonlar validatsiyani bajarmaydi - maydon yana interaktiv boʻlgunga qadar ularning validatsiya qoidalari oʻtkazib yuboriladi.
 
-### Validation timing
+### Validatsiya vaqti {#validation-timing}
 
-Validation rules execute in this order:
+Validatsiya qoidalari quyidagi tartibda bajariladi:
 
-1. **Synchronous validation** - All synchronous validation rules run when value changes
-2. **Asynchronous validation** - Asynchronous validation rules run only after all synchronous validation rules pass
-3. **Field state updates** - The `valid()`, `invalid()`, `errors()`, and `pending()` signals update
+1. **Sinxron validatsiya** - Qiymat oʻzgarganda barcha sinxron validatsiya qoidalari ishga tushadi
+2. **Asinxron validatsiya** - Asinxron validatsiya qoidalari faqat barcha sinxron validatsiya qoidalari muvaffaqiyatli oʻtgandan keyin ishga tushadi
+3. **Maydon holatini yangilash** - `valid()`, `invalid()`, `errors()` va `pending()` signallari yangilanadi
 
-Synchronous validation rules (like `required()`, `email()`) complete immediately. Asynchronous validation rules (like `validateHttp()`) may take time and set the `pending()` signal to `true` while executing.
+Sinxron validatsiya qoidalari (`required()`, `email()` kabi) darhol yakunlanadi. Asinxron validatsiya qoidalari (`validateHttp()` kabi) vaqt talab qilishi mumkin va bajarilayotganda `pending()` signalini `true` qiymatiga oʻrnatadi.
 
-All validation rules run on every change - validation doesn't short-circuit after the first error. If a field has both `required()` and `email()` validation rules, both run, and both can produce errors simultaneously.
+Barcha validatsiya qoidalari har bir oʻzgarishda ishga tushadi - validatsiya birinchi xatodan keyin toʻxtab qolmaydi. Agar maydonda `required()` ham, `email()` ham validatsiya qoidasi boʻlsa, ikkalasi ham ishga tushadi va ikkalasi ham bir vaqtning oʻzida xato chiqarishi mumkin.
 
-### Native HTML validation
+### Native HTML validatsiyasi {#native-html-validation}
 
-Signal Forms **does not** use the browser's built-in [constraint validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Constraint_validation) to run validation rules. This is by design: Signal Forms allows any component to act as a form control, not just native form elements.
+Signal Forms validatsiya qoidalarini bajarish uchun brauzerning oʻrnatilgan [cheklov validatsiyasidan](https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Constraint_validation) (constraint validation) **foydalanmaydi**. Bu ataylab shunday qilingan: Signal Forms faqat native forma elementlariga emas, istalgan komponentga forma boshqaruv elementi (control) sifatida ishlash imkonini beradi.
 
-Instead, your validation rules run entirely in Angular, and validation state is exposed through field state signals such as `valid()`, `invalid()`, and `errors()` rather than through the element's native validity state. The [`FormRoot` directive](guide/forms/signals/form-submission) also sets the `novalidate` attribute on the form element so the browser does not block submission.
+Buning oʻrniga validatsiya qoidalaringiz toʻliq Angular'da bajariladi va validatsiya holati elementning native validlik holati orqali emas, balki `valid()`, `invalid()` va `errors()` kabi maydon holati signallari orqali ochib beriladi. [`FormRoot` direktivi](guide/forms/signals/form-submission) shuningdek, brauzer yuborishni bloklamasligi uchun forma elementiga `novalidate` atributini oʻrnatadi.
 
-When a field is bound to a native form element, some built-in validation rules mirror their constraint to the corresponding native attribute: `required()`, `min()`, `max()`, `minLength()`, and `maxLength()` set the `required`, `min`, `max`, `minlength`, and `maxlength` attributes when the element supports them. An exception is `pattern()`, which does not set the native `pattern` attribute. Signal Forms sets these attributes to control input behavior and to improve accessibility, **not to trigger native validation**.
+Maydon native forma elementiga bogʻlanganda, baʼzi oʻrnatilgan validatsiya qoidalari oʻz cheklovini tegishli native atributga aks ettiradi: `required()`, `min()`, `max()`, `minLength()` va `maxLength()` element qoʻllab-quvvatlasa `required`, `min`, `max`, `minlength` va `maxlength` atributlarini oʻrnatadi. Istisno - `pattern()`: u native `pattern` atributini oʻrnatmaydi. Signal Forms bu atributlarni input xatti-harakatini boshqarish va qulaylikni (accessibility) yaxshilash uchun oʻrnatadi, **native validatsiyani ishga tushirish uchun emas**.
 
-NOTE: There is one case where Signal Forms reads native validity state: when the browser cannot parse a native input's value (for example, a partially typed date), Signal Forms reports it as a parse error. Even then, the error surfaces through the field's `errors()` signal like any other validation error. See [Value transformation](guide/forms/signals/custom-controls#value-transformation) for details.
+NOTE: Signal Forms native validlik holatini oʻqiydigan bitta holat bor: brauzer native input qiymatini tahlil qila olmasa (masalan, qisman kiritilgan sana), Signal Forms buni tahlil (parse) xatosi sifatida qayd etadi. Shunda ham xato boshqa har qanday validatsiya xatosi kabi maydonning `errors()` signali orqali chiqadi. Tafsilotlar uchun [Qiymatni oʻzgartirish](guide/forms/signals/custom-controls#value-transformation) boʻlimiga qarang.
 
-IMPORTANT: Do not rely on native validity features such as the `:valid` and `:invalid` CSS pseudo-classes, the element's `validity` property, or `validationMessage`. The browser may report some inputs as invalid as a side effect of the mirrored attributes (for example, a number input whose value is below its `min`), but this behavior varies by validation rule and input type and is not a supported way to observe validation state.
+IMPORTANT: `:valid` va `:invalid` CSS psevdo-klasslari, elementning `validity` xususiyati yoki `validationMessage` kabi native validlik imkoniyatlariga tayanmang. Brauzer aks ettirilgan atributlarning yon taʼsiri sifatida baʼzi input'larni yaroqsiz deb koʻrsatishi mumkin (masalan, qiymati `min`'dan kichik boʻlgan sonli input), lekin bu xatti-harakat validatsiya qoidasi va input turiga qarab farq qiladi va validatsiya holatini kuzatishning qoʻllab-quvvatlanadigan usuli emas.
 
-To style controls based on validation state, bind classes to field state signals (see [Field state management](guide/forms/signals/field-state-management#conditional-error-display)) or configure automatic status classes (see [Automatic status classes](guide/forms/signals/migration#automatic-status-classes)).
+Boshqaruv elementlariga validatsiya holatiga qarab stil berish uchun klasslarni maydon holati signallariga bogʻlang ([Maydon holatini boshqarish](guide/forms/signals/field-state-management#conditional-error-display) boʻlimiga qarang) yoki avtomatik holat klasslarini sozlang ([Avtomatik holat klasslari](guide/forms/signals/migration#automatic-status-classes) boʻlimiga qarang).
 
-## Built-in validation rules
+## Oʻrnatilgan validatsiya qoidalari {#built-in-validation-rules}
 
-Signal Forms provides validation rules for common validation scenarios. All built-in validation rules accept an options object for custom error messages and conditional logic.
+Signal Forms keng tarqalgan validatsiya holatlari uchun validatsiya qoidalarini taqdim etadi. Barcha oʻrnatilgan validatsiya qoidalari maxsus xato xabarlari va shartli mantiq uchun parametrlar obyektini qabul qiladi.
 
 ### required()
 
-The `required()` validation rule ensures a field has a value:
+`required()` validatsiya qoidasi maydonda qiymat borligini taʼminlaydi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -110,24 +110,22 @@ export class RegistrationComponent {
 }
 ```
 
-A field is considered "empty" when its value is one of the following, and non-empty for every other
-value — including `0` and the empty array `[]`:
+Maydon qiymati quyidagilardan biri boʻlsa "boʻsh" hisoblanadi, boshqa har qanday qiymatda - shu jumladan `0` va boʻsh massiv `[]` boʻlganda ham - boʻsh emas deb hisoblanadi:
 
-| Condition                | Example     |
+| Shart                    | Misol       |
 | ------------------------ | ----------- |
-| Value is `null`          | `null`      |
-| Value is `undefined`     | `undefined` |
-| Value is an empty string | `''`        |
-| Value is `false`         | `false`     |
-| Value is `NaN`           | `NaN`       |
+| Qiymat `null`            | `null`      |
+| Qiymat `undefined`       | `undefined` |
+| Qiymat boʻsh satr        | `''`        |
+| Qiymat `false`           | `false`     |
+| Qiymat `NaN`             | `NaN`       |
 
-The last two are worth calling out:
+Oxirgi ikkitasini alohida taʼkidlash joiz:
 
-- `false` is empty to follow the native semantics of `required` on `<input type="checkbox">`, where
-  an unchecked box fails validation.
-- `NaN` is empty because it is usually the result of a parsing error, and is not a valid number.
+- `false` boʻsh hisoblanadi, chunki bu `<input type="checkbox">`'dagi `required`'ning native semantikasiga mos keladi: belgilanmagan katakcha validatsiyadan oʻtmaydi.
+- `NaN` boʻsh hisoblanadi, chunki u odatda tahlil xatosining natijasi boʻlib, yaroqli son emas.
 
-For conditional requirements, use the `when` option:
+Shartli majburiylik uchun `when` parametridan foydalaning:
 
 ```ts
 registrationForm = form(this.registrationModel, (schemaPath) => {
@@ -138,13 +136,13 @@ registrationForm = form(this.registrationModel, (schemaPath) => {
 });
 ```
 
-The validation rule only runs when the `when` function returns `true`.
+Validatsiya qoidasi faqat `when` funksiyasi `true` qaytarganda ishga tushadi.
 
-NOTE: `required` treats an empty array as present (valid), so use [`minLength()`](#minlength-and-maxlength) to enforce a minimum number of array items.
+NOTE: `required` boʻsh massivni mavjud (valid) deb hisoblaydi, shuning uchun massiv elementlarining minimal sonini talab qilish uchun [`minLength()`](#minlength-and-maxlength)'dan foydalaning.
 
 ### email()
 
-The `email()` validation rule checks for valid email format:
+`email()` validatsiya qoidasi email formatining toʻgʻriligini tekshiradi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -171,11 +169,11 @@ export class ContactComponent {
 }
 ```
 
-The `email()` validation rule uses a standard email format regex. It accepts addresses like `user@example.com` but rejects malformed addresses like `user@` or `@example.com`.
+`email()` validatsiya qoidasi standart email formati regex'idan foydalanadi. U `user@example.com` kabi manzillarni qabul qiladi, lekin `user@` yoki `@example.com` kabi notoʻgʻri tuzilgan manzillarni rad etadi.
 
-### min() and max()
+### min() va max() {#min-and-max}
 
-The `min()` and `max()` validation rules work with numeric values:
+`min()` va `max()` validatsiya qoidalari sonli qiymatlar bilan ishlaydi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -214,7 +212,7 @@ export class AgeFormComponent {
 }
 ```
 
-You can use computed values for dynamic constraints:
+Dinamik cheklovlar uchun hisoblangan qiymatlardan foydalanishingiz mumkin:
 
 ```ts
 ageForm = form(this.ageModel, (schemaPath) => {
@@ -224,9 +222,9 @@ ageForm = form(this.ageModel, (schemaPath) => {
 });
 ```
 
-### minDate() and maxDate()
+### minDate() va maxDate() {#mindate-and-maxdate}
 
-The `minDate()` and `maxDate()` validation rules work with `Date` values, such as a field bound to `<input type="date">`. They also set the `min` and `max` attributes of that input.
+`minDate()` va `maxDate()` validatsiya qoidalari `Date` qiymatlari bilan, masalan, `<input type="date">`'ga bogʻlangan maydon bilan ishlaydi. Ular shuningdek, oʻsha input'ning `min` va `max` atributlarini ham oʻrnatadi.
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -254,9 +252,9 @@ export class BookingFormComponent {
 }
 ```
 
-IMPORTANT: An `<input type="date">` reads and writes `Date` values at midnight UTC, whatever the user's time zone, because that is how the browser's `valueAsDate` works. Build the limits the same way, for example with `new Date('2026-06-01')` or `new Date(Date.UTC(2026, 5, 1))`. A `Date` created from local time, such as `new Date(2026, 5, 1)` or `new Date()`, is shifted by the user's UTC offset. Depending on the time zone, the `min` or `max` attribute can then be off by a day, and the limit date itself can be rejected.
+IMPORTANT: `<input type="date">` foydalanuvchining vaqt mintaqasidan qatʼi nazar `Date` qiymatlarini UTC boʻyicha yarim tun vaqtida oʻqiydi va yozadi, chunki brauzerning `valueAsDate` xususiyati shunday ishlaydi. Chegaralarni ham shu tarzda yarating, masalan, `new Date('2026-06-01')` yoki `new Date(Date.UTC(2026, 5, 1))` bilan. Mahalliy vaqtdan yaratilgan `Date`, masalan, `new Date(2026, 5, 1)` yoki `new Date()`, foydalanuvchining UTC siljishi miqdoriga suriladi. Vaqt mintaqasiga qarab `min` yoki `max` atributi bir kunga farq qilishi va chegara sanasining oʻzi rad etilishi mumkin.
 
-To require a date that is not before today, use today's calendar date in the user's time zone, expressed at midnight UTC:
+Bugundan oldin boʻlmagan sanani talab qilish uchun foydalanuvchi vaqt mintaqasidagi bugungi kalendar sanasini UTC boʻyicha yarim tun koʻrinishida ifodalab ishlating:
 
 ```ts
 const now = new Date();
@@ -265,11 +263,11 @@ const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()
 minDate(schemaPath.checkIn, today, {message: 'Check-in cannot be in the past'});
 ```
 
-Passing `new Date()` directly can reject today's date, because the value picked in the input is midnight UTC, which is earlier than the current time. This happens in UTC and in the time zones behind it.
+`new Date()`'ni toʻgʻridan-toʻgʻri uzatish bugungi sanani rad etishi mumkin, chunki input'da tanlangan qiymat UTC boʻyicha yarim tun boʻlib, joriy vaqtdan oldinroq. Bu UTC'da va undan orqada boʻlgan vaqt mintaqalarida yuz beradi.
 
-### minLength() and maxLength()
+### minLength() va maxLength() {#minlength-and-maxlength}
 
-The `minLength()` and `maxLength()` validation rules work with strings and arrays:
+`minLength()` va `maxLength()` validatsiya qoidalari satrlar va massivlar bilan ishlaydi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -307,11 +305,11 @@ export class PasswordFormComponent {
 }
 ```
 
-For strings, "length" means the number of characters. For arrays, "length" means the number of elements.
+Satrlar uchun "uzunlik" belgilar sonini anglatadi. Massivlar uchun "uzunlik" elementlar sonini anglatadi.
 
 ### pattern()
 
-The `pattern()` validation rule validates against a regular expression:
+`pattern()` validatsiya qoidasi qiymatni regulyar ifoda boʻyicha tekshiradi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -352,18 +350,18 @@ export class PhoneFormComponent {
 }
 ```
 
-Common patterns:
+Keng tarqalgan namunalar:
 
-| Pattern Type     | Regular Expression      | Example      |
-| ---------------- | ----------------------- | ------------ |
-| Phone            | `/^\d{3}-\d{3}-\d{4}$/` | 555-123-4567 |
-| Postal code (US) | `/^\d{5}$/`             | 12345        |
-| Alphanumeric     | `/^[a-zA-Z0-9]+$/`      | abc123       |
-| URL-safe         | `/^[a-zA-Z0-9_-]+$/`    | my-url_123   |
+| Namuna turi           | Regulyar ifoda          | Misol        |
+| --------------------- | ----------------------- | ------------ |
+| Telefon               | `/^\d{3}-\d{3}-\d{4}$/` | 555-123-4567 |
+| Pochta indeksi (AQSH) | `/^\d{5}$/`             | 12345        |
+| Harf-raqamli          | `/^[a-zA-Z0-9]+$/`      | abc123       |
+| URL uchun xavfsiz     | `/^[a-zA-Z0-9_-]+$/`    | my-url_123   |
 
-## Validation of array items
+## Massiv elementlarini validatsiya qilish {#validation-of-array-items}
 
-Forms can include arrays of nested objects (for example, a list of order items). To apply validation rules to each item in an array, use `applyEach()` inside your schema function. `applyEach()` iterates the array path and supplies a path for each item where you can apply validators just like top-level fields.
+Formalar ichki obyektlar massivlarini (masalan, buyurtma elementlari roʻyxatini) oʻz ichiga olishi mumkin. Massivdagi har bir elementga validatsiya qoidalarini qoʻllash uchun sxema funksiyangiz ichida `applyEach()`'dan foydalaning. `applyEach()` massiv yoʻli boʻylab yuradi va har bir element uchun yoʻl taqdim etadi; unda validatorlarni yuqori darajadagi maydonlardagi kabi qoʻllashingiz mumkin.
 
 ```ts
 import {Component, signal} from '@angular/core';
@@ -399,26 +397,26 @@ export class OrderComponent {
 }
 ```
 
-## Validation errors
+## Validatsiya xatolari {#validation-errors}
 
-When validation rules fail, they produce error objects that describe what went wrong. Understanding error structure helps you provide clear feedback to users.
+Validatsiya qoidalari bajarilmaganda ular nima notoʻgʻri ketganini tavsiflovchi xato obyektlarini hosil qiladi. Xato tuzilmasini tushunish foydalanuvchilarga aniq fikr-mulohaza berishga yordam beradi.
 
-NOTE: This section covers the errors that validation rules produce. For displaying and using validation errors in your UI, see the [Field State Management guide](guide/forms/signals/field-state-management).
+NOTE: Bu boʻlim validatsiya qoidalari hosil qiladigan xatolarni yoritadi. Validatsiya xatolarini UI'da koʻrsatish va ishlatish uchun [Maydon holatini boshqarish qoʻllanmasiga](guide/forms/signals/field-state-management) qarang.
 
-### Error structure
+### Xato tuzilmasi {#error-structure}
 
-Each validation error object contains these properties:
+Har bir validatsiya xatosi obyekti quyidagi xususiyatlarni oʻz ichiga oladi:
 
-| Property  | Description                                                              |
-| --------- | ------------------------------------------------------------------------ |
-| `kind`    | The validation rule that failed (e.g., "required", "email", "minLength") |
-| `message` | Optional human-readable error message                                    |
+| Xususiyat | Tavsif                                                                       |
+| --------- | ---------------------------------------------------------------------------- |
+| `kind`    | Bajarilmagan validatsiya qoidasi (masalan, "required", "email", "minLength") |
+| `message` | Ixtiyoriy, odam oʻqishi uchun moʻljallangan xato xabari                      |
 
-Built-in validation rules automatically set the `kind` property. The `message` property is optional - you can provide custom messages through validation rule options.
+Oʻrnatilgan validatsiya qoidalari `kind` xususiyatini avtomatik oʻrnatadi. `message` xususiyati ixtiyoriy - validatsiya qoidasi parametrlari orqali maxsus xabarlar berishingiz mumkin.
 
-### Custom error messages
+### Maxsus xato xabarlari {#custom-error-messages}
 
-All built-in validation rules accept a `message` option for custom error text:
+Barcha oʻrnatilgan validatsiya qoidalari maxsus xato matni uchun `message` parametrini qabul qiladi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -462,11 +460,11 @@ export class SignupComponent {
 }
 ```
 
-Custom messages should be clear, specific, and tell users how to fix the problem. Instead of "Invalid input", use "Password must be at least 12 characters for security".
+Maxsus xabarlar aniq, konkret boʻlishi va foydalanuvchilarga muammoni qanday hal qilishni aytishi kerak. "Invalid input" oʻrniga "Password must be at least 12 characters for security" kabi xabardan foydalaning.
 
-### Multiple errors per field
+### Bir maydonda bir nechta xato {#multiple-errors-per-field}
 
-When a field has multiple validation rules, each validation rule runs independently and can produce an error:
+Maydonda bir nechta validatsiya qoidasi boʻlsa, har bir validatsiya qoidasi mustaqil ishga tushadi va xato chiqarishi mumkin:
 
 ```ts
 signupForm = form(this.signupModel, (schemaPath) => {
@@ -476,22 +474,22 @@ signupForm = form(this.signupModel, (schemaPath) => {
 });
 ```
 
-If the email field is empty, only the `required()` error appears. If the user types "a@b", both `email()` and `minLength()` errors appear. All validation rules run - validation doesn't stop after the first failure.
+Agar email maydoni boʻsh boʻlsa, faqat `required()` xatosi koʻrinadi. Agar foydalanuvchi "a@b" deb yozsa, `email()` ham, `minLength()` ham xato chiqaradi. Barcha validatsiya qoidalari ishga tushadi - validatsiya birinchi muvaffaqiyatsizlikdan keyin toʻxtamaydi.
 
-TIP: Use the `touched() && invalid()` pattern in your templates to prevent errors from appearing before users have interacted with a field. For comprehensive guidance on displaying validation errors, see the [Field State Management guide](guide/forms/signals/field-state-management#conditional-error-display).
+TIP: Foydalanuvchi maydon bilan ishlashidan oldin xatolar koʻrinishining oldini olish uchun shablonlaringizda `touched() && invalid()` namunasidan foydalaning. Validatsiya xatolarini koʻrsatish boʻyicha toʻliq qoʻllanma uchun [Maydon holatini boshqarish qoʻllanmasiga](guide/forms/signals/field-state-management#conditional-error-display) qarang.
 
-## Custom validation rules
+## Maxsus validatsiya qoidalari {#custom-validation-rules}
 
-While built-in validation rules handle common cases, you'll often need custom validation logic for business rules, complex formats, or domain-specific constraints.
+Oʻrnatilgan validatsiya qoidalari keng tarqalgan holatlarni qamrab olsa-da, biznes qoidalari, murakkab formatlar yoki sohaga xos cheklovlar uchun koʻpincha maxsus validatsiya mantigʻi kerak boʻladi.
 
-### Using validate()
+### validate()'dan foydalanish {#using-validate}
 
-The `validate()` function creates custom validation rules. It receives a validator function that accesses the field context and returns:
+`validate()` funksiyasi maxsus validatsiya qoidalarini yaratadi. U maydon kontekstiga murojaat qiluvchi va quyidagilarni qaytaruvchi validator funksiyasini qabul qiladi:
 
-| Return Value          | Meaning          |
-| --------------------- | ---------------- |
-| Error object          | Value is invalid |
-| `null` or `undefined` | Value is valid   |
+| Qaytariladigan qiymat   | Maʼnosi         |
+| ----------------------- | --------------- |
+| Xato obyekti            | Qiymat yaroqsiz |
+| `null` yoki `undefined` | Qiymat yaroqli  |
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -527,25 +525,25 @@ export class UrlFormComponent {
 }
 ```
 
-The validator function receives a `FieldContext` object with:
+Validator funksiyasi quyidagilarga ega `FieldContext` obyektini qabul qiladi:
 
-| Property        | Type       | Description                                 |
-| --------------- | ---------- | ------------------------------------------- |
-| `value`         | Signal     | Signal containing the current field value   |
-| `state`         | FieldState | The field state reference                   |
-| `fieldTree`     | FieldTree  | The field tree reference                    |
-| `valueOf()`     | Method     | Get the value of another field by path      |
-| `stateOf()`     | Method     | Get the state of another field by path      |
-| `fieldTreeOf()` | Method     | Get the field tree of another field by path |
-| `pathKeys`      | Signal     | Path keys from root to current field        |
+| Xususiyat       | Turi       | Tavsif                                                    |
+| --------------- | ---------- | --------------------------------------------------------- |
+| `value`         | Signal     | Maydonning joriy qiymatini saqlovchi signal               |
+| `state`         | FieldState | Maydon holatiga havola                                    |
+| `fieldTree`     | FieldTree  | Maydonlar daraxtiga havola                                |
+| `valueOf()`     | Metod      | Boshqa maydon qiymatini yoʻl boʻyicha olish               |
+| `stateOf()`     | Metod      | Boshqa maydon holatini yoʻl boʻyicha olish                |
+| `fieldTreeOf()` | Metod      | Boshqa maydonning maydonlar daraxtini yoʻl boʻyicha olish |
+| `pathKeys`      | Signal     | Ildizdan joriy maydongacha boʻlgan yoʻl kalitlari         |
 
-NOTE: Child fields also have a `key` signal, and array item fields have both `key` and `index` signals.
+NOTE: Ichki maydonlar shuningdek `key` signaliga, massiv elementi maydonlari esa `key` va `index` signallarining ikkalasiga ega.
 
-Return an error object with `kind` and `message` when validation fails. Return `null` or `undefined` when validation passes.
+Validatsiya muvaffaqiyatsiz boʻlganda `kind` va `message`'ga ega xato obyektini qaytaring. Validatsiya oʻtganda `null` yoki `undefined` qaytaring.
 
-### Using validateTree()
+### validateTree()'dan foydalanish {#using-validatetree}
 
-The `validateTree()` function creates custom validation rules that can target multiple fields or provide complex validation logic for a whole subtree.
+`validateTree()` funksiyasi bir nechta maydonga yoʻnaltirilishi yoki butun bir ichki daraxt (subtree) uchun murakkab validatsiya mantigʻini taqdim etishi mumkin boʻlgan maxsus validatsiya qoidalarini yaratadi.
 
 ```angular-ts
 import {Component, model} from '@angular/core';
@@ -579,11 +577,11 @@ export class UserFormComponent {
 }
 ```
 
-The `validateTree()` validator function receives the same `FieldContext` object as `validate()`.
+`validateTree()` validator funksiyasi `validate()` bilan bir xil `FieldContext` obyektini qabul qiladi.
 
-### Reusable validation rules
+### Qayta ishlatiladigan validatsiya qoidalari {#reusable-validation-rules}
 
-Create reusable validation rule functions by wrapping `validate()`:
+`validate()`'ni oʻrab, qayta ishlatiladigan validatsiya qoidasi funksiyalarini yarating:
 
 ```ts
 function url(path: SchemaPath<string>, options?: {message?: string}) {
@@ -616,7 +614,7 @@ function phoneNumber(path: SchemaPath<string>, options?: {message?: string}) {
 }
 ```
 
-You can use custom validation rules just like built-in validation rules:
+Maxsus validatsiya qoidalarini oʻrnatilgan validatsiya qoidalari kabi ishlatishingiz mumkin:
 
 ```ts
 urlForm = form(this.urlModel, (schemaPath) => {
@@ -625,11 +623,11 @@ urlForm = form(this.urlModel, (schemaPath) => {
 });
 ```
 
-## Cross-field validation
+## Maydonlararo validatsiya {#cross-field-validation}
 
-Cross-field validation compares or relates multiple field values.
+Maydonlararo validatsiya bir nechta maydon qiymatlarini oʻzaro taqqoslaydi yoki bogʻlaydi.
 
-A common scenario for cross-field validation is password confirmation:
+Maydonlararo validatsiyaning keng tarqalgan holati - parolni tasdiqlash:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -683,26 +681,26 @@ export class PasswordChangeComponent {
 }
 ```
 
-The confirmation validation rule accesses the password field value using `valueOf(schemaPath.password)` and compares it to the confirmation value. This validation rule runs reactively - if either password changes, validation reruns automatically.
+Tasdiqlash validatsiya qoidasi `valueOf(schemaPath.password)` yordamida parol maydoni qiymatiga murojaat qiladi va uni tasdiqlash qiymati bilan taqqoslaydi. Bu validatsiya qoidasi reaktiv ishlaydi - parollardan istalgan biri oʻzgarsa, validatsiya avtomatik qayta bajariladi.
 
-## Conditional validation
+## Shartli validatsiya {#conditional-validation}
 
-Sometimes a validation rule should apply only under certain conditions, such as validating a shipping address only when an order ships internationally, or applying a different set of rules to each variant of a union-typed field.
+Baʼzan validatsiya qoidasi faqat maʼlum shartlarda qoʻllanishi kerak, masalan, yetkazib berish manzilini faqat buyurtma xalqaro yuborilganda tekshirish yoki union tipli maydonning har bir variantiga alohida qoidalar toʻplamini qoʻllash.
 
-Because validation rules live in the schema function, you apply them conditionally with the same structural functions that compose schemas:
+Validatsiya qoidalari sxema funksiyasida joylashgani uchun ularni sxemalarni tuzishda ishlatiladigan oʻsha strukturaviy funksiyalar yordamida shartli qoʻllaysiz:
 
-- Use [`applyWhen()`](guide/forms/signals/form-logic#conditional-logic-with-applywhen) to activate a group of rules based on reactive form state, including the values of other fields.
-- Use [`applyWhenValue()`](guide/forms/signals/schemas#type-narrowing-with-applywhenvalue) to apply rules based on a field's own value. When the predicate is a type guard, the rules are typed to the narrowed value, which makes it the recommended way to validate discriminated unions and other variant types.
+- Boshqa maydonlarning qiymatlari ham kiruvchi reaktiv forma holatiga asoslanib qoidalar guruhini faollashtirish uchun [`applyWhen()`](guide/forms/signals/form-logic#conditional-logic-with-applywhen)'dan foydalaning.
+- Maydonning oʻz qiymatiga asoslanib qoidalarni qoʻllash uchun [`applyWhenValue()`](guide/forms/signals/schemas#type-narrowing-with-applywhenvalue)'dan foydalaning. Predikat tip himoyachisi (type guard) boʻlsa, qoidalar toraytirilgan qiymat tipiga ega boʻladi, bu esa uni diskriminatsiyalangan union'lar va boshqa variantli tiplarni tekshirishning tavsiya etilgan usuliga aylantiradi.
 
-For complete examples, including reusable schemas and discriminated unions, see the [Schemas and schema composability guide](guide/forms/signals/schemas).
+Qayta ishlatiladigan sxemalar va diskriminatsiyalangan union'larni ham oʻz ichiga olgan toʻliq misollar uchun [Sxemalar va sxema kompozitsiyasi qoʻllanmasiga](guide/forms/signals/schemas) qarang.
 
-## Async validation
+## Asinxron validatsiya {#async-validation}
 
-Async validation handles validation that requires external data sources, like checking username availability on a server or validating against an API.
+Asinxron validatsiya tashqi maʼlumot manbalarini talab qiluvchi validatsiyani, masalan, serverda foydalanuvchi nomi bandligini tekshirish yoki API orqali tekshirishni amalga oshiradi.
 
-### Using validateHttp()
+### validateHttp()'dan foydalanish {#using-validatehttp}
 
-The `validateHttp()` function performs HTTP-based validation:
+`validateHttp()` funksiyasi HTTP'ga asoslangan validatsiyani bajaradi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -750,17 +748,17 @@ export class UsernameFormComponent {
 }
 ```
 
-The `validateHttp()` validation rule:
+`validateHttp()` validatsiya qoidasi:
 
-1. Calls the URL or request returned by the `request` function
-2. Maps the successful response to a validation error or `null` using `onSuccess`
-3. Handles request failures (network errors, HTTP errors) using `onError`
-4. Sets `pending()` to `true` while the request is in progress
-5. Only runs after all synchronous validation rules pass
+1. `request` funksiyasi qaytargan URL yoki soʻrovni chaqiradi
+2. `onSuccess` yordamida muvaffaqiyatli javobni validatsiya xatosiga yoki `null`'ga aylantiradi
+3. `onError` yordamida soʻrov muvaffaqiyatsizliklarini (tarmoq xatolari, HTTP xatolari) qayta ishlaydi
+4. Soʻrov bajarilayotganda `pending()`'ni `true` qiymatiga oʻrnatadi
+5. Faqat barcha sinxron validatsiya qoidalari muvaffaqiyatli oʻtgandan keyin ishga tushadi
 
-### Pending state
+### Kutish holati {#pending-state}
 
-While async validation runs, the field's `pending()` signal returns `true`. Use this to show loading indicators:
+Asinxron validatsiya bajarilayotganda maydonning `pending()` signali `true` qaytaradi. Yuklanish indikatorlarini koʻrsatish uchun shundan foydalaning:
 
 ```angular-html
 @if (form.username().pending()) {
@@ -768,11 +766,11 @@ While async validation runs, the field's `pending()` signal returns `true`. Use 
 }
 ```
 
-The `valid()` signal returns `false` while validation is pending, even if there are no errors yet. The `invalid()` signal only returns `true` if errors exist.
+`valid()` signali validatsiya kutish holatida boʻlganda, hali xatolar boʻlmasa ham, `false` qaytaradi. `invalid()` signali faqat xatolar mavjud boʻlganda `true` qaytaradi.
 
-## Integration with schema validation libraries
+## Sxema validatsiya kutubxonalari bilan integratsiya {#integration-with-schema-validation-libraries}
 
-Signal Forms have built-in support for libraries that conform to [Standard Schema](https://standardschema.dev/) like [Zod](https://zod.dev/) or [Valibot](https://valibot.dev/). The integration is provided via the `validateStandardSchema` function. This allows you to use existing schemas while maintaining Signal Forms' reactive validation benefits.
+Signal Forms [Standard Schema](https://standardschema.dev/)'ga mos keluvchi [Zod](https://zod.dev/) yoki [Valibot](https://valibot.dev/) kabi kutubxonalarni oʻrnatilgan holda qoʻllab-quvvatlaydi. Integratsiya `validateStandardSchema` funksiyasi orqali taqdim etiladi. Bu Signal Forms'ning reaktiv validatsiya afzalliklarini saqlab qolgan holda mavjud sxemalardan foydalanish imkonini beradi.
 
 ```ts
 import {form, validateStandardSchema} from '@angular/forms/signals';
@@ -790,9 +788,9 @@ const userForm = form(signal({email: '', password: ''}), (schemaPath) => {
 });
 ```
 
-### Dynamic schemas
+### Dinamik sxemalar {#dynamic-schemas}
 
-You can pass a signal instead of a static schema so the validation schema updates automatically when its dependencies change.
+Statik sxema oʻrniga signal uzatishingiz mumkin, shunda validatsiya sxemasi oʻz bogʻliqliklari oʻzgarganda avtomatik yangilanadi.
 
 ```angular-ts
 import {Component, computed, signal} from '@angular/core';
@@ -817,13 +815,13 @@ export class DynamicSchema {
 }
 ```
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-This guide covered creating and applying validation rules. Related guides explore other aspects of Signal Forms:
+Ushbu qoʻllanma validatsiya qoidalarini yaratish va qoʻllashni yoritdi. Tegishli qoʻllanmalar Signal Forms'ning boshqa jihatlarini oʻrganadi:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
-  <docs-pill href="guide/forms/signals/models" title="Form models" />
-  <docs-pill href="guide/forms/signals/form-logic" title="Adding form logic" />
-  <docs-pill href="guide/forms/signals/schemas" title="Schemas and schema composability" />
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish" />
+  <docs-pill href="guide/forms/signals/models" title="Forma modellari" />
+  <docs-pill href="guide/forms/signals/form-logic" title="Forma mantigʻini qoʻshish" />
+  <docs-pill href="guide/forms/signals/schemas" title="Sxemalar va sxema kompozitsiyasi" />
 </docs-pill-row>

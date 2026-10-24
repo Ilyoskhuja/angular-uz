@@ -1,23 +1,23 @@
-# Comparison with other form approaches
+# Boshqa forma yondashuvlari bilan taqqoslash
 
-Angular provides three approaches to building forms: Signal Forms, Reactive Forms, and Template-driven Forms. Each has distinct patterns for managing state, validation, and data flow. This guide helps you understand the differences and choose the right approach for your project.
+Angular formalar yaratishning uchta yondashuvini taqdim etadi: Signal Forms, reaktiv formalar (Reactive Forms) va shablonga asoslangan formalar (Template-driven Forms). Har birining holatni boshqarish, validatsiya va maʼlumotlar oqimi uchun oʻziga xos namunalari bor. Ushbu qoʻllanma farqlarni tushunishga va loyihangiz uchun toʻgʻri yondashuvni tanlashga yordam beradi.
 
-## Quick comparison
+## Qisqacha taqqoslash {#quick-comparison}
 
-| Feature          | Signal Forms                       | Reactive Forms                        | Template-driven Forms   |
-| ---------------- | ---------------------------------- | ------------------------------------- | ----------------------- |
-| Source of truth  | User-defined writable signal model | `FormControl`/`FormGroup`             | User model in component |
-| Type safety      | Inferred from model                | Explicit with typed forms             | Minimal                 |
-| Validation       | Schema with path-based validators  | List of validators passed to Controls | Directive-based         |
-| State management | Signal-based                       | Observable-based                      | Angular-managed         |
-| Setup            | Signal + schema function           | FormControl tree                      | NgModel in template     |
-| Best for         | Signal-based apps                  | Complex forms                         | Simple forms            |
-| Learning curve   | Medium                             | Medium-High                           | Low                     |
-| Status           | Stable (v22+)                      | Stable                                | Stable                  |
+| Xususiyat           | Signal Forms                                    | Reaktiv formalar                                 | Shablonga asoslangan formalar      |
+| ------------------- | ----------------------------------------------- | ------------------------------------------------ | ---------------------------------- |
+| Haqiqat manbai      | Foydalanuvchi aniqlagan yozuvchan signal modeli | `FormControl`/`FormGroup`                        | Komponentdagi foydalanuvchi modeli |
+| Tip xavfsizligi     | Modeldan chiqariladi                            | Tiplangan formalar bilan aniq                    | Minimal                            |
+| Validatsiya         | Yoʻlga asoslangan validatorli sxema             | Control'larga uzatiladigan validatorlar roʻyxati | Direktivaga asoslangan             |
+| Holatni boshqarish  | Signalga asoslangan                             | Observable'ga asoslangan                         | Angular tomonidan boshqariladi     |
+| Sozlash             | Signal + sxema funksiyasi                       | FormControl daraxti                              | Shablonda NgModel                  |
+| Eng mos             | Signalga asoslangan ilovalar                    | Murakkab formalar                                | Oddiy formalar                     |
+| Oʻrganish qiyinligi | Oʻrta                                           | Oʻrta-yuqori                                     | Past                               |
+| Holat               | Barqaror (v22+)                                 | Barqaror                                         | Barqaror                           |
 
-## By example: Login form
+## Misol orqali: Kirish formasi {#by-example-login-form}
 
-The best way to understand the differences is to see the same form implemented in all three approaches.
+Farqlarni tushunishning eng yaxshi usuli - bir xil formani uchala yondashuvda amalga oshirilgan holda koʻrish.
 
 <docs-code-multifile>
   <docs-code language="angular-ts" header="Signal forms" path="adev/src/content/examples/signal-forms/src/comparison/app/signal-forms.ts"/>
@@ -25,43 +25,43 @@ The best way to understand the differences is to see the same form implemented i
   <docs-code header="Template-driven forms" path="adev/src/content/examples/signal-forms/src/comparison/app/template-driven-forms.ts"/>
 </docs-code-multifile>
 
-## Understanding the differences
+## Farqlarni tushunish {#understanding-the-differences}
 
-The three approaches make different design choices that affect how you write and maintain your forms. These differences stem from where each approach stores form state and how it manages validation.
+Uchta yondashuv formalaringizni qanday yozishingiz va qoʻllab-quvvatlashingizga taʼsir qiluvchi turli dizayn qarorlarini qabul qiladi. Bu farqlar har bir yondashuvning forma holatini qayerda saqlashi va validatsiyani qanday boshqarishidan kelib chiqadi.
 
-### Where your form data lives
+### Forma maʼlumotlaringiz qayerda saqlanadi {#where-your-form-data-lives}
 
-The most fundamental difference is where each approach considers the "source of truth" for form values.
+Eng tub farq - har bir yondashuv forma qiymatlari uchun "haqiqat manbai"ni (source of truth) qayerda deb hisoblashida.
 
-Signal Forms stores data in a writable signal. When you need the current form values, you call the signal:
+Signal Forms maʼlumotlarni yozuvchan signalda saqlaydi. Joriy forma qiymatlari kerak boʻlganda signalni chaqirasiz:
 
 ```ts
 const credentials = this.loginModel(); // { email: '...', password: '...' }
 ```
 
-This keeps your form data in a single reactive container that automatically notifies Angular when values change. The form structure mirrors your data model exactly.
+Bu forma maʼlumotlaringizni qiymatlar oʻzgarganda Angular'ni avtomatik xabardor qiladigan yagona reaktiv konteynerda saqlaydi. Forma tuzilmasi maʼlumotlar modelingizni aynan aks ettiradi.
 
-Reactive Forms stores data inside FormControl and FormGroup instances. You access values through the form hierarchy:
+Reaktiv formalar maʼlumotlarni FormControl va FormGroup nusxalari ichida saqlaydi. Qiymatlarga forma ierarxiyasi orqali murojaat qilasiz:
 
 ```ts
 const credentials = this.loginForm.value; // { email: '...', password: '...' }
 ```
 
-This separates form state management from your component's data model. The form structure is explicit but requires more setup code.
+Bu forma holatini boshqarishni komponentingizning maʼlumotlar modelidan ajratadi. Forma tuzilmasi aniq, lekin koʻproq sozlash kodini talab qiladi.
 
-Template-driven Forms stores data in component properties. You access values directly:
+Shablonga asoslangan formalar maʼlumotlarni komponent xususiyatlarida saqlaydi. Qiymatlarga toʻgʻridan-toʻgʻri murojaat qilasiz:
 
 ```ts
 const credentials = {email: this.email, password: this.password};
 ```
 
-This is the most direct approach but requires manually assembling values when you need them. Angular manages form state through directives in the template.
+Bu eng bevosita yondashuv, lekin qiymatlar kerak boʻlganda ularni qoʻlda yigʻishni talab qiladi. Angular forma holatini shablondagi direktivalar orqali boshqaradi.
 
-### How validation works
+### Validatsiya qanday ishlaydi {#how-validation-works}
 
-Each approach defines validation rules differently, affecting where your validation logic lives and how you maintain it.
+Har bir yondashuv validatsiya qoidalarini turlicha aniqlaydi, bu validatsiya mantigʻingiz qayerda joylashishi va uni qanday qoʻllab-quvvatlashingizga taʼsir qiladi.
 
-Signal Forms uses a schema function where you bind validators to field paths:
+Signal Forms validatorlarni maydon yoʻllariga bogʻlaydigan sxema funksiyasidan foydalanadi:
 
 ```ts
 loginForm = form(this.loginModel, (fieldPath) => {
@@ -70,9 +70,9 @@ loginForm = form(this.loginModel, (fieldPath) => {
 });
 ```
 
-All validation rules live together in one place. The schema function runs once during form creation, and validators execute automatically when field values change. Error messages are part of the validation definition.
+Barcha validatsiya qoidalari bir joyda birga joylashadi. Sxema funksiyasi forma yaratilayotganda bir marta bajariladi va validatorlar maydon qiymatlari oʻzgarganda avtomatik ishga tushadi. Xato xabarlari validatsiya taʼrifining bir qismidir.
 
-Reactive Forms attaches validators when creating controls:
+Reaktiv formalar validatorlarni control'lar yaratilayotganda biriktiradi:
 
 ```ts
 loginForm = new FormGroup({
@@ -80,21 +80,21 @@ loginForm = new FormGroup({
 });
 ```
 
-Validators are tied to individual controls in the form structure. This distributes validation across your form definition. Error messages typically live in your template.
+Validatorlar forma tuzilmasidagi alohida control'larga bogʻlangan. Bu validatsiyani forma taʼrifi boʻylab taqsimlaydi. Xato xabarlari odatda shablonigizda joylashadi.
 
-Template-driven Forms uses directive attributes in the template:
+Shablonga asoslangan formalar shablondagi direktiva atributlaridan foydalanadi:
 
 ```html
 <input [(ngModel)]="email" required email />
 ```
 
-Validation rules live in your template alongside the HTML. This keeps validation close to the UI but spreads logic across template and component.
+Validatsiya qoidalari shablonigizda HTML bilan yonma-yon joylashadi. Bu validatsiyani UI'ga yaqin saqlaydi, lekin mantiqni shablon va komponent oʻrtasida tarqatib yuboradi.
 
-### Type safety and autocomplete
+### Tip xavfsizligi va avtotoʻldirish {#type-safety-and-autocomplete}
 
-TypeScript integration differs significantly between approaches, affecting how much the compiler helps you avoid errors.
+TypeScript integratsiyasi yondashuvlar oʻrtasida sezilarli farq qiladi va kompilyator xatolardan qochishingizga qanchalik yordam berishiga taʼsir qiladi.
 
-Signal Forms infers types from your model structure:
+Signal Forms tiplarni model tuzilmangizdan chiqaradi:
 
 ```ts
 const loginModel = signal({email: '', password: ''});
@@ -102,9 +102,9 @@ const loginForm = form(loginModel);
 // TypeScript knows: loginForm.email exists and returns FieldState<string>
 ```
 
-You define your data shape once in the signal, and TypeScript automatically knows what fields exist and their types. Accessing `loginForm.username` (which doesn't exist) produces a type error.
+Maʼlumotlar shaklini signalda bir marta aniqlaysiz va TypeScript qanday maydonlar mavjudligini va ularning tiplarini avtomatik biladi. `loginForm.username`'ga (mavjud boʻlmagan maydon) murojaat qilish tip xatosini keltirib chiqaradi.
 
-Reactive Forms requires explicit type annotations with typed forms:
+Reaktiv formalar tiplangan formalar bilan aniq tip annotatsiyalarini talab qiladi:
 
 ```ts
 const loginForm = new FormGroup({
@@ -114,9 +114,9 @@ const loginForm = new FormGroup({
 // TypeScript knows: loginForm.controls.email is FormControl<string>
 ```
 
-You specify types for each control individually. TypeScript validates your form structure, but you maintain type information separately from your data model.
+Har bir control uchun tiplarni alohida koʻrsatasiz. TypeScript forma tuzilmangizni tekshiradi, lekin tip maʼlumotlarini maʼlumotlar modelingizdan alohida qoʻllab-quvvatlaysiz.
 
-Template-driven Forms offers minimal type safety:
+Shablonga asoslangan formalar minimal tip xavfsizligini taqdim etadi:
 
 ```ts
 email = '';
@@ -124,37 +124,37 @@ password = '';
 // TypeScript only knows these are strings, no form-level typing
 ```
 
-TypeScript understands your component properties but has no knowledge of form structure or validation. You lose compile-time checking for form operations.
+TypeScript komponent xususiyatlaringizni tushunadi, lekin forma tuzilmasi yoki validatsiya haqida hech narsa bilmaydi. Forma amallari uchun kompilyatsiya vaqtidagi tekshiruvdan mahrum boʻlasiz.
 
-## Choose your approach
+## Yondashuvingizni tanlang {#choose-your-approach}
 
-### Use Signal Forms if:
+### Signal Forms'dan foydalaning, agar: {#use-signal-forms-if}
 
-- You're building new signal-based applications (Angular v22+)
-- You want type safety inferred from your model structure
-- Schema-based validation appeals to you
-- Your team is familiar with signals
+- Yangi, signalga asoslangan ilovalar yaratayotgan boʻlsangiz (Angular v22+)
+- Model tuzilmangizdan chiqariladigan tip xavfsizligini istasangiz
+- Sxemaga asoslangan validatsiya sizga yoqsa
+- Jamoangiz signallar bilan tanish boʻlsa
 
-### Use Reactive Forms if:
+### Reaktiv formalardan foydalaning, agar: {#use-reactive-forms-if}
 
-- You need production-ready stability
-- You're building complex, dynamic forms
-- You prefer observable-based patterns
-- You need fine-grained control over form state
-- You're working on an existing reactive forms codebase
+- Production uchun tayyor barqarorlik kerak boʻlsa
+- Murakkab, dinamik formalar yaratayotgan boʻlsangiz
+- Observable'ga asoslangan namunalarni afzal koʻrsangiz
+- Forma holati ustidan nozik boshqaruv kerak boʻlsa
+- Mavjud reaktiv formalar kod bazasi ustida ishlayotgan boʻlsangiz
 
-### Use Template-driven Forms if:
+### Shablonga asoslangan formalardan foydalaning, agar: {#use-template-driven-forms-if}
 
-- You're building simple forms (login, contact, search)
-- You're doing rapid prototyping
-- Your form logic is straightforward
-- You prefer keeping form logic in templates
-- You're working on an existing template-driven codebase
+- Oddiy formalar (kirish, aloqa, qidiruv) yaratayotgan boʻlsangiz
+- Tez prototip yaratayotgan boʻlsangiz
+- Forma mantigʻingiz sodda boʻlsa
+- Forma mantigʻini shablonlarda saqlashni afzal koʻrsangiz
+- Mavjud shablonga asoslangan kod bazasi ustida ishlayotgan boʻlsangiz
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-To learn more about each approach:
+Har bir yondashuv haqida koʻproq bilish uchun:
 
-- **Signal Forms**: See the [Overview guide](guide/forms/signals/overview) to get started, or dive into [Form Models](guide/forms/signals/models), [Validation](guide/forms/signals/validation), and [Field State Management](guide/forms/signals/field-state-management)
-- **Reactive Forms**: See the [Reactive Forms guide](guide/forms/reactive-forms) in Angular documentation
-- **Template-driven Forms**: See the [Template-driven Forms guide](guide/forms/template-driven-forms) in Angular documentation
+- **Signal Forms**: Boshlash uchun [Umumiy koʻrinish qoʻllanmasiga](guide/forms/signals/overview) qarang yoki [Forma modellari](guide/forms/signals/models), [Validatsiya](guide/forms/signals/validation) va [Maydon holatini boshqarish](guide/forms/signals/field-state-management) boʻlimlariga chuqurroq kiring
+- **Reaktiv formalar**: Angular hujjatlaridagi [Reaktiv formalar qoʻllanmasiga](guide/forms/reactive-forms) qarang
+- **Shablonga asoslangan formalar**: Angular hujjatlaridagi [Shablonga asoslangan formalar qoʻllanmasiga](guide/forms/template-driven-forms) qarang
