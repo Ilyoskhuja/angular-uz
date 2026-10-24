@@ -1,23 +1,23 @@
-# Dynamic Forms with JSON
+# JSON bilan dinamik formalar
 
-Some forms can't define their structure at compile time. Server-driven forms, admin panels, multi-tenant applications, and CMS-managed content all need to render fields from configuration delivered at runtime, typically as JSON from a backend, an admin tool, or per-tenant settings.
+Baʼzi formalar oʻz tuzilmasini kompilyatsiya vaqtida belgilay olmaydi. Server tomonidan boshqariladigan formalar, admin panellar, koʻp ijarachili (multi-tenant) ilovalar va CMS orqali boshqariladigan kontent — bularning barchasi maydonlarni ish vaqtida (runtime) yetkazib beriladigan konfiguratsiyadan, odatda backend, admin vositasi yoki har bir ijarachi uchun alohida sozlamalardan keladigan JSON'dan render qilishi kerak.
 
-This guide shows how to build forms whose model, schema, validation, and rendering are all derived from a single runtime configuration.
+Ushbu qoʻllanma modeli, sxemasi, validatsiyasi va render qilinishi yagona runtime konfiguratsiyasidan hosil qilinadigan formalarni qanday yaratishni koʻrsatadi.
 
-## When to use JSON-driven forms
+## JSON asosidagi formalardan qachon foydalanish kerak {#when-to-use-json-driven-forms}
 
-This pattern is a good choice when:
+Bu namuna quyidagi hollarda yaxshi tanlov boʻladi:
 
-- A backend defines which fields appear based on user role, feature flags, or business rules
-- Non-developers configure form structure through an admin panel or CMS
-- Each tenant in a multi-tenant application has its own form structure stored as configuration
-- Forms need to evolve without redeploying the frontend
+- Backend foydalanuvchi roli, feature flag'lar yoki biznes qoidalariga qarab qaysi maydonlar koʻrinishini belgilaydi
+- Dasturchi boʻlmagan foydalanuvchilar forma tuzilmasini admin panel yoki CMS orqali sozlaydi
+- Koʻp ijarachili ilovada har bir ijarachining konfiguratsiya sifatida saqlanadigan oʻz forma tuzilmasi bor
+- Formalar frontend'ni qayta deploy qilmasdan rivojlanishi kerak
 
-Use a static form (with fields defined directly in your component) when the structure is known at build time. Static forms get full TypeScript checking on every field, plus straightforward testing and tooling support.
+Tuzilma build vaqtida maʼlum boʻlsa, statik formadan (maydonlari bevosita komponentingizda belgilangan) foydalaning. Statik formalar har bir maydon uchun toʻliq TypeScript tekshiruvini, shuningdek sodda testlash va vositalar yordamini oladi.
 
-## Defining a typed field config
+## Tiplangan maydon konfiguratsiyasini belgilash {#defining-a-typed-field-config}
 
-When you want to render fields from runtime configuration, start with a TypeScript type that captures the shape of each field. A discriminated union by `kind` lets each variant declare its own validation options:
+Maydonlarni runtime konfiguratsiyasidan render qilmoqchi boʻlsangiz, har bir maydonning shaklini ifodalovchi TypeScript tipidan boshlang. `kind` boʻyicha diskriminatsiyalangan birlashma (discriminated union) har bir variantga oʻz validatsiya parametrlarini eʼlon qilish imkonini beradi:
 
 ```ts
 type FieldConfig =
@@ -25,9 +25,9 @@ type FieldConfig =
   | {kind: 'number'; name: string; label: string; required?: boolean; min?: number; max?: number};
 ```
 
-Every variant has a name, label, and optional `required` flag. Number fields additionally accept `min` and `max` bounds. Add new variants by adding new `kind` branches.
+Har bir variantda name, label va ixtiyoriy `required` flag'i bor. Sonli maydonlar qoʻshimcha ravishda `min` va `max` chegaralarini qabul qiladi. Yangi variantlarni yangi `kind` shoxlarini qoʻshish orqali qoʻshing.
 
-A concrete config might look like this:
+Aniq konfiguratsiya quyidagicha koʻrinishi mumkin:
 
 ```ts
 const profileConfig: FieldConfig[] = [
@@ -36,11 +36,11 @@ const profileConfig: FieldConfig[] = [
 ];
 ```
 
-In practice this `FieldConfig[]` typically arrives from your backend, an admin panel, or a CMS. For brevity, the examples below use an in-component literal.
+Amalda bu `FieldConfig[]` odatda backend'ingizdan, admin paneldan yoki CMS'dan keladi. Qisqalik uchun quyidagi misollarda komponent ichidagi literal ishlatiladi.
 
-## Building the model from config
+## Konfiguratsiyadan model yaratish {#building-the-model-from-config}
 
-The form's model needs one entry per field with a default value matching the field's kind. A small helper handles this:
+Forma modelida har bir maydon uchun maydon turiga (kind) mos sukut boʻyicha qiymatga ega bitta yozuv boʻlishi kerak. Buni kichik yordamchi funksiya bajaradi:
 
 ```ts
 function buildModel(configs: FieldConfig[]): Record<string, string | number | null> {
@@ -52,13 +52,13 @@ function buildModel(configs: FieldConfig[]): Record<string, string | number | nu
 }
 ```
 
-The model uses `Record<string, string | number | null>` because the keys are not known ahead of time.
+Kalitlar oldindan maʼlum boʻlmagani uchun model `Record<string, string | number | null>` tipidan foydalanadi.
 
-In addition, numeric fields initialize to `null` rather than `0` so an empty field reads as empty. With `0`, [`required()`](api/forms/signals/required) would treat the field as already filled, and any [`min()`](api/forms/signals/min) constraint above zero would flag the field invalid before the user enters anything.
+Bundan tashqari, sonli maydonlar `0` emas, `null` bilan ishga tushiriladi, shunda boʻsh maydon boʻsh sifatida oʻqiladi. `0` boʻlsa, [`required()`](api/forms/signals/required) maydonni allaqachon toʻldirilgan deb hisoblar edi, noldan katta har qanday [`min()`](api/forms/signals/min) cheklovi esa foydalanuvchi hali hech narsa kiritmasidan oldin maydonni invalid deb belgilar edi.
 
-## Building the schema from config
+## Konfiguratsiyadan sxema yaratish {#building-the-schema-from-config}
 
-The schema is also derived from the config. You can loop through each entry and apply the validators that match its kind:
+Sxema ham konfiguratsiyadan hosil qilinadi. Har bir yozuv boʻylab aylanib, uning turiga mos validatorlarni qoʻllashingiz mumkin:
 
 ```ts
 import {required, min, max, SchemaFn, SchemaPath} from '@angular/forms/signals';
@@ -82,11 +82,11 @@ function buildSchema(configs: FieldConfig[]): SchemaFn<Record<string, string | n
 }
 ```
 
-The discriminated union narrows `config` inside each branch, so `config.min` and `config.max` are typed correctly when `config.kind === 'number'`.
+Diskriminatsiyalangan birlashma har bir shox ichida `config`'ni toraytiradi, shuning uchun `config.kind === 'number'` boʻlganda `config.min` va `config.max` toʻgʻri tiplanadi.
 
-## Expressing conditional rules in config
+## Shartli qoidalarni konfiguratsiyada ifodalash {#expressing-conditional-rules-in-config}
 
-Some validation rules only make sense under certain conditions. For example, US state codes need validating only when the country is the US. Express these dependencies in the config by adding a `when` discriminator that names another field and the value it must equal:
+Baʼzi validatsiya qoidalari faqat maʼlum shartlarda maʼnoga ega. Masalan, AQSh shtat kodlarini faqat mamlakat AQSh boʻlganda tekshirish kerak. Bu bogʻliqliklarni konfiguratsiyada boshqa maydonni va u teng boʻlishi kerak boʻlgan qiymatni koʻrsatuvchi `when` diskriminatorini qoʻshish orqali ifodalang:
 
 ```ts
 type WhenCondition = {field: string; equals: string | number};
@@ -104,7 +104,7 @@ type FieldConfig =
     };
 ```
 
-Update `buildSchema()` to translate `when` into an [`applyWhen()`](api/forms/signals/applyWhen) call. Shared rule application logic moves into a small closure so the conditional and unconditional branches both call the same function:
+`when`'ni [`applyWhen()`](api/forms/signals/applyWhen) chaqiruviga aylantirish uchun `buildSchema()`'ni yangilang. Qoidalarni qoʻllashning umumiy mantigʻi kichik closure'ga koʻchiriladi, shunda shartli va shartsiz shoxlarning ikkalasi ham bir xil funksiyani chaqiradi:
 
 ```ts
 import {applyWhen, required, min, max, SchemaFn, SchemaPath} from '@angular/forms/signals';
@@ -133,9 +133,9 @@ function buildSchema(configs: FieldConfig[]): SchemaFn<Record<string, string | n
 }
 ```
 
-When `applyWhen()`'s condition is true, the rules inside activate. When the condition becomes false, the rules deactivate and the field's validation state clears. Because the condition function reads through `valueOf(rootPath[field])`, the form re-evaluates the gate every time the referenced field changes.
+`applyWhen()` sharti true boʻlganda ichidagi qoidalar faollashadi. Shart false boʻlganda qoidalar oʻchiriladi va maydonning validatsiya holati tozalanadi. Shart funksiyasi `valueOf(rootPath[field])` orqali oʻqigani uchun forma havola qilingan maydon har safar oʻzgarganda shartni qayta hisoblaydi.
 
-A config that uses `when` looks like this:
+`when` ishlatadigan konfiguratsiya quyidagicha koʻrinadi:
 
 ```ts
 const addressConfig: FieldConfig[] = [
@@ -150,17 +150,17 @@ const addressConfig: FieldConfig[] = [
 ];
 ```
 
-The `stateCode` field only requires a value when `country` is `'US'`. Users entering any other country can leave `stateCode` blank without blocking submission.
+`stateCode` maydoni faqat `country` qiymati `'US'` boʻlganda qiymat talab qiladi. Boshqa istalgan mamlakatni kiritgan foydalanuvchilar `stateCode`'ni boʻsh qoldirishi mumkin va bu yuborishga toʻsqinlik qilmaydi.
 
-For more complex conditions (multiple fields, ranges, or non-equality checks), extend `WhenCondition` with additional discriminators (such as `in: string[]` or `notEquals: string | number`) and translate each variant inside `buildSchema()`. The principle is the same: the config carries the data, `buildSchema()` translates it to `applyWhen()` calls.
+Murakkabroq shartlar uchun (bir nechta maydon, diapazonlar yoki tenglik boʻlmagan tekshiruvlar) `WhenCondition`'ni qoʻshimcha diskriminatorlar bilan (masalan, `in: string[]` yoki `notEquals: string | number`) kengaytiring va har bir variantni `buildSchema()` ichida aylantiring. Tamoyil bir xil: konfiguratsiya maʼlumotni tashiydi, `buildSchema()` esa uni `applyWhen()` chaqiruvlariga aylantiradi.
 
-To gate visibility instead of validation, follow the same pattern using [`hidden()`](api/forms/signals/hidden) on the field path. See [Configuring `hidden()` state on fields](guide/forms/signals/form-logic#configuring-hidden-state-on-fields) for details.
+Validatsiya oʻrniga koʻrinishni boshqarish uchun maydon yoʻlida [`hidden()`](api/forms/signals/hidden) ishlatib, shu namunaga amal qiling. Tafsilotlar uchun [Maydonlarda `hidden()` holatini sozlash](guide/forms/signals/form-logic#configuring-hidden-state-on-fields) boʻlimiga qarang.
 
-## Expressing repeating fields in config
+## Takrorlanuvchi maydonlarni konfiguratsiyada ifodalash {#expressing-repeating-fields-in-config}
 
-Some configurations need fields that grow and shrink at runtime, like a list of phone numbers, tags, or invoice line items. Add an `array` kind to the config and translate it to [`applyEach()`](api/forms/signals/applyEach) so per-item rules apply uniformly as items come and go.
+Baʼzi konfiguratsiyalarga ish vaqtida koʻpayib-kamayadigan maydonlar kerak boʻladi, masalan, telefon raqamlari, teglar yoki hisob-faktura qatorlari roʻyxati. Konfiguratsiyaga `array` turini qoʻshing va uni [`applyEach()`](api/forms/signals/applyEach)'ga aylantiring, shunda elementlar qoʻshilib-olib tashlanganda har bir element uchun qoidalar bir xilda qoʻllanadi.
 
-Extend `FieldConfig` with an `array` variant. This example uses arrays of strings; the same approach scales to arrays of objects by replacing the item shape with a record:
+`FieldConfig`'ni `array` varianti bilan kengaytiring. Bu misolda satrlar massivlari ishlatiladi; element shaklini record bilan almashtirsangiz, xuddi shu yondashuv obyektlar massivlariga ham kengayadi:
 
 ```ts
 type FieldConfig =
@@ -177,7 +177,7 @@ type FieldConfig =
   | {kind: 'array'; name: string; label: string; itemRequired?: boolean; when?: WhenCondition};
 ```
 
-Update `buildModel()` to initialize array fields with an empty array. The model widens to include `string[]`:
+Massiv maydonlarini boʻsh massiv bilan ishga tushirish uchun `buildModel()`'ni yangilang. Model `string[]`'ni ham qamrab olish uchun kengayadi:
 
 ```ts
 function buildModel(configs: FieldConfig[]): Record<string, string | number | null | string[]> {
@@ -191,7 +191,7 @@ function buildModel(configs: FieldConfig[]): Record<string, string | number | nu
 }
 ```
 
-Update `buildSchema()` to apply per-item rules with `applyEach()`. The path coming from a `Record<string, string | number | null | string[]>` model is too broad for `applyEach()` (and for `min()` / `max()`) to type-check directly, so cast `fieldPath` to the appropriate shape inside each `kind` branch:
+Har bir element uchun qoidalarni `applyEach()` bilan qoʻllash uchun `buildSchema()`'ni yangilang. `Record<string, string | number | null | string[]>` modelidan keladigan yoʻl `applyEach()` (hamda `min()` / `max()`) toʻgʻridan-toʻgʻri tip tekshiruvidan oʻtishi uchun juda keng, shuning uchun har bir `kind` shoxi ichida `fieldPath`'ni tegishli shaklga cast qiling:
 
 ```ts
 import {
@@ -240,9 +240,9 @@ function buildSchema(
 }
 ```
 
-The casts inside each branch are deliberate escape hatches: you're trading the compiler's structural guarantee for a runtime invariant the surrounding `kind` check enforces. Each cast is scoped to a `kind` block, so the assumption stays local and straightforward to audit.
+Har bir shox ichidagi cast'lar ataylab qilingan "qochish yoʻllari" (escape hatch): siz kompilyatorning strukturaviy kafolatini atrofdagi `kind` tekshiruvi taʼminlaydigan runtime invariantiga almashtirasiz. Har bir cast `kind` blokiga cheklangan, shuning uchun bu taxmin lokal qoladi va uni tekshirish oson.
 
-A config that uses the `array` kind looks like this:
+`array` turini ishlatadigan konfiguratsiya quyidagicha koʻrinadi:
 
 ```ts
 const contactConfig: FieldConfig[] = [
@@ -251,7 +251,7 @@ const contactConfig: FieldConfig[] = [
 ];
 ```
 
-To render an array field, iterate it with `@for` and let users add or remove items by updating the model signal. Add a typed accessor that returns a [`FieldTree`](api/forms/signals/FieldTree) so the iteration sees the array structure, and define methods to grow and shrink the model:
+Massiv maydonini render qilish uchun uni `@for` bilan aylanib chiqing va foydalanuvchilarga model signalini yangilash orqali elementlar qoʻshish yoki olib tashlash imkonini bering. Iteratsiya massiv tuzilmasini koʻrishi uchun [`FieldTree`](api/forms/signals/FieldTree) qaytaradigan tiplangan accessor qoʻshing va modelni kengaytirish va qisqartirish metodlarini belgilang:
 
 ```ts
 import {FieldTree} from '@angular/forms/signals';
@@ -276,9 +276,9 @@ removeItem(name: string, index: number) {
 }
 ```
 
-`FieldTree<string[]>` is iterable, so `@for` can walk it; each item is a `FieldTree<string>` that satisfies `[formField]` directly. Leaf fields can use `Field<T>` accessors instead, since `Field<T>` is the callable signature without iteration.
+`FieldTree<string[]>` iteratsiya qilinadigan obyekt, shuning uchun `@for` u boʻylab yura oladi; har bir element `[formField]`'ga bevosita mos keladigan `FieldTree<string>` boʻladi. Barg (leaf) maydonlar oʻrniga `Field<T>` accessor'laridan foydalanishi mumkin, chunki `Field<T>` — iteratsiyasiz chaqiriladigan signatura.
 
-In the template, render an array case like this:
+Shablonda massiv holatini (case) quyidagicha render qiling:
 
 ```angular-html
 @case ('array') {
@@ -293,11 +293,11 @@ In the template, render an array case like this:
 }
 ```
 
-The `addItem()` method extends the model; the form re-derives the array's fields automatically. New items start with fresh validation state. The `removeItem()` method filters the model. Because arrays of primitives are [tracked by position](#tracking-item-identity), field state is tied to the index rather than the value: when an item is removed, subsequent values shift into earlier positions and inherit their existing field state, while the trailing field is dropped.
+`addItem()` metodi modelni kengaytiradi; forma massiv maydonlarini avtomatik qayta hosil qiladi. Yangi elementlar yangi validatsiya holati bilan boshlanadi. `removeItem()` metodi modelni filtrlaydi. Primitivlar massivlari [pozitsiya boʻyicha kuzatilgani](#tracking-item-identity) uchun maydon holati qiymatga emas, indeksga bogʻlangan: element olib tashlanganda keyingi qiymatlar oldingi pozitsiyalarga suriladi va ularning mavjud maydon holatini meros qilib oladi, oxirgi maydon esa tashlab yuboriladi.
 
-### Tracking item identity
+### Element identifikatsiyasini kuzatish {#tracking-item-identity}
 
-Signal Forms tracks each item in an array of objects by its identity. When you store a reference to a field at a specific position, that reference follows the underlying data, not the position. Reading state through the held reference returns the data even if it has moved:
+Signal Forms obyektlar massividagi har bir elementni uning identifikatsiyasi (identity) boʻyicha kuzatadi. Maʼlum pozitsiyadagi maydonga havolani saqlasangiz, bu havola pozitsiyaga emas, asosiy maʼlumotga ergashadi. Saqlangan havola orqali holatni oʻqish, maʼlumot koʻchib ketgan boʻlsa ham, oʻsha maʼlumotni qaytaradi:
 
 ```ts
 const contactModel = signal([
@@ -318,22 +318,22 @@ console.log(aliceField().value().phone); // '555-0001' (Alice's number)
 console.log(contactForm[0]().value().phone); // '555-0002' (Bob, now at index 0)
 ```
 
-This identity tracking prevents bugs when sorting, reordering, or filtering, as long as the referenced item remains in the array. Stored field references remain valid even when array order changes; removing the referenced item itself orphans the held reference.
+Bu identifikatsiya kuzatuvi, havola qilingan element massivda qolsa, saralash, qayta tartiblash yoki filtrlashda xatolarning oldini oladi. Saqlangan maydon havolalari massiv tartibi oʻzgarganda ham amal qilib qoladi; havola qilingan elementning oʻzi olib tashlansa, saqlangan havola egasiz qoladi.
 
-For arrays of primitives (the `phoneNumbers` example above), Signal Forms tracks items positionally instead: index 0 always refers to whatever value is currently at position 0.
+Primitivlar massivlari uchun (yuqoridagi `phoneNumbers` misoli) Signal Forms elementlarni pozitsiya boʻyicha kuzatadi: 0-indeks doimo hozir 0-pozitsiyada turgan qiymatga ishora qiladi.
 
-Identity here is by JavaScript object reference, not by a logical id like a database key. If you replace the array with freshly-deserialized objects (for example, after a server reload), field state doesn't follow the logical item even when each item's `id` is unchanged. The guarantee covers in-memory operations like sorting, reordering, and filtering, not data refresh.
+Bu yerda identifikatsiya maʼlumotlar bazasi kaliti kabi mantiqiy id boʻyicha emas, JavaScript obyekt havolasi boʻyicha aniqlanadi. Massivni yangi deserializatsiya qilingan obyektlar bilan almashtirsangiz (masalan, serverdan qayta yuklagandan keyin), har bir elementning `id`'si oʻzgarmagan boʻlsa ham maydon holati mantiqiy elementga ergashmaydi. Kafolat saralash, qayta tartiblash va filtrlash kabi xotiradagi amallarni qamrab oladi, maʼlumotlarni yangilashni emas.
 
-## Validating the config
+## Konfiguratsiyani tekshirish {#validating-the-config}
 
-Configs from external sources need validation before the form is built. Several failure modes can hide in untrusted JSON:
+Tashqi manbalardan kelgan konfiguratsiyalar forma yaratilishidan oldin tekshirilishi kerak. Ishonchsiz JSON'da bir nechta xato holatlari yashirinishi mumkin:
 
-- Duplicate `name` values overwrite earlier model entries and break the `track config.name` expression in the template.
-- A `when` clause that names a non-existent field fails at runtime when the condition first evaluates.
-- A `when` clause that compares against an `array` field has no defined equality semantics.
-- A `when.equals` value whose type doesn't match the referenced field's kind silently never matches, hiding the conditional behavior as if the rule were never active.
+- Takrorlanuvchi `name` qiymatlari oldingi model yozuvlarini qayta yozadi va shablondagi `track config.name` ifodasini buzadi.
+- Mavjud boʻlmagan maydonni koʻrsatuvchi `when` sharti shart birinchi marta hisoblanganda ish vaqtida xatoga uchraydi.
+- `array` maydoni bilan taqqoslaydigan `when` shartining tenglik semantikasi belgilanmagan.
+- Tipi havola qilingan maydon turiga mos kelmaydigan `when.equals` qiymati jimgina hech qachon mos kelmaydi va shartli xatti-harakatni qoida hech qachon faol boʻlmagandek yashiradi.
 
-Catch all four at the boundary:
+Bu toʻrttasini ham chegarada ushlang:
 
 ```ts
 function validateConfigs(configs: FieldConfig[]): FieldConfig[] {
@@ -371,11 +371,11 @@ function validateConfigs(configs: FieldConfig[]): FieldConfig[] {
 }
 ```
 
-The first pass enforces uniqueness; the second pass walks each `when` clause to confirm the referenced field exists, isn't an array, and is being compared against a value of the right type. The function returns the configs unchanged on success, so it composes cleanly with the field initializer that holds the configs in the component. Failures surface at the boundary between your application and the upstream source rather than as opaque form misbehavior later.
+Birinchi oʻtish yagonalikni taʼminlaydi; ikkinchi oʻtish har bir `when` shartini aylanib chiqib, havola qilingan maydon mavjudligini, massiv emasligini va toʻgʻri tipdagi qiymat bilan taqqoslanayotganini tasdiqlaydi. Muvaffaqiyatli boʻlganda funksiya konfiguratsiyalarni oʻzgarishsiz qaytaradi, shuning uchun u komponentda konfiguratsiyalarni saqlaydigan maydon initsializatori bilan yaxshi birikadi. Xatolar keyinroq formaning tushunarsiz notoʻgʻri ishlashi sifatida emas, ilovangiz va yuqori oqimdagi manba oʻrtasidagi chegarada yuzaga chiqadi.
 
-## Rendering the form dynamically
+## Formani dinamik render qilish {#rendering-the-form-dynamically}
 
-In the component, use `@for` to iterate the configs and `@switch` on `kind` to pick the right input control:
+Komponentda konfiguratsiyalar boʻylab aylanish uchun `@for`'dan va toʻgʻri input elementini tanlash uchun `kind` boʻyicha `@switch`'dan foydalaning:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -457,27 +457,27 @@ export class DynamicForm {
 }
 ```
 
-Template type-checking treats `dynamicForm[name]` as an independent expression, so the `@switch` narrowing on `config.kind` doesn't reach the indexed access. The accessors restate that narrowing as a cast at the binding site, and the matching `kind` branch guarantees the narrowed type is correct at runtime.
+Shablon tip tekshiruvi `dynamicForm[name]`'ni mustaqil ifoda sifatida koʻradi, shuning uchun `config.kind` boʻyicha `@switch` toraytirishi indeksli murojaatga yetib bormaydi. Accessor'lar bu toraytirishni bogʻlash joyida cast sifatida qayta ifodalaydi, mos `kind` shoxi esa toraytirilgan tipning ish vaqtida toʻgʻri boʻlishini kafolatlaydi.
 
-Because the model and schema are both derived from the same `FieldConfig[]` at component construction, they can't drift apart for a given config. The example above assumes the config is available synchronously when the component is created.
+Model ham, sxema ham komponent yaratilishida bir xil `FieldConfig[]`'dan hosil qilingani uchun ular berilgan konfiguratsiya uchun bir-biridan uzoqlashib keta olmaydi. Yuqoridagi misol komponent yaratilganda konfiguratsiya sinxron tarzda mavjud deb hisoblaydi.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-JSON-driven forms keep their model and schema aligned by deriving both from the same `FieldConfig[]`. Each extension in this guide (conditional rules, repeating fields) widens the type and adds a translation step inside `buildSchema()` while preserving that alignment. The model and schema stay locked together, regardless of where the config comes from or how it grows.
+JSON asosidagi formalar model va sxemasini bir xil `FieldConfig[]`'dan hosil qilish orqali bir-biriga mos holda saqlaydi. Ushbu qoʻllanmadagi har bir kengaytma (shartli qoidalar, takrorlanuvchi maydonlar) tipni kengaytiradi va bu moslikni saqlab qolgan holda `buildSchema()` ichiga aylantirish qadamini qoʻshadi. Konfiguratsiya qayerdan kelishi yoki qanday oʻsishidan qatʼi nazar, model va sxema bir-biriga bogʻlangan holda qoladi.
 
-For related guides cover other aspects of Signal Forms, check out:
+Signal Forms'ning boshqa jihatlarini yorituvchi tegishli qoʻllanmalar uchun quyidagilarga qarang:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/schemas" title="Schemas and schema composability" />
-  <docs-pill href="guide/forms/signals/validation" title="Validation" />
-  <docs-pill href="guide/forms/signals/form-logic" title="Adding form logic" />
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
+  <docs-pill href="guide/forms/signals/schemas" title="Sxemalar va sxema kompozitsiyasi" />
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya" />
+  <docs-pill href="guide/forms/signals/form-logic" title="Forma mantigʻini qoʻshish" />
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish" />
 </docs-pill-row>
 
-For detailed API documentation, see:
+Batafsil API hujjatlari uchun qarang:
 
-- [`form()`](api/forms/signals/form) - Create a form from a model signal
-- [`applyWhen()`](api/forms/signals/applyWhen) - Apply a schema conditionally based on reactive state
-- [`applyEach()`](api/forms/signals/applyEach) - Apply a schema to each item in an array field
-- [`FieldTree`](api/forms/signals/FieldTree) - Navigable tree of fields exposed by `form()`
-- [`SchemaFn`](api/forms/signals/SchemaFn) - Type signature for schema functions
+- [`form()`](api/forms/signals/form) - Model signalidan forma yaratish
+- [`applyWhen()`](api/forms/signals/applyWhen) - Sxemani reaktiv holatga qarab shartli qoʻllash
+- [`applyEach()`](api/forms/signals/applyEach) - Sxemani massiv maydonining har bir elementiga qoʻllash
+- [`FieldTree`](api/forms/signals/FieldTree) - `form()` tomonidan taqdim etiladigan maydonlarning navigatsiya qilinadigan daraxti
+- [`SchemaFn`](api/forms/signals/SchemaFn) - Sxema funksiyalari uchun tip signaturasi

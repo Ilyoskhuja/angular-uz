@@ -1,18 +1,18 @@
-# Form models
+# Forma modellari
 
-Form models are the foundation of Signal Forms, serving as the single source of truth for your form data. This guide explores how to create form models, update them, and design them for maintainability.
+Forma modellari Signal Forms'ning asosi boʻlib, forma maʼlumotlaringiz uchun yagona haqiqat manbai (single source of truth) vazifasini bajaradi. Ushbu qoʻllanma forma modellarini qanday yaratish, yangilash va ularni qoʻllab-quvvatlash qulay boʻladigan tarzda loyihalashni koʻrib chiqadi.
 
-NOTE: Form models are distinct from Angular's `model()` signal used for component two-way binding. A form model is a writable signal that stores form data, while `model()` creates inputs/outputs for parent/child component communication.
+NOTE: Forma modellari Angular'ning komponentlarda ikki tomonlama bogʻlash uchun ishlatiladigan `model()` signalidan farq qiladi. Forma modeli — forma maʼlumotlarini saqlaydigan yoziladigan (writable) signal, `model()` esa ota/bola komponentlar oʻrtasidagi aloqa uchun input/output'lar yaratadi.
 
-## What form models solve
+## Forma modellari qanday muammoni hal qiladi {#what-form-models-solve}
 
-Forms require managing data that changes over time. Without a clear structure, this data can become scattered across component properties, making it difficult to track changes, validate input, or submit data to a server.
+Formalar vaqt oʻtishi bilan oʻzgaradigan maʼlumotlarni boshqarishni talab qiladi. Aniq tuzilma boʻlmasa, bu maʼlumotlar komponent xususiyatlari boʻylab tarqalib ketishi mumkin, bu esa oʻzgarishlarni kuzatish, kiritilgan maʼlumotlarni tekshirish yoki ularni serverga yuborishni qiyinlashtiradi.
 
-Form models solve this by centralizing form data in a single writable signal. When the model updates, the form automatically reflects those changes. When users interact with the form, the model updates accordingly.
+Forma modellari buni forma maʼlumotlarini yagona yoziladigan signalda markazlashtirish orqali hal qiladi. Model yangilanganda forma bu oʻzgarishlarni avtomatik aks ettiradi. Foydalanuvchilar forma bilan ishlaganda model shunga mos ravishda yangilanadi.
 
-## Creating models
+## Modellar yaratish {#creating-models}
 
-A form model is a writable signal created with Angular's `signal()` function. The signal holds an object that represents your form's data structure.
+Forma modeli — Angular'ning `signal()` funksiyasi bilan yaratilgan yoziladigan signal. Signal formangizning maʼlumotlar tuzilmasini ifodalovchi obyektni saqlaydi.
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -36,13 +36,13 @@ export class LoginComponent {
 }
 ```
 
-The [`form()`](api/forms/signals/form) function accepts the model signal and creates a **field tree** - a special object structure that mirrors your model's shape. The field tree is both navigable (access child fields with dot notation like `loginForm.email`) and callable (call a field as a function to access its state).
+[`form()`](api/forms/signals/form) funksiyasi model signalini qabul qiladi va **maydonlar daraxtini** (field tree) — modelingiz shaklini aks ettiruvchi maxsus obyekt tuzilmasini yaratadi. Maydonlar daraxti ham navigatsiya qilinadigan (`loginForm.email` kabi nuqta belgisi orqali ichki maydonlarga murojaat qilish), ham chaqiriladigan (maydonni funksiya sifatida chaqirib, uning holatiga murojaat qilish) obyektdir.
 
-The `[formField]` directive binds each input element to its corresponding field in the field tree, enabling automatic two-way synchronization between the UI and model.
+`[formField]` direktivi har bir input elementini maydonlar daraxtidagi tegishli maydonga bogʻlaydi va UI bilan model oʻrtasida avtomatik ikki tomonlama sinxronlashni taʼminlaydi.
 
-### Supported model structures
+### Qoʻllab-quvvatlanadigan model tuzilmalari {#supported-model-structures}
 
-Signal Forms builds the field tree by walking your model. The objects and arrays it walks through (the **structural layer**) must be plain JavaScript objects and arrays. The values at the **leaves** (positions with no nested fields) are usually primitives (strings, numbers, booleans) or `null`. Native `date`, `month`, `time`, and `week` inputs also accept `Date`, and custom controls can accept any value type they understand.
+Signal Forms maydonlar daraxtini modelingiz boʻylab yurib yaratadi. U yurib oʻtadigan obyektlar va massivlar (**strukturaviy qatlam**) oddiy JavaScript obyektlari va massivlari boʻlishi shart. **Barglardagi** (ichki maydonlari boʻlmagan pozitsiyalardagi) qiymatlar odatda primitivlar (satrlar, sonlar, boolean'lar) yoki `null` boʻladi. Native `date`, `month`, `time` va `week` input'lari `Date`'ni ham qabul qiladi, maxsus kontrollar esa oʻzlari tushunadigan istalgan qiymat turini qabul qilishi mumkin.
 
 ```ts {prefer, header: 'Plain structure'}
 interface UserFormModel {
@@ -66,17 +66,17 @@ const userModel = signal<UserFormModel>({
 });
 ```
 
-IMPORTANT: Class instances, `Map`, and `Set` are **not supported in the structural layer**, even though TypeScript will accept them. Signal Forms does not validate the model shape at runtime, so the framework accepts these values without throwing, then produces incorrect behavior in different ways depending on shape:
+IMPORTANT: Klass nusxalari (instance), `Map` va `Set` **strukturaviy qatlamda qoʻllab-quvvatlanmaydi**, TypeScript ularni qabul qilsa ham. Signal Forms model shaklini ish vaqtida tekshirmaydi, shuning uchun freymvork bu qiymatlarni xato tashlamasdan qabul qiladi, keyin esa shaklga qarab turli yoʻllar bilan notoʻgʻri ishlaydi:
 
-- **Class instances** lose their prototype on the first write because Signal Forms shallow-copies parent objects on update. Methods, getters, and `instanceof` checks are gone afterward.
-- **Non-extensible or frozen objects inside arrays** throw when Signal Forms assigns a tracking symbol to preserve item identity across reorders.
-- **`Map` and `Set`** produce empty field trees, because Signal Forms enumerates children with `Object.keys`.
+- **Klass nusxalari** birinchi yozishda oʻz prototipini yoʻqotadi, chunki Signal Forms yangilashda ota obyektlarni yuzaki (shallow) nusxalaydi. Shundan keyin metodlar, getter'lar va `instanceof` tekshiruvlari ishlamay qoladi.
+- **Massivlar ichidagi kengaytirilmaydigan yoki muzlatilgan (frozen) obyektlar** Signal Forms qayta tartiblashlarda element identifikatsiyasini saqlash uchun kuzatuv simvolini biriktirganda xato tashlaydi.
+- **`Map` va `Set`** boʻsh maydonlar daraxtini hosil qiladi, chunki Signal Forms ichki elementlarni `Object.keys` bilan sanab chiqadi.
 
-If your application uses classes for domain modeling, translate to plain objects at the form boundary. See [Translating between form model and domain model](guide/forms/signals/model-design#translating-between-form-model-and-domain-model).
+Agar ilovangiz domen modellashtirish uchun klasslardan foydalansa, forma chegarasida ularni oddiy obyektlarga aylantiring. [Forma modeli va domen modeli oʻrtasida oʻgirish](guide/forms/signals/model-design#translating-between-form-model-and-domain-model) boʻlimiga qarang.
 
-### Using TypeScript types
+### TypeScript tiplaridan foydalanish {#using-typescript-types}
 
-While TypeScript infers types from object literals, defining explicit types improves code quality and provides better IntelliSense support.
+TypeScript obyekt literallaridan tiplarni oʻzi aniqlasa-da, aniq tiplarni belgilash kod sifatini yaxshilaydi va IntelliSense yordamini kuchaytiradi.
 
 ```ts
 interface LoginData {
@@ -94,7 +94,7 @@ export class LoginComponent {
 }
 ```
 
-With explicit types, the field tree provides full type safety. Accessing `loginForm.email` is typed as `FieldTree<string>`, and attempting to access a non-existent property results in a compile-time error.
+Aniq tiplar bilan maydonlar daraxti toʻliq tip xavfsizligini taʼminlaydi. `loginForm.email`'ga murojaat `FieldTree<string>` sifatida tiplanadi, mavjud boʻlmagan xususiyatga murojaat qilishga urinish esa kompilyatsiya vaqtida xatoga olib keladi.
 
 ```ts
 // TypeScript knows this is FieldTree<string>
@@ -104,9 +104,9 @@ const emailField = loginForm.email;
 const usernameField = loginForm.username;
 ```
 
-### Initializing all fields
+### Barcha maydonlarni ishga tushirish {#initializing-all-fields}
 
-Form models should provide initial values for all fields you want to include in the field tree.
+Forma modellari maydonlar daraxtiga kiritmoqchi boʻlgan barcha maydonlar uchun boshlangʻich qiymatlar berishi kerak.
 
 ```ts {prefer}
 // Good: All fields initialized
@@ -126,7 +126,7 @@ const userModel = signal({
 });
 ```
 
-For optional fields, explicitly set them to an empty value or `null`:
+Ixtiyoriy maydonlar uchun ularni aniq ravishda boʻsh qiymatga yoki `null`'ga oʻrnating:
 
 ```ts
 interface UserData {
@@ -142,17 +142,17 @@ const userModel = signal<UserData>({
 });
 ```
 
-HELPFUL: Native text controls like `<input type=text>` and `<textarea>` don't support `null`, use `''` to represent an empty value.
+HELPFUL: `<input type=text>` va `<textarea>` kabi native matn kontrollari `null`'ni qoʻllab-quvvatlamaydi, boʻsh qiymatni ifodalash uchun `''` dan foydalaning.
 
-Fields set to `undefined` are excluded from the field tree. A model with `{value: undefined}` behaves identically to `{}` - accessing the field returns `undefined` rather than a `FieldTree`.
+`undefined` qiymatiga oʻrnatilgan maydonlar maydonlar daraxtidan chiqarib tashlanadi. `{value: undefined}` modeli `{}` bilan bir xil ishlaydi — maydonga murojaat `FieldTree` oʻrniga `undefined` qaytaradi.
 
-## Reading model values
+## Model qiymatlarini oʻqish {#reading-model-values}
 
-You can access form values in two ways: directly from the model signal, or through individual fields. Each approach serves a different purpose.
+Forma qiymatlariga ikki yoʻl bilan murojaat qilishingiz mumkin: bevosita model signalidan yoki alohida maydonlar orqali. Har bir yondashuv oʻz maqsadiga xizmat qiladi.
 
-### Reading from the model
+### Modeldan oʻqish {#reading-from-the-model}
 
-Access the model signal when you need the complete form data, such as during form submission:
+Toʻliq forma maʼlumotlari kerak boʻlganda, masalan, formani yuborish vaqtida model signaliga murojaat qiling:
 
 ```ts
 async onSubmit() {
@@ -164,13 +164,13 @@ async onSubmit() {
 }
 ```
 
-The model signal returns the entire data object, making it ideal for operations that work with the complete form state.
+Model signali butun maʼlumotlar obyektini qaytaradi, bu uni formaning toʻliq holati bilan ishlaydigan amallar uchun ideal qiladi.
 
-### Reading from field state
+### Maydon holatidan oʻqish {#reading-from-field-state}
 
-Each field in the field tree is a function. Calling a field returns a `FieldState` object containing reactive signals for the field's value, validation status, and interaction state.
+Maydonlar daraxtidagi har bir maydon — funksiya. Maydonni chaqirish maydon qiymati, validatsiya holati va oʻzaro aloqa holati uchun reaktiv signallarni oʻz ichiga olgan `FieldState` obyektini qaytaradi.
 
-Access field state when working with individual fields in templates or reactive computations:
+Shablonlarda yoki reaktiv hisob-kitoblarda alohida maydonlar bilan ishlaganda maydon holatiga murojaat qiling:
 
 ```angular-ts
 @Component({
@@ -189,17 +189,17 @@ export class LoginComponent {
 }
 ```
 
-Field state provides reactive signals for each field's value, making it suitable for displaying field-specific information or creating derived state.
+Maydon holati har bir maydon qiymati uchun reaktiv signallarni taqdim etadi, bu uni maydonga xos maʼlumotlarni koʻrsatish yoki hosilaviy holat yaratish uchun mos qiladi.
 
-TIP: Field state includes many more signals beyond `value()`, such as validation state (e.g., valid, invalid, errors), interaction tracking (e.g., touched, dirty), and visibility (e.g., hidden, disabled).
+TIP: Maydon holati `value()`'dan tashqari yana koʻp signallarni oʻz ichiga oladi, masalan, validatsiya holati (valid, invalid, errors), oʻzaro aloqani kuzatish (touched, dirty) va koʻrinish (hidden, disabled).
 
-See the [Field State Management guide](guide/forms/signals/field-state-management) for complete coverage.
+Toʻliq maʼlumot uchun [Maydon holatini boshqarish qoʻllanmasiga](guide/forms/signals/field-state-management) qarang.
 
-## Updating form models programmatically
+## Forma modellarini dasturiy ravishda yangilash {#updating-form-models-programmatically}
 
-### Replacing form models with `set()`
+### Forma modellarini `set()` bilan almashtirish {#replacing-form-models-with-set}
 
-Use `set()` on the form model to replace the entire value:
+Butun qiymatni almashtirish uchun forma modelida `set()`'dan foydalaning:
 
 ```ts
 loadUserData() {
@@ -219,11 +219,11 @@ resetForm() {
 }
 ```
 
-This approach works well when loading data from an API or resetting the entire form.
+Bu yondashuv API'dan maʼlumot yuklash yoki butun formani qayta tiklashda yaxshi ishlaydi.
 
-### Update a single field directly with `set()` or `update()`
+### Bitta maydonni `set()` yoki `update()` bilan bevosita yangilash {#update-a-single-field-directly-with-set-or-update}
 
-Use `set()` on individual field values to directly update the field state:
+Maydon holatini bevosita yangilash uchun alohida maydon qiymatlarida `set()`'dan foydalaning:
 
 ```ts
 clearEmail() {
@@ -235,11 +235,11 @@ incrementAge() {
 }
 ```
 
-These are also known as "field-level updates." They automatically propagate to the model signal and keep both in sync.
+Bular "maydon darajasidagi yangilanishlar" deb ham ataladi. Ular avtomatik ravishda model signaliga tarqaladi va ikkalasini sinxron holda saqlaydi.
 
-### Example: Loading data from an API
+### Misol: API'dan maʼlumot yuklash {#example-loading-data-from-an-api}
 
-A common pattern involves fetching data and populating the model:
+Keng tarqalgan namuna maʼlumotlarni olib, modelni toʻldirishni oʻz ichiga oladi:
 
 ```ts
 export class UserProfileComponent {
@@ -263,33 +263,33 @@ export class UserProfileComponent {
 }
 ```
 
-The form fields automatically update when the model changes, displaying the fetched data without additional code.
+Model oʻzgarganda forma maydonlari avtomatik yangilanadi va olingan maʼlumotlarni qoʻshimcha kodsiz koʻrsatadi.
 
-## Two-way data binding
+## Ikki tomonlama maʼlumot bogʻlash {#two-way-data-binding}
 
-The `[formField]` directive creates automatic two-way synchronization between the model, form state, and UI.
+`[formField]` direktivi model, forma holati va UI oʻrtasida avtomatik ikki tomonlama sinxronlash yaratadi.
 
-### How data flows
+### Maʼlumotlar qanday oqadi {#how-data-flows}
 
-Changes flow bidirectionally:
+Oʻzgarishlar ikki yoʻnalishda oqadi:
 
-**User input → Model:**
+**Foydalanuvchi kiritishi → Model:**
 
-1. User types in an input element
-2. The `[formField]` directive detects the change
-3. Field state updates
-4. Model signal updates
+1. Foydalanuvchi input elementiga matn kiritadi
+2. `[formField]` direktivi oʻzgarishni aniqlaydi
+3. Maydon holati yangilanadi
+4. Model signali yangilanadi
 
-**Programmatic update → UI:**
+**Dasturiy yangilanish → UI:**
 
-1. Code updates the model with `set()` or `update()`
-2. Model signal notifies subscribers
-3. Field state updates
-4. The `[formField]` directive updates the input element
+1. Kod modelni `set()` yoki `update()` bilan yangilaydi
+2. Model signali obunachilarni xabardor qiladi
+3. Maydon holati yangilanadi
+4. `[formField]` direktivi input elementini yangilaydi
 
-This synchronization happens automatically. You don't write subscriptions or event handlers to keep the model and UI in sync.
+Bu sinxronlash avtomatik sodir boʻladi. Model va UI'ni sinxron saqlash uchun obunalar yoki hodisa ishlov beruvchilarini yozmaysiz.
 
-### Example: Both directions
+### Misol: Ikkala yoʻnalish {#example-both-directions}
 
 ```angular-ts
 @Component({
@@ -310,15 +310,15 @@ export class UserComponent {
 }
 ```
 
-When the user types in the input, `userModel().name` updates. When the button is clicked, the input value changes to "Bob". No manual synchronization code is required.
+Foydalanuvchi input'ga matn kiritganda `userModel().name` yangilanadi. Tugma bosilganda input qiymati "Bob" ga oʻzgaradi. Hech qanday qoʻlda sinxronlash kodi talab qilinmaydi.
 
-## Model structure patterns
+## Model tuzilmasi namunalari {#model-structure-patterns}
 
-Form models can be flat objects or contain nested objects and arrays. The structure you choose affects how you access fields and organize validation.
+Forma modellari yassi (flat) obyektlar boʻlishi yoki ichki (nested) obyektlar va massivlarni oʻz ichiga olishi mumkin. Tanlagan tuzilmangiz maydonlarga qanday murojaat qilishingiz va validatsiyani qanday tashkil qilishingizga taʼsir qiladi.
 
-### Flat vs nested models
+### Yassi va ichki modellar {#flat-vs-nested-models}
 
-Flat form models keep all fields at the top level:
+Yassi forma modellari barcha maydonlarni yuqori darajada saqlaydi:
 
 ```ts
 // Flat structure
@@ -332,7 +332,7 @@ const userModel = signal({
 });
 ```
 
-Nested models group related fields:
+Ichki modellar bogʻliq maydonlarni guruhlaydi:
 
 ```ts
 // Nested structure
@@ -348,21 +348,21 @@ const userModel = signal({
 });
 ```
 
-**Use flat structures when:**
+**Yassi tuzilmalardan quyidagi hollarda foydalaning:**
 
-- Fields don't have clear conceptual groupings
-- You want simpler field access (`userForm.city` vs `userForm.address.city`)
-- Validation rules span multiple potential groups
+- Maydonlarning aniq konseptual guruhlari boʻlmasa
+- Maydonlarga soddaroq murojaat qilishni istasangiz (`userForm.city` va `userForm.address.city`)
+- Validatsiya qoidalari bir nechta potensial guruhni qamrab olsa
 
-**Use nested structures when:**
+**Ichki tuzilmalardan quyidagi hollarda foydalaning:**
 
-- Fields form a clear conceptual group (like an address)
-- The grouped data matches your API structure
-- You want to validate the group as a unit
+- Maydonlar aniq konseptual guruhni tashkil qilsa (manzil kabi)
+- Guruhlangan maʼlumotlar API tuzilmangizga mos kelsa
+- Guruhni yaxlit birlik sifatida tekshirishni istasangiz
 
-### Working with nested objects
+### Ichki obyektlar bilan ishlash {#working-with-nested-objects}
 
-You can access nested fields by following the object path:
+Ichki maydonlarga obyekt yoʻli boʻylab murojaat qilishingiz mumkin:
 
 ```ts
 const userModel = signal({
@@ -383,7 +383,7 @@ userForm.profile.firstName; // FieldTree<string>
 userForm.settings.theme; // FieldTree<string>
 ```
 
-In templates, you bind nested fields the same way as top-level fields:
+Shablonlarda ichki maydonlarni yuqori darajadagi maydonlar bilan bir xil tarzda bogʻlaysiz:
 
 ```angular-ts
 @Component({
@@ -399,9 +399,9 @@ In templates, you bind nested fields the same way as top-level fields:
 })
 ```
 
-### Working with arrays
+### Massivlar bilan ishlash {#working-with-arrays}
 
-Models can include arrays for collections of items:
+Modellar elementlar toʻplami uchun massivlarni oʻz ichiga olishi mumkin:
 
 ```ts
 const orderModel = signal({
@@ -416,17 +416,17 @@ orderForm.items[0].product; // FieldTree<string>
 orderForm.items[0].quantity; // FieldTree<number>
 ```
 
-Array items containing objects automatically receive tracking identities, which helps maintain field state even when items change position in the array. This ensures validation state and user interactions persist correctly when arrays are reordered.
+Obyektlardan iborat massiv elementlari avtomatik ravishda kuzatuv identifikatsiyalarini oladi, bu elementlar massivdagi oʻrnini oʻzgartirganda ham maydon holatini saqlab qolishga yordam beradi. Bu massivlar qayta tartiblanganda validatsiya holati va foydalanuvchi oʻzaro aloqalarining toʻgʻri saqlanishini taʼminlaydi.
 
 <!-- TBD: For dynamic arrays and complex array operations, see the [Working with arrays guide](guide/forms/signals/arrays). -->
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-This guide covered creating models and updating values. Related guides explore other aspects of Signal Forms:
+Ushbu qoʻllanma modellar yaratish va qiymatlarni yangilashni yoritdi. Tegishli qoʻllanmalar Signal Forms'ning boshqa jihatlarini koʻrib chiqadi:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
-  <docs-pill href="guide/forms/signals/validation" title="Validation" />
-  <docs-pill href="guide/forms/signals/custom-controls" title="Custom controls" />
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish" />
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya" />
+  <docs-pill href="guide/forms/signals/custom-controls" title="Maxsus boshqaruv elementlari" />
   <!-- <docs-pill href="guide/forms/signals/arrays" title="Working with Arrays" /> -->
 </docs-pill-row>
