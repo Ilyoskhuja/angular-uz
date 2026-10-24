@@ -1,11 +1,10 @@
-# Inheritance
+# Meros (Inheritance)
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: Bu qoʻllanma siz [Asosiy tushunchalar qoʻllanmasini](essentials) allaqachon oʻqib chiqqan deb hisoblaydi. Agar Angular'da yangi boʻlsangiz, avval oʻshani oʻqing.
 
-Angular components are TypeScript classes and participate in standard JavaScript inheritance
-semantics.
+Angular komponentlari TypeScript klasslari boʻlib, JavaScript'ning standart meros (inheritance) semantikasida ishtirok etadi.
 
-A component can extend any base class:
+Komponent istalgan asosiy klassni kengaytirishi mumkin:
 
 ```ts
 export class ListboxBase {
@@ -18,11 +17,9 @@ export class CustomListbox extends ListboxBase {
 }
 ```
 
-## Extending other components and directives
+## Boshqa komponentlar va direktivalarni kengaytirish {#extending-other-components-and-directives}
 
-When a component extends another component or a directive, it inherits some of the metadata defined in
-the base class's decorator and the base class's decorated members. This includes
-host bindings, inputs, outputs, lifecycle methods.
+Komponent boshqa komponent yoki direktivani kengaytirganda, u asosiy klass dekoratorida eʼlon qilingan metadataning bir qismini va asosiy klassning dekorator bilan belgilangan aʼzolarini meros qilib oladi. Bunga host bogʻlashlari, input'lar, output'lar va hayot sikli metodlari kiradi.
 
 ```angular-ts
 @Component({
@@ -54,16 +51,13 @@ export class CustomListbox extends ListboxBase {
 }
 ```
 
-In the example above, `CustomListbox` inherits all the information associated with `ListboxBase`,
-overriding the selector and template with its own values. `CustomListbox` has two inputs (`value`
-and `disabled`) and two event listeners (`keydown` and `click`).
+Yuqoridagi misolda `CustomListbox` `ListboxBase` bilan bogʻliq barcha maʼlumotlarni meros qilib oladi va selektor hamda shablonni oʻz qiymatlari bilan qayta belgilaydi. `CustomListbox` ikkita input'ga (`value` va `disabled`) va ikkita hodisa tinglovchisiga (`keydown` va `click`) ega.
 
-Child classes end up with the _union_ of all of their ancestors' inputs, outputs, and host bindings
-and their own.
+Bola klasslar natijada oʻz ajdodlarining barcha input'lari, output'lari va host bogʻlashlari hamda oʻzlarinikining _birlashmasiga_ ega boʻladi.
 
-### Forwarding injected dependencies
+### Inyeksiya qilingan bogʻliqliklarni uzatish {#forwarding-injected-dependencies}
 
-When a base class uses `inject()` as a property initializer, the child class inherits the property automatically. No `super` forwarding is needed.
+Asosiy klass `inject()`'ni xususiyat initsializatori sifatida ishlatganda, bola klass bu xususiyatni avtomatik meros qilib oladi. `super` orqali uzatish talab qilinmaydi.
 
 ```ts
 @Component(/* ... */)
@@ -77,7 +71,7 @@ export class CustomListbox extends ListboxBase {
 }
 ```
 
-If a base class injects dependencies as constructor parameters, the child class must explicitly pass these dependencies to `super`.
+Agar asosiy klass bogʻliqliklarni konstruktor parametrlari sifatida inyeksiya qilsa, bola klass bu bogʻliqliklarni `super`'ga aniq uzatishi shart.
 
 ```ts
 @Component(/* ... */)
@@ -93,11 +87,9 @@ export class CustomListbox extends ListboxBase {
 }
 ```
 
-### Overriding lifecycle methods
+### Hayot sikli metodlarini qayta belgilash {#overriding-lifecycle-methods}
 
-If a base class defines a lifecycle method, such as `ngOnInit`, a child class that also
-implements `ngOnInit` _overrides_ the base class's implementation. If you want to preserve the base
-class's lifecycle method, explicitly call the method with `super`:
+Agar asosiy klass `ngOnInit` kabi hayot sikli metodini eʼlon qilsa, `ngOnInit`'ni ham amalga oshiradigan bola klass asosiy klassning implementatsiyasini _qayta belgilaydi_ (overrides). Agar asosiy klassning hayot sikli metodini saqlab qolmoqchi boʻlsangiz, metodni `super` orqali aniq chaqiring:
 
 ```ts
 @Component(/* ... */)

@@ -1,19 +1,18 @@
-# Referencing component children with queries
+# Soʻrovlar yordamida komponentning bola elementlariga murojaat qilish
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: Bu qoʻllanma siz [Asosiy tushunchalar qoʻllanmasini](essentials) allaqachon oʻqib chiqqan deb hisoblaydi. Agar Angular'da yangi boʻlsangiz, avval oʻshani oʻqing.
 
-A component can define **queries** that find child elements and read values from their injectors.
+Komponent bola elementlarni topuvchi va ularning injector'laridan qiymatlarni oʻqiydigan **soʻrovlar** (queries) eʼlon qilishi mumkin.
 
-Developers most commonly use queries to retrieve references to child components, directives, DOM elements, and more.
+Dasturchilar soʻrovlardan koʻpincha bola komponentlar, direktivalar, DOM elementlari va boshqalarga havolalarni olish uchun foydalanadilar.
 
-All query functions return signals that reflect the most up-to-date results. You can read the
-result by calling the signal function, including in [reactive contexts](guide/signals#reactive-contexts) like `computed` and `effect`.
+Barcha soʻrov funksiyalari eng soʻnggi natijalarni aks ettiruvchi signallarni qaytaradi. Natijani signal funksiyasini chaqirib oʻqishingiz mumkin, jumladan `computed` va `effect` kabi [reaktiv kontekstlarda](guide/signals#reactive-contexts) ham.
 
-There are two categories of query: **view queries** and **content queries.**
+Soʻrovlarning ikki turi mavjud: **view soʻrovlari** va **kontent soʻrovlari.**
 
-## View queries
+## View soʻrovlari {#view-queries}
 
-View queries retrieve results from the elements in the component's _view_ — the elements defined in the component's own template. You can query for a single result with the `viewChild` function.
+View soʻrovlari natijalarni komponentning _view_'idagi elementlardan — yaʼni komponentning oʻz shablonida eʼlon qilingan elementlardan oladi. `viewChild` funksiyasi yordamida bitta natijani soʻrashingiz mumkin.
 
 ```angular-ts {highlight: [14, 15]}
 @Component({
@@ -34,11 +33,11 @@ export class CustomCard {
 }
 ```
 
-In this example, the `CustomCard` component queries for a child `CustomCardHeader` and uses the result in a `computed`.
+Bu misolda `CustomCard` komponenti bola `CustomCardHeader`'ni soʻraydi va natijadan `computed` ichida foydalanadi.
 
-If the query does not find a result, its value is `undefined`. This may occur if the target element is hidden by `@if`. Angular keeps the result of `viewChild` up to date as your application state changes.
+Agar soʻrov natija topmasa, uning qiymati `undefined` boʻladi. Bu maqsadli element `@if` tomonidan yashirilgan boʻlsa yuz berishi mumkin. Ilova holati oʻzgarganda Angular `viewChild` natijasini doimo yangilab turadi.
 
-You can also query for multiple results with the `viewChildren` function.
+`viewChildren` funksiyasi yordamida bir nechta natijani ham soʻrashingiz mumkin.
 
 ```angular-ts {highlight: [17]}
 @Component({
@@ -62,13 +61,13 @@ export class CustomCard {
 }
 ```
 
-`viewChildren` creates a signal with an `Array` of the query results.
+`viewChildren` soʻrov natijalaridan iborat `Array` saqlovchi signal yaratadi.
 
-**Queries never pierce through component boundaries.** View queries can only retrieve results from the component's template.
+**Soʻrovlar hech qachon komponent chegaralaridan oʻtmaydi.** View soʻrovlari natijalarni faqat komponentning oʻz shablonidan olishi mumkin.
 
-## Content queries
+## Kontent soʻrovlari {#content-queries}
 
-Content queries retrieve results from the elements in the component's _content_— the elements nested inside the component in the template where it's used. You can query for a single result with the `contentChild` function.
+Kontent soʻrovlari natijalarni komponentning _kontenti_dagi elementlardan — yaʼni komponent ishlatilgan shablonda uning ichiga joylashtirilgan elementlardan oladi. `contentChild` funksiyasi yordamida bitta natijani soʻrashingiz mumkin.
 
 ```angular-ts {highlight: [14, 15]}
 @Component({
@@ -100,11 +99,11 @@ export class CustomExpando {
 export class UserProfile {}
 ```
 
-If the query does not find a result, its value is `undefined`. This may occur if the target element is absent or hidden by `@if`. Angular keeps the result of `contentChild` up to date as your application state changes.
+Agar soʻrov natija topmasa, uning qiymati `undefined` boʻladi. Bu maqsadli element mavjud boʻlmasa yoki `@if` tomonidan yashirilgan boʻlsa yuz berishi mumkin. Ilova holati oʻzgarganda Angular `contentChild` natijasini doimo yangilab turadi.
 
-By default, `contentChild` queries traverse into descendants, while `contentChildren` queries find only _direct_ children. See [Content descendants](#content-descendants).
+Sukut boʻyicha `contentChild` soʻrovlari avlodlar ichiga kirib boradi, `contentChildren` soʻrovlari esa faqat _bevosita_ bolalarni topadi. [Kontent avlodlari](#content-descendants) boʻlimiga qarang.
 
-You can also query for multiple results with the `contentChildren` function.
+`contentChildren` funksiyasi yordamida bir nechta natijani ham soʻrashingiz mumkin.
 
 ```angular-ts {highlight: [14, 15]}
 @Component({
@@ -136,15 +135,15 @@ export class CustomMenu {
 export class UserProfile {}
 ```
 
-`contentChildren` creates a signal with an `Array` of the query results.
+`contentChildren` soʻrov natijalaridan iborat `Array` saqlovchi signal yaratadi.
 
-**Queries never pierce through component boundaries.** Content queries can only retrieve results from the same template as the component itself.
+**Soʻrovlar hech qachon komponent chegaralaridan oʻtmaydi.** Kontent soʻrovlari natijalarni faqat komponentning oʻzi joylashgan shablondan olishi mumkin.
 
-## Required queries
+## Majburiy soʻrovlar {#required-queries}
 
-If a child query (`viewChild` or `contentChild`) does not find a result, its value is `undefined`. This may occur if the target element is hidden by a control flow statement like `@if` or `@for`. Because of this, the child queries return a signal that include `undefined` in their value type.
+Agar bola soʻrovi (`viewChild` yoki `contentChild`) natija topmasa, uning qiymati `undefined` boʻladi. Bu maqsadli element `@if` yoki `@for` kabi boshqaruv oqimi konstruksiyasi tomonidan yashirilgan boʻlsa yuz berishi mumkin. Shu sababli bola soʻrovlari qiymat turida `undefined`'ni ham oʻz ichiga olgan signal qaytaradi.
 
-In some cases, especially with `viewChild`, you know with certainty that a specific child is always available. In other cases, you may want to strictly enforce that a specific child is present. For these cases, you can use a _required query_.
+Baʼzi hollarda, ayniqsa `viewChild` bilan ishlaganda, siz maʼlum bir bola har doim mavjudligini aniq bilasiz. Boshqa hollarda esa maʼlum bir bolaning mavjudligini qatʼiy talab qilishni xohlashingiz mumkin. Bunday holatlar uchun _majburiy soʻrov_ (required query) dan foydalanishingiz mumkin.
 
 ```ts
 @Component(/* ... */)
@@ -154,16 +153,15 @@ export class CustomCard {
 }
 ```
 
-If a required query does not find a matching result, Angular reports an error. Because this guarantees that a result is available, required queries do not automatically include `undefined` in the signal's value type.
+Agar majburiy soʻrov mos natija topmasa, Angular xato haqida xabar beradi. Bu natijaning mavjudligini kafolatlagani uchun majburiy soʻrovlar signal qiymat turiga `undefined`'ni avtomatik qoʻshmaydi.
 
-## Query locators
+## Soʻrov lokatorlari {#query-locators}
 
-This first parameter for each query decorator is its **locator**.
+Har bir soʻrov dekoratorining birinchi parametri uning **lokatori** (locator) hisoblanadi.
 
-Most of the time, you want to use a component or directive as your locator.
+Koʻp hollarda lokator sifatida komponent yoki direktivadan foydalanishni xohlaysiz.
 
-You can alternatively specify a string locator corresponding to
-a [template reference variable](guide/templates/variables#template-reference-variables).
+Muqobil ravishda [shablon havola oʻzgaruvchisiga](guide/templates/variables#template-reference-variables) mos keluvchi satrli lokatorni ham koʻrsatishingiz mumkin.
 
 ```angular-ts
 @Component({
@@ -178,15 +176,15 @@ export class ActionBar {
 }
 ```
 
-If more than one element defines the same template reference variable, the query retrieves the first matching element.
+Agar bir nechta element bir xil shablon havola oʻzgaruvchisini eʼlon qilsa, soʻrov birinchi mos kelgan elementni oladi.
 
-Angular does not support CSS selectors as query locators.
+Angular soʻrov lokatori sifatida CSS selektorlarini qoʻllab-quvvatlamaydi.
 
-### Queries and the injector tree
+### Soʻrovlar va injector daraxti {#queries-and-the-injector-tree}
 
-TIP: See [Dependency Injection](guide/di) for background on providers and Angular's injection tree.
+TIP: Provider'lar va Angular'ning inyeksiya daraxti haqida asosiy maʼlumot olish uchun [Bogʻliqliklarni inyeksiya qilish](guide/di) boʻlimiga qarang.
 
-For more advanced cases, you can use any `ProviderToken` as a locator. This lets you locate elements based on component and directive providers.
+Murakkabroq holatlar uchun lokator sifatida istalgan `ProviderToken`'dan foydalanishingiz mumkin. Bu elementlarni komponent va direktiva provider'lari asosida topish imkonini beradi.
 
 ```angular-ts
 const SUB_ITEM = new InjectionToken<string>('sub-item');
@@ -203,15 +201,15 @@ export class CustomList {
 }
 ```
 
-The above example uses an `InjectionToken` as a locator, but you can use any `ProviderToken` to locate specific elements.
+Yuqoridagi misolda lokator sifatida `InjectionToken` ishlatilgan, lekin muayyan elementlarni topish uchun istalgan `ProviderToken`'dan foydalanishingiz mumkin.
 
-## Query options
+## Soʻrov opsiyalari {#query-options}
 
-All query functions accept an options object as a second parameter. These options control how the query finds its results.
+Barcha soʻrov funksiyalari ikkinchi parametr sifatida opsiyalar obyektini qabul qiladi. Bu opsiyalar soʻrov natijalarni qanday topishini boshqaradi.
 
-### Reading specific values from an element's injector
+### Element injector'idan muayyan qiymatlarni oʻqish {#reading-specific-values-from-an-elements-injector}
 
-By default, the query locator indicates both the element you're searching for and the value retrieved. You can alternatively specify the `read` option to retrieve a different value from the element matched by the locator.
+Sukut boʻyicha soʻrov lokatori ham siz qidirayotgan elementni, ham olinadigan qiymatni belgilaydi. Muqobil ravishda `read` opsiyasini koʻrsatib, lokatorga mos kelgan elementdan boshqa qiymatni olishingiz mumkin.
 
 ```ts
 @Component(/* ... */)
@@ -220,12 +218,11 @@ export class CustomExpando {
 }
 ```
 
-The above example, locates an element with the directive `ExpandoContent` and retrieves
-the `TemplateRef` associated with that element.
+Yuqoridagi misol `ExpandoContent` direktivasiga ega elementni topadi va oʻsha element bilan bogʻliq `TemplateRef`'ni oladi.
 
-Developers most commonly use `read` to retrieve `ElementRef` and `TemplateRef`.
+Dasturchilar `read`'dan koʻpincha `ElementRef` va `TemplateRef` olish uchun foydalanadilar.
 
-You can also pass `Injector` to `read`.
+`read`'ga `Injector`'ni ham uzatishingiz mumkin.
 
 ```angular-ts
 @Component({
@@ -244,15 +241,12 @@ export class CustomTable {
 }
 ```
 
-The above example retrieves the node injector of the `third-party-table` element, meaning the
-injector as seen from that element's position in the tree. Passing it to `NgTemplateOutlet` through
-`ngTemplateOutletInjector` lets directives in the projected template inject values that the
-third-party component provides.
+Yuqoridagi misol `third-party-table` elementining tugun injector'ini, yaʼni daraxtda oʻsha element joylashgan oʻrindan koʻrinadigan injector'ni oladi. Uni `ngTemplateOutletInjector` orqali `NgTemplateOutlet`'ga uzatish proyeksiya qilingan shablondagi direktivalarga uchinchi tomon komponenti taqdim etadigan qiymatlarni inyeksiya qilish imkonini beradi.
 
-### Content descendants
+### Kontent avlodlari {#content-descendants}
 
-By default, `contentChildren` queries find only _direct_ children of the component and do not traverse into descendants.
-`contentChild` queries do traverse into descendants by default.
+Sukut boʻyicha `contentChildren` soʻrovlari komponentning faqat _bevosita_ bolalarini topadi va avlodlar ichiga kirib bormaydi.
+`contentChild` soʻrovlari esa sukut boʻyicha avlodlar ichiga kirib boradi.
 
 ```angular-ts {highlight: [13, 14, 15, 16, 17]}
 @Component({
@@ -277,20 +271,19 @@ export class CustomExpando {
 export class UserProfile {}
 ```
 
-In the example above, `CustomExpando` cannot find `<custom-toggle>` with `contentChildren` because it is not a direct child of `<custom-expando>`. By setting `descendants: true`, you configure the query to traverse all descendants in the same template. Queries, however, _never_ pierce into components to traverse elements in other templates.
+Yuqoridagi misolda `CustomExpando` `contentChildren` yordamida `<custom-toggle>`'ni topa olmaydi, chunki u `<custom-expando>`'ning bevosita bolasi emas. `descendants: true` qiymatini oʻrnatib, soʻrovni bir xil shablondagi barcha avlodlar boʻylab oʻtadigan qilib sozlaysiz. Biroq soʻrovlar boshqa shablonlardagi elementlarni koʻrib chiqish uchun _hech qachon_ komponentlar ichiga kirmaydi.
 
-View queries do not have this option because they _always_ traverse into descendants.
+View soʻrovlarida bu opsiya yoʻq, chunki ular _har doim_ avlodlar ichiga kirib boradi.
 
-## Decorator-based queries
+## Dekoratorga asoslangan soʻrovlar {#decorator-based-queries}
 
-TIP: While the Angular team recommends using the signal-based query function for new projects, the
-original decorator-based query APIs remain fully supported.
+TIP: Angular jamoasi yangi loyihalar uchun signalga asoslangan soʻrov funksiyalaridan foydalanishni tavsiya qilsa-da, asl dekoratorga asoslangan soʻrov API'lari toʻliq qoʻllab-quvvatlanishda davom etadi.
 
-You can alternatively declare queries by adding the corresponding decorator to a property. Decorator-based queries behave the same way as signal-based queries except as described below.
+Muqobil ravishda xususiyatga tegishli dekoratorni qoʻshib ham soʻrovlarni eʼlon qilishingiz mumkin. Dekoratorga asoslangan soʻrovlar, quyida tavsiflangan farqlarni hisobga olmaganda, signalga asoslangan soʻrovlar bilan bir xil ishlaydi.
 
-### View queries {#decorator-view-queries}
+### View soʻrovlari {#decorator-view-queries}
 
-You can query for a single result with the `@ViewChild` decorator.
+`@ViewChild` dekoratori yordamida bitta natijani soʻrashingiz mumkin.
 
 ```angular-ts {highlight: [14, 16, 17, 18]}
 @Component({
@@ -314,13 +307,13 @@ export class CustomCard implements AfterViewInit {
 }
 ```
 
-In this example, the `CustomCard` component queries for a child `CustomCardHeader` and accesses the result in `ngAfterViewInit`.
+Bu misolda `CustomCard` komponenti bola `CustomCardHeader`'ni soʻraydi va natijaga `ngAfterViewInit` ichida murojaat qiladi.
 
-Angular keeps the result of `@ViewChild` up to date as your application state changes.
+Ilova holati oʻzgarganda Angular `@ViewChild` natijasini doimo yangilab turadi.
 
-**View query results become available in the `ngAfterViewInit` lifecycle method**. Before this point, the value is `undefined`. See the [Lifecycle](guide/components/lifecycle) section for details on the component lifecycle.
+**View soʻrovi natijalari `ngAfterViewInit` hayot sikli metodida mavjud boʻladi**. Bundan oldin qiymat `undefined` boʻladi. Komponent hayot sikli haqida batafsil maʼlumot uchun [Hayot sikli](guide/components/lifecycle) boʻlimiga qarang.
 
-You can also query for multiple results with the `@ViewChildren` decorator.
+`@ViewChildren` dekoratori yordamida bir nechta natijani ham soʻrashingiz mumkin.
 
 ```angular-ts {highlight: [17, 19, 20, 21, 22, 23]}
 @Component({
@@ -349,11 +342,11 @@ export class CustomCard implements AfterViewInit {
 }
 ```
 
-`@ViewChildren` creates a `QueryList` object that contains the query results. You can subscribe to changes to the query results over time via the `changes` property.
+`@ViewChildren` soʻrov natijalarini saqlovchi `QueryList` obyektini yaratadi. `changes` xususiyati orqali soʻrov natijalarining vaqt davomidagi oʻzgarishlariga obuna boʻlishingiz mumkin.
 
-### Content queries {#decorator-content-queries}
+### Kontent soʻrovlari {#decorator-content-queries}
 
-You can query for a single result with the `@ContentChild` decorator.
+`@ContentChild` dekoratori yordamida bitta natijani soʻrashingiz mumkin.
 
 ```angular-ts {highlight: [14, 16, 17, 18]}
 @Component({
@@ -387,13 +380,13 @@ export class CustomExpando implements AfterContentInit {
 export class UserProfile {}
 ```
 
-In this example, the `CustomExpando` component queries for a child `CustomToggle` and accesses the result in `ngAfterContentInit`.
+Bu misolda `CustomExpando` komponenti bola `CustomToggle`'ni soʻraydi va natijaga `ngAfterContentInit` ichida murojaat qiladi.
 
-Angular keeps the result of `@ContentChild` up to date as your application state changes.
+Ilova holati oʻzgarganda Angular `@ContentChild` natijasini doimo yangilab turadi.
 
-**Content query results become available in the `ngAfterContentInit` lifecycle method**. Before this point, the value is `undefined`. See the [Lifecycle](guide/components/lifecycle) section for details on the component lifecycle.
+**Kontent soʻrovi natijalari `ngAfterContentInit` hayot sikli metodida mavjud boʻladi**. Bundan oldin qiymat `undefined` boʻladi. Komponent hayot sikli haqida batafsil maʼlumot uchun [Hayot sikli](guide/components/lifecycle) boʻlimiga qarang.
 
-You can also query for multiple results with the `@ContentChildren` decorator.
+`@ContentChildren` dekoratori yordamida bir nechta natijani ham soʻrashingiz mumkin.
 
 ```angular-ts {highlight: [14, 16, 17, 18, 19, 20]}
 @Component({
@@ -430,15 +423,15 @@ export class CustomMenu implements AfterContentInit {
 export class UserProfile {}
 ```
 
-`@ContentChildren` creates a `QueryList` object that contains the query results. You can subscribe to changes to the query results over time via the `changes` property.
+`@ContentChildren` soʻrov natijalarini saqlovchi `QueryList` obyektini yaratadi. `changes` xususiyati orqali soʻrov natijalarining vaqt davomidagi oʻzgarishlariga obuna boʻlishingiz mumkin.
 
-### Decorator-based query options
+### Dekoratorga asoslangan soʻrov opsiyalari {#decorator-based-query-options}
 
-All query decorators accept an options object as a second parameter. These options work the same way as signal-based queries except where described below.
+Barcha soʻrov dekoratorlari ikkinchi parametr sifatida opsiyalar obyektini qabul qiladi. Bu opsiyalar, quyida tavsiflangan farqlarni hisobga olmaganda, signalga asoslangan soʻrovlar bilan bir xil ishlaydi.
 
-### Static queries
+### Statik soʻrovlar {#static-queries}
 
-`@ViewChild` and `@ContentChild` decorators accept the `static` option.
+`@ViewChild` va `@ContentChild` dekoratorlari `static` opsiyasini qabul qiladi.
 
 ```angular-ts
 @Component({
@@ -454,26 +447,26 @@ export class CustomCard implements OnInit {
 }
 ```
 
-By setting `static: true`, you guarantee to Angular that the target of this query is _always_ present and is not conditionally rendered. This makes the result available earlier, in the `ngOnInit` lifecycle method.
+`static: true` qiymatini oʻrnatib, siz Angular'ga bu soʻrovning maqsadi _har doim_ mavjudligini va shartli ravishda render qilinmasligini kafolatlaysiz. Bu natijani ertaroq — `ngOnInit` hayot sikli metodida mavjud qiladi.
 
-Static query results do not update after initialization.
+Statik soʻrov natijalari ishga tushirilgandan keyin yangilanmaydi.
 
-The `static` option is not available for `@ViewChildren` and `@ContentChildren` queries.
+`static` opsiyasi `@ViewChildren` va `@ContentChildren` soʻrovlari uchun mavjud emas.
 
-### Using QueryList
+### QueryList'dan foydalanish {#using-querylist}
 
-`@ViewChildren` and `@ContentChildren` both provide a `QueryList` object that contains a list of results.
+`@ViewChildren` va `@ContentChildren` ikkalasi ham natijalar roʻyxatini saqlovchi `QueryList` obyektini taqdim etadi.
 
-`QueryList` offers a number of convenience APIs for working with results in an array-like manner, such as `map`, `reduce`, and `forEach`. You can get an array of the current results by calling `toArray`.
+`QueryList` natijalar bilan massivga oʻxshash tarzda ishlash uchun `map`, `reduce` va `forEach` kabi bir qator qulay API'larni taklif qiladi. `toArray` metodini chaqirib, joriy natijalar massivini olishingiz mumkin.
 
-You can subscribe to the `changes` property to do something any time the results change.
+Natijalar oʻzgargan har safar biror amal bajarish uchun `changes` xususiyatiga obuna boʻlishingiz mumkin.
 
-## Common query pitfalls
+## Soʻrovlar bilan bogʻliq keng tarqalgan xatolar {#common-query-pitfalls}
 
-When using queries, common pitfalls can make your code harder to understand and maintain.
+Soʻrovlardan foydalanganda keng tarqalgan xatolar kodingizni tushunish va qoʻllab-quvvatlashni qiyinlashtirishi mumkin.
 
-Always maintain a single source of truth for state shared between multiple components. This avoids scenarios where repeated state in different components becomes out of sync.
+Bir nechta komponent oʻrtasida umumiy boʻlgan holat uchun har doim yagona haqiqat manbasini saqlang. Bu turli komponentlarda takrorlangan holatning bir-biriga mos kelmay qolishi holatlarining oldini oladi.
 
-Avoid directly writing state to child components. This pattern can lead to brittle code that is hard to understand and is prone to [ExpressionChangedAfterItHasBeenChecked](errors/NG0100) errors.
+Holatni bola komponentlarga toʻgʻridan-toʻgʻri yozishdan saqlaning. Bunday yondashuv tushunish qiyin boʻlgan moʻrt kodga olib kelishi va [ExpressionChangedAfterItHasBeenChecked](errors/NG0100) xatolariga moyil boʻlishi mumkin.
 
-Never directly write state to parent or ancestor components. This pattern can lead to brittle code that is hard to understand and is prone to [ExpressionChangedAfterItHasBeenChecked](errors/NG0100) errors.
+Holatni ota yoki ajdod komponentlarga hech qachon toʻgʻridan-toʻgʻri yozmang. Bunday yondashuv tushunish qiyin boʻlgan moʻrt kodga olib kelishi va [ExpressionChangedAfterItHasBeenChecked](errors/NG0100) xatolariga moyil boʻlishi mumkin.

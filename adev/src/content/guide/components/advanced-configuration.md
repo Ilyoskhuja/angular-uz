@@ -1,38 +1,28 @@
-# Advanced component configuration
+# Komponentning kengaytirilgan konfiguratsiyasi
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: Bu qoʻllanma siz [Asosiy tushunchalar qoʻllanmasini](essentials) allaqachon oʻqib chiqqan deb hisoblaydi. Agar Angular'da yangi boʻlsangiz, avval oʻshani oʻqing.
 
-## ChangeDetectionStrategy
+## ChangeDetectionStrategy {#changedetectionstrategy}
 
-The `@Component` decorator accepts a `changeDetection` option that controls the component's **change
-detection mode**. There are two change detection mode options.
+`@Component` dekoratori komponentning **oʻzgarishlarni aniqlash rejimini** (change detection mode) boshqaruvchi `changeDetection` opsiyasini qabul qiladi. Oʻzgarishlarni aniqlash rejimining ikkita varianti mavjud.
 
-**`ChangeDetectionStrategy.Eager`/`Default`** is an optional mode. In this mode,
-Angular checks whether the component's DOM needs an update whenever any activity may have occurred
-application-wide. Activities that trigger this checking include user interaction, network response,
-timers, and more.
+**`ChangeDetectionStrategy.Eager`/`Default`** — ixtiyoriy rejim. Bu rejimda Angular ilova miqyosida qandaydir faollik yuz bergan boʻlishi mumkin boʻlgan har safar komponentning DOM'i yangilanishga muhtojligini tekshiradi. Bunday tekshiruvni ishga tushiradigan faolliklarga foydalanuvchi harakatlari, tarmoq javoblari, taymerlar va boshqalar kiradi.
 
-**`ChangeDetectionStrategy.OnPush`** is the default strategy (since v22). This mode reduces the amount of checking Angular
-needs to perform. In this mode, the framework only checks if a component's DOM needs an update when:
+**`ChangeDetectionStrategy.OnPush`** — sukut boʻyicha strategiya (v22 dan boshlab). Bu rejim Angular bajarishi kerak boʻlgan tekshiruvlar hajmini kamaytiradi. Bu rejimda freymvork komponentning DOM'i yangilanishga muhtojligini faqat quyidagi hollarda tekshiradi:
 
-- A component input has changes as a result of a binding in a template, or
-- An event listener in this component runs
-- The component is explicitly marked for check, via `ChangeDetectorRef.markForCheck` or something which wraps it, like `AsyncPipe`.
+- Komponent input'i shablondagi bogʻlash natijasida oʻzgarganda, yoki
+- Bu komponentdagi hodisa tinglovchisi ishga tushganda
+- Komponent `ChangeDetectorRef.markForCheck` yoki uni oʻrab oluvchi `AsyncPipe` kabi biror narsa orqali tekshirish uchun aniq belgilanganda.
 
-Additionally, when an OnPush component is checked, Angular _also_ checks all of its ancestor
-components, traversing upwards through the application tree.
+Bundan tashqari, OnPush komponenti tekshirilganda Angular ilova daraxti boʻylab yuqoriga koʻtarilib, uning barcha ajdod komponentlarini _ham_ tekshiradi.
 
-## PreserveWhitespaces
+## PreserveWhitespaces {#preservewhitespaces}
 
-By default, Angular removes and collapses superfluous whitespace in templates, most commonly from
-newlines and indentation. You can change this setting by explicitly setting `preserveWhitespaces` to
-`true` in a component's metadata.
+Sukut boʻyicha Angular shablonlardagi ortiqcha boʻsh joylarni, koʻpincha yangi qatorlar va chekinishlardan (indentation) kelib chiqadiganlarini, olib tashlaydi va qisqartiradi. Komponent metadatasida `preserveWhitespaces` qiymatini aniq `true` ga oʻrnatib, bu sozlamani oʻzgartirishingiz mumkin.
 
-## Custom element schemas
+## Maxsus element sxemalari {#custom-element-schemas}
 
-By default, Angular throws an error when it encounters an unknown HTML element. You can
-disable this behavior for a component by including `CUSTOM_ELEMENTS_SCHEMA` in the `schemas`
-property in your component metadata.
+Sukut boʻyicha Angular nomaʼlum HTML elementiga duch kelganda xato tashlaydi. Komponent metadatasidagi `schemas` xususiyatiga `CUSTOM_ELEMENTS_SCHEMA`'ni qoʻshib, komponent uchun bu xatti-harakatni oʻchirib qoʻyishingiz mumkin.
 
 ```angular-ts
 import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
@@ -45,4 +35,4 @@ import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 export class ComponentWithCustomElements { }
 ```
 
-Angular also provides `NO_ERRORS_SCHEMA`, which allows any element and any property.
+Angular shuningdek istalgan element va istalgan xususiyatga ruxsat beruvchi `NO_ERRORS_SCHEMA`'ni ham taqdim etadi.

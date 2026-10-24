@@ -1,10 +1,8 @@
-# Using DOM APIs
+# DOM API'laridan foydalanish
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: Bu qoʻllanma siz [Asosiy tushunchalar qoʻllanmasini](essentials) allaqachon oʻqib chiqqan deb hisoblaydi. Agar Angular'da yangi boʻlsangiz, avval oʻshani oʻqing.
 
-Angular handles most DOM creation, updates, and removals for you. However, you might rarely need to
-directly interact with a component's DOM. Components can inject ElementRef to get a reference to the
-component's host element:
+Angular DOM'ni yaratish, yangilash va olib tashlash ishlarining koʻp qismini siz uchun bajaradi. Biroq kamdan-kam hollarda komponentning DOM'i bilan bevosita ishlashingiz kerak boʻlishi mumkin. Komponentlar oʻzining host elementiga havola olish uchun ElementRef'ni inyeksiya qilishi mumkin:
 
 ```ts
 @Component(/* ... */)
@@ -16,11 +14,9 @@ export class ProfilePhoto {
 }
 ```
 
-The `nativeElement` property references the
-host [Element](https://developer.mozilla.org/docs/Web/API/Element) instance.
+`nativeElement` xususiyati host [Element](https://developer.mozilla.org/docs/Web/API/Element) nusxasiga havola qiladi.
 
-You can use Angular's `afterEveryRender` and `afterNextRender` functions to register a **render
-callback** that runs when Angular has finished rendering the page.
+Angular sahifani render qilishni tugatganda ishga tushadigan **render callback**'ni roʻyxatdan oʻtkazish uchun Angular'ning `afterEveryRender` va `afterNextRender` funksiyalaridan foydalanishingiz mumkin.
 
 ```ts
 @Component(/* ... */)
@@ -35,51 +31,34 @@ export class ProfilePhoto {
 }
 ```
 
-`afterEveryRender` and `afterNextRender` must be called in an _injection context_, typically a
-component's constructor.
+`afterEveryRender` va `afterNextRender` _inyeksiya kontekstida_ (injection context), odatda komponentning konstruktorida chaqirilishi shart.
 
-**Avoid direct DOM manipulation whenever possible.** Always prefer expressing your DOM's structure
-in component templates and updating that DOM with bindings.
+**Imkon qadar DOM'ni bevosita oʻzgartirishdan saqlaning.** Har doim DOM tuzilmasini komponent shablonlarida ifodalashni va oʻsha DOM'ni bogʻlashlar orqali yangilashni afzal koʻring.
 
-**Render callbacks never run during server-side rendering or build-time pre-rendering.**
+**Render callback'lar server tomonida render qilish yoki build vaqtidagi oldindan render qilish (pre-rendering) jarayonida hech qachon ishga tushmaydi.**
 
-**Never directly manipulate the DOM inside of other Angular lifecycle hooks**. Angular does not
-guarantee that a component's DOM is fully rendered at any point other than in render callbacks.
-Further, reading or modifying the DOM during other lifecycle hooks can negatively impact page
-performance by
-causing [layout thrashing](https://web.dev/avoid-large-complex-layouts-and-layout-thrashing).
+**Angular'ning boshqa hayot sikli hook'lari ichida DOM'ni hech qachon bevosita oʻzgartirmang**. Angular render callback'lardan tashqari hech qanday nuqtada komponent DOM'ining toʻliq render qilinganini kafolatlamaydi. Bundan tashqari, boshqa hayot sikli hook'lari davomida DOM'ni oʻqish yoki oʻzgartirish [layout thrashing](https://web.dev/avoid-large-complex-layouts-and-layout-thrashing) hodisasini keltirib chiqarib, sahifa unumdorligiga salbiy taʼsir koʻrsatishi mumkin.
 
-## Using a component's renderer
+## Komponent renderer'idan foydalanish {#using-a-components-renderer}
 
-Components can inject an instance of `Renderer2` to perform certain DOM manipulations that are tied
-to other Angular features.
+Komponentlar Angular'ning boshqa imkoniyatlari bilan bogʻliq boʻlgan maʼlum DOM oʻzgartirishlarini bajarish uchun `Renderer2` nusxasini inyeksiya qilishi mumkin.
 
-Any DOM elements created by a component's `Renderer2` participate in that
-component's [style encapsulation](guide/components/styling#style-scoping).
+Komponentning `Renderer2`'si tomonidan yaratilgan har qanday DOM elementlari oʻsha komponentning [stil inkapsulyatsiyasida](guide/components/styling#style-scoping) ishtirok etadi.
 
-Certain `Renderer2` APIs also tie into Angular's animation system. You can use the `setProperty`
-method to update synthetic animation properties and the `listen` method to add event listeners for
-synthetic animation events. See the [Animations](guide/animations) guide for details.
+Baʼzi `Renderer2` API'lari Angular'ning animatsiya tizimi bilan ham bogʻlangan. Sintetik animatsiya xususiyatlarini yangilash uchun `setProperty` metodidan, sintetik animatsiya hodisalari uchun hodisa tinglovchilarini qoʻshish uchun esa `listen` metodidan foydalanishingiz mumkin. Batafsil maʼlumot uchun [Animatsiyalar](guide/animations) qoʻllanmasiga qarang.
 
-Aside from these two narrow use-cases, there is no difference between using `Renderer2` and native
-DOM APIs. `Renderer2` APIs do not support DOM manipulation in server-side rendering or build-time
-pre-rendering contexts.
+Bu ikki tor holatdan tashqari, `Renderer2` va native DOM API'laridan foydalanish oʻrtasida farq yoʻq. `Renderer2` API'lari server tomonida render qilish yoki build vaqtidagi oldindan render qilish kontekstlarida DOM'ni oʻzgartirishni qoʻllab-quvvatlamaydi.
 
-## When to use DOM APIs
+## DOM API'larini qachon ishlatish kerak {#when-to-use-dom-apis}
 
-While Angular handles most rendering concerns, some behaviors may still require using DOM APIs. Some
-common use cases include:
+Angular render qilish bilan bogʻliq masalalarning koʻp qismini hal qilsa-da, baʼzi xatti-harakatlar hali ham DOM API'laridan foydalanishni talab qilishi mumkin. Keng tarqalgan holatlardan baʼzilari:
 
-- Managing element focus
-- Measuring element geometry, such as with `getBoundingClientRect`
-- Reading an element's text content
-- Setting up native observers such
-  as [`MutationObserver`](https://developer.mozilla.org/docs/Web/API/MutationObserver),
-  [`ResizeObserver`](https://developer.mozilla.org/docs/Web/API/ResizeObserver), or
-  [`IntersectionObserver`](https://developer.mozilla.org/docs/Web/API/Intersection_Observer_API).
+- Element fokusini boshqarish
+- Element geometriyasini oʻlchash, masalan, `getBoundingClientRect` yordamida
+- Elementning matn tarkibini oʻqish
+- [`MutationObserver`](https://developer.mozilla.org/docs/Web/API/MutationObserver),
+  [`ResizeObserver`](https://developer.mozilla.org/docs/Web/API/ResizeObserver) yoki
+  [`IntersectionObserver`](https://developer.mozilla.org/docs/Web/API/Intersection_Observer_API) kabi
+  native kuzatuvchilarni (observers) sozlash.
 
-Avoid inserting, removing, and modifying DOM elements. In particular, **never directly set an
-element's `innerHTML` property**, which can make your application vulnerable
-to [cross-site scripting (XSS) exploits](https://developer.mozilla.org/docs/Glossary/Cross-site_scripting).
-Angular's template bindings, including bindings for `innerHTML`, include safeguards that help
-protect against XSS attacks. See the [Security guide](best-practices/security) for details.
+DOM elementlarini qoʻshish, olib tashlash va oʻzgartirishdan saqlaning. Xususan, **elementning `innerHTML` xususiyatini hech qachon bevosita oʻrnatmang**, chunki bu ilovangizni [saytlararo skripting (XSS) hujumlariga](https://developer.mozilla.org/docs/Glossary/Cross-site_scripting) zaif qilib qoʻyishi mumkin. Angular'ning shablon bogʻlashlari, jumladan `innerHTML` uchun bogʻlashlar, XSS hujumlaridan himoyalanishga yordam beradigan xavfsizlik choralarini oʻz ichiga oladi. Batafsil maʼlumot uchun [Xavfsizlik qoʻllanmasiga](best-practices/security) qarang.

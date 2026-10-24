@@ -1,23 +1,16 @@
-# Programmatically rendering components
+# Komponentlarni programmatik tarzda render qilish
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: Bu qoʻllanma siz [Asosiy tushunchalar qoʻllanmasini](essentials) allaqachon oʻqib chiqqan deb hisoblaydi. Agar Angular'da yangi boʻlsangiz, avval oʻshani oʻqing.
 
-In addition to using a component directly in a template, you can also dynamically render components
-programmatically. This is helpful for situations when a component is unknown initially (thus can not
-be referenced in a template directly) and it depends on some conditions.
+Komponentni shablonda bevosita ishlatishdan tashqari, komponentlarni programmatik tarzda dinamik render qilishingiz ham mumkin. Bu komponent dastlab nomaʼlum boʻlgan (shu sababli shablonda unga bevosita murojaat qilib boʻlmaydigan) va qandaydir shartlarga bogʻliq boʻlgan holatlarda foydalidir.
 
-There are two main ways to render a component programmatically: in a template using `NgComponentOutlet`,
-or in your TypeScript code using `ViewContainerRef`.
+Komponentni programmatik tarzda render qilishning ikkita asosiy usuli mavjud: shablonda `NgComponentOutlet` yordamida yoki TypeScript kodingizda `ViewContainerRef` yordamida.
 
-HELPFUL: for lazy-loading use-cases (for example if you want to delay loading of a heavy component), consider
-using the built-in [`@defer` feature](/guide/templates/defer) instead. The `@defer` feature allows the code
-of any components, directives, and pipes inside the `@defer` block to be extracted into separate JavaScript
-chunks automatically and loaded only when necessary, based on the configured triggers.
+HELPFUL: lazy loading holatlari uchun (masalan, ogʻir komponentning yuklanishini kechiktirmoqchi boʻlsangiz) oʻrniga oʻrnatilgan [`@defer` imkoniyatidan](/guide/templates/defer) foydalanishni koʻrib chiqing. `@defer` imkoniyati `@defer` bloki ichidagi istalgan komponentlar, direktivalar va pipe'lar kodini avtomatik ravishda alohida JavaScript chunk'lariga ajratib olish va sozlangan trigger'lar asosida faqat zarur boʻlganda yuklash imkonini beradi.
 
-## Using NgComponentOutlet
+## NgComponentOutlet'dan foydalanish {#using-ngcomponentoutlet}
 
-`NgComponentOutlet` is a structural directive that dynamically renders a given component in a
-template.
+`NgComponentOutlet` — berilgan komponentni shablonda dinamik render qiladigan strukturaviy direktiva.
 
 ```angular-ts
 import {NgComponentOutlet} from '@angular/common';
@@ -48,9 +41,9 @@ export class CustomDialog {
 }
 ```
 
-### Passing inputs to dynamically rendered components
+### Dinamik render qilingan komponentlarga input'larni uzatish {#passing-inputs-to-dynamically-rendered-components}
 
-You can pass inputs to the dynamically rendered component using the `ngComponentOutletInputs` property. This property accepts an object where keys are input names and values are the input values.
+`ngComponentOutletInputs` xususiyati yordamida dinamik render qilingan komponentga input'larni uzatishingiz mumkin. Bu xususiyat kalitlari input nomlari, qiymatlari esa input qiymatlari boʻlgan obyektni qabul qiladi.
 
 ```angular-ts
 @Component({
@@ -78,11 +71,11 @@ export class ProfileView {
 }
 ```
 
-The inputs are updated whenever the `greetingInputs` signal changes, keeping the dynamic component in sync with the parent's state.
+`greetingInputs` signali oʻzgargan har safar input'lar yangilanadi va dinamik komponent ota komponentning holati bilan sinxron saqlanadi.
 
-### Providing content projection
+### Kontent proyeksiyasini taqdim etish {#providing-content-projection}
 
-Use `ngComponentOutletContent` to pass projected content to the dynamically rendered component. This is useful when the dynamic component uses `<ng-content>` to display content.
+Dinamik render qilingan komponentga proyeksiya qilingan kontentni uzatish uchun `ngComponentOutletContent`'dan foydalaning. Bu dinamik komponent kontentni koʻrsatish uchun `<ng-content>`'dan foydalanganda qoʻl keladi.
 
 ```angular-ts
 @Component({
@@ -122,11 +115,11 @@ export class DynamicCard {
 }
 ```
 
-NOTE: Hydration does not support projecting DOM nodes created with native DOM APIs. This causes an [NG0503 error](/errors/NG0503). Use Angular APIs to create projected content or add `ngSkipHydration` to the component.
+NOTE: Gidratsiya native DOM API'lari yordamida yaratilgan DOM tugunlarini proyeksiya qilishni qoʻllab-quvvatlamaydi. Bu [NG0503 xatosiga](/errors/NG0503) olib keladi. Proyeksiya qilinadigan kontentni yaratish uchun Angular API'laridan foydalaning yoki komponentga `ngSkipHydration` qoʻshing.
 
-### Providing injectors
+### Injector'larni taqdim etish {#providing-injectors}
 
-You can provide a custom injector to the dynamically created component using `ngComponentOutletInjector`. This is useful for providing component-specific services or configuration.
+`ngComponentOutletInjector` yordamida dinamik yaratilgan komponentga maxsus injector taqdim etishingiz mumkin. Bu komponentga xos servislar yoki konfiguratsiyani taqdim etish uchun foydalidir.
 
 ```angular-ts
 export const THEME_DATA = new InjectionToken<string>('THEME_DATA', {
@@ -155,9 +148,9 @@ export class DynamicPanel {
 }
 ```
 
-### Accessing the component instance
+### Komponent nusxasiga murojaat qilish {#accessing-the-component-instance}
 
-You can access the dynamically created component's instance using the directive's `exportAs` feature:
+Direktivaning `exportAs` imkoniyati yordamida dinamik yaratilgan komponentning nusxasiga murojaat qilishingiz mumkin:
 
 ```angular-ts
 @Component({
@@ -184,20 +177,15 @@ export class CounterHost {
 }
 ```
 
-NOTE: The `componentInstance` property is `null` before the component is rendered.
+NOTE: Komponent render qilinishidan oldin `componentInstance` xususiyati `null` boʻladi.
 
-See the [NgComponentOutlet API reference](api/common/NgComponentOutlet) for more information on the
-directive's capabilities.
+Direktivaning imkoniyatlari haqida koʻproq maʼlumot olish uchun [NgComponentOutlet API maʼlumotnomasiga](api/common/NgComponentOutlet) qarang.
 
-## Using ViewContainerRef
+## ViewContainerRef'dan foydalanish {#using-viewcontainerref}
 
-A **view container** is a node in Angular's component tree that can contain content. Any component
-or directive can inject `ViewContainerRef` to get a reference to a view container corresponding to
-that component or directive's location in the DOM.
+**View konteyneri** — Angular komponent daraxtidagi kontent saqlashi mumkin boʻlgan tugun. Har qanday komponent yoki direktiva oʻsha komponent yoki direktivaning DOM'dagi joylashuviga mos keluvchi view konteyneriga havola olish uchun `ViewContainerRef`'ni inyeksiya qilishi mumkin.
 
-You can use the `createComponent`method on `ViewContainerRef` to dynamically create and render a
-component. When you create a new component with a `ViewContainerRef`, Angular appends it into the
-DOM as the next sibling of the component or directive that injected the `ViewContainerRef`.
+Komponentni dinamik yaratish va render qilish uchun `ViewContainerRef`'dagi `createComponent` metodidan foydalanishingiz mumkin. `ViewContainerRef` yordamida yangi komponent yaratganingizda Angular uni DOM'ga `ViewContainerRef`'ni inyeksiya qilgan komponent yoki direktivaning keyingi qoʻshni elementi sifatida qoʻshadi.
 
 ```angular-ts
 @Component({
@@ -229,7 +217,7 @@ export class InnerItem {
 }
 ```
 
-In the example above, clicking the "Load content" button results in the following DOM structure
+Yuqoridagi misolda "Load content" tugmasini bosish quyidagi DOM tuzilmasiga olib keladi
 
 ```angular-html
 <outer-container>
@@ -242,13 +230,11 @@ In the example above, clicking the "Load content" button results in the followin
 </outer-container>
 ```
 
-## Lazy-loading components
+## Komponentlarni lazy loading qilish {#lazy-loading-components}
 
-HELPFUL: if you want to lazy-load some components, you may consider using the built-in [`@defer` feature](/guide/templates/defer)
-instead.
+HELPFUL: agar baʼzi komponentlarni lazy loading (kechiktirilgan yuklash) qilmoqchi boʻlsangiz, oʻrniga oʻrnatilgan [`@defer` imkoniyatidan](/guide/templates/defer) foydalanishni koʻrib chiqishingiz mumkin.
 
-If your use-case is not covered by the `@defer` feature, you can use either `NgComponentOutlet` or
-`ViewContainerRef` with a standard JavaScript [dynamic import](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/import).
+Agar sizning holatingiz `@defer` imkoniyati bilan qamrab olinmasa, `NgComponentOutlet` yoki `ViewContainerRef`'ni standart JavaScript [dinamik import](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/import) bilan birga ishlatishingiz mumkin.
 
 ```angular-ts
 @Component({
@@ -279,19 +265,19 @@ export class AdminSettings {
 }
 ```
 
-The example above loads and displays the `AdvancedSettings` upon receiving a button click.
+Yuqoridagi misol tugma bosilganda `AdvancedSettings`'ni yuklaydi va koʻrsatadi.
 
-## Binding inputs, outputs and setting host directives at creation
+## Yaratish vaqtida input'lar, output'larni bogʻlash va host direktivalarini oʻrnatish {#binding-inputs-outputs-and-setting-host-directives-at-creation}
 
-When dynamically creating components, manually setting inputs and subscribing to outputs can be error-prone. You often need to write extra code just to wire up bindings after the component is instantiated.
+Komponentlarni dinamik yaratishda input'larni qoʻlda oʻrnatish va output'larga obuna boʻlish xatolarga moyil boʻlishi mumkin. Komponent nusxasi yaratilgandan keyin bogʻlashlarni ulash uchun koʻpincha qoʻshimcha kod yozishingiz kerak boʻladi.
 
-To simplify this, both `createComponent` and `ViewContainerRef.createComponent` support passing a `bindings` array with helpers like `inputBinding()`, `outputBinding()`, and `twoWayBinding()` to configure inputs and outputs up front. You can also specify a `directives` array to apply any host directives. This enables creating components programmatically with template-like bindings in a single, declarative call.
+Buni soddalashtirish uchun `createComponent` ham, `ViewContainerRef.createComponent` ham input'lar va output'larni oldindan sozlash uchun `inputBinding()`, `outputBinding()` va `twoWayBinding()` kabi yordamchilardan iborat `bindings` massivini uzatishni qoʻllab-quvvatlaydi. Shuningdek, istalgan host direktivalarini qoʻllash uchun `directives` massivini ham koʻrsatishingiz mumkin. Bu komponentlarni shablondagiga oʻxshash bogʻlashlar bilan yagona deklarativ chaqiruvda programmatik tarzda yaratish imkonini beradi.
 
-### Host view using `ViewContainerRef.createComponent`
+### `ViewContainerRef.createComponent` yordamida host view {#host-view-using-viewcontainerrefcreatecomponent}
 
-`ViewContainerRef.createComponent` creates a component and automatically inserts its host view and host element into the container’s view hierarchy at the container’s location. Use this when the dynamic component should become part of the container’s logical and visual structure (for example, adding list items or inline UI).
+`ViewContainerRef.createComponent` komponent yaratadi va uning host view'i hamda host elementini konteyner joylashgan oʻringa, konteynerning view ierarxiyasiga avtomatik joylashtiradi. Dinamik komponent konteynerning mantiqiy va vizual tuzilmasining bir qismiga aylanishi kerak boʻlganda (masalan, roʻyxat elementlari yoki inline UI qoʻshishda) shundan foydalaning.
 
-By contrast, the standalone `createComponent` API does not attach the new component to any existing view or DOM location — it returns a `ComponentRef` and gives you explicit control over where to place the component’s host element.
+Bundan farqli oʻlaroq, mustaqil `createComponent` API'si yangi komponentni hech qanday mavjud view yoki DOM joylashuviga biriktirmaydi — u `ComponentRef` qaytaradi va komponentning host elementini qayerga joylashtirishni aniq nazorat qilish imkonini beradi.
 
 ```angular-ts
 import {Component, input, model, output} from '@angular/core';
@@ -353,11 +339,11 @@ export class Host {
 }
 ```
 
-In the example above, the dynamic **AppWarning** is created with its `canClose` input bound to a reactive signal, a two-way binding on its `isExpanded` state, and an output listener for `close`. The `FocusTrap` and `ThemeDirective` are attached to the host element via `directives`.
+Yuqoridagi misolda dinamik **AppWarning** komponenti `canClose` input'i reaktiv signalga bogʻlangan, `isExpanded` holatida ikki tomonlama bogʻlash va `close` uchun output tinglovchisi bilan yaratiladi. `FocusTrap` va `ThemeDirective` host elementga `directives` orqali biriktiriladi.
 
-### Popup attached to `document.body` with `createComponent` + `hostElement`
+### `createComponent` + `hostElement` yordamida `document.body`'ga biriktirilgan popup {#popup-attached-to-documentbody-with-createcomponent--hostelement}
 
-Use this when rendering outside the current view hierarchy (e.g., overlays). The provided `hostElement` becomes the component’s host in the DOM, so Angular doesn’t create a new element matching the selector. Lets you configure **bindings** directly.
+Joriy view ierarxiyasidan tashqarida render qilishda (masalan, overlay'lar) shundan foydalaning. Berilgan `hostElement` DOM'da komponentning host'iga aylanadi, shu sababli Angular selektorga mos yangi element yaratmaydi. **Bogʻlashlarni** bevosita sozlash imkonini beradi.
 
 ```ts
 import {
@@ -404,9 +390,9 @@ export class PopupService {
 }
 ```
 
-## Handling rendering errors
+## Render qilish xatolariga ishlov berish {#handling-rendering-errors}
 
-When dynamically creating components using `ViewContainerRef.createComponent` or the standalone `createComponent` function, you can provide an `onError` callback in the options object to handle errors that occur during the rendering or change detection phases. This is the programmatic equivalent of using an `@error` block in templates.
+`ViewContainerRef.createComponent` yoki mustaqil `createComponent` funksiyasi yordamida komponentlarni dinamik yaratishda, render qilish yoki oʻzgarishlarni aniqlash bosqichlarida yuzaga keladigan xatolarga ishlov berish uchun opsiyalar obyektida `onError` callback'ini taqdim etishingiz mumkin. Bu shablonlardagi `@error` blokidan foydalanishning programmatik ekvivalentidir.
 
 ```ts
 viewContainerRef.createComponent(DynamicComponent, {
@@ -417,4 +403,4 @@ viewContainerRef.createComponent(DynamicComponent, {
 });
 ```
 
-NOTE: The `onError` callback only catches errors that occur during the rendering or change detection phases. It does not catch errors that occur during component instantiation (for example, in the constructor). Angular throws construction errors synchronously when you call the API.
+NOTE: `onError` callback'i faqat render qilish yoki oʻzgarishlarni aniqlash bosqichlarida yuzaga keladigan xatolarni ushlaydi. U komponent nusxasini yaratish vaqtida (masalan, konstruktorda) yuzaga keladigan xatolarni ushlamaydi. Angular API'ni chaqirganingizda yaratish xatolarini sinxron tarzda tashlaydi.
