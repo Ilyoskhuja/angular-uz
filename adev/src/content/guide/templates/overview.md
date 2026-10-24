@@ -1,48 +1,48 @@
-<docs-decorative-header title="Template syntax" imgSrc="adev/src/assets/images/templates.svg"> <!-- markdownlint-disable-line -->
-In Angular, a template is a chunk of HTML.
-Use special syntax within a template to leverage many of Angular's features.
+<docs-decorative-header title="Shablon sintaksisi" imgSrc="adev/src/assets/images/templates.svg"> <!-- markdownlint-disable-line -->
+Angular'da shablon (template) — bu HTML boʻlagi.
+Angular'ning koʻplab imkoniyatlaridan foydalanish uchun shablon ichida maxsus sintaksisdan foydalaning.
 </docs-decorative-header>
 
-TIP: Check out Angular's [Essentials](essentials/templates) before diving into this comprehensive guide.
+TIP: Ushbu keng qamrovli qoʻllanmaga shoʻngʻishdan oldin Angular'ning [Asoslar](essentials/templates) boʻlimi bilan tanishib chiqing.
 
-Every Angular component has a **template** that defines the [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) that the component renders onto the page. By using templates, Angular is able to automatically keep your page up-to-date as data changes.
+Har bir Angular komponenti komponent sahifaga render qiladigan [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)'ni belgilaydigan **shablon**ga ega. Shablonlardan foydalanish orqali Angular maʼlumotlar oʻzgarganda sahifangizni avtomatik tarzda yangilab tura oladi.
 
-Templates are usually found within either the `template` property of a `*.ts` file or the `*.html` file. To learn more, check out the [in-depth components guide](/guide/components).
+Shablonlar odatda `*.ts` faylining `template` xususiyatida yoki `*.html` faylida joylashadi. Koʻproq bilish uchun [komponentlar boʻyicha chuqur qoʻllanma](/guide/components)ga qarang.
 
-## How do templates work?
+## Shablonlar qanday ishlaydi? {#how-do-templates-work}
 
-Templates are based on [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) syntax, with additional features such as built-in template functions, data binding, event listening, variables, and more.
+Shablonlar [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) sintaksisiga asoslanadi va unga oʻrnatilgan shablon funksiyalari, maʼlumotlarni bogʻlash (data binding), hodisalarni tinglash, oʻzgaruvchilar va boshqa qoʻshimcha imkoniyatlar qoʻshiladi.
 
-Angular compiles templates into JavaScript in order to build up an internal understanding of your application. One of the benefits of this are built-in rendering optimizations that Angular applies to your application automatically.
+Angular ilovangiz haqida ichki tasavvur hosil qilish uchun shablonlarni JavaScript'ga kompilyatsiya qiladi. Buning afzalliklaridan biri — Angular ilovangizga avtomatik tarzda qoʻllaydigan oʻrnatilgan render optimizatsiyalari.
 
-### Differences from standard HTML
+### Standart HTML'dan farqlari {#differences-from-standard-html}
 
-Some differences between templates and standard HTML syntax include:
+Shablonlar va standart HTML sintaksisi oʻrtasidagi baʼzi farqlar quyidagilarni oʻz ichiga oladi:
 
-- Comments in the template source code are not included in the rendered output
-- Component and directive elements can be self-closed (e.g., `<UserProfile />`)
-- Attributes with certain characters (i.e., `[]`, `()`, etc.) have special meaning to Angular. See [binding docs](guide/templates/binding) and [adding event listeners docs](guide/templates/event-listeners) for more information.
-- The `@` character has a special meaning to Angular for adding dynamic behavior, such as [control flow](guide/templates/control-flow), to templates. You can include a literal `@` character by escaping it as an HTML entity code (`&commat;` or `&#64;`).
-- Angular ignores and collapses unnecessary whitespace characters. See [whitespace in templates](guide/templates/whitespace) for more details.
-- Angular may add comment nodes to a page as placeholders for dynamic content, but developers can ignore these.
+- Shablon manba kodidagi izohlar render qilingan natijaga kiritilmaydi
+- Komponent va direktiva elementlari oʻz-oʻzidan yopiladigan boʻlishi mumkin (masalan, `<UserProfile />`)
+- Maʼlum belgilarga ega atributlar (yaʼni `[]`, `()` va h.k.) Angular uchun alohida maʼnoga ega. Koʻproq maʼlumot uchun [bogʻlash hujjatlari](guide/templates/binding) va [hodisa tinglovchilarini qoʻshish hujjatlari](guide/templates/event-listeners)ga qarang.
+- `@` belgisi Angular uchun shablonlarga [boshqaruv oqimi (control flow)](guide/templates/control-flow) kabi dinamik xatti-harakat qoʻshishda alohida maʼnoga ega. Oddiy `@` belgisini HTML entity kodi (`&commat;` yoki `&#64;`) orqali ekranlab kiritishingiz mumkin.
+- Angular keraksiz boʻsh joy belgilarini eʼtiborsiz qoldiradi va qisqartiradi. Batafsil maʼlumot uchun [shablonlardagi boʻsh joylar](guide/templates/whitespace)ga qarang.
+- Angular dinamik kontent uchun toʻldiruvchi (placeholder) sifatida sahifaga izoh tugunlarini qoʻshishi mumkin, lekin dasturchilar ularga eʼtibor bermasligi mumkin.
 
-In addition, while most HTML syntax is valid template syntax, Angular does not support `<script>` element in templates. For more information, see the [Security](best-practices/security) page.
+Bundan tashqari, HTML sintaksisining aksariyati toʻgʻri shablon sintaksisi hisoblansa-da, Angular shablonlarda `<script>` elementini qoʻllab-quvvatlamaydi. Koʻproq maʼlumot uchun [Xavfsizlik](best-practices/security) sahifasiga qarang.
 
-## What's next?
+## Keyingi qadamlar {#whats-next}
 
-You might also be interested in the following:
+Sizni quyidagilar ham qiziqtirishi mumkin:
 
-| Topics                                                                      | Details                                                                                 |
-| :-------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
-| [Binding dynamic text, properties, and attributes](guide/templates/binding) | Bind dynamic data to text, properties and attributes.                                   |
-| [Adding event listeners](guide/templates/event-listeners)                   | Respond to events in your templates.                                                    |
-| [Two-way binding](guide/templates/two-way-binding)                          | Simultaneously binds a value and propagate changes.                                     |
-| [Control flow](guide/templates/control-flow)                                | Conditionally show, hide and repeat elements.                                           |
-| [Pipes](guide/templates/pipes)                                              | Transform data declaratively.                                                           |
-| [Slotting child content with ng-content](guide/templates/ng-content)        | Control how components render content.                                                  |
-| [Create template fragments with ng-template](guide/templates/ng-template)   | Declare a template fragment.                                                            |
-| [Grouping elements with ng-container](guide/templates/ng-container)         | Group multiple elements together or mark a location for rendering.                      |
-| [Variables in templates](guide/templates/variables)                         | Learn about variable declarations.                                                      |
-| [Deferred loading with @defer](guide/templates/defer)                       | Create deferrable views with `@defer`.                                                  |
-| [Expression syntax](guide/templates/expression-syntax)                      | Learn similarities and differences between Angular expressions and standard JavaScript. |
-| [Whitespace in templates](guide/templates/whitespace)                       | Learn how Angular handles whitespace.                                                   |
+| Mavzular                                                                                  | Tafsilotlar                                                                                    |
+| :---------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------- |
+| [Dinamik matn, xususiyat va atributlarni bogʻlash](guide/templates/binding)               | Dinamik maʼlumotlarni matn, xususiyat va atributlarga bogʻlang.                                |
+| [Hodisa tinglovchilarini qoʻshish](guide/templates/event-listeners)                       | Shablonlaringizdagi hodisalarga javob bering.                                                  |
+| [Ikki tomonlama bogʻlash](guide/templates/two-way-binding)                                | Qiymatni bogʻlash va oʻzgarishlarni tarqatishni bir vaqtda bajaradi.                           |
+| [Boshqaruv oqimi](guide/templates/control-flow)                                           | Elementlarni shartli koʻrsating, yashiring va takrorlang.                                       |
+| [Pipe'lar](guide/templates/pipes)                                                         | Maʼlumotlarni deklarativ tarzda oʻzgartiring.                                                  |
+| [ng-content bilan bola kontentni slotlarga joylash](guide/templates/ng-content)           | Komponentlar kontentni qanday render qilishini boshqaring.                                     |
+| [ng-template bilan shablon fragmentlarini yaratish](guide/templates/ng-template)          | Shablon fragmentini eʼlon qiling.                                                              |
+| [ng-container bilan elementlarni guruhlash](guide/templates/ng-container)                 | Bir nechta elementni birgalikda guruhlang yoki render qilish uchun joyni belgilang.             |
+| [Shablonlardagi oʻzgaruvchilar](guide/templates/variables)                                | Oʻzgaruvchilarni eʼlon qilish haqida bilib oling.                                              |
+| [@defer bilan kechiktirilgan yuklash](guide/templates/defer)                              | `@defer` bilan kechiktiriladigan view'lar yarating.                                            |
+| [Ifoda sintaksisi](guide/templates/expression-syntax)                                     | Angular ifodalari va standart JavaScript oʻrtasidagi oʻxshashlik va farqlarni bilib oling.     |
+| [Shablonlardagi boʻsh joylar](guide/templates/whitespace)                                 | Angular boʻsh joylarni qanday qayta ishlashini bilib oling.                                    |

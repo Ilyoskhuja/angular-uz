@@ -1,8 +1,8 @@
-# Render templates from a parent component with `ng-content`
+# `ng-content` bilan ota komponentdan shablonlarni render qilish
 
-`<ng-content>` is a special element that accepts markup or a template fragment and controls how components render content. It does not render a real DOM element.
+`<ng-content>` — belgilash (markup) yoki shablon fragmentini qabul qiladigan va komponentlar kontentni qanday render qilishini boshqaradigan maxsus element. U haqiqiy DOM elementini render qilmaydi.
 
-Here is an example of a `BaseButton` component that accepts any markup from its parent.
+Quyida oʻz ota komponentidan istalgan belgilashni qabul qiladigan `BaseButton` komponentining misoli keltirilgan.
 
 ```angular-ts {header:'base-button/base-button.ts'}
 import {Component} from '@angular/core';
@@ -26,4 +26,4 @@ import {BaseButton} from './base-button';
 export class App {}
 ```
 
-For more detail, check out the [`<ng-content>` in-depth guide](/guide/components/content-projection) for other ways you can leverage this pattern.
+Batafsil maʼlumot va bu patterndan foydalanishning boshqa usullari uchun [`<ng-content>` boʻyicha chuqur qoʻllanma](/guide/components/content-projection)ga qarang.
