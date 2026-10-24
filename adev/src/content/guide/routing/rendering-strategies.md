@@ -1,139 +1,139 @@
-# Rendering strategies in Angular
+# Angular'da render strategiyalari
 
-This guide helps you choose the right rendering strategy for different parts of your Angular application.
+Bu qoʻllanma Angular ilovangizning turli qismlari uchun toʻgʻri render strategiyasini tanlashga yordam beradi.
 
-## What are rendering strategies?
+## Render strategiyalari nima? {#what-are-rendering-strategies}
 
-Rendering strategies determine when and where your Angular application's HTML content is generated. Each strategy offers different trade-offs between initial page load performance, interactivity, SEO capabilities, and server resource usage.
+Render strategiyalari Angular ilovangizning HTML kontenti qachon va qayerda yaratilishini belgilaydi. Har bir strategiya sahifaning dastlabki yuklanish unumdorligi, interaktivlik, SEO imkoniyatlari va server resurslaridan foydalanish oʻrtasida turlicha murosalarni (trade-off) taklif qiladi.
 
-Angular supports three primary rendering strategies:
+Angular uchta asosiy render strategiyasini qoʻllab-quvvatlaydi:
 
-- **Client-Side Rendering (CSR)** - Content is rendered entirely in the browser
-- **Static Site Generation (SSG/Prerendering)** - Content is pre-rendered at build time
-- **Server-Side Rendering (SSR)** - Content is rendered on the server for the initial request for a route
+- **Klient tomonida render qilish (Client-Side Rendering, CSR)** — kontent toʻliq brauzerda render qilinadi
+- **Statik sayt generatsiyasi (Static Site Generation, SSG/Prerendering)** — kontent build vaqtida oldindan render qilinadi
+- **Server tomonida render qilish (Server-Side Rendering, SSR)** — kontent marshrutga birinchi soʻrov kelganda serverda render qilinadi
 
-## Client-Side Rendering (CSR)
+## Klient tomonida render qilish (CSR) {#client-side-rendering-csr}
 
-**CSR is Angular's default.** Content renders entirely in the browser after JavaScript loads.
+**CSR — Angular'ning sukut boʻyicha strategiyasi.** Kontent JavaScript yuklangandan soʻng toʻliq brauzerda render qilinadi.
 
-### When to use CSR
+### CSR'dan qachon foydalanish kerak {#when-to-use-csr}
 
-✅ It can be a good fit for:
+✅ Quyidagilar uchun yaxshi mos kelishi mumkin:
 
-- Interactive applications (dashboards, admin panels)
-- Real-time applications
-- Internal tools where SEO doesn't matter
-- Single-page applications with complex client-side state
+- Interaktiv ilovalar (boshqaruv panellari, administrator panellari)
+- Real vaqt rejimidagi ilovalar
+- SEO muhim boʻlmagan ichki vositalar
+- Murakkab klient tomonidagi holatga ega bir sahifali ilovalar
 
-❌ When possible, consider avoiding it for:
+❌ Imkon boʻlsa, quyidagilar uchun undan qochishni koʻrib chiqing:
 
-- Public-facing content that needs SEO
-- Pages where initial load performance is critical
+- SEO talab qilinadigan ommaga ochiq kontent
+- Dastlabki yuklanish unumdorligi juda muhim boʻlgan sahifalar
 
-### CSR trade-offs
+### CSR murosalari {#csr-trade-offs}
 
-| Aspect            | Impact                                                   |
-| :---------------- | :------------------------------------------------------- |
-| **SEO**           | Poor - content not visible to crawlers until JS executes |
-| **Initial load**  | Slower - must download and execute JavaScript first      |
-| **Interactivity** | Immediate once loaded                                    |
-| **Server needs**  | Minimal outside of some configuration                    |
-| **Complexity**    | Simplest because it works with minimum configuration     |
+| Jihat                 | Taʼsir                                                                      |
+| :-------------------- | :-------------------------------------------------------------------------- |
+| **SEO**               | Yomon — JS bajarilmaguncha kontent qidiruv robotlariga koʻrinmaydi          |
+| **Dastlabki yuklanish** | Sekinroq — avval JavaScript'ni yuklab olish va bajarish kerak             |
+| **Interaktivlik**     | Yuklangandan soʻng darhol                                                   |
+| **Server talablari**  | Baʼzi konfiguratsiyalardan tashqari minimal                                 |
+| **Murakkablik**       | Eng sodda, chunki minimal konfiguratsiya bilan ishlaydi                     |
 
-## Static Site Generation (SSG/Prerendering)
+## Statik sayt generatsiyasi (SSG/Prerendering) {#static-site-generation-ssg-prerendering}
 
-**SSG pre-renders pages at build time** into static HTML files. The server sends pre-built HTML for the initial page load. After hydration, your app runs entirely in the browser like a traditional SPA - subsequent navigation, route changes, and API calls all happen client-side without server rendering.
+**SSG sahifalarni build vaqtida** statik HTML fayllarga oldindan render qiladi. Server sahifaning dastlabki yuklanishi uchun oldindan tayyorlangan HTML'ni yuboradi. Gidratsiyadan soʻng ilovangiz anʼanaviy SPA kabi toʻliq brauzerda ishlaydi — keyingi navigatsiya, marshrut oʻzgarishlari va API chaqiruvlarining barchasi server renderisiz klient tomonida sodir boʻladi.
 
-### When to use SSG
+### SSG'dan qachon foydalanish kerak {#when-to-use-ssg}
 
-✅ It can be a good fit for:
+✅ Quyidagilar uchun yaxshi mos kelishi mumkin:
 
-- Marketing pages and landing pages
-- Blog posts and documentation
-- Product catalogs with stable content
-- Content that doesn't change per-user
+- Marketing sahifalari va kirish (landing) sahifalari
+- Blog postlari va hujjatlar
+- Barqaror kontentli mahsulot kataloglari
+- Har bir foydalanuvchi uchun oʻzgarmaydigan kontent
 
-❌ When possible, consider avoiding it for:
+❌ Imkon boʻlsa, quyidagilar uchun undan qochishni koʻrib chiqing:
 
-- User-specific content
-- Frequently changing data
-- Real-time information
+- Foydalanuvchiga xos kontent
+- Tez-tez oʻzgaruvchi maʼlumotlar
+- Real vaqt rejimidagi maʼlumotlar
 
-### SSG trade-offs
+### SSG murosalari {#ssg-trade-offs}
 
-| Aspect              | Impact                                      |
-| :------------------ | :------------------------------------------ |
-| **SEO**             | Excellent - full HTML available immediately |
-| **Initial load**    | Fastest - pre-generated HTML                |
-| **Interactivity**   | After hydration completes                   |
-| **Server needs**    | None for serving (CDN-friendly)             |
-| **Build time**      | Longer - generates all pages upfront        |
-| **Content updates** | Requires rebuild and redeploy               |
+| Jihat                   | Taʼsir                                            |
+| :---------------------- | :------------------------------------------------ |
+| **SEO**                 | Aʼlo — toʻliq HTML darhol mavjud                  |
+| **Dastlabki yuklanish** | Eng tez — oldindan yaratilgan HTML                |
+| **Interaktivlik**       | Gidratsiya yakunlangandan soʻng                   |
+| **Server talablari**    | Xizmat koʻrsatish uchun kerak emas (CDN'ga qulay) |
+| **Build vaqti**         | Uzoqroq — barcha sahifalarni oldindan yaratadi    |
+| **Kontent yangilanishi** | Qayta build va qayta deploy talab qiladi         |
 
-📖 **Implementation:** See [Customizing build-time prerendering](guide/ssr#customizing-build-time-prerendering-ssg) in the SSR guide.
+📖 **Amalga oshirish:** SSR qoʻllanmasidagi [Build vaqtidagi oldindan render qilishni sozlash](guide/ssr#customizing-build-time-prerendering-ssg) boʻlimiga qarang.
 
-## Server-Side Rendering (SSR)
+## Server tomonida render qilish (SSR) {#server-side-rendering-ssr}
 
-**SSR generates HTML on the server for the initial request for a route**, providing dynamic content with good SEO. The server renders HTML and sends it to the client.
+**SSR marshrutga birinchi soʻrov kelganda HTML'ni serverda yaratadi** va shu orqali yaxshi SEO bilan dinamik kontent taqdim etadi. Server HTML'ni render qiladi va klientga yuboradi.
 
-Once the client renders the page, Angular [hydrates](/guide/hydration#what-is-hydration) the app and it then runs entirely in the browser like a traditional SPA - subsequent navigation, route changes, and API calls all happen client-side without additional server rendering.
+Klient sahifani render qilgach, Angular ilovani [gidratsiya qiladi](/guide/hydration#what-is-hydration) va shundan soʻng u anʼanaviy SPA kabi toʻliq brauzerda ishlaydi — keyingi navigatsiya, marshrut oʻzgarishlari va API chaqiruvlarining barchasi qoʻshimcha server renderisiz klient tomonida sodir boʻladi.
 
-### When to use SSR
+### SSR'dan qachon foydalanish kerak {#when-to-use-ssr}
 
-✅ It can be a good fit for:
+✅ Quyidagilar uchun yaxshi mos kelishi mumkin:
 
-- E-commerce product pages (dynamic pricing/inventory)
-- News sites and social media feeds
-- Personalized content that changes frequently
+- Elektron tijorat mahsulot sahifalari (dinamik narx/zaxira)
+- Yangiliklar saytlari va ijtimoiy tarmoq lentalari
+- Tez-tez oʻzgaradigan shaxsiylashtirilgan kontent
 
-❌ When possible, consider avoiding it for:
+❌ Imkon boʻlsa, quyidagilar uchun undan qochishni koʻrib chiqing:
 
-- Static content (use SSG instead)
-- When server costs are a concern
+- Statik kontent (oʻrniga SSG'dan foydalaning)
+- Server xarajatlari muhim boʻlgan holatlar
 
-### SSR trade-offs
+### SSR murosalari {#ssr-trade-offs}
 
-| Aspect              | Impact                                              |
-| :------------------ | :-------------------------------------------------- |
-| **SEO**             | Excellent - full HTML for crawlers                  |
-| **Initial load**    | Fast - immediate content visibility                 |
-| **Interactivity**   | Delayed until hydration                             |
-| **Server needs**    | Requires server                                     |
-| **Personalization** | Full access to user context                         |
-| **Server costs**    | Higher - renders on the initial request for a route |
+| Jihat                   | Taʼsir                                                    |
+| :---------------------- | :-------------------------------------------------------- |
+| **SEO**                 | Aʼlo — qidiruv robotlari uchun toʻliq HTML                |
+| **Dastlabki yuklanish** | Tez — kontent darhol koʻrinadi                            |
+| **Interaktivlik**       | Gidratsiyagacha kechiktiriladi                            |
+| **Server talablari**    | Server talab qiladi                                       |
+| **Shaxsiylashtirish**   | Foydalanuvchi kontekstiga toʻliq kirish                   |
+| **Server xarajatlari**  | Yuqoriroq — marshrutga birinchi soʻrov kelganda render qiladi |
 
-📖 **Implementation:** See [Server routing](guide/ssr#server-routing) and [Authoring server-compatible components](guide/ssr#authoring-server-compatible-components) in the SSR guide.
+📖 **Amalga oshirish:** SSR qoʻllanmasidagi [Server marshrutlash](guide/ssr#server-routing) va [Server bilan mos komponentlar yozish](guide/ssr#authoring-server-compatible-components) boʻlimlariga qarang.
 
-## Choosing the Right Strategy
+## Toʻgʻri strategiyani tanlash {#choosing-the-right-strategy}
 
-### Decision matrix
+### Qaror matritsasi {#decision-matrix}
 
-| If you need...             | Use this strategy | Why                                              |
-| :------------------------- | :---------------- | :----------------------------------------------- |
-| **SEO + Static content**   | SSG               | Pre-rendered HTML, fastest load                  |
-| **SEO + Dynamic content**  | SSR               | Fresh content on the initial request for a route |
-| **No SEO + Interactivity** | CSR               | Simplest, no server needed                       |
-| **Mixed requirements**     | Hybrid            | Different strategies per route                   |
+| Agar sizga kerak boʻlsa...        | Shu strategiyadan foydalaning | Nega                                                   |
+| :-------------------------------- | :---------------------------- | :----------------------------------------------------- |
+| **SEO + Statik kontent**          | SSG                           | Oldindan render qilingan HTML, eng tez yuklanish       |
+| **SEO + Dinamik kontent**         | SSR                           | Marshrutga birinchi soʻrov kelganda yangi kontent      |
+| **SEO kerak emas + Interaktivlik** | CSR                          | Eng sodda, server kerak emas                           |
+| **Aralash talablar**              | Gibrid                        | Har bir marshrut uchun turli strategiyalar             |
 
-## Making SSR/SSG Interactive with Hydration
+## SSR/SSG'ni gidratsiya bilan interaktiv qilish {#making-ssr-ssg-interactive-with-hydration}
 
-When using SSR or SSG, Angular "hydrates" the server-rendered HTML to make it interactive.
+SSR yoki SSG'dan foydalanilganda Angular serverda render qilingan HTML'ni interaktiv qilish uchun uni "gidratsiya qiladi".
 
-**Available strategies:**
+**Mavjud strategiyalar:**
 
-- **Full hydration** - Entire app becomes interactive at once (default)
-- **Incremental hydration** - Parts become interactive as needed (better performance)
-- **Event replay** - Captures clicks before hydration completes
+- **Toʻliq gidratsiya** — butun ilova bir vaqtda interaktiv boʻladi (sukut boʻyicha)
+- **Bosqichma-bosqich (incremental) gidratsiya** — qismlar kerak boʻlganda interaktiv boʻladi (yaxshiroq unumdorlik)
+- **Hodisalarni qayta ijro etish (event replay)** — gidratsiya yakunlanishidan oldingi bosishlarni ushlab qoladi
 
-📖 **Learn more:**
+📖 **Koʻproq bilib oling:**
 
-- [Hydration guide](guide/hydration) - Complete hydration setup
-- [Incremental hydration](guide/incremental-hydration) - Advanced hydration with `@defer` blocks
+- [Gidratsiya qoʻllanmasi](guide/hydration) — gidratsiyani toʻliq sozlash
+- [Bosqichma-bosqich gidratsiya](guide/incremental-hydration) — `@defer` bloklari bilan ilgʻor gidratsiya
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
 <docs-pill-row>
-  <docs-pill href="/guide/ssr" title="Server-Side Rendering"/>
-  <docs-pill href="/guide/hydration" title="Hydration"/>
-  <docs-pill href="/guide/incremental-hydration" title="Incremental Hydration"/>
+  <docs-pill href="/guide/ssr" title="Server tomonida render qilish"/>
+  <docs-pill href="/guide/hydration" title="Gidratsiya"/>
+  <docs-pill href="/guide/incremental-hydration" title="Bosqichma-bosqich gidratsiya"/>
 </docs-pill-row>

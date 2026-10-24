@@ -1,36 +1,36 @@
-# Control route access with guards
+# Marshrutga kirishni himoyachilar bilan boshqarish
 
-CRITICAL: Never rely on client-side guards as the sole source of access control. All JavaScript that runs in a web browser can be modified by the user running the browser. Always enforce user authorization server-side, in addition to any client-side guards.
+CRITICAL: Hech qachon klient tomonidagi himoyachilarga kirishni boshqarishning yagona manbai sifatida tayanmang. Veb-brauzerda ishlaydigan har qanday JavaScript'ni brauzerni ishlatayotgan foydalanuvchi oʻzgartirishi mumkin. Klient tomonidagi har qanday himoyachilarga qoʻshimcha ravishda foydalanuvchi avtorizatsiyasini doimo server tomonida ham taʼminlang.
 
-Route guards are functions that control whether a user can navigate to or leave a particular route. They are like checkpoints that manage whether a user can access specific routes. Common examples of using route guards include authentication and access control.
+Marshrut himoyachilari (route guards) — foydalanuvchi muayyan marshrutga oʻta olishi yoki undan chiqa olishini boshqaruvchi funksiyalar. Ular foydalanuvchining muayyan marshrutlarga kirishini boshqaruvchi nazorat punktlariga oʻxshaydi. Marshrut himoyachilaridan foydalanishning keng tarqalgan misollariga autentifikatsiya va kirishni boshqarish kiradi.
 
-## Creating a route guard
+## Marshrut himoyachisini yaratish {#creating-a-route-guard}
 
-You can generate a route guard using the Angular CLI:
+Marshrut himoyachisini Angular CLI yordamida generatsiya qilishingiz mumkin:
 
 ```bash
 ng generate guard CUSTOM_NAME
 ```
 
-This will prompt you to select which [type of route guard](#types-of-route-guards) to use and then create the corresponding `CUSTOM_NAME-guard.ts` file.
+Bu sizdan qaysi [marshrut himoyachisi turini](#types-of-route-guards) ishlatishni tanlashni soʻraydi va soʻngra tegishli `CUSTOM_NAME-guard.ts` faylini yaratadi.
 
-TIP: You can also create a route guard manually by creating a separate TypeScript file in your Angular project. Developers typically add a suffix of `-guard.ts` in the filename to distinguish it from other files.
+TIP: Marshrut himoyachisini Angular loyihangizda alohida TypeScript fayli yaratib, qoʻlda ham yaratishingiz mumkin. Dasturchilar odatda uni boshqa fayllardan ajratish uchun fayl nomiga `-guard.ts` suffiksini qoʻshadi.
 
-## Route guard return types
+## Marshrut himoyachisining qaytarish turlari {#route-guard-return-types}
 
-All route guards share the same possible return types. This gives you flexibility in how you control navigation:
+Barcha marshrut himoyachilari bir xil mumkin boʻlgan qaytarish turlariga ega. Bu sizga navigatsiyani boshqarishda moslashuvchanlik beradi:
 
-| Return types                    | Description                                                                       |
-| ------------------------------- | --------------------------------------------------------------------------------- |
-| `boolean`                       | `true` allows navigation, `false` blocks it (see note for `CanMatch` route guard) |
-| `UrlTree` or `RedirectCommand`  | Redirects to another route instead of blocking                                    |
-| `Promise<T>` or `Observable<T>` | Router uses the first emitted value and then unsubscribes                         |
+| Qaytarish turlari               | Tavsif                                                                                          |
+| ------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `boolean`                       | `true` navigatsiyaga ruxsat beradi, `false` uni bloklaydi (`CanMatch` marshrut himoyachisi uchun izohga qarang) |
+| `UrlTree` yoki `RedirectCommand` | Bloklash oʻrniga boshqa marshrutga yoʻnaltiradi                                                |
+| `Promise<T>` yoki `Observable<T>` | Router birinchi yuborilgan qiymatdan foydalanadi va soʻngra obunani bekor qiladi             |
 
-NOTE: `CanMatch` behaves differently— when it returns `false`, Angular tries other matching routes instead of completely blocking navigation.
+NOTE: `CanMatch` boshqacha ishlaydi — u `false` qaytarganda Angular navigatsiyani butunlay bloklash oʻrniga boshqa mos marshrutlarni sinab koʻradi.
 
-## Types of route guards
+## Marshrut himoyachilarining turlari {#types-of-route-guards}
 
-Angular provides four types of route guards, each serving different purposes:
+Angular har biri turli maqsadlarga xizmat qiluvchi toʻrt turdagi marshrut himoyachisini taqdim etadi:
 
 <docs-pill-row>
   <docs-pill href="#canactivate" title="CanActivate"/>
@@ -39,18 +39,18 @@ Angular provides four types of route guards, each serving different purposes:
   <docs-pill href="#canmatch" title="CanMatch"/>
 </docs-pill-row>
 
-All the guards have access to [services provided at the route level](guide/di/defining-dependency-providers#route-providers) as well as route-specific information via the `route` argument.
+Barcha himoyachilar [marshrut darajasida taqdim etilgan servislarga](guide/di/defining-dependency-providers#route-providers), shuningdek `route` argumenti orqali marshrutga xos maʼlumotlarga kirish huquqiga ega.
 
 ### CanActivate
 
-The `CanActivate` guard determines whether a user can access a route. It is most commonly used for authentication and authorization.
+`CanActivate` himoyachisi foydalanuvchi marshrutga kira olishini aniqlaydi. U koʻpincha autentifikatsiya va avtorizatsiya uchun ishlatiladi.
 
-It has access to the following default arguments:
+U quyidagi standart argumentlarga kirish huquqiga ega:
 
-- `route`: `ActivatedRouteSnapshot` - Contains information about the route being activated
-- `state`: `RouterStateSnapshot` - Contains the router's current state
+- `route`: `ActivatedRouteSnapshot` — faollashtirilayotgan marshrut haqidagi maʼlumotni oʻz ichiga oladi
+- `state`: `RouterStateSnapshot` — router'ning joriy holatini oʻz ichiga oladi
 
-It can return the [standard return guard types](#route-guard-return-types).
+U [standart himoyachi qaytarish turlarini](#route-guard-return-types) qaytarishi mumkin.
 
 ```ts
 export const authGuard: CanActivateFn = (
@@ -62,20 +62,20 @@ export const authGuard: CanActivateFn = (
 };
 ```
 
-TIP: If you need to redirect the user, return a [`URLTree`](api/router/UrlTree) or [`RedirectCommand`](api/router/RedirectCommand). Do **not** return `false` and then programmatically `navigate` the user.
+TIP: Agar foydalanuvchini yoʻnaltirishingiz kerak boʻlsa, [`URLTree`](api/router/UrlTree) yoki [`RedirectCommand`](api/router/RedirectCommand) qaytaring. `false` qaytarib, soʻngra foydalanuvchini dasturiy ravishda `navigate` qilish **kerak emas**.
 
-For more information, check out the [API docs for CanActivateFn](api/router/CanActivateFn).
+Koʻproq maʼlumot uchun [CanActivateFn API hujjatlariga](api/router/CanActivateFn) qarang.
 
 ### CanActivateChild
 
-The `CanActivateChild` guard determines whether a user can access child routes of a particular parent route. This is useful when you want to protect an entire section of nested routes. In other words, `canActivateChild` runs for _all_ children. If there is a child component with another child component underneath of it, `canActivateChild` will run once for each of them.
+`CanActivateChild` himoyachisi foydalanuvchi muayyan ota marshrutning bola marshrutlariga kira olishini aniqlaydi. Bu ichma-ich marshrutlarning butun boʻlimini himoya qilmoqchi boʻlganingizda foydali. Boshqacha aytganda, `canActivateChild` _barcha_ bolalar uchun ishga tushadi. Agar bola komponent ostida yana bir bola komponent boʻlsa, `canActivateChild` ularning har biri uchun bir martadan ishga tushadi.
 
-It has access to the following default arguments:
+U quyidagi standart argumentlarga kirish huquqiga ega:
 
-- `childRoute`: `ActivatedRouteSnapshot` - Contains information about the "future" snapshot (i.e., state the router is attempting to navigate to) of the child route being activated
-- `state`: `RouterStateSnapshot` - Contains the router's current state
+- `childRoute`: `ActivatedRouteSnapshot` — faollashtirilayotgan bola marshrutning "kelajakdagi" surati (yaʼni router oʻtmoqchi boʻlgan holat) haqidagi maʼlumotni oʻz ichiga oladi
+- `state`: `RouterStateSnapshot` — router'ning joriy holatini oʻz ichiga oladi
 
-It can return the [standard return guard types](#route-guard-return-types).
+U [standart himoyachi qaytarish turlarini](#route-guard-return-types) qaytarishi mumkin.
 
 ```ts
 export const adminChildGuard: CanActivateChildFn = (
@@ -87,20 +87,20 @@ export const adminChildGuard: CanActivateChildFn = (
 };
 ```
 
-For more information, check out the [API docs for CanActivateChildFn](api/router/CanActivateChildFn).
+Koʻproq maʼlumot uchun [CanActivateChildFn API hujjatlariga](api/router/CanActivateChildFn) qarang.
 
 ### CanDeactivate
 
-The `CanDeactivate` guard determines whether a user can leave a route. A common scenario is preventing navigation away from unsaved forms.
+`CanDeactivate` himoyachisi foydalanuvchi marshrutdan chiqa olishini aniqlaydi. Keng tarqalgan holat — saqlanmagan formalardan chiqib ketishning oldini olish.
 
-It has access to the following default arguments:
+U quyidagi standart argumentlarga kirish huquqiga ega:
 
-- `component`: `T` - The component instance being deactivated
-- `currentRoute`: `ActivatedRouteSnapshot` - Contains information about the current route
-- `currentState`: `RouterStateSnapshot` - Contains the current router state
-- `nextState`: `RouterStateSnapshot` - Contains the next router state being navigated to
+- `component`: `T` — oʻchirilayotgan (deactivate) komponent nusxasi
+- `currentRoute`: `ActivatedRouteSnapshot` — joriy marshrut haqidagi maʼlumotni oʻz ichiga oladi
+- `currentState`: `RouterStateSnapshot` — router'ning joriy holatini oʻz ichiga oladi
+- `nextState`: `RouterStateSnapshot` — oʻtilayotgan keyingi router holatini oʻz ichiga oladi
 
-It can return the [standard return guard types](#route-guard-return-types).
+U [standart himoyachi qaytarish turlarini](#route-guard-return-types) qaytarishi mumkin.
 
 ```ts
 export const unsavedChangesGuard: CanDeactivateFn<Form> = (
@@ -115,19 +115,19 @@ export const unsavedChangesGuard: CanDeactivateFn<Form> = (
 };
 ```
 
-For more information, check out the [API docs for CanDeactivateFn](api/router/CanDeactivateFn).
+Koʻproq maʼlumot uchun [CanDeactivateFn API hujjatlariga](api/router/CanDeactivateFn) qarang.
 
 ### CanMatch
 
-The `CanMatch` guard determines whether a route can be matched during path matching. Unlike other guards, rejection falls through to try other matching routes instead of blocking navigation entirely. This can be useful for feature flags, A/B testing, or conditional route loading.
+`CanMatch` himoyachisi yoʻlni moslashtirish davomida marshrut mos kelishi mumkinligini aniqlaydi. Boshqa himoyachilardan farqli oʻlaroq, rad etish navigatsiyani butunlay bloklash oʻrniga boshqa mos marshrutlarni sinab koʻrishga oʻtadi. Bu feature flag'lar, A/B testlash yoki shartli marshrut yuklash uchun foydali boʻlishi mumkin.
 
-It has access to the following default arguments:
+U quyidagi standart argumentlarga kirish huquqiga ega:
 
-- `route`: `Route` - The route configuration being evaluated
-- `segments`: `UrlSegment[]` - The URL segments that have not been consumed by previous parent route evaluations
-- `currentSnapshot: PartialMatchRouteSnapshot` - The current route snapshot up to this point in the matching process
+- `route`: `Route` — baholanayotgan marshrut konfiguratsiyasi
+- `segments`: `UrlSegment[]` — oldingi ota marshrutlarni baholashda isteʼmol qilinmagan URL segmentlari
+- `currentSnapshot: PartialMatchRouteSnapshot` — moslashtirish jarayonining shu nuqtasigacha boʻlgan joriy marshrut surati
 
-It can return the [standard return guard types](#route-guard-return-types), but when it returns `false`, Angular tries other matching routes instead of completely blocking navigation.
+U [standart himoyachi qaytarish turlarini](#route-guard-return-types) qaytarishi mumkin, lekin `false` qaytarganda Angular navigatsiyani butunlay bloklash oʻrniga boshqa mos marshrutlarni sinab koʻradi.
 
 ```ts
 export const featureToggleGuard: CanMatchFn = (
@@ -140,7 +140,7 @@ export const featureToggleGuard: CanMatchFn = (
 };
 ```
 
-It can also allow you to use different components for the same path.
+Shuningdek, u bir xil yoʻl uchun turli komponentlardan foydalanish imkonini ham beradi.
 
 ```ts {header: "routes.ts"}
 const routes: Routes = [
@@ -157,19 +157,19 @@ const routes: Routes = [
 ];
 ```
 
-In this example, when the user visits `/dashboard`, the first one that matches the correct guard will be used.
+Bu misolda foydalanuvchi `/dashboard`'ga kirganda, toʻgʻri himoyachiga mos kelgan birinchisi ishlatiladi.
 
-For more information, check out the [API docs for CanMatchFn](api/router/CanMatchFn).
+Koʻproq maʼlumot uchun [CanMatchFn API hujjatlariga](api/router/CanMatchFn) qarang.
 
-## Applying guards to routes
+## Himoyachilarni marshrutlarga qoʻllash {#applying-guards-to-routes}
 
-Once you've created your route guards, you need to configure them in your route definitions.
+Marshrut himoyachilarini yaratgach, ularni marshrut aniqlanishlaringizda sozlashingiz kerak.
 
-Guards are specified as arrays in the route configuration in order to allow you to apply multiple guards to a single route. The router starts the guards in the order they appear in the array, but it does not wait for one guard to finish before starting the next. Guards that return a `Promise` or an `Observable` therefore run concurrently.
+Bitta marshrutga bir nechta himoyachi qoʻllash imkonini berish uchun himoyachilar marshrut konfiguratsiyasida massiv sifatida koʻrsatiladi. Router himoyachilarni massivda koʻrsatilgan tartibda ishga tushiradi, lekin keyingisini boshlashdan oldin bitta himoyachining tugashini kutmaydi. Shu sababli `Promise` yoki `Observable` qaytaruvchi himoyachilar parallel ishlaydi.
 
-The array order determines which result takes priority. Navigation continues only if every guard returns `true`. Otherwise the router uses the result of the first guard in the array that did not return `true`, even if a later guard finished earlier.
+Massiv tartibi qaysi natija ustuvor boʻlishini belgilaydi. Navigatsiya faqat har bir himoyachi `true` qaytarsa davom etadi. Aks holda router massivdagi `true` qaytarmagan birinchi himoyachining natijasidan foydalanadi, hatto keyingi himoyachi ertaroq tugagan boʻlsa ham.
 
-NOTE: Because asynchronous guards run concurrently, a guard must not rely on work done by an earlier guard in the same array, such as loading the current user. Put that work in a service that both guards use, or combine the checks into a single guard.
+NOTE: Asinxron himoyachilar parallel ishlagani sababli, himoyachi bir xil massivdagi oldingi himoyachi bajargan ishga, masalan, joriy foydalanuvchini yuklashga tayanmasligi kerak. Bu ishni ikkala himoyachi ham foydalanadigan servisga joylashtiring yoki tekshiruvlarni bitta himoyachiga birlashtiring.
 
 ```ts
 import {Routes} from '@angular/router';

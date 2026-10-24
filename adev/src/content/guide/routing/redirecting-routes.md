@@ -1,10 +1,10 @@
-# Redirecting Routes
+# Marshrutlarni yoʻnaltirish
 
-Route redirects allow you to automatically navigate users from one route to another. Think of it like mail forwarding, where mail intended for one address is sent to a different address. This is useful for handling legacy URLs, implementing default routes, or managing access control.
+Marshrut yoʻnaltirishlari (redirect) foydalanuvchilarni bir marshrutdan boshqasiga avtomatik oʻtkazish imkonini beradi. Buni pochta yoʻnaltirishiga oʻxshatish mumkin: bir manzilga moʻljallangan xat boshqa manzilga yuboriladi. Bu eski URL'lar bilan ishlash, sukut boʻyicha marshrutlarni amalga oshirish yoki kirishni boshqarish uchun foydali.
 
-## How to configure redirects
+## Yoʻnaltirishlarni qanday sozlash {#how-to-configure-redirects}
 
-You can define redirects in your route configuration with the `redirectTo` property. This property accepts a string.
+Yoʻnaltirishlarni marshrut konfiguratsiyangizda `redirectTo` xususiyati bilan aniqlashingiz mumkin. Bu xususiyat satr qabul qiladi.
 
 ```ts
 import {Routes} from '@angular/router';
@@ -22,28 +22,28 @@ const routes: Routes = [
 ];
 ```
 
-In this example, there are three redirects:
+Bu misolda uchta yoʻnaltirish bor:
 
-1. When a user visits the `/marketing` path, they are redirected to `/newsletter`.
-2. When a user visits any `/legacy-user/:id` path, they are routed to the corresponding `/users/:id` path.
-3. When a user visit any path that’s not defined in the router, they are redirected to the login page because of the `**` wildcard path definition.
+1. Foydalanuvchi `/marketing` yoʻliga kirganda, u `/newsletter`'ga yoʻnaltiriladi.
+2. Foydalanuvchi istalgan `/legacy-user/:id` yoʻliga kirganda, u tegishli `/users/:id` yoʻliga oʻtkaziladi.
+3. Foydalanuvchi router'da aniqlanmagan istalgan yoʻlga kirganda, `**` wildcard yoʻli aniqlanishi sababli u login sahifasiga yoʻnaltiriladi.
 
-## Understanding `pathMatch`
+## `pathMatch`'ni tushunish {#understanding-pathmatch}
 
-The `pathMatch` property on routes enables developers to control how Angular matches a URL to routes.
+Marshrutlardagi `pathMatch` xususiyati dasturchilarga Angular URL'ni marshrutlarga qanday moslashtirishini boshqarish imkonini beradi.
 
-There are two values that `pathMatch` accepts:
+`pathMatch` ikkita qiymatni qabul qiladi:
 
-| Value      | Description                                  |
-| ---------- | -------------------------------------------- |
-| `'full'`   | The entire URL path must match exactly       |
-| `'prefix'` | Only the beginning of the URL needs to match |
+| Qiymat     | Tavsif                                              |
+| ---------- | --------------------------------------------------- |
+| `'full'`   | Butun URL yoʻli aniq mos kelishi kerak              |
+| `'prefix'` | Faqat URL'ning boshlanishi mos kelishi kifoya       |
 
-By default, all redirects use the `prefix` strategy.
+Sukut boʻyicha barcha yoʻnaltirishlar `prefix` strategiyasidan foydalanadi.
 
 ### `pathMatch: 'prefix'`
 
-`pathMatch: 'prefix'` is the default strategy and ideal when you want Angular Router to match all subsequent routes when triggering a redirect.
+`pathMatch: 'prefix'` — sukut boʻyicha strategiya boʻlib, yoʻnaltirishni ishga tushirishda Angular Router barcha keyingi marshrutlarni moslashtirishini istaganingizda ideal.
 
 ```ts
 export const routes: Routes = [
@@ -55,46 +55,46 @@ export const routes: Routes = [
 ];
 ```
 
-In this example, all routes that are prefixed with `news` are redirected to their `/blog` equivalents. Here are some examples where users are redirected when visiting the old `news` prefix:
+Bu misolda `news` prefiksiga ega barcha marshrutlar oʻzlarining `/blog` ekvivalentlariga yoʻnaltiriladi. Foydalanuvchilar eski `news` prefiksiga kirganda yoʻnaltirilishiga baʼzi misollar:
 
-- `/news` redirects to `/blog`
-- `/news/article` redirects to `/blog/article`
-- `/news/article/:id` redirects to `/blog/article/:id`
+- `/news` → `/blog`'ga yoʻnaltiriladi
+- `/news/article` → `/blog/article`'ga yoʻnaltiriladi
+- `/news/article/:id` → `/blog/article/:id`'ga yoʻnaltiriladi
 
 ### `pathMatch: 'full'`
 
-On the other hand, `pathMatch: 'full'` is useful when you want Angular Router to only redirect a specific path.
+Boshqa tomondan, `pathMatch: 'full'` Angular Router faqat muayyan yoʻlni yoʻnaltirishini istaganingizda foydali.
 
 ```ts
 export const routes: Routes = [{path: '', redirectTo: '/dashboard', pathMatch: 'full'}];
 ```
 
-In this example, any time the user visits the root URL (i.e., `''`), the router redirects that user to the `'/dashboard'` page.
+Bu misolda foydalanuvchi ildiz URL'ga (yaʼni `''`) kirganda, router oʻsha foydalanuvchini `'/dashboard'` sahifasiga yoʻnaltiradi.
 
-Any subsequent pages (e.g., `/login`, `/about`, `/product/id`, etc.), are ignored and do not trigger a redirect.
+Keyingi barcha sahifalar (masalan, `/login`, `/about`, `/product/id` va h.k.) eʼtiborga olinmaydi va yoʻnaltirishni ishga tushirmaydi.
 
-TIP: Be careful when configuring a redirect on the root page (i.e., `"/"` or `""`). If you do not set `pathMatch: 'full'`, the router will redirect all URLs.
+TIP: Ildiz sahifada (yaʼni `"/"` yoki `""`) yoʻnaltirishni sozlashda ehtiyot boʻling. Agar `pathMatch: 'full'` ni oʻrnatmasangiz, router barcha URL'larni yoʻnaltiradi.
 
-To further illustrate this, if the `news` example from the previous section used `pathMatch: 'full'` instead:
+Buni yanada yaqqolroq koʻrsatish uchun, agar oldingi boʻlimdagi `news` misoli oʻrniga `pathMatch: 'full'` ishlatilsa:
 
 ```ts
 export const routes: Routes = [{path: 'news', redirectTo: '/blog', pathMatch: 'full'}];
 ```
 
-This means that:
+Bu quyidagilarni anglatadi:
 
-1. Only the `/news` path will be redirected to `/blog`.
-2. Any subsequent segments such as `/news/articles` or `/news/articles/1` would not redirect with the new `/blog` prefix.
+1. Faqat `/news` yoʻli `/blog`'ga yoʻnaltiriladi.
+2. `/news/articles` yoki `/news/articles/1` kabi keyingi segmentlar yangi `/blog` prefiksi bilan yoʻnaltirilmaydi.
 
-## Conditional redirects
+## Shartli yoʻnaltirishlar {#conditional-redirects}
 
-The `redirectTo` property can also accept a function in order to add logic to how users are redirected.
+Foydalanuvchilar qanday yoʻnaltirilishiga mantiq qoʻshish uchun `redirectTo` xususiyati funksiyani ham qabul qilishi mumkin.
 
-The [function](api/router/RedirectFunction) only has access part of the [`ActivatedRouteSnapshot`](api/router/ActivatedRouteSnapshot) data since some data is not accurately known at the route matching phase. Examples include: resolved titles, lazy loaded components, etc.
+[Funksiya](api/router/RedirectFunction) [`ActivatedRouteSnapshot`](api/router/ActivatedRouteSnapshot) maʼlumotlarining faqat bir qismiga kirish huquqiga ega, chunki baʼzi maʼlumotlar marshrutlarni moslashtirish bosqichida aniq maʼlum boʻlmaydi. Misollar: resolve qilingan sarlavhalar, kechiktirib yuklanadigan komponentlar va h.k.
 
-It typically returns a string or [`URLTree`](api/router/UrlTree), but it can also return an observable or promise.
+U odatda satr yoki [`URLTree`](api/router/UrlTree) qaytaradi, lekin observable yoki promise ham qaytarishi mumkin.
 
-Here is an example where the user is redirected to different menu based on the time of the day:
+Quyida foydalanuvchi kun vaqtiga qarab turli menyuga yoʻnaltiriladigan misol keltirilgan:
 
 ```ts
 import {Routes} from '@angular/router';
@@ -134,8 +134,8 @@ export const routes: Routes = [
 ];
 ```
 
-To learn more, check out [the API docs for the RedirectFunction](api/router/RedirectFunction).
+Koʻproq bilish uchun [RedirectFunction API hujjatlariga](api/router/RedirectFunction) qarang.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-For more information about the `redirectTo` property, check out the [API docs](api/router/Route#redirectTo).
+`redirectTo` xususiyati haqida koʻproq maʼlumot olish uchun [API hujjatlariga](api/router/Route#redirectTo) qarang.

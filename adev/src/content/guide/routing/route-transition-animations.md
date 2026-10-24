@@ -1,17 +1,17 @@
-# Route transition animations
+# Marshrut oʻtish animatsiyalari
 
-Route transition animations enhance user experience by providing smooth visual transitions when navigating between different views in your Angular application. [Angular Router](/guide/routing) includes built-in support for the browser's View Transitions API, enabling seamless animations between route changes in supported browsers.
+Marshrut oʻtish animatsiyalari (route transition animations) Angular ilovangizdagi turli view'lar oʻrtasida harakatlanishda silliq vizual oʻtishlarni taʼminlab, foydalanuvchi tajribasini yaxshilaydi. [Angular Router](/guide/routing) brauzerning View Transitions API'sini oʻrnatilgan holda qoʻllab-quvvatlaydi va bu qoʻllab-quvvatlanadigan brauzerlarda marshrut oʻzgarishlari oʻrtasida uzluksiz animatsiyalarni amalga oshirish imkonini beradi.
 
-## How View Transitions work
+## View Transitions qanday ishlaydi {#how-view-transitions-work}
 
-View transitions use the browser's native [`document.startViewTransition` API](https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition) to create smooth animations between different states of your application. The API works by:
+View oʻtishlari ilovangizning turli holatlari oʻrtasida silliq animatsiyalar yaratish uchun brauzerning oʻrnatilgan [`document.startViewTransition` API](https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition)'sidan foydalanadi. API quyidagicha ishlaydi:
 
-1. **Capturing the current state** - The browser takes a screenshot of the current page
-2. **Executing the DOM update** - Your callback function runs to update the DOM
-3. **Capturing the new state** - The browser captures the updated page state
-4. **Playing the transition** - The browser animates between the old and new states
+1. **Joriy holatni ushlab olish** — brauzer joriy sahifaning suratini oladi
+2. **DOM yangilanishini bajarish** — DOM'ni yangilash uchun sizning callback funksiyangiz ishga tushadi
+3. **Yangi holatni ushlab olish** — brauzer yangilangan sahifa holatini ushlab oladi
+4. **Oʻtishni ijro etish** — brauzer eski va yangi holatlar oʻrtasida animatsiya qiladi
 
-Here's the basic structure of the `startViewTransition` API:
+`startViewTransition` API'sining asosiy tuzilmasi quyidagicha:
 
 ```ts
 document.startViewTransition(async () => {
@@ -19,24 +19,24 @@ document.startViewTransition(async () => {
 });
 ```
 
-For more details about the browser API, see the [Chrome Explainer](https://developer.chrome.com/docs/web-platform/view-transitions).
+Brauzer API'si haqida batafsil maʼlumot uchun [Chrome Explainer](https://developer.chrome.com/docs/web-platform/view-transitions)'ga qarang.
 
-## How the Router uses view transitions
+## Router view oʻtishlaridan qanday foydalanadi {#how-the-router-uses-view-transitions}
 
-Angular Router integrates view transitions into the navigation lifecycle to create seamless route changes. During navigation, the Router:
+Angular Router uzluksiz marshrut oʻzgarishlarini yaratish uchun view oʻtishlarini navigatsiya hayot sikliga integratsiya qiladi. Navigatsiya davomida Router:
 
-1. **Completes navigation preparation** - Route matching, [lazy loading](guide/routing/loading-strategies#lazily-loaded-components-and-routes), [guards](/guide/routing/route-guards), [resources](/guide/routing/data-fetching-with-resources), and [resolvers](/guide/routing/data-resolvers) execute
-2. **Initiates the view transition** - Router calls `startViewTransition` when routes are ready for activation
-3. **Updates the DOM** - Router activates new routes and deactivates old ones within the transition callback
-4. **Finalizes the transition** - The transition Promise resolves when Angular completes rendering
+1. **Navigatsiyaga tayyorgarlikni yakunlaydi** — marshrutlarni moslashtirish, [lazy loading](guide/routing/loading-strategies#lazily-loaded-components-and-routes), [himoyachilar](/guide/routing/route-guards), [resurslar](/guide/routing/data-fetching-with-resources) va [resolver'lar](/guide/routing/data-resolvers) bajariladi
+2. **View oʻtishini boshlaydi** — marshrutlar faollashtirishga tayyor boʻlganda Router `startViewTransition`'ni chaqiradi
+3. **DOM'ni yangilaydi** — Router oʻtish callback'i ichida yangi marshrutlarni faollashtiradi va eskilarini oʻchiradi
+4. **Oʻtishni yakunlaydi** — Angular render qilishni tugatganda oʻtish Promise'i yechiladi (resolve)
 
-The Router's view transition integration acts as a [progressive enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement). When browsers don't support the View Transitions API, the Router performs normal DOM updates without animation, ensuring your application works across all browsers.
+Router'ning view oʻtishlari integratsiyasi [progressiv yaxshilash](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) vazifasini bajaradi. Brauzerlar View Transitions API'sini qoʻllab-quvvatlamasa, Router animatsiyasiz oddiy DOM yangilanishlarini bajaradi va shu orqali ilovangiz barcha brauzerlarda ishlashini taʼminlaydi.
 
-## Enabling View Transitions in the Router
+## Router'da View Transitions'ni yoqish {#enabling-view-transitions-in-the-router}
 
-Enable view transitions by adding the `withViewTransitions` feature to your [router configuration](/guide/routing/define-routes#adding-the-router-to-your-application). Angular supports both standalone and NgModule bootstrap approaches:
+View oʻtishlarini [router konfiguratsiyangizga](/guide/routing/define-routes#adding-the-router-to-your-application) `withViewTransitions` imkoniyatini qoʻshish orqali yoqing. Angular standalone ham, NgModule bootstrap yondashuvini ham qoʻllab-quvvatlaydi:
 
-### Standalone bootstrap
+### Standalone bootstrap {#standalone-bootstrap}
 
 ```ts
 import {bootstrapApplication} from '@angular/platform-browser';
@@ -48,7 +48,7 @@ bootstrapApplication(MyApp, {
 });
 ```
 
-### NgModule bootstrap
+### NgModule bootstrap {#ngmodule-bootstrap}
 
 ```ts
 import {NgModule} from '@angular/core';
@@ -60,21 +60,21 @@ import {RouterModule} from '@angular/router';
 export class AppRouting {}
 ```
 
-[Try the "count" example on StackBlitz](https://stackblitz.com/edit/stackblitz-starters-2dnvtm?file=src%2Fmain.ts)
+["count" misolini StackBlitz'da sinab koʻring](https://stackblitz.com/edit/stackblitz-starters-2dnvtm?file=src%2Fmain.ts)
 
-This example demonstrates how router navigation can replace direct `startViewTransition` calls for counter updates.
+Bu misol hisoblagich yangilanishlari uchun router navigatsiyasi toʻgʻridan-toʻgʻri `startViewTransition` chaqiruvlarini qanday almashtirishi mumkinligini koʻrsatadi.
 
-## Customizing transitions with CSS
+## Oʻtishlarni CSS bilan sozlash {#customizing-transitions-with-css}
 
-You can customize view transitions using CSS to create unique animation effects. The browser creates separate transition elements that you can target with CSS selectors.
+Noyob animatsiya effektlarini yaratish uchun view oʻtishlarini CSS yordamida sozlashingiz mumkin. Brauzer CSS selektorlari bilan moʻljalga olishingiz mumkin boʻlgan alohida oʻtish elementlarini yaratadi.
 
-To create custom transitions:
+Maxsus oʻtishlar yaratish uchun:
 
-1. **Add view-transition-name** - Assign unique names to elements you want to animate
-2. **Define global animations** - Create CSS animations in your global styles
-3. **Target transition pseudo-elements** - Use `::view-transition-old()` and `::view-transition-new()` selectors
+1. **view-transition-name qoʻshing** — animatsiya qilmoqchi boʻlgan elementlarga noyob nomlar bering
+2. **Global animatsiyalarni aniqlang** — global stillaringizda CSS animatsiyalarini yarating
+3. **Oʻtish psevdo-elementlarini moʻljalga oling** — `::view-transition-old()` va `::view-transition-new()` selektorlaridan foydalaning
 
-Here's an example that adds a rotation effect to a counter element:
+Quyida hisoblagich elementiga aylanish effektini qoʻshuvchi misol keltirilgan:
 
 ```css
 /* Define keyframe animations */
@@ -102,21 +102,21 @@ Here's an example that adds a rotation effect to a counter element:
 }
 ```
 
-IMPORTANT: Define view transition animations in your global styles file, not in component styles. Angular's [view encapsulation](/guide/components/styling#style-scoping) scopes component styles, which prevents them from targeting the transition pseudo-elements correctly.
+IMPORTANT: View oʻtish animatsiyalarini komponent stillarida emas, global stillar faylingizda aniqlang. Angular'ning [view inkapsulyatsiyasi](/guide/components/styling#style-scoping) komponent stillarini chegaralaydi va bu ularning oʻtish psevdo-elementlarini toʻgʻri moʻljalga olishiga toʻsqinlik qiladi.
 
-[Try the updated “count” example on StackBlitz](https://stackblitz.com/edit/stackblitz-starters-fwn4i7?file=src%2Fmain.ts)
+[Yangilangan "count" misolini StackBlitz'da sinab koʻring](https://stackblitz.com/edit/stackblitz-starters-fwn4i7?file=src%2Fmain.ts)
 
-## Advanced transition control with onViewTransitionCreated
+## onViewTransitionCreated bilan oʻtishlarni ilgʻor boshqarish {#advanced-transition-control-with-onviewtransitioncreated}
 
-The `withViewTransitions` feature accepts an options object with an `onViewTransitionCreated` callback for advanced control over view transitions. This callback:
+`withViewTransitions` imkoniyati view oʻtishlarini ilgʻor boshqarish uchun `onViewTransitionCreated` callback'iga ega sozlamalar obyektini qabul qiladi. Bu callback:
 
-- Runs in an [injection context](/guide/di/dependency-injection-context#run-within-an-injection-context)
-- Receives a [`ViewTransitionInfo`](/api/router/ViewTransitionInfo) object containing:
-  - The `ViewTransition` instance from `startViewTransition`
-  - The [`ActivatedRouteSnapshot`](/api/router/ActivatedRouteSnapshot) for the route being navigated from
-  - The [`ActivatedRouteSnapshot`](/api/router/ActivatedRouteSnapshot) for the route being navigated to
+- [Inyeksiya kontekstida](/guide/di/dependency-injection-context#run-within-an-injection-context) ishlaydi
+- Quyidagilarni oʻz ichiga olgan [`ViewTransitionInfo`](/api/router/ViewTransitionInfo) obyektini qabul qiladi:
+  - `startViewTransition`'dan olingan `ViewTransition` nusxasi
+  - Qaysi marshrutdan oʻtilayotgani uchun [`ActivatedRouteSnapshot`](/api/router/ActivatedRouteSnapshot)
+  - Qaysi marshrutga oʻtilayotgani uchun [`ActivatedRouteSnapshot`](/api/router/ActivatedRouteSnapshot)
 
-Use this callback to customize transition behavior based on navigation context. For example, you can skip transitions for specific navigation types:
+Bu callback'dan navigatsiya kontekstiga qarab oʻtish xatti-harakatini sozlash uchun foydalaning. Masalan, muayyan navigatsiya turlari uchun oʻtishlarni oʻtkazib yuborishingiz mumkin:
 
 ```ts
 import {inject} from '@angular/core';
@@ -144,11 +144,11 @@ withViewTransitions({
 });
 ```
 
-This example skips the view transition when navigation only changes the [URL fragment or query parameters](/guide/routing/read-route-state#query-parameters) (such as anchor links within the same page). The `skipTransition()` method prevents the animation while still allowing the navigation to complete.
+Bu misol navigatsiya faqat [URL fragmenti yoki soʻrov parametrlarini](/guide/routing/read-route-state#query-parameters) oʻzgartirganda (masalan, bir sahifa ichidagi anchor havolalar) view oʻtishini oʻtkazib yuboradi. `skipTransition()` metodi animatsiyani oldini oladi, lekin navigatsiyaning yakunlanishiga imkon beradi.
 
-## Respecting the user's motion preferences
+## Foydalanuvchining harakat sozlamalarini hurmat qilish {#respecting-the-users-motion-preferences}
 
-The Router runs view transitions regardless of the user's [`prefers-reduced-motion`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion) setting. A preference for reduced motion doesn't necessarily mean the user wants no motion at all, so the framework leaves the choice to the application: you can [provide more subtle animations](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#react_to_the_reduced_motion_preference) for these users, or skip the transition entirely with the `onViewTransitionCreated` callback:
+Router foydalanuvchining [`prefers-reduced-motion`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion) sozlamasidan qatʼi nazar view oʻtishlarini ishga tushiradi. Harakatni kamaytirish istagi foydalanuvchi umuman harakatni istamasligini anglatmaydi, shu sababli freymvork tanlovni ilovaga qoldiradi: bunday foydalanuvchilar uchun [yanada nozik animatsiyalar taqdim etishingiz](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#react_to_the_reduced_motion_preference) yoki `onViewTransitionCreated` callback'i bilan oʻtishni butunlay oʻtkazib yuborishingiz mumkin:
 
 ```ts
 withViewTransitions({
@@ -160,56 +160,56 @@ withViewTransitions({
 });
 ```
 
-## Examples from the Chrome explainer adapted to Angular
+## Chrome explainer'idan Angular'ga moslashtirilgan misollar {#examples-from-the-chrome-explainer-adapted-to-angular}
 
-The following examples demonstrate various view transition techniques adapted from the Chrome team's documentation for use with Angular Router:
+Quyidagi misollar Chrome jamoasi hujjatlaridan Angular Router bilan ishlatish uchun moslashtirilgan turli view oʻtish texnikalarini koʻrsatadi:
 
-### Transitioning elements don't need to be the same DOM element
+### Oʻtuvchi elementlar bir xil DOM elementi boʻlishi shart emas {#transitioning-elements-dont-need-to-be-the-same-dom-element}
 
-Elements can transition smoothly between different DOM elements as long as they share the same `view-transition-name`.
+Elementlar bir xil `view-transition-name`'ga ega boʻlsa, turli DOM elementlari oʻrtasida silliq oʻtishi mumkin.
 
 - [Chrome Explainer](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#transitioning_elements_dont_need_to_be_the_same_dom_element)
-- [Angular Example on StackBlitz](https://stackblitz.com/edit/stackblitz-starters-dh8npr?file=src%2Fmain.ts)
+- [StackBlitz'dagi Angular misoli](https://stackblitz.com/edit/stackblitz-starters-dh8npr?file=src%2Fmain.ts)
 
-### Custom entry and exit animations
+### Maxsus kirish va chiqish animatsiyalari {#custom-entry-and-exit-animations}
 
-Create unique animations for elements entering and leaving the viewport during route transitions.
+Marshrut oʻtishlari davomida koʻrish maydoniga (viewport) kiruvchi va undan chiquvchi elementlar uchun noyob animatsiyalar yarating.
 
 - [Chrome Explainer](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#custom_entry_and_exit_transitions)
-- [Angular Example on StackBlitz](https://stackblitz.com/edit/stackblitz-starters-8kly3o)
+- [StackBlitz'dagi Angular misoli](https://stackblitz.com/edit/stackblitz-starters-8kly3o)
 
-### Async DOM updates and waiting for content
+### Asinxron DOM yangilanishlari va kontentni kutish {#async-dom-updates-and-waiting-for-content}
 
-Angular Router prioritizes immediate transitions over waiting for additional content to load.
+Angular Router qoʻshimcha kontent yuklanishini kutishdan koʻra darhol oʻtishlarni afzal koʻradi.
 
 - [Chrome Explainer](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#async_dom_updates_and_waiting_for_content)
 
-NOTE: Angular Router does not provide a way to delay view transitions. This design choice prevents pages from becoming non-interactive while waiting for additional content. As the Chrome documentation notes: "During this time, the page is frozen, so delays here should be kept to a minimum…in some cases it's better to avoid the delay altogether, and use the content you already have."
+NOTE: Angular Router view oʻtishlarini kechiktirish usulini taqdim etmaydi. Bu dizayn qarori qoʻshimcha kontentni kutish davomida sahifalarning interaktiv boʻlmay qolishining oldini oladi. Chrome hujjatlarida qayd etilganidek: "Bu vaqt davomida sahifa muzlatilgan boʻladi, shu sababli bu yerdagi kechikishlar minimal darajada boʻlishi kerak… baʼzi hollarda kechikishdan butunlay qochib, sizda allaqachon mavjud kontentdan foydalanish yaxshiroq."
 
-### Handle multiple view transition styles with view transition types
+### View oʻtish turlari bilan bir nechta view oʻtish uslublarini boshqarish {#handle-multiple-view-transition-styles-with-view-transition-types}
 
-Use view transition types to apply different animation styles based on navigation context.
+Navigatsiya kontekstiga qarab turli animatsiya uslublarini qoʻllash uchun view oʻtish turlaridan foydalaning.
 
 - [Chrome Explainer](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#view-transition-types)
-- [Angular Example on StackBlitz](https://stackblitz.com/edit/stackblitz-starters-vxzcam)
+- [StackBlitz'dagi Angular misoli](https://stackblitz.com/edit/stackblitz-starters-vxzcam)
 
-### Handle multiple view transition styles with a class name on the view transition root (deprecated)
+### View oʻtish ildizidagi klass nomi bilan bir nechta view oʻtish uslublarini boshqarish (eskirgan) {#handle-multiple-view-transition-styles-with-a-class-name-on-the-view-transition-root-deprecated}
 
-This approach uses CSS classes on the transition root element to control animation styles.
+Bu yondashuv animatsiya uslublarini boshqarish uchun oʻtish ildiz elementidagi CSS klasslaridan foydalanadi.
 
 - [Chrome Explainer](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#changing-on-navigation-type)
-- [Angular Example on StackBlitz](https://stackblitz.com/edit/stackblitz-starters-nmnzzg?file=src%2Fmain.ts)
+- [StackBlitz'dagi Angular misoli](https://stackblitz.com/edit/stackblitz-starters-nmnzzg?file=src%2Fmain.ts)
 
-### Transitioning without freezing other animations
+### Boshqa animatsiyalarni muzlatmasdan oʻtish {#transitioning-without-freezing-other-animations}
 
-Maintain other page animations during view transitions to create more dynamic user experiences.
+Yanada dinamik foydalanuvchi tajribasini yaratish uchun view oʻtishlari davomida sahifadagi boshqa animatsiyalarni davom ettiring.
 
 - [Chrome Explainer](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#transitioning-without-freezing)
-- [Angular Example on StackBlitz](https://stackblitz.com/edit/stackblitz-starters-76kgww)
+- [StackBlitz'dagi Angular misoli](https://stackblitz.com/edit/stackblitz-starters-76kgww)
 
-### Animating with JavaScript
+### JavaScript bilan animatsiya qilish {#animating-with-javascript}
 
-Control view transitions programmatically using JavaScript APIs for complex animation scenarios.
+Murakkab animatsiya stsenariylari uchun JavaScript API'lari yordamida view oʻtishlarini dasturiy ravishda boshqaring.
 
 - [Chrome Explainer](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#animating-with-javascript)
-- [Angular Example on StackBlitz](https://stackblitz.com/edit/stackblitz-starters-cklnkm)
+- [StackBlitz'dagi Angular misoli](https://stackblitz.com/edit/stackblitz-starters-cklnkm)

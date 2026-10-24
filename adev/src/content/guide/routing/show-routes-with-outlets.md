@@ -1,6 +1,6 @@
-# Show routes with outlets
+# Marshrutlarni outlet'lar bilan koʻrsatish
 
-The `RouterOutlet` directive is a placeholder that marks the location where the router should render the component for the current URL.
+`RouterOutlet` direktivasi — router joriy URL uchun komponentni qayerda render qilishi kerakligini belgilovchi toʻldiruvchi (placeholder).
 
 ```html
 <app-header />
@@ -22,7 +22,7 @@ import {RouterOutlet} from '@angular/router';
 export class App {}
 ```
 
-In this example, if an application has the following routes defined:
+Bu misolda, agar ilovada quyidagi marshrutlar aniqlangan boʻlsa:
 
 ```ts
 import {Routes} from '@angular/router';
@@ -43,7 +43,7 @@ const routes: Routes = [
 ];
 ```
 
-When a user visits `/products`, Angular renders the following:
+Foydalanuvchi `/products`'ga kirganda Angular quyidagini render qiladi:
 
 ```angular-html
 <app-header />
@@ -51,7 +51,7 @@ When a user visits `/products`, Angular renders the following:
 <app-footer />
 ```
 
-If the user goes back to the home page, then Angular renders:
+Agar foydalanuvchi bosh sahifaga qaytsa, Angular quyidagini render qiladi:
 
 ```angular-html
 <app-header />
@@ -59,7 +59,7 @@ If the user goes back to the home page, then Angular renders:
 <app-footer />
 ```
 
-When displaying a route, the `<router-outlet>` element remains present in the DOM as a reference point for future navigations. Angular inserts routed content just after the outlet element as a sibling.
+Marshrut koʻrsatilayotganda `<router-outlet>` elementi kelajakdagi navigatsiyalar uchun moʻljal nuqtasi sifatida DOM'da qoladi. Angular marshrutlangan kontentni outlet elementidan keyin darhol, uning qoʻshni (sibling) elementi sifatida joylashtiradi.
 
 ```angular-html
 <!-- Contents of the component's template -->
@@ -76,13 +76,13 @@ When displaying a route, the `<router-outlet>` element remains present in the DO
 <app-footer />
 ```
 
-## Nesting routes with child routes
+## Bola marshrutlar bilan ichma-ich marshrutlar yaratish {#nesting-routes-with-child-routes}
 
-As your application grows more complex, you might want to create routes that are relative to a component other than your root component. This enables you to create experiences where only part of the application changes when the URL changes, as opposed to the users feeling like the entire page is refreshed.
+Ilovangiz murakkablashgani sari ildiz komponentingizdan boshqa komponentga nisbatan boʻlgan marshrutlar yaratishni istashingiz mumkin. Bu URL oʻzgarganda foydalanuvchi butun sahifa yangilanganday his qilish oʻrniga ilovaning faqat bir qismi oʻzgaradigan tajribalar yaratish imkonini beradi.
 
-These types of nested routes are called child routes. This means you're adding a second `<router-outlet>` to your app, because it is in addition to the `<router-outlet>` in AppComponent.
+Bunday ichma-ich marshrutlar bola marshrutlar (child routes) deb ataladi. Bu ilovangizga ikkinchi `<router-outlet>` qoʻshishingizni anglatadi, chunki u AppComponent'dagi `<router-outlet>`'ga qoʻshimcha boʻladi.
 
-In this example, the `Settings` component will display the desired panel based on what the user selects. One of the unique things you’ll notice about child routes is that the component often has its own `<nav>` and `<router-outlet>`.
+Bu misolda `Settings` komponenti foydalanuvchi tanloviga qarab kerakli panelni koʻrsatadi. Bola marshrutlarning oʻziga xos jihatlaridan biri shundaki, komponent koʻpincha oʻzining `<nav>` va `<router-outlet>`'iga ega boʻladi.
 
 ```angular-html
 <h1>Settings</h1>
@@ -95,7 +95,7 @@ In this example, the `Settings` component will display the desired panel based o
 <router-outlet />
 ```
 
-A child route is like any other route, in that it needs both a `path` and a `component`. The one difference is that you place child routes in a children array within the parent route.
+Bola marshrut har qanday boshqa marshrut kabi `path` va `component`'ga muhtoj. Yagona farq shundaki, bola marshrutlarni ota marshrut ichidagi children massiviga joylashtirasiz.
 
 ```ts
 const routes: Routes = [
@@ -116,11 +116,11 @@ const routes: Routes = [
 ];
 ```
 
-Once both the `routes` and `<router-outlet>` are configured correctly, your application is now using nested routes!
+`routes` ham, `<router-outlet>` ham toʻgʻri sozlangach, ilovangiz endi ichma-ich marshrutlardan foydalanadi!
 
-## Secondary routes with named outlets
+## Nomlangan outlet'lar bilan ikkilamchi marshrutlar {#secondary-routes-with-named-outlets}
 
-Pages may have multiple outlets— you can assign a name to each outlet to specify which content belongs to which outlet.
+Sahifalarda bir nechta outlet boʻlishi mumkin — qaysi kontent qaysi outlet'ga tegishli ekanini koʻrsatish uchun har bir outlet'ga nom berishingiz mumkin.
 
 ```angular-html
 <app-header />
@@ -130,9 +130,9 @@ Pages may have multiple outlets— you can assign a name to each outlet to speci
 <app-footer />
 ```
 
-Each outlet must have a unique name. The name cannot be set or changed dynamically. By default, the name is `'primary'`.
+Har bir outlet noyob nomga ega boʻlishi kerak. Nomni dinamik tarzda oʻrnatish yoki oʻzgartirish mumkin emas. Sukut boʻyicha nom `'primary'` boʻladi.
 
-Angular matches the outlet's name to the `outlet` property defined on each route:
+Angular outlet nomini har bir marshrutda aniqlangan `outlet` xususiyatiga moslashtiradi:
 
 ```ts
 {
@@ -142,18 +142,18 @@ Angular matches the outlet's name to the `outlet` property defined on each route
 }
 ```
 
-## Outlet lifecycle events
+## Outlet hayot sikli hodisalari {#outlet-lifecycle-events}
 
-There are four lifecycle events that a router outlet can emit:
+Router outlet yuborishi mumkin boʻlgan toʻrtta hayot sikli hodisasi bor:
 
-| Event        | Description                                                              |
+| Hodisa       | Tavsif                                                                   |
 | ------------ | ------------------------------------------------------------------------ |
-| `activate`   | When a new component is instantiated                                     |
-| `deactivate` | When a component is destroyed                                            |
-| `attach`     | When the `RouteReuseStrategy` instructs the outlet to attach the subtree |
-| `detach`     | When the `RouteReuseStrategy` instructs the outlet to detach the subtree |
+| `activate`   | Yangi komponent nusxasi yaratilganda                                     |
+| `deactivate` | Komponent yoʻq qilinganda                                                |
+| `attach`     | `RouteReuseStrategy` outlet'ga pastki daraxtni biriktirishni buyurganda  |
+| `detach`     | `RouteReuseStrategy` outlet'ga pastki daraxtni ajratishni buyurganda     |
 
-You can add event listeners with the standard event binding syntax:
+Hodisa tinglovchilarini standart hodisa bogʻlash sintaksisi bilan qoʻshishingiz mumkin:
 
 ```angular-html
 <router-outlet
@@ -164,11 +164,11 @@ You can add event listeners with the standard event binding syntax:
 />
 ```
 
-Check out the [API docs for RouterOutlet](/api/router/RouterOutlet?tab=api) if you’d like to learn more.
+Koʻproq bilishni istasangiz, [RouterOutlet API hujjatlariga](/api/router/RouterOutlet?tab=api) qarang.
 
-## Passing contextual data to routed components
+## Marshrutlangan komponentlarga kontekst maʼlumotlarini uzatish {#passing-contextual-data-to-routed-components}
 
-Passing contextual data to routed components often requires global state or complicated route configurations. To make this easier, each `RouterOutlet` supports a `routerOutletData` input. Routed components and their children can read this data as a signal using the `ROUTER_OUTLET_DATA` injection token, allowing outlet-specific configuration without modifying route definitions.
+Marshrutlangan komponentlarga kontekst maʼlumotlarini uzatish koʻpincha global holat yoki murakkab marshrut konfiguratsiyalarini talab qiladi. Buni osonlashtirish uchun har bir `RouterOutlet` `routerOutletData` input'ini qoʻllab-quvvatlaydi. Marshrutlangan komponentlar va ularning bolalari bu maʼlumotlarni `ROUTER_OUTLET_DATA` inyeksiya tokeni orqali signal sifatida oʻqishi mumkin, bu marshrut aniqlanishlarini oʻzgartirmasdan outlet'ga xos konfiguratsiya qilish imkonini beradi.
 
 ```angular-ts
 import {Component} from '@angular/core';
@@ -185,7 +185,7 @@ import {RouterOutlet} from '@angular/router';
 export class Dashboard {}
 ```
 
-The routed component can inject the provided outlet data using `ROUTER_OUTLET_DATA`:
+Marshrutlangan komponent taqdim etilgan outlet maʼlumotlarini `ROUTER_OUTLET_DATA` yordamida inyeksiya qilishi mumkin:
 
 ```angular-ts
 import {Component, inject, Signal} from '@angular/core';
@@ -200,12 +200,12 @@ export class Stats {
 }
 ```
 
-When Angular activates the `Stats` in that outlet, it receives `{ layout: 'sidebar' }` as injected data.
+Angular oʻsha outlet'da `Stats`'ni faollashtirganda, u inyeksiya qilingan maʼlumot sifatida `{ layout: 'sidebar' }` ni oladi.
 
-NOTE: When the `routerOutletData` input is unset, the injected signal's value is `undefined` by default.
+NOTE: `routerOutletData` input'i oʻrnatilmagan boʻlsa, inyeksiya qilingan signalning qiymati sukut boʻyicha `undefined` boʻladi.
 
 ---
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-Learn how to [navigate to routes](/guide/routing/navigate-to-routes) with Angular Router.
+Angular Router bilan [marshrutlarga oʻtish](/guide/routing/navigate-to-routes)ni qanday amalga oshirishni bilib oling.
