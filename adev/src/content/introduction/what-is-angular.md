@@ -81,7 +81,7 @@
     yuz minglab qator kodli loyihalarni bir daqiqadan kamroq vaqtda build qilishlarini aytishadi.
   </docs-card>
   <docs-card title="Google'ning eng yirik veb-ilovalarida sinalgan" titleIconName="sensors">
-    Google'ning yirik mahsulotlari Angular arxitekturasi asosida quriladi va Angular'ning miqyoslanuvchanligini
+    Google'ning yirik mahsulotlari Angular arxitekturasi asosida quriladi va Angular'ning masshtablanuvchanligini
     yanada oshiradigan yangi imkoniyatlarni ishlab chiqishga yordam beradi — [Google Fonts](https://fonts.google.com/)'dan tortib [Google Cloud](https://console.cloud.google.com)'gacha.
   </docs-card>
 </docs-card-container>
@@ -103,7 +103,7 @@
     Angular'ni hamma uchun yaxshiroq freymvorkka aylantirayotgan ochiq kod hissa qoʻshuvchilariga minnatdormiz. Hujjatlardagi imlo xatosini tuzatishdan tortib yirik imkoniyatlar qoʻshishgacha — qiziqqan har bir kishini GitHub'imizda boshlashga chorlaymiz.
   </docs-card>
   <docs-card title="Jamoa bilan hamkorlik" href="https://developers.google.com/community/experts/directory?specialization=angular" link="Angular GDE'lari bilan tanishing" titleIconName="sensors">
-    Jamoamiz dasturchilarni doimiy qoʻllab-quvvatlash uchun shaxslar, oʻqituvchilar va korxonalar bilan hamkorlik qiladi. Angular Google Developer Experts (GDE) — dunyo boʻylab Angular bilan oʻqitadigan, tashkil qiladigan va ishlab chiqadigan jamoa yetakchilari. Korporativ hamkorliklar Angular'ning texnologiya sohasi yetakchilari uchun yaxshi miqyoslanishini taʼminlaydi.
+    Jamoamiz dasturchilarni doimiy qoʻllab-quvvatlash uchun shaxslar, oʻqituvchilar va korxonalar bilan hamkorlik qiladi. Angular Google Developer Experts (GDE) — dunyo boʻylab Angular bilan oʻqitadigan, tashkil qiladigan va ishlab chiqadigan jamoa yetakchilari. Korporativ hamkorliklar Angular'ning texnologiya sohasi yetakchilari uchun yaxshi masshtablanishini taʼminlaydi.
   </docs-card>
   <docs-card title="Boshqa Google texnologiyalari bilan hamkorlik" titleIconName="sensors">
     <p>Angular vebni yaxshilash uchun boshqa Google texnologiyalari va jamoalari bilan yaqindan hamkorlik qiladi.</p>

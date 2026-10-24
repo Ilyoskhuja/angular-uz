@@ -81,6 +81,7 @@ Qoidalar build tizimi (adev markdown pipeline) talablaridan kelib chiqadi — ul
 | tutorial | darslik |
 | overview | umumiy koʻrinish |
 | next step(s) | keyingi qadam(lar) |
+| scalability / scalable | masshtablanuvchanlik / masshtablanuvchan |
 | best practice | eng yaxshi amaliyot |
 | by default | sukut boʻyicha |
 | deprecated | eskirgan (deprecated) |
