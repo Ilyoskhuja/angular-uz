@@ -32,7 +32,9 @@ Maqsad — angular.dev saytidagi "Community translations" roʻyxatiga qoʻshilad
 | Kirish → Oʻrnatish | ✅ tarjima qilingan |
 | Kirish → Asoslar → Umumiy koʻrinish | ✅ tarjima qilingan |
 | Asoslar (komponentlar, signallar, shablonlar, signal formalar, DI, keyingi qadamlar) | ✅ tarjima qilingan |
-| Chuqur qoʻllanmalar (`guide/`) | ⏳ navbatda |
+| Chuqur qoʻllanmalar → Komponentlar (13 sahifa) | ✅ tarjima qilingan |
+| Bosh sahifa, navigatsiya, footer | ✅ tarjima qilingan |
+| Chuqur qoʻllanmalar → qolganlari (`guide/`) | ⏳ navbatda |
 | Darsliklar (`tutorials/`) | ⏳ navbatda |
 
 ## Hissa qoʻshish
