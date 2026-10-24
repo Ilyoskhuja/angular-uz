@@ -1,20 +1,20 @@
-# Adding form logic
+# Forma mantiqini qoʻshish
 
-Signal Forms allow you to add logic to your form using schemas. Validation logic is covered in the [Validation guide](guide/forms/signals/validation), and this guide discusses other rules available in schemas. You can disable fields conditionally, hide them based on other values, make them readonly, debounce user input, and attach metadata for custom controls.
+Signal Forms sxemalar (schema) yordamida formangizga mantiq qoʻshish imkonini beradi. Validatsiya mantigʻi [Validatsiya qoʻllanmasi](guide/forms/signals/validation)da yoritilgan, bu qoʻllanma esa sxemalarda mavjud boshqa qoidalarni koʻrib chiqadi. Siz maydonlarni shartli oʻchirib qoʻyishingiz, boshqa qiymatlarga qarab yashirishingiz, faqat oʻqish uchun qilishingiz, foydalanuvchi kiritmasini debounce qilishingiz va maxsus kontrollar uchun metadata biriktirishingiz mumkin.
 
-This guide shows you how to use rules like `disabled()`, `hidden()`, `readonly()`, `debounce()`, and `metadata()` to control field behavior.
+Bu qoʻllanma maydon xatti-harakatini boshqarish uchun `disabled()`, `hidden()`, `readonly()`, `debounce()` va `metadata()` kabi qoidalardan qanday foydalanishni koʻrsatadi.
 
-## When to add form logic
+## Forma mantiqini qachon qoʻshish kerak {#when-to-add-form-logic}
 
-Use rules when field behavior depends on other field values or needs to update reactively. For example:
+Maydon xatti-harakati boshqa maydon qiymatlariga bogʻliq boʻlsa yoki reaktiv yangilanishi kerak boʻlsa, qoidalardan foydalaning. Masalan:
 
-- A coupon code field that's disabled when the order total is too low
-- An address field that's hidden unless shipping is required
-- A search field that debounces to reduce API calls
+- Buyurtma summasi juda kichik boʻlganda oʻchiriladigan kupon kodi maydoni
+- Yetkazib berish talab qilinmasa yashiriladigan manzil maydoni
+- API chaqiruvlarini kamaytirish uchun debounce qilinadigan qidiruv maydoni
 
-## How rules work
+## Qoidalar qanday ishlaydi {#how-rules-work}
 
-Rules bind reactive logic to specific fields in your form. Most conditional rules accept an options object with a `when` function. The `when` function automatically recomputes whenever the signals it references change, just like a `computed`.
+Qoidalar reaktiv mantiqni formangizdagi muayyan maydonlarga bogʻlaydi. Koʻpchilik shartli qoidalar `when` funksiyasiga ega parametrlar obyektini qabul qiladi. `when` funksiyasi, `computed` kabi, oʻzi murojaat qilgan signallar oʻzgarganda avtomatik qayta hisoblanadi.
 
 ```ts
 const orderForm = form(this.orderModel, (schemaPath) => {
@@ -24,23 +24,23 @@ const orderForm = form(this.orderModel, (schemaPath) => {
 });
 ```
 
-Reactive logic functions receive a `FieldContext` object that provides access to field values and state through helper functions like `valueOf()` and `stateOf()`. It is often destructured to access these helpers directly.
+Reaktiv mantiq funksiyalari `valueOf()` va `stateOf()` kabi yordamchi funksiyalar orqali maydon qiymatlari va holatiga kirish imkonini beruvchi `FieldContext` obyektini qabul qiladi. Bu yordamchilarga bevosita murojaat qilish uchun u koʻpincha destrukturizatsiya qilinadi.
 
-NOTE: The schema callback parameter (`schemaPath` in these examples) is a `SchemaPathTree` object that provides paths to all fields in your form. You can name this parameter anything you like.
+NOTE: Sxema callback'ining parametri (bu misollarda `schemaPath`) formangizdagi barcha maydonlarga yoʻllarni taqdim etuvchi `SchemaPathTree` obyektidir. Bu parametrni istalgancha nomlashingiz mumkin.
 
-For complete details on `FieldContext` properties and methods, see the [Validation guide](guide/forms/signals/validation).
+`FieldContext` xususiyatlari va metodlari haqida toʻliq maʼlumot uchun [Validatsiya qoʻllanmasi](guide/forms/signals/validation)ga qarang.
 
-## Prevent field updates with `disabled()`
+## `disabled()` bilan maydon yangilanishlarining oldini olish {#prevent-field-updates-with-disabled}
 
-The `disabled()` rule configures a field's disabled state.
+`disabled()` qoidasi maydonning oʻchirilgan holatini sozlaydi.
 
-It works with the `[formField]` directive to automatically bind the `disabled` attribute based on the field's state, so you don't need to manually add `[disabled]="yourForm.fieldName().disabled()"` to your template.
+U `[formField]` direktivi bilan birga ishlab, maydon holatiga qarab `disabled` atributini avtomatik bogʻlaydi, shuning uchun shabloningizga `[disabled]="yourForm.fieldName().disabled()"` ni qoʻlda qoʻshishingiz shart emas.
 
-NOTE: Disabled fields skip validation - they don't participate in form validation checks. The field's value is preserved but not validated. For details on validation behavior, see the [Validation guide](guide/forms/signals/validation).
+NOTE: Oʻchirilgan maydonlar validatsiyani oʻtkazib yuboradi - ular forma validatsiya tekshiruvlarida ishtirok etmaydi. Maydon qiymati saqlanadi, lekin validatsiya qilinmaydi. Validatsiya xatti-harakati haqida maʼlumot uchun [Validatsiya qoʻllanmasi](guide/forms/signals/validation)ga qarang.
 
-### Always disabled
+### Doimo oʻchirilgan {#always-disabled}
 
-To disable a field permanently, call `disabled()` with just the field path:
+Maydonni doimiy oʻchirib qoʻyish uchun `disabled()`'ni faqat maydon yoʻli bilan chaqiring:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -68,9 +68,9 @@ export class Settings {
 }
 ```
 
-### Conditional disabling
+### Shartli oʻchirish {#conditional-disabling}
 
-To disable a field based on conditions, provide a `when` function that returns `true` (disabled) or `false` (enabled):
+Maydonni shartlarga qarab oʻchirish uchun `true` (oʻchirilgan) yoki `false` (yoqilgan) qaytaruvchi `when` funksiyasini bering:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -103,11 +103,11 @@ export class Order {
 }
 ```
 
-In this example, when the order total is less than $50, the coupon code field is disabled.
+Bu misolda buyurtma summasi $50 dan kam boʻlganda kupon kodi maydoni oʻchiriladi.
 
-### Disabled reasons
+### Oʻchirilganlik sabablari {#disabled-reasons}
 
-When you disable a field, provide user-facing explanations by returning a string instead of `true`:
+Maydonni oʻchirganingizda, `true` oʻrniga satr qaytarib, foydalanuvchiga koʻrsatiladigan tushuntirishlar bering:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -151,16 +151,16 @@ export class Order {
 }
 ```
 
-The `when` function returns:
+`when` funksiyasi quyidagilarni qaytaradi:
 
-- A **string** to disable the field with a reason
-- `false` to enable the field (not just any falsy value - use `false` explicitly)
+- Maydonni sabab bilan oʻchirish uchun **satr**
+- Maydonni yoqish uchun `false` (istalgan falsy qiymat emas - aniq `false` ishlating)
 
-Access the reasons through the `disabledReasons()` signal on the field state. Each reason has a `message` property containing the string you returned.
+Sabablarga maydon holatidagi `disabledReasons()` signali orqali murojaat qiling. Har bir sabab siz qaytargan satrni oʻz ichiga olgan `message` xususiyatiga ega.
 
-#### Multiple disabled reasons
+#### Bir nechta oʻchirilganlik sabablari {#multiple-disabled-reasons}
 
-You can also call `disabled()` multiple times on the same field, and all of the returned reasons accumulate:
+Shuningdek, bir xil maydonda `disabled()`'ni bir necha marta chaqirishingiz mumkin va qaytarilgan barcha sabablar toʻplanib boradi:
 
 ```angular-ts
 orderForm = form(this.orderModel, (schemaPath) => {
@@ -174,19 +174,19 @@ orderForm = form(this.orderModel, (schemaPath) => {
 });
 ```
 
-If both conditions are true, the field shows both disabled reasons. This pattern is useful for complex availability rules that you want to keep separate.
+Agar ikkala shart ham toʻgʻri boʻlsa, maydon ikkala oʻchirilganlik sababini koʻrsatadi. Bu namuna alohida saqlamoqchi boʻlgan murakkab mavjudlik qoidalari uchun foydali.
 
-## Configuring `hidden()` state on fields
+## Maydonlarda `hidden()` holatini sozlash {#configuring-hidden-state-on-fields}
 
-The `hidden()` rule configures a field's hidden state. However, this only sets a programmatic state. **You control whether the field appears in the UI**.
+`hidden()` qoidasi maydonning yashirin holatini sozlaydi. Biroq bu faqat dasturiy holatni oʻrnatadi. **Maydonning UI'da koʻrinish-koʻrinmasligini siz boshqarasiz**.
 
-IMPORTANT: Unlike `disabled` and `readonly`, there is no native DOM property for `hidden` state. The `[formField]` directive does not apply a `hidden` attribute to elements. You must use `@if` or CSS in your template to conditionally render fields based on the `hidden()` state.
+IMPORTANT: `disabled` va `readonly`'dan farqli oʻlaroq, `hidden` holati uchun tabiiy (native) DOM xususiyati yoʻq. `[formField]` direktivi elementlarga `hidden` atributini qoʻllamaydi. Maydonlarni `hidden()` holatiga qarab shartli render qilish uchun shabloningizda `@if` yoki CSS'dan foydalanishingiz kerak.
 
-NOTE: Like disabled fields, hidden fields also skip validation. See the [Validation guide](guide/forms/signals/validation) for details.
+NOTE: Oʻchirilgan maydonlar kabi, yashirin maydonlar ham validatsiyani oʻtkazib yuboradi. Tafsilotlar uchun [Validatsiya qoʻllanmasi](guide/forms/signals/validation)ga qarang.
 
-### Basic field hiding
+### Maydonni oddiy yashirish {#basic-field-hiding}
 
-Use `hidden()` with a `when` function that returns `true` (hidden) or `false` (visible):
+`hidden()`'ni `true` (yashirin) yoki `false` (koʻrinadigan) qaytaruvchi `when` funksiyasi bilan ishlating:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -221,9 +221,9 @@ export class Profile {
 }
 ```
 
-### Always hidden
+### Doimo yashirin {#always-hidden}
 
-To make a field permanently hidden, call `hidden()` with just the field path:
+Maydonni doimiy yashirin qilish uchun `hidden()`'ni faqat maydon yoʻli bilan chaqiring:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -260,15 +260,15 @@ export class Profile {
 }
 ```
 
-## Display uneditable fields with `readonly()`
+## `readonly()` bilan tahrirlanmaydigan maydonlarni koʻrsatish {#display-uneditable-fields-with-readonly}
 
-The `readonly()` rule prevents users from updating a field. The `[FormField]` directive automatically binds this state to the HTML `readonly` attribute, which prevents editing while still allowing users to focus and select text.
+`readonly()` qoidasi foydalanuvchilarning maydonni yangilashiga yoʻl qoʻymaydi. `[FormField]` direktivi bu holatni HTML `readonly` atributiga avtomatik bogʻlaydi; bu tahrirlashni taqiqlaydi, lekin foydalanuvchilarga fokus berish va matnni tanlash imkonini saqlab qoladi.
 
-NOTE: Readonly fields skip [validation](guide/forms/signals/validation).
+NOTE: Faqat oʻqish uchun maydonlar [validatsiyani](guide/forms/signals/validation) oʻtkazib yuboradi.
 
-### Always readonly
+### Doimo faqat oʻqish uchun {#always-readonly}
 
-To make a field permanently readonly, call `readonly()` with just the field path:
+Maydonni doimiy faqat oʻqish uchun qilish uchun `readonly()`'ni faqat maydon yoʻli bilan chaqiring:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -301,11 +301,11 @@ export class Account {
 }
 ```
 
-The `[FormField]` directive automatically binds the `readonly` attribute based on the field's state.
+`[FormField]` direktivi maydon holatiga qarab `readonly` atributini avtomatik bogʻlaydi.
 
-### Conditional readonly
+### Shartli faqat oʻqish uchun {#conditional-readonly}
 
-To make a field readonly based on conditions, provide a `when` function:
+Maydonni shartlarga qarab faqat oʻqish uchun qilish uchun `when` funksiyasini bering:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -338,57 +338,57 @@ export class Document {
 }
 ```
 
-When `isLocked` is true, the title field becomes readonly.
+`isLocked` toʻgʻri (true) boʻlganda sarlavha maydoni faqat oʻqish uchun boʻladi.
 
-## Choose between hidden, disabled, and readonly
+## hidden, disabled va readonly oʻrtasida tanlov {#choose-between-hidden-disabled-and-readonly}
 
-These three configuration functions control field availability in different ways:
+Bu uchta sozlash funksiyasi maydon mavjudligini turli yoʻllar bilan boshqaradi:
 
-Choose `hidden()` when the field:
+`hidden()`'ni maydon quyidagicha boʻlganda tanlang:
 
-- Should not appear in the UI at all
-- Is irrelevant to the current form state
-- Example: Shipping address fields when "same as billing" is checked
+- UI'da umuman koʻrinmasligi kerak
+- Joriy forma holatiga aloqasi yoʻq
+- Misol: "Hisob-kitob manzili bilan bir xil" belgilanganda yetkazib berish manzili maydonlari
 
-Choose `disabled()` when the field:
+`disabled()`'ni maydon quyidagicha boʻlganda tanlang:
 
-- Should be visible but not editable
-- Needs to show why it's unavailable (using disabled reasons)
-- Should be excluded from HTML form submission
-- Example: Submit button disabled until form is valid, approval fields disabled for non-admin users
+- Koʻrinishi, lekin tahrirlanmasligi kerak
+- Nega mavjud emasligini koʻrsatishi kerak (oʻchirilganlik sabablari orqali)
+- HTML forma yuborishdan chiqarib tashlanishi kerak
+- Misol: Forma valid boʻlgunga qadar oʻchirilgan yuborish tugmasi, admin boʻlmagan foydalanuvchilar uchun oʻchirilgan tasdiqlash maydonlari
 
-Choose `readonly()` when the field:
+`readonly()`'ni maydon quyidagicha boʻlganda tanlang:
 
-- Should be visible but not editable
-- Contains data users need to see, select, or copy
-- Should be included in HTML form submission
-- Example: Order confirmation number, system-generated reference codes
+- Koʻrinishi, lekin tahrirlanmasligi kerak
+- Foydalanuvchilar koʻrishi, tanlashi yoki nusxalashi kerak boʻlgan maʼlumotlarni oʻz ichiga oladi
+- HTML forma yuborishga kiritilishi kerak
+- Misol: Buyurtma tasdiqlash raqami, tizim tomonidan yaratilgan maʼlumotnoma kodlari
 
-All three skip validation and prevent user editing while active. The key differences:
+Uchalasi ham faol boʻlganda validatsiyani oʻtkazib yuboradi va foydalanuvchi tahrirlashiga yoʻl qoʻymaydi. Asosiy farqlar:
 
-| Feature                          | `hidden()` | `disabled()` | `readonly()` |
-| -------------------------------- | ---------- | ------------ | ------------ |
-| Visible in UI                    | No         | Yes          | Yes          |
-| Users can focus/select           | No         | No           | Yes          |
-| Included in HTML form submission | No         | No           | Yes          |
+| Xususiyat                                 | `hidden()` | `disabled()` | `readonly()` |
+| ----------------------------------------- | ---------- | ------------ | ------------ |
+| UI'da koʻrinadi                           | Yoʻq       | Ha           | Ha           |
+| Foydalanuvchilar fokus bera/tanlay oladi  | Yoʻq       | Yoʻq         | Ha           |
+| HTML forma yuborishga kiritiladi          | Yoʻq       | Yoʻq         | Ha           |
 
-## Delay input operations with `debounce()`
+## `debounce()` bilan kiritish operatsiyalarini kechiktirish {#delay-input-operations-with-debounce}
 
-The `debounce()` rule delays updating the form model. This is useful for performance optimization and reducing unnecessary operations during rapid input.
+`debounce()` qoidasi forma modelini yangilashni kechiktiradi. Bu unumdorlikni optimallashtirish va tez kiritish vaqtida keraksiz operatsiyalarni kamaytirish uchun foydali.
 
-### What debouncing does
+### Debounce nima qiladi {#what-debouncing-does}
 
-Without debouncing, every keystroke immediately updates the form model. This can trigger:
+Debounce'siz har bir klavish bosilishi forma modelini darhol yangilaydi. Bu quyidagilarni ishga tushirishi mumkin:
 
-- Expensive computed signals that recalculate on every change
-- Validation checks after each character
-- API calls or other side effects tied to the model value
+- Har bir oʻzgarishda qayta hisoblanadigan qimmat computed signallar
+- Har bir belgidan keyin validatsiya tekshiruvlari
+- Model qiymatiga bogʻlangan API chaqiruvlari yoki boshqa yon taʼsirlar
 
-Debouncing delays these updates and reduces unnecessary work.
+Debounce bu yangilanishlarni kechiktiradi va keraksiz ishni kamaytiradi.
 
-### Basic debouncing
+### Oddiy debounce {#basic-debouncing}
 
-You can debounce a field by specifying a delay in milliseconds:
+Millisekundlarda kechikishni koʻrsatib, maydonni debounce qilishingiz mumkin:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -417,25 +417,25 @@ export class Search {
 }
 ```
 
-With a 300ms debounce:
+300ms debounce bilan:
 
-- User types in the input field
-- Form model updates only after 300ms of typing inactivity
-- If user keeps typing, the timer resets with each keystroke
-- Once user pauses for 300ms, the model updates with the final value
+- Foydalanuvchi input maydoniga yozadi
+- Forma modeli faqat yozishda 300ms tanaffus boʻlgandan keyin yangilanadi
+- Foydalanuvchi yozishda davom etsa, taymer har bir klavish bosilishida qayta boshlanadi
+- Foydalanuvchi 300ms toʻxtagach, model yakuniy qiymat bilan yangilanadi
 
-### Timing guarantees
+### Vaqt kafolatlari {#timing-guarantees}
 
-The `debounce()` function ensures users don't lose data through these mechanisms:
+`debounce()` funksiyasi quyidagi mexanizmlar orqali foydalanuvchilar maʼlumotlarini yoʻqotmasligini taʼminlaydi:
 
-- **When marked as touched:** The value syncs immediately, aborting any pending debounce delay. This happens when the field loses focus (blur) or when explicitly marked as touched.
-- **On form submission:** All fields are marked as touched before validation, which ensures all debounced values sync immediately.
+- **Touched deb belgilanganda:** Qiymat darhol sinxronlanadi va kutilayotgan har qanday debounce kechikishi bekor qilinadi. Bu maydon fokusni yoʻqotganda (blur) yoki aniq touched deb belgilanganda sodir boʻladi.
+- **Forma yuborilganda:** Validatsiyadan oldin barcha maydonlar touched deb belgilanadi, bu barcha debounce qilingan qiymatlarning darhol sinxronlanishini taʼminlaydi.
 
-This means users can type quickly, tab away, or submit the form without waiting for debounce delays to expire.
+Bu foydalanuvchilar debounce kechikishlari tugashini kutmasdan tez yozishi, tab bilan boshqa maydonga oʻtishi yoki formani yuborishi mumkinligini anglatadi.
 
-### Custom debounce logic
+### Maxsus debounce mantigʻi {#custom-debounce-logic}
 
-For advanced control, provide a debouncer function that controls when to synchronize the value. This function is called every time the control value is updated and can return either `undefined` to synchronize immediately, or a Promise that prevents synchronization until it resolves:
+Ilgʻor boshqaruv uchun qiymatni qachon sinxronlashni boshqaruvchi debouncer funksiyasini bering. Bu funksiya kontrol qiymati har safar yangilanganda chaqiriladi va darhol sinxronlash uchun `undefined` yoki hal boʻlgunga (resolve) qadar sinxronlashga yoʻl qoʻymaydigan Promise qaytarishi mumkin:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -467,39 +467,39 @@ export class Search {
 }
 ```
 
-The debouncer function can return:
+Debouncer funksiyasi quyidagilarni qaytarishi mumkin:
 
-- `undefined` to synchronize the value immediately
-- A `Promise<void>` that prevents synchronization until it resolves
+- Qiymatni darhol sinxronlash uchun `undefined`
+- Hal boʻlgunga qadar sinxronlashga yoʻl qoʻymaydigan `Promise<void>`
 
-Use cases for custom debounce logic:
+Maxsus debounce mantigʻidan foydalanish holatlari:
 
-- Implementing custom timing logic beyond simple delays
-- Coordinating synchronization with external events
-- Conditional debouncing based on application state
+- Oddiy kechikishlardan tashqari maxsus vaqt mantigʻini amalga oshirish
+- Sinxronlashni tashqi hodisalar bilan muvofiqlashtirish
+- Ilova holatiga asoslangan shartli debounce
 
-### When to use debouncing
+### Debounce'dan qachon foydalanish kerak {#when-to-use-debouncing}
 
-Debouncing is most useful when:
+Debounce quyidagi hollarda eng foydali:
 
-- You have expensive computed signals that depend on the field value
-- The field triggers API calls or other side effects
-- You want to reduce validation overhead during rapid typing
-- Performance profiling shows model updates are causing slowdowns
+- Maydon qiymatiga bogʻliq qimmat computed signallaringiz bor
+- Maydon API chaqiruvlari yoki boshqa yon taʼsirlarni ishga tushiradi
+- Tez yozish vaqtida validatsiya yukini kamaytirmoqchisiz
+- Unumdorlik profillash model yangilanishlari sekinlashuvga sabab boʻlayotganini koʻrsatadi
 
-Don't use debouncing if:
+Quyidagi hollarda debounce'dan foydalanmang:
 
-- The field needs immediate updates for good UX (such as calculator inputs)
-- The performance benefit is negligible
-- Users expect real-time feedback
+- Yaxshi UX uchun maydon darhol yangilanishi kerak (masalan, kalkulyator input'lari)
+- Unumdorlik foydasi arzimas darajada
+- Foydalanuvchilar real vaqtdagi javobni kutadi
 
-## Associate data with a field using `metadata()`
+## `metadata()` yordamida maydonga maʼlumot biriktirish {#associate-data-with-a-field-using-metadata}
 
-Metadata attaches reactive data to a field. Validation rules use this system internally, and you can publish your own keys for application-specific information like help text, configuration, or computed display values.
+Metadata maydonga reaktiv maʼlumotlarni biriktiradi. Validatsiya qoidalari bu tizimdan ichki foydalanadi, siz esa yordamchi matn, konfiguratsiya yoki hisoblangan koʻrsatish qiymatlari kabi ilovaga xos maʼlumotlar uchun oʻz kalitlaringizni eʼlon qilishingiz mumkin.
 
-Signal Forms provides pre-defined metadata keys that built-in validators populate automatically:
+Signal Forms oʻrnatilgan validatorlar avtomatik toʻldiradigan oldindan belgilangan metadata kalitlarini taqdim etadi:
 
-| Key          | Populated by         | Read via              |
+| Kalit        | Kim toʻldiradi       | Qanday oʻqiladi       |
 | ------------ | -------------------- | --------------------- |
 | `REQUIRED`   | `required()`         | `field().required()`  |
 | `MIN`        | `min()`, `minDate()` | `field().min()`       |
@@ -508,7 +508,7 @@ Signal Forms provides pre-defined metadata keys that built-in validators populat
 | `MAX_LENGTH` | `maxLength()`        | `field().maxLength()` |
 | `PATTERN`    | `pattern()`          | `field().pattern()`   |
 
-The `[formField]` directive automatically binds five of these (`REQUIRED`, `MIN`, `MAX`, `MIN_LENGTH`, and `MAX_LENGTH`) to the corresponding HTML attribute on a native form control. `PATTERN` is the exception, because Signal Forms supports multiple patterns per field but the HTML `pattern` attribute accepts only a single regular expression.
+`[formField]` direktivi ulardan beshtasini (`REQUIRED`, `MIN`, `MAX`, `MIN_LENGTH` va `MAX_LENGTH`) tabiiy forma kontrolidagi tegishli HTML atributiga avtomatik bogʻlaydi. `PATTERN` bundan mustasno, chunki Signal Forms bir maydon uchun bir nechta namunani qoʻllab-quvvatlaydi, HTML `pattern` atributi esa faqat bitta regulyar ifodani qabul qiladi.
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -539,9 +539,9 @@ export class Age {
 }
 ```
 
-### Reactive metadata
+### Reaktiv metadata {#reactive-metadata}
 
-Validation rules can derive their constraints from other fields, making the published metadata reactive:
+Validatsiya qoidalari oʻz cheklovlarini boshqa maydonlardan olishi mumkin, bu esa eʼlon qilingan metadatani reaktiv qiladi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -580,17 +580,17 @@ export class Inventory {
 }
 ```
 
-The `max()` validation rule sets the `MAX` metadata reactively based on the selected item, so any template or control reading `field().max()` updates whenever the item changes.
+`max()` validatsiya qoidasi `MAX` metadatasini tanlangan elementga qarab reaktiv oʻrnatadi, shuning uchun `field().max()`'ni oʻqiydigan har qanday shablon yoki kontrol element oʻzgarganda yangilanadi.
 
-For deeper coverage, including how to define custom keys, combine contributions with reducers, and use managed metadata for lifecycle-aware objects, see the [Field metadata guide](guide/forms/signals/field-metadata).
+Maxsus kalitlarni qanday belgilash, hissalarni reducer'lar bilan birlashtirish va hayot siklini hisobga oluvchi obyektlar uchun boshqariladigan metadatadan foydalanishni ham oʻz ichiga olgan chuqurroq maʼlumot uchun [Maydon metadatasi qoʻllanmasi](guide/forms/signals/field-metadata)ga qarang.
 
-## Combining rules
+## Qoidalarni birlashtirish {#combining-rules}
 
-You can apply multiple rules to the same field, and you can use conditional logic to apply entire groups of rules based on form state.
+Bir xil maydonga bir nechta qoida qoʻllashingiz va forma holatiga qarab butun qoidalar guruhlarini qoʻllash uchun shartli mantiqdan foydalanishingiz mumkin.
 
-### Multiple rules on one field
+### Bir maydonda bir nechta qoida {#multiple-rules-on-one-field}
 
-Apply multiple rules to configure all aspects of a field's behavior:
+Maydon xatti-harakatining barcha jihatlarini sozlash uchun bir nechta qoida qoʻllang:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -629,16 +629,16 @@ export class Promo {
 }
 ```
 
-These rules work together:
+Bu qoidalar birgalikda ishlaydi:
 
-- Hidden takes precedence - if the field is hidden, disabled state doesn't matter
-- Disabled prevents editing regardless of readonly state
-- Debouncing affects model updates regardless of other state
-- Metadata is independent and always available
+- Yashirin holat ustunlik qiladi - agar maydon yashirin boʻlsa, oʻchirilgan holatning ahamiyati yoʻq
+- Oʻchirilgan holat readonly holatidan qatʼi nazar tahrirlashga yoʻl qoʻymaydi
+- Debounce boshqa holatlardan qatʼi nazar model yangilanishlariga taʼsir qiladi
+- Metadata mustaqil va doimo mavjud
 
-### Conditional logic with applyWhen
+### applyWhen bilan shartli mantiq {#conditional-logic-with-applywhen}
 
-Use `applyWhen()` to conditionally apply entire groups of rules:
+Butun qoidalar guruhlarini shartli qoʻllash uchun `applyWhen()`'dan foydalaning:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -682,17 +682,17 @@ export class Address {
 }
 ```
 
-The `applyWhen()` function receives:
+`applyWhen()` funksiyasi quyidagilarni qabul qiladi:
 
-1. A path to apply logic to (often the root form path)
-2. A reactive logic function that returns `true` (apply) or `false` (don't apply)
-3. A schema function that defines the conditional rules
+1. Mantiq qoʻllanadigan yoʻl (koʻpincha ildiz forma yoʻli)
+2. `true` (qoʻllash) yoki `false` (qoʻllamaslik) qaytaruvchi reaktiv mantiq funksiyasi
+3. Shartli qoidalarni belgilaydigan sxema funksiyasi
 
-The conditional rules only run when the condition is true. This is useful for complex forms where validation rules or behavior changes based on user choices.
+Shartli qoidalar faqat shart toʻgʻri boʻlganda ishlaydi. Bu validatsiya qoidalari yoki xatti-harakat foydalanuvchi tanloviga qarab oʻzgaradigan murakkab formalar uchun foydali.
 
-### Reusable schema functions
+### Qayta foydalaniladigan sxema funksiyalari {#reusable-schema-functions}
 
-Extract common rule configurations into reusable functions:
+Umumiy qoida konfiguratsiyalarini qayta foydalaniladigan funksiyalarga ajratib oling:
 
 ```ts
 import {SchemaPath, debounce, metadata, maxLength} from '@angular/forms/signals';
@@ -715,12 +715,12 @@ const registrationForm = form(registrationModel, (schemaPath) => {
 });
 ```
 
-This pattern is useful when you have standard field configurations that you use across multiple forms in your application.
+Bu namuna ilovangizdagi bir nechta formada foydalanadigan standart maydon konfiguratsiyalaringiz boʻlganda foydali.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-To learn more about Signal Forms, check out these related guides:
+Signal Forms haqida koʻproq bilish uchun ushbu tegishli qoʻllanmalarni koʻrib chiqing:
 
-- [Field State Management](guide/forms/signals/field-state-management) - Learn how to use the state signals created by these functions in your templates and component logic
-- [Validation](guide/forms/signals/validation) - Learn about validation rules and error handling
-- [Custom Controls](guide/forms/signals/custom-controls) - Learn how custom controls can read metadata and state to configure themselves automatically
+- [Maydon holatini boshqarish](guide/forms/signals/field-state-management) - Bu funksiyalar yaratgan holat signallaridan shablonlaringiz va komponent mantigʻida qanday foydalanishni oʻrganing
+- [Validatsiya](guide/forms/signals/validation) - Validatsiya qoidalari va xatolarga ishlov berish haqida bilib oling
+- [Maxsus kontrollar](guide/forms/signals/custom-controls) - Maxsus kontrollar oʻzlarini avtomatik sozlash uchun metadata va holatni qanday oʻqishi mumkinligini oʻrganing
