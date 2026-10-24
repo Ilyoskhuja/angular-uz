@@ -1,399 +1,399 @@
-# Building a template-driven form
+# Shablonga asoslangan forma yaratish
 
-This tutorial shows you how to create a template-driven form. The control elements in the form are bound to data properties that have input validation. The input validation helps maintain data integrity and styling to improve the user experience.
+Bu darslik sizga shablonga asoslangan forma (template-driven form) yaratishni koʻrsatadi. Formadagi boshqaruv elementlari (controls) kiritish validatsiyasiga ega maʼlumot xususiyatlariga bogʻlanadi. Kiritish validatsiyasi maʼlumotlar yaxlitligini saqlashga va foydalanuvchi tajribasini yaxshilash uchun stillar berishga yordam beradi.
 
-Template-driven forms use [two-way data binding](guide/templates/two-way-binding) to update the data model in the component as changes are made in the template and vice versa.
+Shablonga asoslangan formalar shablonda oʻzgarishlar kiritilganda komponentdagi maʼlumotlar modelini yangilash uchun (va aksincha) [ikki tomonlama maʼlumot bogʻlash](guide/templates/two-way-binding)dan foydalanadi.
 
-<docs-callout helpful title="Template vs Reactive forms">
-Angular supports two design approaches for interactive forms. Template-driven forms allow you to use form-specific directives in your Angular template. Reactive forms provide a model-driven approach to building forms.
+<docs-callout helpful title="Shablonga asoslangan va reaktiv formalar">
+Angular interaktiv formalar uchun ikkita dizayn yondashuvini qoʻllab-quvvatlaydi. Shablonga asoslangan formalar Angular shabloningizda formaga xos direktivalardan foydalanish imkonini beradi. Reaktiv formalar formalar yaratishga modelga asoslangan yondashuvni taqdim etadi.
 
-Template-driven forms are a great choice for small or simple forms, while reactive forms are more scalable and suitable for complex forms. For a comparison of the two approaches, see [Choosing an approach](guide/forms#choosing-an-approach)
+Shablonga asoslangan formalar kichik yoki sodda formalar uchun ajoyib tanlov, reaktiv formalar esa yaxshiroq masshtablanadi va murakkab formalar uchun mos keladi. Ikki yondashuvni solishtirish uchun [Yondashuvni tanlash](guide/forms#choosing-an-approach) boʻlimiga qarang
 </docs-callout>
 
-You can build almost any kind of form with an Angular template — login forms, contact forms, and pretty much any business form.
-You can lay out the controls creatively and bind them to the data in your object model.
-You can specify validation rules and display validation errors, conditionally allow input from specific controls, trigger built-in visual feedback, and much more.
+Angular shabloni bilan deyarli har qanday turdagi formani yaratishingiz mumkin — kirish formalari, aloqa formalari va amalda istalgan biznes formasi.
+Boshqaruv elementlarini ijodiy joylashtirishingiz va ularni obyekt modelingizdagi maʼlumotlarga bogʻlashingiz mumkin.
+Validatsiya qoidalarini belgilashingiz va validatsiya xatolarini koʻrsatishingiz, muayyan boshqaruv elementlaridan kiritishga shartli ruxsat berishingiz, oʻrnatilgan vizual qayta aloqani ishga tushirishingiz va yana koʻp narsalarni qilishingiz mumkin.
 
-## Objectives
+## Maqsadlar {#objectives}
 
-This tutorial teaches you how to do the following:
+Bu darslik sizga quyidagilarni oʻrgatadi:
 
-- Build an Angular form with a component and template
-- Use `ngModel` to create two-way data bindings for reading and writing input-control values
-- Provide visual feedback using special CSS classes that track the state of the controls
-- Display validation errors to users and conditionally allow input from form controls based on the form status
-- Share information across HTML elements using [template reference variables](guide/templates/variables#template-reference-variables)
+- Komponent va shablon bilan Angular formasini yaratish
+- Input boshqaruv elementlari qiymatlarini oʻqish va yozish uchun `ngModel` yordamida ikki tomonlama maʼlumot bogʻlashlarini yaratish
+- Boshqaruv elementlari holatini kuzatuvchi maxsus CSS klasslari yordamida vizual qayta aloqa berish
+- Foydalanuvchilarga validatsiya xatolarini koʻrsatish va forma holatiga qarab forma boshqaruv elementlaridan kiritishga shartli ruxsat berish
+- [Shablon murojaat oʻzgaruvchilari](guide/templates/variables#template-reference-variables) yordamida HTML elementlari oʻrtasida maʼlumot ulashish
 
-## Build a template-driven form
+## Shablonga asoslangan forma yaratish {#build-a-template-driven-form}
 
-Template-driven forms rely on directives defined in the `FormsModule`.
+Shablonga asoslangan formalar `FormsModule`'da aniqlangan direktivalarga tayanadi.
 
-| Directives     | Details                                                                                                                                                                                                                                                                         |
+| Direktivalar   | Tafsilotlar                                                                                                                                                                                                                                                                      |
 | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `NgModel`      | Reconciles value changes in the attached form element with changes in the data model, allowing you to respond to user input with input validation and error handling.                                                                                                           |
-| `NgForm`       | Creates a top-level `FormGroup` instance and binds it to a `<form>` element to track aggregated form value and validation status. As soon as you import `FormsModule`, this directive becomes active by default on all `<form>` tags. You don't need to add a special selector. |
-| `NgModelGroup` | Creates and binds a `FormGroup` instance to a DOM element.                                                                                                                                                                                                                      |
+| `NgModel`      | Biriktirilgan forma elementidagi qiymat oʻzgarishlarini maʼlumotlar modelidagi oʻzgarishlar bilan moslashtiradi va foydalanuvchi kiritishiga kiritish validatsiyasi va xatolarga ishlov berish bilan javob qaytarish imkonini beradi.                                            |
+| `NgForm`       | Yuqori darajali `FormGroup` nusxasini yaratadi va formaning umumiy qiymati hamda validatsiya holatini kuzatish uchun uni `<form>` elementiga bogʻlaydi. `FormsModule`'ni import qilishingiz bilan bu direktiva sukut boʻyicha barcha `<form>` teglarida faol boʻladi. Maxsus selektor qoʻshish shart emas. |
+| `NgModelGroup` | `FormGroup` nusxasini yaratadi va uni DOM elementiga bogʻlaydi.                                                                                                                                                                                                                 |
 
-### Step overview
+### Qadamlar umumiy koʻrinishi {#step-overview}
 
-In the course of this tutorial, you bind a sample form to data and handle user input using the following steps.
+Bu darslik davomida siz namunaviy formani maʼlumotlarga bogʻlaysiz va quyidagi qadamlar yordamida foydalanuvchi kiritishiga ishlov berasiz.
 
-1. Build the basic form.
-   - Define a sample data model
-   - Include required infrastructure such as the `FormsModule`
-1. Bind form controls to data properties using the `ngModel` directive and two-way data-binding syntax.
-   - Examine how `ngModel` reports control states using CSS classes
-   - Name controls to make them accessible to `ngModel`
-1. Track input validity and control status using `ngModel`.
-   - Add custom CSS to provide visual feedback on the status
-   - Show and hide validation-error messages
-1. Respond to a native HTML button-click event by adding to the model data.
-1. Handle form submission using the [`ngSubmit`](api/forms/NgForm#ngSubmit) output property of the form.
-   - Disable the **Submit** button until the form is valid
-   - After submit, swap out the finished form for different content on the page
+1. Asosiy formani yarating.
+   - Namunaviy maʼlumotlar modelini aniqlang
+   - `FormsModule` kabi zarur infratuzilmani qoʻshing
+1. `ngModel` direktivi va ikki tomonlama maʼlumot bogʻlash sintaksisi yordamida forma boshqaruv elementlarini maʼlumot xususiyatlariga bogʻlang.
+   - `ngModel` boshqaruv elementlari holatlarini CSS klasslari orqali qanday bildirishini koʻrib chiqing
+   - Boshqaruv elementlariga `ngModel` uchun mavjud boʻlishi maqsadida nom bering
+1. `ngModel` yordamida kiritish validligini va boshqaruv elementi holatini kuzating.
+   - Holat haqida vizual qayta aloqa berish uchun maxsus CSS qoʻshing
+   - Validatsiya xatosi xabarlarini koʻrsating va yashiring
+1. Model maʼlumotlariga qoʻshish orqali HTML tugmasining native bosish hodisasiga javob bering.
+1. Formaning [`ngSubmit`](api/forms/NgForm#ngSubmit) output xususiyati yordamida forma yuborilishiga ishlov bering.
+   - Forma valid boʻlmaguncha **Submit** tugmasini oʻchirib qoʻying
+   - Yuborilgandan soʻng tugallangan formani sahifadagi boshqa kontent bilan almashtiring
 
-## Build the form
+## Formani yaratish {#build-the-form}
 
 <!-- TODO: link to preview -->
 <!-- <docs-code live/> -->
 
-1. The provided sample application creates the `Actor` class which defines the data model reflected in the form.
+1. Taqdim etilgan namunaviy ilova formada aks etadigan maʼlumotlar modelini aniqlovchi `Actor` klassini yaratadi.
 
    <docs-code header="actor.ts" language="typescript" path="adev/src/content/examples/forms/src/app/actor.ts"/>
 
-1. The form layout and details are defined in the `ActorFormComponent` class.
+1. Forma joylashuvi va tafsilotlari `ActorFormComponent` klassida aniqlanadi.
 
    <docs-code header="actor-form.component.ts (v1)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" region="v1"/>
 
-   The component's `selector` value of "app-actor-form" means you can drop this form in a parent template using the `<app-actor-form>` tag.
+   Komponentning `selector` qiymati "app-actor-form" boʻlgani uchun bu formani `<app-actor-form>` tegi yordamida ota shablonga joylashtirishingiz mumkin.
 
-1. The following code creates a new actor instance, so that the initial form can show an example actor.
+1. Quyidagi kod yangi aktyor nusxasini yaratadi, shunda dastlabki forma namunaviy aktyorni koʻrsata oladi.
 
    <docs-code language="typescript" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" language="typescript" region="Marilyn"/>
 
-   This demo uses dummy data for `model` and `skills`.
-   In a real app, you would inject a data service to get and save real data, or expose these properties as inputs and outputs.
+   Bu demo `model` va `skills` uchun soxta maʼlumotlardan foydalanadi.
+   Haqiqiy ilovada haqiqiy maʼlumotlarni olish va saqlash uchun maʼlumotlar servisini inyeksiya qilgan yoki bu xususiyatlarni input va output sifatida ochib bergan boʻlardingiz.
 
-1. The component enables the Forms feature by importing the `FormsModule` module.
+1. Komponent `FormsModule` modulini import qilish orqali Forms imkoniyatini yoqadi.
 
    <docs-code language="typescript" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" language="typescript" region="imports"/>
 
-1. The form is displayed in the application layout defined by the root component's template.
+1. Forma ildiz komponent shablonida aniqlangan ilova joylashuvida koʻrsatiladi.
 
    <docs-code header="app.component.html" language="html" path="adev/src/content/examples/forms/src/app/app.component.html"/>
 
-   The initial template defines the layout for a form with two form groups and a submit button.
-   The form groups correspond to two properties of the Actor data model, name and studio.
-   Each group has a label and a box for user input.
-   - The **Name** `<input>` control element has the HTML5 `required` attribute
-   - The **Studio** `<input>` control element does not because `studio` is optional
+   Dastlabki shablon ikkita forma guruhi va yuborish tugmasiga ega forma joylashuvini aniqlaydi.
+   Forma guruhlari Actor maʼlumotlar modelining ikkita xususiyatiga — name va studio — mos keladi.
+   Har bir guruhda yorliq (label) va foydalanuvchi kiritishi uchun katakcha bor.
+   - **Name** `<input>` boshqaruv elementida HTML5 `required` atributi bor
+   - **Studio** `<input>` boshqaruv elementida esa yoʻq, chunki `studio` ixtiyoriy
 
-   The **Submit** button has some classes on it for styling.
-   At this point, the form layout is all plain HTML5, with no bindings or directives.
+   **Submit** tugmasida stillar berish uchun bir nechta klass bor.
+   Hozircha forma joylashuvi hech qanday bogʻlash yoki direktivalarsiz, butunlay oddiy HTML5'dan iborat.
 
-1. The sample form uses some style classes from [Twitter Bootstrap](https://getbootstrap.com/css): `container`, `form-group`, `form-control`, and `btn`.
-   To use these styles, the application's style sheet imports the library.
+1. Namunaviy forma [Twitter Bootstrap](https://getbootstrap.com/css)'dan bir nechta stil klasslaridan foydalanadi: `container`, `form-group`, `form-control` va `btn`.
+   Bu stillardan foydalanish uchun ilovaning stil fayli kutubxonani import qiladi.
 
    <docs-code header="styles.css" path="adev/src/content/examples/forms/src/styles.1.css"/>
 
-1. The form requires that an actor's skill is chosen from a predefined list of `skills` maintained internally in `ActorFormComponent`.
-   The Angular `@for` loop iterates over the data values to populate the `<select>` element.
+1. Forma aktyor mahorati (skill) `ActorFormComponent` ichida saqlanadigan oldindan belgilangan `skills` roʻyxatidan tanlanishini talab qiladi.
+   Angular `@for` sikli `<select>` elementini toʻldirish uchun maʼlumot qiymatlari boʻylab takrorlanadi.
 
    <docs-code header="actor-form.component.html (skills)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="skills"/>
 
-If you run the application right now, you see the list of skills in the selection control.
-The input elements are not yet bound to data values or events, so they are still blank and have no behavior.
+Agar ilovani hozir ishga tushirsangiz, tanlov boshqaruv elementida mahoratlar roʻyxatini koʻrasiz.
+Input elementlari hali maʼlumot qiymatlariga yoki hodisalarga bogʻlanmagan, shuning uchun ular hali boʻsh va hech qanday xatti-harakatga ega emas.
 
-## Bind input controls to data properties
+## Input boshqaruv elementlarini maʼlumot xususiyatlariga bogʻlash {#bind-input-controls-to-data-properties}
 
-The next step is to bind the input controls to the corresponding `Actor` properties with two-way data binding, so that they respond to user input by updating the data model, and also respond to programmatic changes in the data by updating the display.
+Keyingi qadam — input boshqaruv elementlarini tegishli `Actor` xususiyatlariga ikki tomonlama maʼlumot bogʻlash orqali bogʻlash, shunda ular foydalanuvchi kiritishiga maʼlumotlar modelini yangilash bilan, maʼlumotlardagi dasturiy oʻzgarishlarga esa koʻrinishni yangilash bilan javob beradi.
 
-The `ngModel` directive declared in the `FormsModule` lets you bind controls in your template-driven form to properties in your data model.
-When you include the directive using the syntax for two-way data binding, `[(ngModel)]`, Angular can track the value and user interaction of the control and keep the view synced with the model.
+`FormsModule`'da eʼlon qilingan `ngModel` direktivi shablonga asoslangan formangizdagi boshqaruv elementlarini maʼlumotlar modelingizdagi xususiyatlarga bogʻlash imkonini beradi.
+Direktivani ikki tomonlama maʼlumot bogʻlash sintaksisi `[(ngModel)]` bilan qoʻshganingizda, Angular boshqaruv elementining qiymatini va foydalanuvchi bilan oʻzaro aloqasini kuzatib, koʻrinishni model bilan sinxron saqlay oladi.
 
-1. Edit the template file `actor-form.component.html`.
-1. Find the `<input>` tag next to the **Name** label.
-1. Add the `ngModel` directive, using two-way data binding syntax `[(ngModel)]="..."`.
+1. `actor-form.component.html` shablon faylini tahrirlang.
+1. **Name** yorligʻi yonidagi `<input>` tegini toping.
+1. Ikki tomonlama maʼlumot bogʻlash sintaksisi `[(ngModel)]="..."` yordamida `ngModel` direktivini qoʻshing.
 
 <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngModelName-1"/>
 
-HELPFUL: This example has a temporary diagnostic interpolation after each input tag, `{{model.name}}`, to show the current data value of the corresponding property. The comment reminds you to remove the diagnostic lines when you have finished observing the two-way data binding at work.
+HELPFUL: Bu misolda har bir input tegidan keyin tegishli xususiyatning joriy maʼlumot qiymatini koʻrsatish uchun vaqtinchalik diagnostik interpolyatsiya `{{model.name}}` bor. Izoh ikki tomonlama maʼlumot bogʻlashning ishlashini kuzatib boʻlganingizdan soʻng diagnostik qatorlarni olib tashlashni eslatadi.
 
-### Access the overall form status
+### Formaning umumiy holatiga murojaat qilish {#access-the-overall-form-status}
 
-When you imported the `FormsModule` in your component, Angular automatically created and attached an [NgForm](api/forms/NgForm) directive to the `<form>` tag in the template (because `NgForm` has the selector `form` that matches `<form>` elements).
+Komponentingizga `FormsModule`'ni import qilganingizda, Angular shablondagi `<form>` tegiga avtomatik ravishda [NgForm](api/forms/NgForm) direktivasini yaratib biriktirdi (chunki `NgForm` `<form>` elementlariga mos keladigan `form` selektoriga ega).
 
-To get access to the `NgForm` and the overall form status, declare a [template reference variable](guide/templates/variables#template-reference-variables).
+`NgForm`'ga va formaning umumiy holatiga murojaat qilish uchun [shablon murojaat oʻzgaruvchisi](guide/templates/variables#template-reference-variables)ni eʼlon qiling.
 
-1. Edit the template file `actor-form.component.html`.
-1. Update the `<form>` tag with a template reference variable, `#actorForm`, and set its value as follows.
+1. `actor-form.component.html` shablon faylini tahrirlang.
+1. `<form>` tegini `#actorForm` shablon murojaat oʻzgaruvchisi bilan yangilang va uning qiymatini quyidagicha oʻrnating.
 
    <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="template-variable"/>
 
-   The `actorForm` template variable is now a reference to the `NgForm` directive instance that governs the form as a whole.
+   `actorForm` shablon oʻzgaruvchisi endi formani yaxlit boshqaradigan `NgForm` direktivasi nusxasiga murojaatdir.
 
-1. Run the app.
-1. Start typing in the **Name** input box.
+1. Ilovani ishga tushiring.
+1. **Name** input katakchasiga yozishni boshlang.
 
-   As you add and delete characters, you can see them appear and disappear from the data model.
+   Belgilarni qoʻshganingizda va oʻchirganingizda ular maʼlumotlar modelida paydo boʻlishini va yoʻqolishini koʻrishingiz mumkin.
 
-The diagnostic line that shows interpolated values demonstrates that values are really flowing from the input box to the model and back again.
+Interpolyatsiya qilingan qiymatlarni koʻrsatuvchi diagnostik qator qiymatlar haqiqatan ham input katakchasidan modelga va yana qaytib oqayotganini namoyish etadi.
 
-### Naming control elements
+### Boshqaruv elementlariga nom berish {#naming-control-elements}
 
-When you use `[(ngModel)]` on an element, you must define a `name` attribute for that element.
-Angular uses the assigned name to register the element with the `NgForm` directive attached to the parent `<form>` element.
+Elementda `[(ngModel)]`'dan foydalanganingizda, oʻsha element uchun `name` atributini aniqlashingiz shart.
+Angular berilgan nomdan elementni ota `<form>` elementiga biriktirilgan `NgForm` direktivasida roʻyxatdan oʻtkazish uchun foydalanadi.
 
-The example added a `name` attribute to the `<input>` element and set it to "name", which makes sense for the actor's name.
-Any unique value will do, but using a descriptive name is helpful.
+Misolda `<input>` elementiga `name` atributi qoʻshilib, "name" qiymatiga oʻrnatildi — bu aktyor ismi uchun mantiqan toʻgʻri.
+Har qanday noyob qiymat yetarli, lekin tavsiflovchi nom ishlatish foydali.
 
-1. Add similar `[(ngModel)]` bindings and `name` attributes to **Studio** and **Skill**.
-1. You can now remove the diagnostic messages that show interpolated values.
-1. To confirm that two-way data binding works for the entire actor model, add a new text binding with the [`json`](api/common/JsonPipe) pipe at the top to the component's template, which serializes the data to a string.
+1. **Studio** va **Skill**'ga ham shunga oʻxshash `[(ngModel)]` bogʻlashlari va `name` atributlarini qoʻshing.
+1. Endi interpolyatsiya qilingan qiymatlarni koʻrsatuvchi diagnostik xabarlarni olib tashlashingiz mumkin.
+1. Ikki tomonlama maʼlumot bogʻlash butun aktyor modeli uchun ishlashini tasdiqlash uchun komponent shablonining yuqori qismiga maʼlumotlarni satrga seriyalashtiruvchi [`json`](api/common/JsonPipe) pipe bilan yangi matn bogʻlashini qoʻshing.
 
-After these revisions, the form template should look like the following:
+Bu oʻzgarishlardan soʻng forma shabloni quyidagicha koʻrinishi kerak:
 
 <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngModel-2"/>
 
-You'll notice that:
+Eʼtibor bering:
 
-- Each `<input>` element has an `id` property.
-  This is used by the `<label>` element's `for` attribute to match the label to its input control.
-  This is a [standard HTML feature](https://developer.mozilla.org/docs/Web/HTML/Element/label).
+- Har bir `<input>` elementida `id` xususiyati bor.
+  U `<label>` elementining `for` atributi tomonidan yorliqni oʻz input boshqaruv elementiga moslashtirish uchun ishlatiladi.
+  Bu [standart HTML imkoniyati](https://developer.mozilla.org/docs/Web/HTML/Element/label).
 
-- Each `<input>` element also has the required `name` property that Angular uses to register the control with the form.
+- Har bir `<input>` elementida shuningdek Angular boshqaruv elementini formada roʻyxatdan oʻtkazish uchun ishlatadigan zarur `name` xususiyati ham bor.
 
-When you have observed the effects, you can delete the `{{ model | json }}` text binding.
+Natijalarni kuzatib boʻlganingizdan soʻng `{{ model | json }}` matn bogʻlashini oʻchirib tashlashingiz mumkin.
 
-## Track form states
+## Forma holatlarini kuzatish {#track-form-states}
 
-Angular applies the `ng-submitted` class to `form` elements after the form has been submitted. This class can be used to change the form's style after it has been submitted.
+Angular forma yuborilgandan soʻng `form` elementlariga `ng-submitted` klassini qoʻllaydi. Bu klassdan forma yuborilgandan keyin uning stilini oʻzgartirish uchun foydalanish mumkin.
 
-## Track control states
+## Boshqaruv elementlari holatlarini kuzatish {#track-control-states}
 
-Adding the `NgModel` directive to a control adds class names to the control that describe its state.
-These classes can be used to change a control's style based on its state.
+Boshqaruv elementiga `NgModel` direktivasini qoʻshish unga holatini tavsiflovchi klass nomlarini qoʻshadi.
+Bu klasslardan boshqaruv elementining stilini uning holatiga qarab oʻzgartirish uchun foydalanish mumkin.
 
-The following table describes the class names that Angular applies based on the control's state.
+Quyidagi jadval Angular boshqaruv elementi holatiga qarab qoʻllaydigan klass nomlarini tavsiflaydi.
 
-| States                           | Class if true | Class if false |
-| :------------------------------- | :------------ | :------------- |
-| The control has been visited.    | `ng-touched`  | `ng-untouched` |
-| The control's value has changed. | `ng-dirty`    | `ng-pristine`  |
-| The control's value is valid.    | `ng-valid`    | `ng-invalid`   |
+| Holatlar                                         | Rost boʻlsa klass | Yolgʻon boʻlsa klass |
+| :----------------------------------------------- | :---------------- | :------------------- |
+| Boshqaruv elementiga kirilgan.                   | `ng-touched`      | `ng-untouched`       |
+| Boshqaruv elementining qiymati oʻzgargan.        | `ng-dirty`        | `ng-pristine`        |
+| Boshqaruv elementining qiymati valid.            | `ng-valid`        | `ng-invalid`         |
 
-Angular also applies the `ng-submitted` class to `form` elements upon submission, but not to the controls inside the `form` element.
+Angular shuningdek yuborilganda `form` elementlariga `ng-submitted` klassini ham qoʻllaydi, lekin `form` elementi ichidagi boshqaruv elementlariga qoʻllamaydi.
 
-You use these CSS classes to define the styles for your control based on its status.
+Bu CSS klasslaridan boshqaruv elementingiz uchun holatiga qarab stillarni aniqlashda foydalanasiz.
 
-### Observe control states
+### Boshqaruv elementlari holatlarini kuzatib koʻrish {#observe-control-states}
 
-To see how the classes are added and removed by the framework, open the browser's developer tools and inspect the `<input>` element that represents the actor name.
+Freymvork klasslarni qanday qoʻshishi va olib tashlashini koʻrish uchun brauzerning dasturchi vositalarini oching va aktyor ismini ifodalovchi `<input>` elementini tekshiring.
 
-1. Using your browser's developer tools, find the `<input>` element that corresponds to the **Name** input box.
-   You can see that the element has multiple CSS classes in addition to "form-control".
+1. Brauzeringizning dasturchi vositalari yordamida **Name** input katakchasiga mos keladigan `<input>` elementini toping.
+   Elementda "form-control"dan tashqari bir nechta CSS klasslari borligini koʻrishingiz mumkin.
 
-1. When you first bring it up, the classes indicate that it has a valid value, that the value has not been changed since initialization or reset, and that the control has not been visited since initialization or reset.
+1. Uni birinchi marta ochganingizda klasslar u valid qiymatga ega ekanini, qiymat initsializatsiya yoki qayta oʻrnatishdan beri oʻzgarmaganini va boshqaruv elementiga initsializatsiya yoki qayta oʻrnatishdan beri kirilmaganini bildiradi.
 
    ```html
    <input class="form-control ng-untouched ng-pristine ng-valid" />
    ```
 
-1. Take the following actions on the **Name** `<input>` box, and observe which classes appear.
-   - Look but don't touch.
-     The classes indicate that it is untouched, pristine, and valid.
+1. **Name** `<input>` katakchasida quyidagi amallarni bajaring va qaysi klasslar paydo boʻlishini kuzating.
+   - Qarang, lekin tegmang.
+     Klasslar u tegilmagan (untouched), oʻzgarmagan (pristine) va valid ekanini bildiradi.
 
-   - Click inside the name box, then click outside it.
-     The control has now been visited, and the element has the `ng-touched` class instead of the `ng-untouched` class.
+   - Ism katakchasi ichiga bosing, keyin uning tashqarisiga bosing.
+     Boshqaruv elementiga endi kirilgan va elementda `ng-untouched` klassi oʻrniga `ng-touched` klassi bor.
 
-   - Add slashes to the end of the name.
-     It is now touched and dirty.
+   - Ism oxiriga slesh belgilarini qoʻshing.
+     Endi u tegilgan (touched) va oʻzgargan (dirty).
 
-   - Erase the name.
-     This makes the value invalid, so the `ng-invalid` class replaces the `ng-valid` class.
+   - Ismni oʻchiring.
+     Bu qiymatni invalid qiladi, shuning uchun `ng-valid` klassi oʻrnini `ng-invalid` klassi egallaydi.
 
-### Create visual feedback for states
+### Holatlar uchun vizual qayta aloqa yaratish {#create-visual-feedback-for-states}
 
-The `ng-valid`/`ng-invalid` pair is particularly interesting, because you want to send a
-strong visual signal when the values are invalid.
-You also want to mark required fields.
+`ng-valid`/`ng-invalid` juftligi ayniqsa qiziq, chunki qiymatlar invalid boʻlganda
+kuchli vizual signal berishni istaysiz.
+Shuningdek, majburiy maydonlarni ham belgilashni istaysiz.
 
-You can mark required fields and invalid data at the same time with a colored bar
-on the left of the input box.
+Majburiy maydonlarni va invalid maʼlumotlarni input katakchasining chap tomonidagi rangli
+chiziq bilan bir vaqtning oʻzida belgilashingiz mumkin.
 
-To change the appearance in this way, take the following steps.
+Koʻrinishni shu tarzda oʻzgartirish uchun quyidagi qadamlarni bajaring.
 
-1. Add definitions for the `ng-*` CSS classes.
-1. Add these class definitions to a new `forms.css` file.
-1. Add the new file to the project as a sibling to `index.html`:
+1. `ng-*` CSS klasslari uchun taʼriflar qoʻshing.
+1. Bu klass taʼriflarini yangi `forms.css` fayliga qoʻshing.
+1. Yangi faylni loyihaga `index.html` bilan bir qatorda joylashtiring:
 
    <docs-code header="forms.css" language="css" path="adev/src/content/examples/forms/src/assets/forms.css"/>
 
-1. In the `index.html` file, update the `<head>` tag to include the new style sheet.
+1. `index.html` faylida `<head>` tegini yangi stil faylini qoʻshadigan tarzda yangilang.
 
    <docs-code header="index.html (styles)" path="adev/src/content/examples/forms/src/index.html" region="styles"/>
 
-### Show and hide validation error messages
+### Validatsiya xatosi xabarlarini koʻrsatish va yashirish {#show-and-hide-validation-error-messages}
 
-The **Name** input box is required and clearing it turns the bar red.
-That indicates that something is wrong, but the user doesn't know what is wrong or what to do about it.
-You can provide a helpful message by checking for and responding to the control's state.
+**Name** input katakchasi majburiy va uni tozalash chiziqni qizil rangga oʻzgartiradi.
+Bu nimadir notoʻgʻri ekanini bildiradi, lekin foydalanuvchi nima notoʻgʻri yoki nima qilish kerakligini bilmaydi.
+Boshqaruv elementi holatini tekshirib, unga javob berish orqali foydali xabar taqdim etishingiz mumkin.
 
-The **Skill** select box is also required, but it doesn't need this kind of error handling because the selection box already constrains the selection to valid values.
+**Skill** tanlov katakchasi ham majburiy, lekin unga bunday xatolarga ishlov berish kerak emas, chunki tanlov katakchasi tanlovni allaqachon valid qiymatlar bilan cheklaydi.
 
-To define and show an error message when appropriate, take the following steps.
+Kerak boʻlganda xato xabarini aniqlash va koʻrsatish uchun quyidagi qadamlarni bajaring.
 
 <docs-workflow>
-<docs-step title="Add a local reference to the input">
-Extend the `input` tag with a template reference variable that you can use to access the input box's Angular control from within the template. In the example, the variable is `#name="ngModel"`.
+<docs-step title="Input'ga lokal murojaat qoʻshing">
+`input` tegini shablon ichidan input katakchasining Angular boshqaruv elementiga murojaat qilish uchun ishlatishingiz mumkin boʻlgan shablon murojaat oʻzgaruvchisi bilan kengaytiring. Misolda oʻzgaruvchi `#name="ngModel"`.
 
-The template reference variable (`#name`) is set to `"ngModel"` because that is the value of the [`NgModel.exportAs`](api/core/Directive#exportAs) property. This property tells Angular how to link a reference variable to a directive.
+Shablon murojaat oʻzgaruvchisi (`#name`) `"ngModel"` qiymatiga oʻrnatiladi, chunki bu [`NgModel.exportAs`](api/core/Directive#exportAs) xususiyatining qiymati. Bu xususiyat Angular'ga murojaat oʻzgaruvchisini direktivaga qanday bogʻlashni aytadi.
 </docs-step>
 
-<docs-step title="Add the error message">
-Add a `<div>` that contains a suitable error message.
+<docs-step title="Xato xabarini qoʻshing">
+Mos xato xabarini oʻz ichiga olgan `<div>` qoʻshing.
 </docs-step>
 
-<docs-step title="Make the error message conditional">
-Show or hide the error message by binding properties of the `name` control to the message `<div>` element's `hidden` property.
+<docs-step title="Xato xabarini shartli qiling">
+`name` boshqaruv elementining xususiyatlarini xabar `<div>` elementining `hidden` xususiyatiga bogʻlash orqali xato xabarini koʻrsating yoki yashiring.
 </docs-step>
 
 <docs-code header="actor-form.component.html (hidden-error-msg)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="hidden-error-msg"/>
 
-<docs-step title="Add a conditional error message to name">
-Add a conditional error message to the `name` input box, as in the following example.
+<docs-step title="name'ga shartli xato xabarini qoʻshing">
+Quyidagi misoldagidek, `name` input katakchasiga shartli xato xabarini qoʻshing.
 
 <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="name-with-error-msg"/>
 </docs-step>
 </docs-workflow>
 
-<docs-callout title='Illustrating the "pristine" state'>
+<docs-callout title='"Pristine" holatini tushuntirish'>
 
-In this example, you hide the message when the control is either valid or _pristine_.
-Pristine means the user hasn't changed the value since it was displayed in this form.
-If you ignore the `pristine` state, you would hide the message only when the value is valid.
-If you arrive in this component with a new, blank actor or an invalid actor, you'll see the error message immediately, before you've done anything.
+Bu misolda boshqaruv elementi valid yoki _pristine_ (oʻzgarmagan) boʻlganda xabarni yashirasiz.
+Pristine foydalanuvchi qiymatni bu formada koʻrsatilganidan beri oʻzgartirmaganini anglatadi.
+Agar `pristine` holatini eʼtiborsiz qoldirsangiz, xabarni faqat qiymat valid boʻlganda yashirgan boʻlardingiz.
+Agar bu komponentga yangi, boʻsh aktyor yoki invalid aktyor bilan kirsangiz, hech narsa qilmasingizdan oldin xato xabarini darhol koʻrasiz.
 
-You might want the message to display only when the user makes an invalid change.
-Hiding the message while the control is in the `pristine` state achieves that goal.
-You'll see the significance of this choice when you add a new actor to the form in the next step.
+Xabar faqat foydalanuvchi invalid oʻzgarish kiritganda koʻrsatilishini istashingiz mumkin.
+Boshqaruv elementi `pristine` holatida boʻlganida xabarni yashirish shu maqsadga erishadi.
+Keyingi qadamda formaga yangi aktyor qoʻshganingizda bu tanlovning ahamiyatini koʻrasiz.
 
 </docs-callout>
 
-## Add a new actor
+## Yangi aktyor qoʻshish {#add-a-new-actor}
 
-This exercise shows how you can respond to a native HTML button-click event by adding to the model data.
-To let form users add a new actor, you will add a **New Actor** button that responds to a click event.
+Bu mashq model maʼlumotlariga qoʻshish orqali HTML tugmasining native bosish hodisasiga qanday javob berishingiz mumkinligini koʻrsatadi.
+Forma foydalanuvchilariga yangi aktyor qoʻshish imkonini berish uchun bosish hodisasiga javob beradigan **New Actor** tugmasini qoʻshasiz.
 
-1. In the template, place a "New Actor" `<button>` element at the bottom of the form.
-1. In the component file, add the actor-creation method to the actor data model.
+1. Shablonda formaning pastki qismiga "New Actor" `<button>` elementini joylashtiring.
+1. Komponent faylida aktyor maʼlumotlar modeliga aktyor yaratish metodini qoʻshing.
 
    <docs-code header="actor-form.component.ts (New Actor method)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" region="new-actor"/>
 
-1. Bind the button's click event to an actor-creation method, `newActor()`.
+1. Tugmaning bosish hodisasini aktyor yaratish metodi `newActor()`'ga bogʻlang.
 
    <docs-code header="actor-form.component.html (New Actor button)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="new-actor-button-no-reset"/>
 
-1. Run the application again and click the **New Actor** button.
+1. Ilovani qayta ishga tushiring va **New Actor** tugmasini bosing.
 
-   The form clears, and the _required_ bars to the left of the input box are red, indicating invalid `name` and `skill` properties.
-   Notice that the error messages are hidden.
-   This is because the form is pristine; you haven't changed anything yet.
+   Forma tozalanadi va input katakchasining chap tomonidagi _majburiy_ chiziqlar qizil boʻlib, `name` va `skill` xususiyatlari invalid ekanini bildiradi.
+   Xato xabarlari yashirilganiga eʼtibor bering.
+   Buning sababi forma pristine holatda; siz hali hech narsani oʻzgartirmadingiz.
 
-1. Enter a name and click **New Actor** again.
+1. Ism kiriting va yana **New Actor** tugmasini bosing.
 
-   Now the application displays a `Name is required` error message, because the input box is no longer pristine.
-   The form remembers that you entered a name before clicking **New Actor**.
+   Endi ilova `Name is required` xato xabarini koʻrsatadi, chunki input katakchasi endi pristine emas.
+   Forma **New Actor** tugmasini bosishdan oldin ism kiritganingizni eslab qoladi.
 
-1. To restore the pristine state of the form controls, clear all of the flags imperatively by calling the form's `reset()` method after calling the `newActor()` method.
+1. Forma boshqaruv elementlarining pristine holatini tiklash uchun `newActor()` metodini chaqirgandan soʻng formaning `reset()` metodini chaqirib, barcha bayroqlarni imperativ tarzda tozalang.
 
    <docs-code header="actor-form.component.html (Reset the form)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="new-actor-button-form-reset"/>
 
-   Now clicking **New Actor** resets both the form and its control flags.
+   Endi **New Actor** tugmasini bosish formani ham, uning boshqaruv elementlari bayroqlarini ham qayta oʻrnatadi.
 
-## Submit the form with `ngSubmit`
+## Formani `ngSubmit` bilan yuborish {#submit-the-form-with-ngsubmit}
 
-The user should be able to submit this form after filling it in.
-The **Submit** button at the bottom of the form does nothing on its own, but it does trigger a form-submit event because of its type (`type="submit"`).
+Foydalanuvchi bu formani toʻldirgandan soʻng yubora olishi kerak.
+Formaning pastki qismidagi **Submit** tugmasi oʻz-oʻzidan hech narsa qilmaydi, lekin turi (`type="submit"`) tufayli forma yuborish hodisasini ishga tushiradi.
 
-To respond to this event, take the following steps.
+Bu hodisaga javob berish uchun quyidagi qadamlarni bajaring.
 
 <docs-workflow>
 
-<docs-step title="Listen to ngOnSubmit">
-Bind the form's [`ngSubmit`](api/forms/NgForm#ngSubmit) event property to the actor-form component's `onSubmit()` method.
+<docs-step title="ngOnSubmit'ni tinglang">
+Formaning [`ngSubmit`](api/forms/NgForm#ngSubmit) hodisa xususiyatini aktyor formasi komponentining `onSubmit()` metodiga bogʻlang.
 
 <docs-code header="actor-form.component.html (ngSubmit)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngSubmit"/>
 </docs-step>
 
-<docs-step title="Bind the disabled property">
-Use the template reference variable, `#actorForm` to access the form that contains the **Submit** button and create an event binding.
+<docs-step title="disabled xususiyatini bogʻlang">
+**Submit** tugmasini oʻz ichiga olgan formaga murojaat qilish va hodisa bogʻlashini yaratish uchun `#actorForm` shablon murojaat oʻzgaruvchisidan foydalaning.
 
-You will bind the form property that indicates its overall validity to the **Submit** button's `disabled` property.
+Formaning umumiy validligini bildiruvchi xususiyatini **Submit** tugmasining `disabled` xususiyatiga bogʻlaysiz.
 
 <docs-code header="actor-form.component.html (submit-button)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="submit-button"/>
 </docs-step>
 
-<docs-step title="Run the application">
-Notice that the button is enabled — although it doesn't do anything useful yet.
+<docs-step title="Ilovani ishga tushiring">
+Tugma yoqilganiga eʼtibor bering — garchi u hali foydali hech narsa qilmasa ham.
 </docs-step>
 
-<docs-step title="Delete the Name value">
-This violates the "required" rule, so it displays the error message —and notice that it also disables the **Submit** button.
+<docs-step title="Name qiymatini oʻchiring">
+Bu "required" qoidasini buzadi, shuning uchun xato xabari koʻrsatiladi — va bu **Submit** tugmasini ham oʻchirib qoʻyishiga eʼtibor bering.
 
-You didn't have to explicitly wire the button's enabled state to the form's validity.
-The `FormsModule` did this automatically when you defined a template reference variable on the enhanced form element, then referred to that variable in the button control.
+Tugmaning yoqilganlik holatini formaning validligiga qoʻlda bogʻlashingiz shart emas edi.
+`FormsModule` kengaytirilgan forma elementida shablon murojaat oʻzgaruvchisini aniqlab, keyin tugma boshqaruv elementida oʻsha oʻzgaruvchiga murojaat qilganingizda buni avtomatik bajardi.
 </docs-step>
 </docs-workflow>
 
-### Respond to form submission
+### Forma yuborilishiga javob berish {#respond-to-form-submission}
 
-To show a response to form submission, you can hide the data entry area and display something else in its place.
+Forma yuborilishiga javobni koʻrsatish uchun maʼlumot kiritish hududini yashirib, uning oʻrniga boshqa narsa koʻrsatishingiz mumkin.
 
 <docs-workflow>
-<docs-step title="Wrap the form">
-Wrap the entire form in a `<div>` and bind its `hidden` property to the `ActorFormComponent.submitted` property.
+<docs-step title="Formani oʻrang">
+Butun formani `<div>` ichiga oʻrang va uning `hidden` xususiyatini `ActorFormComponent.submitted` xususiyatiga bogʻlang.
 
 <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="edit-div"/>
 
-The main form is visible from the start because the `submitted` property is false until you submit the form, as this fragment from the `ActorFormComponent` shows:
+Asosiy forma boshidan koʻrinadi, chunki `ActorFormComponent`'dan olingan ushbu parcha koʻrsatganidek, `submitted` xususiyati siz formani yubormaguningizcha false boʻladi:
 
 <docs-code header="actor-form.component.ts (submitted)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" region="submitted"/>
 
-When you click the **Submit** button, the `submitted` flag becomes true and the form disappears.
+**Submit** tugmasini bosganingizda `submitted` bayrogʻi true boʻladi va forma yoʻqoladi.
 </docs-step>
 
-<docs-step title="Add the submitted state">
-To show something else while the form is in the submitted state, add the following HTML below the new `<div>` wrapper.
+<docs-step title="Yuborilgan holatni qoʻshing">
+Forma yuborilgan holatda boʻlganida boshqa narsa koʻrsatish uchun yangi `<div>` oʻrami ostiga quyidagi HTML'ni qoʻshing.
 
 <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="submitted"/>
 
-This `<div>`, which shows a read-only actor with interpolation bindings, appears only while the component is in the submitted state.
+Interpolyatsiya bogʻlashlari bilan faqat oʻqish uchun aktyorni koʻrsatuvchi bu `<div>` faqat komponent yuborilgan holatda boʻlganida paydo boʻladi.
 
-The alternative display includes an _Edit_ button whose click event is bound to an expression that clears the `submitted` flag.
+Muqobil koʻrinishda bosish hodisasi `submitted` bayrogʻini tozalaydigan ifodaga bogʻlangan _Edit_ tugmasi bor.
 </docs-step>
 
-<docs-step title="Test the Edit button">
-Click the *Edit* button to switch the display back to the editable form.
+<docs-step title="Edit tugmasini sinab koʻring">
+Koʻrinishni tahrirlanadigan formaga qaytarish uchun *Edit* tugmasini bosing.
 </docs-step>
 </docs-workflow>
 
-## Summary
+## Xulosa {#summary}
 
-The Angular form discussed in this page takes advantage of the following
-framework features to provide support for data modification, validation, and more.
+Bu sahifada koʻrib chiqilgan Angular formasi maʼlumotlarni oʻzgartirish, validatsiya va boshqa imkoniyatlarni
+taʼminlash uchun freymvorkning quyidagi imkoniyatlaridan foydalanadi.
 
-- An Angular HTML form template
-- A form component class with a `@Component` decorator
-- Handling form submission by binding to the `NgForm.ngSubmit` event property
-- Template-reference variables such as `#actorForm` and `#name`
-- `[(ngModel)]` syntax for two-way data binding
-- The use of `name` attributes for validation and form-element change tracking
-- The reference variable's `valid` property on input controls indicates whether a control is valid or should show error messages
-- Controlling the **Submit** button's enabled state by binding to `NgForm` validity
-- Custom CSS classes that provide visual feedback to users about controls that are not valid
+- Angular HTML forma shabloni
+- `@Component` dekoratoriga ega forma komponenti klassi
+- `NgForm.ngSubmit` hodisa xususiyatiga bogʻlash orqali forma yuborilishiga ishlov berish
+- `#actorForm` va `#name` kabi shablon murojaat oʻzgaruvchilari
+- Ikki tomonlama maʼlumot bogʻlash uchun `[(ngModel)]` sintaksisi
+- Validatsiya va forma elementi oʻzgarishlarini kuzatish uchun `name` atributlaridan foydalanish
+- Input boshqaruv elementlaridagi murojaat oʻzgaruvchisining `valid` xususiyati boshqaruv elementi valid ekanini yoki xato xabarlarini koʻrsatishi kerakligini bildiradi
+- `NgForm` validligiga bogʻlash orqali **Submit** tugmasining yoqilganlik holatini boshqarish
+- Foydalanuvchilarga valid boʻlmagan boshqaruv elementlari haqida vizual qayta aloqa beruvchi maxsus CSS klasslari
 
-Here's the code for the final version of the application:
+Ilovaning yakuniy versiyasi kodi:
 
 <docs-code-multifile>
     <docs-code header="actor-form.component.ts" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" region="final"/>
