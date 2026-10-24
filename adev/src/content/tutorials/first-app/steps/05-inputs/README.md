@@ -1,53 +1,53 @@
-# Add an input parameter to the component
+# Komponentga input parametri qoʻshing
 
-This tutorial lesson demonstrates how to create a component `input` and use it to pass data to a component for customization.
+Bu darslik darsi komponent `input`'ini yaratish va undan komponentni moslashtirish uchun maʼlumot uzatishda foydalanishni koʻrsatadi.
 
 <docs-video src="https://www.youtube.com/embed/eM3zi_n7lNs?si=WvRGFSkW_7_zDIFD&amp;start=241"/>
 
-NOTE: This video reflects an older syntax, but the main concepts remain valid.
+NOTE: Bu video eskiroq sintaksisni aks ettiradi, lekin asosiy tushunchalar oʻz kuchini saqlab qoladi.
 
-## What you'll learn
+## Nimalarni oʻrganasiz {#what-youll-learn}
 
-Your app's `HousingLocation` template has a `HousingLocation` property to receive input.
+Ilovangizning `HousingLocation` shablonida input qabul qiluvchi `HousingLocation` xususiyati paydo boʻladi.
 
-## Conceptual preview of Inputs
+## Input'larning konseptual koʻrinishi {#conceptual-preview-of-inputs}
 
-[Inputs](api/core/input) allow components to specify data that can be passed to it from a parent component.
+[Input'lar](api/core/input) komponentlarga ota (parent) komponentdan uzatilishi mumkin boʻlgan maʼlumotlarni belgilash imkonini beradi.
 
-In this lesson, you'll define an `input` property in the `HousingLocation` component that enables you to customize the data displayed in the component.
+Bu darsda `HousingLocation` komponentida koʻrsatiladigan maʼlumotlarni moslashtirish imkonini beruvchi `input` xususiyatini belgilaysiz.
 
-Learn more in the [Accepting data with input properties](guide/components/inputs) and [Custom events with outputs](guide/components/outputs) guides.
+Koʻproq maʼlumotni [Input xususiyatlari bilan maʼlumot qabul qilish](guide/components/inputs) va [Output'lar bilan maxsus hodisalar](guide/components/outputs) qoʻllanmalarida bilib oling.
 
 <docs-workflow>
 
-<docs-step title="Import the input() function">
-In the code editor, import the `input` helper method from `@angular/core` and the `HousingLocationInfo` interface from `../housinglocation` into the `HousingLocation` component.
+<docs-step title="input() funksiyasini import qiling">
+Kod muharririda `@angular/core`'dan `input` yordamchi metodini va `../housinglocation`'dan `HousingLocationInfo` interfeysini `HousingLocation` komponentiga import qiling.
 
-<docs-code header="Import input and HousingLocationInfo in housing-location.ts" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/housing-location/housing-location.ts" visibleLines="[1,2]"/>
-
-</docs-step>
-
-<docs-step title="Add the Input property">
-Add a required property called `housingLocation` and initialize it using `input.required()` with the type `HousingLocationInfo`.
-
-  <docs-code header="Declare the input property in housing-location.ts" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/housing-location/housing-location.ts" visibleLines="[10]"/>
-
-You have to invoke the `required` method on `input` to indicate that the parent component must provide a value. In our example application, we know this value will always be passed in — this is by design. The `.required()` call ensures that the TypeScript compiler enforces this and treats the property as non-nullable when this component is used in a template.
+<docs-code header="housing-location.ts faylida input va HousingLocationInfo'ni import qiling" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/housing-location/housing-location.ts" visibleLines="[1,2]"/>
 
 </docs-step>
 
-<docs-step title="Pass data to the input">
-Send the `housingLocation` value from the `Home` component to the `housingLocation` property of the HousingLocation component.
+<docs-step title="Input xususiyatini qoʻshing">
+`housingLocation` nomli majburiy xususiyat qoʻshing va uni `HousingLocationInfo` turi bilan `input.required()` orqali boshlangʻich qiymat bilan taʼminlang.
 
-<docs-code language="angular-ts" header="Declare the input property for HousingLocation in home.ts" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/home/home.ts" visibleLines="[16]"/>
+  <docs-code header="housing-location.ts faylida input xususiyatini eʼlon qiling" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/housing-location/housing-location.ts" visibleLines="[10]"/>
+
+Ota komponent qiymat berishi shart ekanini bildirish uchun `input` ustida `required` metodini chaqirishingiz kerak. Bizning misol ilovamizda bu qiymat har doim uzatilishini bilamiz — bu ataylab shunday qilingan. `.required()` chaqiruvi TypeScript kompilyatori buni majburiy qilishini va bu komponent shablonda ishlatilganda xususiyatni null boʻlmaydigan (non-nullable) deb hisoblashini taʼminlaydi.
+
+</docs-step>
+
+<docs-step title="Input'ga maʼlumot uzating">
+`housingLocation` qiymatini `Home` komponentidan HousingLocation komponentining `housingLocation` xususiyatiga yuboring.
+
+<docs-code language="angular-ts" header="home.ts faylida HousingLocation uchun input xususiyatini eʼlon qiling" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/home/home.ts" visibleLines="[16]"/>
 
 </docs-step>
 
 </docs-workflow>
 
-SUMMARY: In this lesson, you created a new `input` property. You also used the `.required` method to ensure the signal value is always defined.
+SUMMARY: Bu darsda yangi `input` xususiyatini yaratdingiz. Shuningdek, signal qiymati har doim aniqlangan boʻlishini taʼminlash uchun `.required` metodidan foydalandingiz.
 
 <docs-pill-row>
-  <docs-pill href="guide/components/inputs" title="Accepting data with input properties"/>
-  <docs-pill href="guide/components/outputs" title="Custom events with outputs"/>
+  <docs-pill href="guide/components/inputs" title="Input xususiyatlari bilan maʼlumot qabul qilish"/>
+  <docs-pill href="guide/components/outputs" title="Output'lar bilan maxsus hodisalar"/>
 </docs-pill-row>

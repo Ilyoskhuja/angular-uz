@@ -1,101 +1,101 @@
-# Create Home component
+# Home komponentini yarating
 
-This tutorial lesson demonstrates how to create a new [component](guide/components) for your Angular app.
+Bu darslik darsi Angular ilovangiz uchun yangi [komponent](guide/components) yaratishni koʻrsatadi.
 
 <docs-video src="https://www.youtube.com/embed/R0nRX8jD2D0?si=OMVaw71EIa44yIOJ"/>
 
-## What you'll learn
+## Nimalarni oʻrganasiz {#what-youll-learn}
 
-Your app has a new component: `Home`.
+Ilovangizda yangi komponent paydo boʻladi: `Home`.
 
-## Conceptual preview of Angular components
+## Angular komponentlarining konseptual koʻrinishi {#conceptual-preview-of-angular-components}
 
-Angular apps are built around components, which are Angular's building blocks.
-Components contain the code, HTML layout, and CSS style information that provide the function and appearance of an element in the app.
-In Angular, components can contain other components. An app's functions and appearance can be divided and partitioned into components.
+Angular ilovalari komponentlar atrofida quriladi — komponentlar Angular'ning qurilish bloklaridir.
+Komponentlar ilovadagi elementning funksiyasi va koʻrinishini taʼminlovchi kod, HTML joylashuvi (layout) va CSS stil maʼlumotlarini oʻz ichiga oladi.
+Angular'da komponentlar boshqa komponentlarni oʻz ichiga olishi mumkin. Ilovaning funksiyalari va koʻrinishini komponentlarga boʻlib tashlash mumkin.
 
-In Angular, components have metadata that define its properties.
-When you create your `Home`, you use these properties:
+Angular'da komponentlar oʻz xususiyatlarini belgilovchi metamaʼlumotlarga ega.
+`Home` komponentini yaratganingizda quyidagi xususiyatlardan foydalanasiz:
 
-- `selector`: to describe how Angular refers to the component in templates.
-- `imports`: to describe the component's dependencies.
-- `template`: to describe the component's HTML markup and layout.
-- `styleUrls`: to list the URLs of the CSS files that the component uses in an array.
+- `selector`: Angular shablonlarda komponentga qanday murojaat qilishini tavsiflaydi.
+- `imports`: komponentning bogʻliqliklarini tavsiflaydi.
+- `template`: komponentning HTML belgilanishi (markup) va joylashuvini tavsiflaydi.
+- `styleUrls`: komponent foydalanadigan CSS fayllarining URL manzillarini massivda sanab oʻtadi.
 
 <docs-pill-row>
-  <docs-pill href="api/core/Component" title="Learn more about Components"/>
+  <docs-pill href="api/core/Component" title="Komponentlar haqida koʻproq bilib oling"/>
 </docs-pill-row>
 
 <docs-workflow>
 
-<docs-step title="Create the `Home`">
-In this step, you create a new component for your app.
+<docs-step title="`Home` komponentini yarating">
+Bu qadamda ilovangiz uchun yangi komponent yaratasiz.
 
-In the **Terminal** pane of your IDE:
+IDE'ingizning **Terminal** panelida:
 
-1. In your project directory, navigate to the `first-app` directory.
-1. Run this command to create a new `Home`
+1. Loyiha katalogingizda `first-app` katalogiga oʻting.
+1. Yangi `Home` yaratish uchun quyidagi buyruqni bajaring
 
    ```shell
    ng generate component home
    ```
 
-1. Run this command to build and serve your app.
+1. Ilovangizni build qilish va ishga tushirish uchun quyidagi buyruqni bajaring.
 
-   NOTE: This step is only for your local environment!
+   NOTE: Bu qadam faqat lokal muhitingiz uchun!
 
    ```shell
    ng serve
    ```
 
-1. Open a browser and navigate to `http://localhost:4200` to find the application.
+1. Brauzerni ochib, ilovani koʻrish uchun `http://localhost:4200` manziliga oʻting.
 
-1. Confirm that the app builds without error.
+1. Ilova xatosiz build boʻlishini tasdiqlang.
 
-   HELPFUL: It should render the same as it did in the previous lesson because even though you added a new component, you haven't included it in any of the app's templates, yet.
+   HELPFUL: U oldingi darsdagi kabi koʻrinishi kerak, chunki yangi komponent qoʻshgan boʻlsangiz-da, uni hali ilovaning hech bir shabloniga kiritmagansiz.
 
-1. Leave `ng serve` running as you complete the next steps.
+1. Keyingi qadamlarni bajarayotganingizda `ng serve`'ni ishlab turgan holda qoldiring.
    </docs-step>
 
-<docs-step title="Add the new component to your app's layout">
-In this step, you add the new component, `Home` to your app's root component, `App`, so that it displays in your app's layout.
+<docs-step title="Yangi komponentni ilovangiz joylashuviga qoʻshing">
+Bu qadamda yangi `Home` komponentini ilovangizning asosiy (root) komponenti `App`'ga qoʻshasiz, shunda u ilovangiz joylashuvida koʻrinadi.
 
-In the **Edit** pane of your IDE:
+IDE'ingizning **Edit** panelida:
 
-1.  Open `app.ts` in the editor.
-1.  In `app.ts`, import `Home` by adding this line to the file level imports.
+1.  Muharrirda `app.ts` faylini oching.
+1.  `app.ts` faylida fayl darajasidagi importlarga quyidagi qatorni qoʻshib, `Home`'ni import qiling.
 
-      <docs-code header="Import Home in src/app/app.ts" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/app.ts" visibleLines="[2]"/>
+      <docs-code header="src/app/app.ts faylida Home'ni import qiling" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/app.ts" visibleLines="[2]"/>
 
-1.  In `app.ts`, in `@Component`, update the `imports` array property and add `Home`.
+1.  `app.ts` faylida, `@Component` ichida, `imports` massiv xususiyatini yangilab, `Home`'ni qoʻshing.
 
-      <docs-code header="Replace in src/app/app.ts" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/app.ts" visibleLines="[6]"/>
+      <docs-code header="src/app/app.ts faylida almashtiring" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/app.ts" visibleLines="[6]"/>
 
-1.  In `app.ts`, in `@Component`, update the `template` property to include the following HTML code.
+1.  `app.ts` faylida, `@Component` ichida, `template` xususiyatini quyidagi HTML kodini oʻz ichiga oladigan qilib yangilang.
 
-      <docs-code language="angular-ts" header="Replace in src/app/app.ts" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/app.ts" visibleLines="[7,16]"/>
+      <docs-code language="angular-ts" header="src/app/app.ts faylida almashtiring" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/app.ts" visibleLines="[7,16]"/>
 
-1.  Save your changes to `app.ts`.
-1.  If `ng serve` is running, the app should update.
-    If `ng serve` is not running, start it again.
-    _Hello world_ in your app should change to _home works!_ from the `Home`.
-1.  Check the running app in the browser and confirm that the app has been updated.
+1.  `app.ts` faylidagi oʻzgarishlaringizni saqlang.
+1.  Agar `ng serve` ishlab turgan boʻlsa, ilova yangilanishi kerak.
+    Agar `ng serve` ishlamayotgan boʻlsa, uni qayta ishga tushiring.
+    Ilovangizdagi _Hello world_ matni `Home` komponentidan kelgan _home works!_ matniga oʻzgarishi kerak.
+1.  Brauzerda ishlab turgan ilovani tekshirib, ilova yangilanganini tasdiqlang.
 
   <img alt="browser frame of page displaying the text 'home works!'" src="assets/images/tutorials/first-app/homes-app-lesson-02-step-2.png">
 
 </docs-step>
 
-<docs-step title="Add features to `Home`">
+<docs-step title="`Home` komponentiga imkoniyatlar qoʻshing">
 
-In this step you add features to `Home`.
+Bu qadamda `Home` komponentiga imkoniyatlar qoʻshasiz.
 
-In the previous step, you added the default `Home` to your app's template so its default HTML appeared in the app.
-In this step, you add a search filter and button that is used in a later lesson.
-For now, that's all that `Home` has.
-Note that this step just adds the search elements to the layout without any functionality, yet.
+Oldingi qadamda standart `Home` komponentini ilovangiz shabloniga qoʻshdingiz, shunda uning standart HTML'i ilovada paydo boʻldi.
+Bu qadamda keyingi darslardan birida ishlatiladigan qidiruv filtri va tugmasini qoʻshasiz.
+Hozircha `Home` komponentida boshqa hech narsa boʻlmaydi.
+Eʼtibor bering, bu qadam qidiruv elementlarini joylashuvga hozircha hech qanday funksionallikisiz qoʻshadi.
 
-If you started from a fresh Angular project instead of downloading the starter
-(ng new): add these globals to `src/styles.css` so the search button and input border are visible:
+Agar boshlangʻich loyihani yuklab olish oʻrniga yangi Angular loyihasidan
+(ng new) boshlagan boʻlsangiz: qidiruv tugmasi va input chegarasi koʻrinishi uchun `src/styles.css` fayliga quyidagi global stillarni qoʻshing:
 
 ```css
 :root {
@@ -114,32 +114,32 @@ button.primary {
 }
 ```
 
-In the **Edit** pane of your IDE:
+IDE'ingizning **Edit** panelida:
 
-1.  In the `first-app` directory, open `home.ts` in the editor.
-1.  In `home.ts`, in `@Component`, update the `template` property with this code.
+1.  `first-app` katalogida muharrirda `home.ts` faylini oching.
+1.  `home.ts` faylida, `@Component` ichida, `template` xususiyatini quyidagi kod bilan yangilang.
 
-      <docs-code language="angular-ts" header="Replace in src/app/home/home.ts" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/home/home.ts" visibleLines="[5,12]"/>
+      <docs-code language="angular-ts" header="src/app/home/home.ts faylida almashtiring" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/home/home.ts" visibleLines="[5,12]"/>
 
-1.  Next, open `home.css` in the editor and update the content with these styles.
+1.  Keyin muharrirda `home.css` faylini oching va uning tarkibini quyidagi stillar bilan yangilang.
 
-    NOTE: In the browser, these can go in `src/app/home/home.ts` in the `styles` array.
+    NOTE: Brauzerda bularni `src/app/home/home.ts` faylidagi `styles` massiviga joylashtirish mumkin.
 
-       <docs-code header="Replace in src/app/home/home.css" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/home/home.css"/>
+       <docs-code header="src/app/home/home.css faylida almashtiring" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/home/home.css"/>
 
-1.  Confirm that the app builds without error. You should find the filter query box and button in your app and they should be styled. Correct any errors before you continue to the next step.
+1.  Ilova xatosiz build boʻlishini tasdiqlang. Ilovangizda filtr soʻrovi maydoni va tugmani koʻrishingiz kerak, ular stillangan boʻlishi lozim. Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
 
    <img alt="browser frame of homes-app displaying logo, filter text input box and search button" src="assets/images/tutorials/first-app/homes-app-lesson-02-step-3.png">
 </docs-step>
 
 </docs-workflow>
 
-SUMMARY: In this lesson, you created a new component for your app and gave it a filter edit control and button.
+SUMMARY: Bu darsda ilovangiz uchun yangi komponent yaratdingiz va unga filtr kiritish maydoni hamda tugma berdingiz.
 
-For more information about the topics covered in this lesson, visit:
+Bu darsda yoritilgan mavzular haqida koʻproq maʼlumot olish uchun quyidagilarga qarang:
 
 <docs-pill-row>
   <docs-pill href="cli/generate/component" title="`ng generate component`"/>
-  <docs-pill href="api/core/Component" title="`Component` reference"/>
-  <docs-pill href="guide/components" title="Angular components overview"/>
+  <docs-pill href="api/core/Component" title="`Component` maʼlumotnomasi"/>
+  <docs-pill href="guide/components" title="Angular komponentlari umumiy koʻrinishi"/>
 </docs-pill-row>

@@ -1,122 +1,122 @@
-# Hello world
+# Salom, dunyo
 
-This first lesson serves as the starting point from which each lesson in this tutorial adds new features to build a complete Angular app. In this lesson, we'll update the application to display the famous text, "Hello World".
+Bu birinchi dars boshlangʻich nuqta boʻlib xizmat qiladi — ushbu darslikdagi har bir dars toʻliq Angular ilovasini yaratish uchun unga yangi imkoniyatlar qoʻshib boradi. Bu darsda biz ilovani mashhur "Hello World" matnini koʻrsatadigan qilib yangilaymiz.
 
 <docs-video src="https://www.youtube.com/embed/UnOwDuliqZA?si=uML-cDRbrxmYdD_9"/>
 
-## What you'll learn
+## Nimalarni oʻrganasiz {#what-youll-learn}
 
-If your application runs successfully in the browser and displays the executed content without errors, it confirms that your development environment and IDE are correctly set up to begin building an Angular app.
+Agar ilovangiz brauzerda muvaffaqiyatli ishga tushib, bajarilgan kontentni xatosiz koʻrsatsa, bu dasturlash muhitingiz va IDE'ingiz Angular ilovasini yaratishni boshlash uchun toʻgʻri sozlanganini tasdiqlaydi.
 
-NOTE: If you are working with the embedded editor, skip to [step four](#create-hello-world).
-When working in the browser playground, you do not need to `ng serve` to run the app. Other commands like `ng generate` can be done in the console window to your right.
+NOTE: Agar oʻrnatilgan muharrirda ishlayotgan boʻlsangiz, [toʻrtinchi qadamga](#create-hello-world) oʻting.
+Brauzerdagi oʻyin maydonchasida (playground) ishlaganda ilovani ishga tushirish uchun `ng serve` bajarish shart emas. `ng generate` kabi boshqa buyruqlarni oʻng tomoningizdagi konsol oynasida bajarish mumkin.
 
 <docs-workflow>
 
-<docs-step title="Download the default app">
-Start by clicking the "Download" icon in the top right pane of the code editor. This will download a `.zip` file containing the source code for this tutorial. Open this in your local Terminal and IDE then move on to testing the default app.
+<docs-step title="Standart ilovani yuklab oling">
+Kod muharririning yuqori oʻng panelidagi "Download" belgisini bosishdan boshlang. Bu ushbu darslikning manba kodini oʻz ichiga olgan `.zip` faylini yuklab oladi. Uni lokal Terminal va IDE'ingizda oching, soʻng standart ilovani sinab koʻrishga oʻting.
 
-At any step in the tutorial, you can click this icon to download the step's source code and start from there.
+Darslikning istalgan qadamida bu belgini bosib, oʻsha qadamning manba kodini yuklab olishingiz va shu yerdan boshlashingiz mumkin.
 </docs-step>
 
-<docs-step title="Test the default app">
-In this step, after you download the default starting app, you build the default Angular app.
-This confirms that your development environment has what you need to continue the tutorial.
+<docs-step title="Standart ilovani sinab koʻring">
+Bu qadamda, standart boshlangʻich ilovani yuklab olganingizdan soʻng, standart Angular ilovasini build qilasiz.
+Bu dasturlash muhitingizda darslikni davom ettirish uchun kerakli hamma narsa mavjudligini tasdiqlaydi.
 
-In the **Terminal** pane of your IDE:
+IDE'ingizning **Terminal** panelida:
 
-1. In your project directory, navigate to the `first-app` directory.
-1. Run this command to install the dependencies needed to run the app.
+1. Loyiha katalogingizda `first-app` katalogiga oʻting.
+1. Ilovani ishga tushirish uchun zarur boʻlgan bogʻliqliklarni oʻrnatish uchun quyidagi buyruqni bajaring.
 
    ```shell
    npm install
    ```
 
-1. Run this command to build and serve the default app.
+1. Standart ilovani build qilish va ishga tushirish (serve) uchun quyidagi buyruqni bajaring.
 
    ```shell
    ng serve
    ```
 
-   The app should build without errors.
+   Ilova xatosiz build boʻlishi kerak.
 
-1. In a web browser on your development computer, open `http://localhost:4200`.
-1. Confirm that the default web site appears in the browser.
-1. You can leave `ng serve` running as you complete the next steps.
+1. Dasturlash kompyuteringizdagi veb-brauzerda `http://localhost:4200` manzilini oching.
+1. Brauzerda standart veb-sayt koʻrinishini tasdiqlang.
+1. Keyingi qadamlarni bajarayotganingizda `ng serve`'ni ishlab turgan holda qoldirishingiz mumkin.
    </docs-step>
 
-<docs-step title="Review the files in the project">
-In this step, you get to know the files that make up a default Angular app.
+<docs-step title="Loyihadagi fayllarni koʻrib chiqing">
+Bu qadamda standart Angular ilovasini tashkil etuvchi fayllar bilan tanishasiz.
 
-In the **Explorer** pane of your IDE:
+IDE'ingizning **Explorer** panelida:
 
-1. In your project directory, navigate to the `first-app` directory.
-1. Open the `src` directory to see these files.
-   1. In the file explorer, find the Angular app files (`/src`).
-      1. `index.html` is the app's top level HTML template.
-      1. `styles.css` is the app's top level style sheet.
-      1. `main.ts` is where the app starts running.
-      1. `favicon.ico` is the app's icon, just as you would find in any web site.
-   1. In the file explorer, find the Angular app's component files (`/app`).
-      1. `app.ts` is the source file that describes the `app-root` component.
-         This is the top-level Angular component in the app. A component is the basic building block of an Angular application.
-         The component description includes the component's code, HTML template, and styles, which can be described in this file, or in separate files.
+1. Loyiha katalogingizda `first-app` katalogiga oʻting.
+1. Quyidagi fayllarni koʻrish uchun `src` katalogini oching.
+   1. Fayl koʻrgichida (file explorer) Angular ilovasi fayllarini (`/src`) toping.
+      1. `index.html` — ilovaning yuqori darajadagi HTML shabloni.
+      1. `styles.css` — ilovaning yuqori darajadagi stillar jadvali.
+      1. `main.ts` — ilova ishga tushadigan joy.
+      1. `favicon.ico` — har qanday veb-saytda boʻlgani kabi, ilovaning belgisi (ikonkasi).
+   1. Fayl koʻrgichida Angular ilovasining komponent fayllarini (`/app`) toping.
+      1. `app.ts` — `app-root` komponentini tavsiflovchi manba fayli.
+         Bu ilovadagi yuqori darajadagi Angular komponenti. Komponent — Angular ilovasining asosiy qurilish bloki.
+         Komponent tavsifi komponentning kodi, HTML shabloni va stillarini oʻz ichiga oladi; ular shu faylda yoki alohida fayllarda tavsiflanishi mumkin.
 
-         In this app, the styles are in a separate file while the component's code and HTML template are in this file.
+         Bu ilovada stillar alohida faylda, komponentning kodi va HTML shabloni esa shu faylda joylashgan.
 
-      1. `app.css` is the style sheet for this component.
-      1. New components are added to this directory.
+      1. `app.css` — bu komponentning stillar jadvali.
+      1. Yangi komponentlar shu katalogga qoʻshiladi.
 
-   1. In the file explorer, find the image directory (`/public`) that contains images used by the app.
-   1. In the file explorer, find the files and directories that an Angular app needs to build and run, but they are not files that you normally interact with.
-      1. `.angular` has files required to build the Angular app.
-      1. `.e2e` has files used to test the app.
-      1. `.node_modules` has the node.js packages that the app uses.
-      1. `angular.json` describes the Angular app to the app building tools.
-      1. `package.json` is used by `npm` (the node package manager) to run the finished app.
-      1. `tsconfig.*` are the files that describe the app's configuration to the TypeScript compiler.
+   1. Fayl koʻrgichida ilova ishlatadigan rasmlarni oʻz ichiga olgan rasmlar katalogini (`/public`) toping.
+   1. Fayl koʻrgichida Angular ilovasini build qilish va ishga tushirish uchun zarur boʻlgan, lekin siz odatda bevosita ishlamaydigan fayllar va kataloglarni toping.
+      1. `.angular` — Angular ilovasini build qilish uchun zarur fayllarni oʻz ichiga oladi.
+      1. `.e2e` — ilovani testlash uchun ishlatiladigan fayllarni oʻz ichiga oladi.
+      1. `.node_modules` — ilova foydalanadigan node.js paketlarini oʻz ichiga oladi.
+      1. `angular.json` — Angular ilovasini ilova build qiluvchi vositalarga tavsiflaydi.
+      1. `package.json` — tayyor ilovani ishga tushirish uchun `npm` (node paket menejeri) tomonidan ishlatiladi.
+      1. `tsconfig.*` — ilova konfiguratsiyasini TypeScript kompilyatoriga tavsiflovchi fayllar.
 
-After you have reviewed the files that make up an Angular app project, continue to the next step.
+Angular ilovasi loyihasini tashkil etuvchi fayllarni koʻrib chiqqach, keyingi qadamga oʻting.
 </docs-step>
 
-<docs-step title="Create `Hello World`">
-In this step, you update the Angular project files to change the displayed content.
+<docs-step title="`Hello World` yarating">
+Bu qadamda koʻrsatiladigan kontentni oʻzgartirish uchun Angular loyihasi fayllarini yangilaysiz.
 
-In your IDE:
+IDE'ingizda:
 
-1. Open `first-app/src/index.html`.
-   NOTE: This step and the next are only for your local environment!
+1. `first-app/src/index.html` faylini oching.
+   NOTE: Bu qadam va keyingisi faqat lokal muhitingiz uchun!
 
-1. In `index.html`, replace the `<title>` element with this code to update the title of the app.
+1. `index.html` faylida ilova sarlavhasini yangilash uchun `<title>` elementini quyidagi kod bilan almashtiring.
 
-   <docs-code header="Replace in src/index.html" path="adev/src/content/tutorials/first-app/steps/02-Home/src/index.html" visibleLines="[5]"/>
+   <docs-code header="src/index.html faylida almashtiring" path="adev/src/content/tutorials/first-app/steps/02-Home/src/index.html" visibleLines="[5]"/>
 
-   Then, save the changes you just made to `index.html`.
+   Soʻng `index.html` faylida hozir qilgan oʻzgarishlaringizni saqlang.
 
-1. Next, open `first-app/src/app/app.ts`.
-1. In `app.ts`, in the `@Component` definition, replace the `template` line with this code to change the text in the app component.
+1. Keyin `first-app/src/app/app.ts` faylini oching.
+1. `app.ts` faylida, `@Component` taʼrifida, ilova komponentidagi matnni oʻzgartirish uchun `template` qatorini quyidagi kod bilan almashtiring.
 
-   <docs-code language="angular-ts" header="Replace in src/app/app.ts" path="adev/src/content/tutorials/first-app/steps/02-Home/src/app/app.ts" visibleLines="[6]"/>
+   <docs-code language="angular-ts" header="src/app/app.ts faylida almashtiring" path="adev/src/content/tutorials/first-app/steps/02-Home/src/app/app.ts" visibleLines="[6]"/>
 
-1. In `app.ts`, in the `App` class definition, replace the `title` line with this code to change the component title.
+1. `app.ts` faylida, `App` klassi taʼrifida, komponent sarlavhasini oʻzgartirish uchun `title` qatorini quyidagi kod bilan almashtiring.
 
-   <docs-code header="Replace in src/app/app.ts" path="adev/src/content/tutorials/first-app/steps/02-Home/src/app/app.ts" visibleLines="[10]"/>
+   <docs-code header="src/app/app.ts faylida almashtiring" path="adev/src/content/tutorials/first-app/steps/02-Home/src/app/app.ts" visibleLines="[10]"/>
 
-   Then, save the changes you made to `app.ts`.
+   Soʻng `app.ts` faylida qilgan oʻzgarishlaringizni saqlang.
 
-1. If you stopped the `ng serve` command from step 1, in the **Terminal** window of your IDE, run `ng serve` again.
-1. Open your browser and navigate to `localhost:4200` and confirm that the app builds without error and displays _Homes_ in the title and _Hello world_ in the body of your app:
+1. Agar 1-qadamdagi `ng serve` buyrugʻini toʻxtatgan boʻlsangiz, IDE'ingizning **Terminal** oynasida `ng serve`'ni qayta ishga tushiring.
+1. Brauzeringizni ochib, `localhost:4200` manziliga oʻting va ilova xatosiz build boʻlib, sarlavhada _Homes_, ilova tanasida esa _Hello world_ koʻrsatilishini tasdiqlang:
    <img alt="browser frame of page displaying the text 'Hello World'" src="assets/images/tutorials/first-app/homes-app-lesson-01-browser.png">
    </docs-step>
 
 </docs-workflow>
 
-SUMMARY: In this lesson, you updated a default Angular app to display _Hello world_.
-In the process, you learned about the `ng serve` command to serve your app locally for testing.
+SUMMARY: Bu darsda standart Angular ilovasini _Hello world_ koʻrsatadigan qilib yangiladingiz.
+Bu jarayonda ilovangizni testlash uchun lokal ishga tushiruvchi `ng serve` buyrugʻi bilan tanishdingiz.
 
-For more information about the topics covered in this lesson, visit:
+Bu darsda yoritilgan mavzular haqida koʻproq maʼlumot olish uchun quyidagilarga qarang:
 
 <docs-pill-row>
-  <docs-pill href="guide/components" title="Angular Components"/>
-  <docs-pill href="tools/cli" title="Creating applications with the Angular CLI"/>
+  <docs-pill href="guide/components" title="Angular komponentlari"/>
+  <docs-pill href="tools/cli" title="Angular CLI bilan ilovalar yaratish"/>
 </docs-pill-row>

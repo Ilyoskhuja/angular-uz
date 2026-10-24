@@ -1,50 +1,50 @@
-# Add a property binding to a component’s template
+# Komponent shabloniga xususiyat bogʻlash qoʻshing
 
-This tutorial lesson demonstrates how to add property binding to a template and use it to pass dynamic data to components.
+Bu darslik darsi shablonga xususiyat bogʻlashni (property binding) qoʻshish va undan komponentlarga dinamik maʼlumot uzatishda foydalanishni koʻrsatadi.
 
 <docs-video src="https://www.youtube.com/embed/eM3zi_n7lNs?si=AsiczpWnMz5HhJqB&amp;start=599"/>
 
-## What you'll learn
+## Nimalarni oʻrganasiz {#what-youll-learn}
 
-- Your app has data bindings in the `Home` template.
-- Your app sends data from the `Home` to the `HousingLocation`.
+- Ilovangizning `Home` shablonida maʼlumot bogʻlashlar paydo boʻladi.
+- Ilovangiz `Home` komponentidan `HousingLocation` komponentiga maʼlumot yuboradi.
 
-## Conceptual preview of Inputs
+## Input'larning konseptual koʻrinishi {#conceptual-preview-of-inputs}
 
-In this lesson, you'll continue the process of sharing data from the parent component to the child component by binding data to those properties in the template using property binding.
+Bu darsda ota komponentdan bola (child) komponentga maʼlumot ulashish jarayonini davom ettirasiz — buning uchun shablonda xususiyat bogʻlash yordamida oʻsha xususiyatlarga maʼlumot bogʻlaysiz.
 
-Property binding enables you to connect a variable to an `Input` in an Angular template. The data is then dynamically bound to the `Input`.
+Xususiyat bogʻlash Angular shablonida oʻzgaruvchini `Input`'ga ulash imkonini beradi. Maʼlumot soʻngra `Input`'ga dinamik tarzda bogʻlanadi.
 
-For a more in depth explanation, please refer to the [Property binding](/guide/templates/binding#binding-dynamic-properties-and-attributes) guide.
+Batafsilroq tushuntirish uchun [Xususiyat bogʻlash](/guide/templates/binding#binding-dynamic-properties-and-attributes) qoʻllanmasiga qarang.
 
 <docs-workflow>
 
-<docs-step title="Update the `Home` template">
-This step adds property binding to the `<app-housing-location>` tag.
+<docs-step title="`Home` shablonini yangilang">
+Bu qadam `<app-housing-location>` tegiga xususiyat bogʻlashni qoʻshadi.
 
-In the code editor:
+Kod muharririda:
 
-1.  Navigate to `src/app/home/home.ts`
-1.  In the template property of the `@Component` decorator, update the code to match the code below:
-    <docs-code language="angular-ts" header="Add housingLocation property binding" path="adev/src/content/tutorials/first-app/steps/07-dynamic-template-values/src/app/home/home.ts" visibleLines="[15,17]"/>
+1.  `src/app/home/home.ts` fayliga oʻting
+1.  `@Component` dekoratorining template xususiyatida kodni quyidagi kodga moslab yangilang:
+    <docs-code language="angular-ts" header="housingLocation xususiyat bogʻlashini qoʻshing" path="adev/src/content/tutorials/first-app/steps/07-dynamic-template-values/src/app/home/home.ts" visibleLines="[15,17]"/>
 
-    When adding a property binding to a component tag, we use the `[attribute] = "value"` syntax to notify Angular that the assigned value should be treated as a property from the component class and not a string value.
+    Komponent tegiga xususiyat bogʻlashni qoʻshganda, tayinlangan qiymat satr qiymati emas, balki komponent klassidagi xususiyat sifatida qaralishi kerakligini Angular'ga bildirish uchun `[attribute] = "value"` sintaksisidan foydalanamiz.
 
-    The value on the right-hand side is the name of the property from the `Home`.
+    Oʻng tomondagi qiymat — `Home` komponentidagi xususiyatning nomi.
 
 </docs-step>
 
-<docs-step title="Confirm the code still works">
-1.  Save your changes and confirm the app does not have any errors.
-1.  Correct any errors before you continue to the next step.
+<docs-step title="Kod hali ham ishlashini tasdiqlang">
+1.  Oʻzgarishlaringizni saqlang va ilovada hech qanday xato yoʻqligini tasdiqlang.
+1.  Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
 </docs-step>
 
 </docs-workflow>
 
-SUMMARY: In this lesson, you added a new property binding and passed in a reference to a class property. Now, the `HousingLocation` has access to data that it can use to customize the component's display.
+SUMMARY: Bu darsda yangi xususiyat bogʻlash qoʻshdingiz va klass xususiyatiga havola uzatdingiz. Endi `HousingLocation` komponenti oʻz koʻrinishini moslashtirish uchun foydalanishi mumkin boʻlgan maʼlumotlarga ega.
 
-For more information about the topics covered in this lesson, visit:
+Bu darsda yoritilgan mavzular haqida koʻproq maʼlumot olish uchun quyidagilarga qarang:
 
 <docs-pill-row>
-  <docs-pill href="/guide/templates/binding#binding-dynamic-properties-and-attributes" title="Property binding"/>
+  <docs-pill href="/guide/templates/binding#binding-dynamic-properties-and-attributes" title="Xususiyat bogʻlash"/>
 </docs-pill-row>

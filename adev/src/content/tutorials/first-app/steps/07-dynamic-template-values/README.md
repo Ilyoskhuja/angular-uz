@@ -1,60 +1,60 @@
-# Add an interpolation to a component’s template
+# Komponent shabloniga interpolyatsiya qoʻshing
 
-This tutorial lesson demonstrates how to add interpolation to Angular templates in order to display dynamic data in a template.
+Bu darslik darsi shablonda dinamik maʼlumotlarni koʻrsatish uchun Angular shablonlariga interpolyatsiya qoʻshishni koʻrsatadi.
 
 <docs-video src="https://www.youtube.com/embed/eM3zi_n7lNs?si=IFAly3Ss8dwqFx8N&amp;start=338"/>
 
-## What you'll learn
+## Nimalarni oʻrganasiz {#what-youll-learn}
 
-- Your app will display interpolated values in the `HousingLocation` template.
-- Your app will render a housing location data to the browser.
+- Ilovangiz `HousingLocation` shablonida interpolyatsiya qilingan qiymatlarni koʻrsatadi.
+- Ilovangiz uy-joy manzili maʼlumotlarini brauzerda render qiladi.
 
-## Conceptual preview of interpolation
+## Interpolyatsiyaning konseptual koʻrinishi {#conceptual-preview-of-interpolation}
 
-In this step you will display values read from `input` properties in a template using interpolation.
+Bu qadamda `input` xususiyatlaridan oʻqilgan qiymatlarni shablonda interpolyatsiya yordamida koʻrsatasiz.
 
-Using the `{{ expression }}` in Angular templates, you can render values from properties, `inputs`, and valid JavaScript expressions.
+Angular shablonlarida `{{ expression }}` yordamida xususiyatlar, `input`'lar va toʻgʻri JavaScript ifodalaridan olingan qiymatlarni render qilishingiz mumkin.
 
-For a more in depth explanation, please refer to the [Displaying values with interpolation](guide/templates/binding#render-dynamic-text-with-text-interpolation) guide.
+Batafsilroq tushuntirish uchun [Qiymatlarni interpolyatsiya bilan koʻrsatish](guide/templates/binding#render-dynamic-text-with-text-interpolation) qoʻllanmasiga qarang.
 
 <docs-workflow>
 
-<docs-step title="Update `HousingLocation` template to include interpolated values">
-This step adds new HTML structure and interpolated values in the `HousingLocation` template.
+<docs-step title="`HousingLocation` shablonini interpolyatsiya qilingan qiymatlarni oʻz ichiga oladigan qilib yangilang">
+Bu qadam `HousingLocation` shabloniga yangi HTML tuzilmasi va interpolyatsiya qilingan qiymatlarni qoʻshadi.
 
-In the code editor:
+Kod muharririda:
 
-1.  Navigate to `src/app/housing-location/housing-location.ts`
-1.  In the template property of the `@Component` decorator, replace the existing HTML markup with the following code:
+1.  `src/app/housing-location/housing-location.ts` fayliga oʻting
+1.  `@Component` dekoratorining template xususiyatida mavjud HTML belgilanishini quyidagi kod bilan almashtiring:
 
-    <docs-code language="angular-ts"  header="Update HousingLocation template in housing-location.ts" path="adev/src/content/tutorials/first-app/steps/08-ngFor/src/app/housing-location/housing-location.ts" visibleLines="[6,17]"/>
+    <docs-code language="angular-ts"  header="housing-location.ts faylida HousingLocation shablonini yangilang" path="adev/src/content/tutorials/first-app/steps/08-ngFor/src/app/housing-location/housing-location.ts" visibleLines="[6,17]"/>
 
-In this updated template code you have used property binding to bind the `housingLocation.photo` to the `src` attribute. The `alt` attribute uses interpolation to give more context to the alt text of the image.
+Bu yangilangan shablon kodida `housingLocation.photo`'ni `src` atributiga bogʻlash uchun xususiyat bogʻlashdan foydalandingiz. `alt` atributi rasmning alt matniga koʻproq kontekst berish uchun interpolyatsiyadan foydalanadi.
 
-You use interpolation to include the values for `name`, `city` and `state` of the `housingLocation` property.
+`housingLocation` xususiyatining `name`, `city` va `state` qiymatlarini kiritish uchun interpolyatsiyadan foydalanasiz.
 
 </docs-step>
 
-<docs-step title="Confirm the changes render in the browser">
-1.  Save all changes.
-1.  Open the browser and confirm that the app renders the photo, city and state sample data.
+<docs-step title="Oʻzgarishlar brauzerda render qilinishini tasdiqlang">
+1.  Barcha oʻzgarishlarni saqlang.
+1.  Brauzerni oching va ilova namunaviy rasm, shahar va shtat maʼlumotlarini render qilishini tasdiqlang.
     <img alt="browser frame of homes-app displaying logo, filter text input box, search button and the same housing location UI card" src="assets/images/tutorials/first-app/homes-app-lesson-07-step-2.png">
 </docs-step>
 
 </docs-workflow>
 
-SUMMARY: In this lesson, you added a new HTML structure and used Angular template syntax to render values in the `HousingLocation` template.
+SUMMARY: Bu darsda yangi HTML tuzilmasi qoʻshdingiz va `HousingLocation` shablonida qiymatlarni render qilish uchun Angular shablon sintaksisidan foydalandingiz.
 
-Now, you have two important skills:
+Endi sizda ikkita muhim koʻnikma bor:
 
-- passing data to components
-- Interpolating values into a template
+- komponentlarga maʼlumot uzatish
+- shablonga qiymatlarni interpolyatsiya qilish
 
-With these skills, your app can now share data and display dynamic values in the browser. Great work so far.
+Bu koʻnikmalar bilan ilovangiz endi maʼlumot ulasha oladi va brauzerda dinamik qiymatlarni koʻrsata oladi. Shu paytgacha ajoyib ish qildingiz.
 
-For more information about the topics covered in this lesson, visit:
+Bu darsda yoritilgan mavzular haqida koʻproq maʼlumot olish uchun quyidagilarga qarang:
 
 <docs-pill-row>
-  <docs-pill href="guide/templates" title="Template syntax"/>
-  <docs-pill href="guide/templates/binding#render-dynamic-text-with-text-interpolation" title="Displaying values with interpolation"/>
+  <docs-pill href="guide/templates" title="Shablon sintaksisi"/>
+  <docs-pill href="guide/templates/binding#render-dynamic-text-with-text-interpolation" title="Qiymatlarni interpolyatsiya bilan koʻrsatish"/>
 </docs-pill-row>
