@@ -1,6 +1,6 @@
-# Dependent state with `linkedSignal`
+# `linkedSignal` bilan bogʻliq holat
 
-You can use the `signal` function to hold some state in your Angular code. Sometimes, this state depends on some _other_ state. For example, imagine a component that lets the user select a shipping method for an order:
+Angular kodingizda biror holatni saqlash uchun `signal` funksiyasidan foydalanishingiz mumkin. Baʼzan bu holat biror _boshqa_ holatga bogʻliq boʻladi. Masalan, foydalanuvchiga buyurtma uchun yetkazib berish usulini tanlash imkonini beruvchi komponentni tasavvur qiling:
 
 ```typescript
 @Component({
@@ -18,9 +18,9 @@ export class ShippingMethodPicker {
 }
 ```
 
-In this example, the `selectedOption` defaults to the first option, but changes if the user selects another option. But `shippingOptions` is a signal— its value may change! If `shippingOptions` changes, `selectedOption` may contain a value that is no longer a valid option.
+Bu misolda `selectedOption` sukut boʻyicha birinchi variantga teng, lekin foydalanuvchi boshqa variantni tanlasa oʻzgaradi. Biroq `shippingOptions` — signal, uning qiymati oʻzgarishi mumkin! Agar `shippingOptions` oʻzgarsa, `selectedOption` endi yaroqli variant boʻlmagan qiymatni saqlab qolishi mumkin.
 
-**The `linkedSignal` function lets you create a signal to hold some state that is intrinsically _linked_ to some other state.** Revisiting the example above, `linkedSignal` can replace `signal`:
+**`linkedSignal` funksiyasi biror boshqa holat bilan tubdan _bogʻlangan_ holatni saqlash uchun signal yaratish imkonini beradi.** Yuqoridagi misolga qaytsak, `linkedSignal` `signal`'ning oʻrnini bosa oladi:
 
 ```ts
 @Component({
@@ -38,9 +38,9 @@ export class ShippingMethodPicker {
 }
 ```
 
-`linkedSignal` works similarly to `signal` with one key difference— instead of passing a default value, you pass a _computation function_, just like `computed`. When the value of the computation changes, the value of the `linkedSignal` changes to the computation result. This helps ensure that the `linkedSignal` always has a valid value.
+`linkedSignal` `signal`'ga oʻxshab ishlaydi, lekin bitta asosiy farq bilan — sukut qiymatini uzatish oʻrniga, `computed`'dagi kabi, _hisoblash funksiyasini_ (computation function) uzatasiz. Hisoblash qiymati oʻzgarganda `linkedSignal`'ning qiymati hisoblash natijasiga oʻzgaradi. Bu `linkedSignal` har doim yaroqli qiymatga ega boʻlishini taʼminlashga yordam beradi.
 
-The following example shows how the value of a `linkedSignal` can change based on its linked state:
+Quyidagi misol `linkedSignal`'ning qiymati u bogʻlangan holatga qarab qanday oʻzgarishi mumkinligini koʻrsatadi:
 
 ```ts
 const shippingOptions = signal(['Ground', 'Air', 'Sea']);
@@ -54,11 +54,11 @@ shippingOptions.set(['Email', 'Will Call', 'Postal service']);
 console.log(selectedOption()); // 'Email'
 ```
 
-## Accounting for previous state
+## Oldingi holatni hisobga olish {#accounting-for-previous-state}
 
-In some cases, the computation for a `linkedSignal` needs to account for the previous value of the `linkedSignal`.
+Baʼzi hollarda `linkedSignal` uchun hisoblash `linkedSignal`'ning oldingi qiymatini hisobga olishi kerak boʻladi.
 
-In the example above, `selectedOption` always updates back to the first option when `shippingOptions` changes. You may, however, want to preserve the user's selection if their selected option is still somewhere in the list. To accomplish this, you can create a `linkedSignal` with a separate _source_ and _computation_:
+Yuqoridagi misolda `shippingOptions` oʻzgarganda `selectedOption` har doim birinchi variantga qaytib yangilanadi. Biroq, agar foydalanuvchi tanlagan variant hali ham roʻyxatning qayeridadir mavjud boʻlsa, uning tanlovini saqlab qolishni istashingiz mumkin. Bunga erishish uchun alohida _source_ (manba) va _computation_ (hisoblash) bilan `linkedSignal` yaratishingiz mumkin:
 
 ```ts
 interface ShippingMethod {
@@ -106,17 +106,17 @@ export class ShippingMethodPicker {
 }
 ```
 
-When you create a `linkedSignal`, you can pass an object with separate `source` and `computation` properties instead of providing just a computation.
+`linkedSignal` yaratganingizda, faqat hisoblashni berish oʻrniga alohida `source` va `computation` xususiyatlariga ega obyekt uzatishingiz mumkin.
 
-The `source` can be any signal, such as a `computed` or component `input`. The `linkedSignal` updates its value when the `source` changes or when any signal referenced in the `computation` changes, updating its value with the result of the provided `computation`.
+`source` har qanday signal boʻlishi mumkin, masalan `computed` yoki komponent `input`'i. `linkedSignal` `source` oʻzgarganda yoki `computation`'da murojaat qilingan har qanday signal oʻzgarganda oʻz qiymatini berilgan `computation` natijasi bilan yangilaydi.
 
-The `computation` is a function that receives the new value of `source` and a `previous` object. The `previous` object has two properties— `previous.source` is the previous value of `source`, and `previous.value` is the previous value of the `linkedSignal`. You can use these previous values to decide the new result of the computation.
+`computation` — `source`'ning yangi qiymatini va `previous` obyektini qabul qiluvchi funksiya. `previous` obyekti ikki xususiyatga ega — `previous.source` `source`'ning oldingi qiymati, `previous.value` esa `linkedSignal`'ning oldingi qiymati. Bu oldingi qiymatlardan hisoblashning yangi natijasini aniqlash uchun foydalanishingiz mumkin.
 
-HELPFUL: When using the `previous` parameter, it is necessary to provide the generic type arguments of `linkedSignal` explicitly. The first generic type corresponds with the type of `source` and the second generic type determines the output type of `computation`.
+HELPFUL: `previous` parametridan foydalanganda `linkedSignal`'ning generik tur argumentlarini aniq koʻrsatish zarur. Birinchi generik tur `source` turiga mos keladi, ikkinchi generik tur esa `computation`'ning chiqish turini belgilaydi.
 
-## Custom equality comparison
+## Maxsus tenglik taqqoslashi {#custom-equality-comparison}
 
-`linkedSignal`, as any other signal, can be configured with a custom equality function. This function is used by downstream dependencies to determine if that value of the `linkedSignal` (result of a computation) changed:
+`linkedSignal`, har qanday boshqa signal kabi, maxsus tenglik funksiyasi bilan sozlanishi mumkin. Bu funksiya quyi oqimdagi bogʻliqliklar tomonidan `linkedSignal` qiymati (hisoblash natijasi) oʻzgarganini aniqlash uchun ishlatiladi:
 
 ```typescript
 const activeUser = signal({id: 123, name: 'Morgan', isAdmin: true});
@@ -134,20 +134,20 @@ const activeUserEditCopy = linkedSignal({
 });
 ```
 
-## Customizing the set operation
+## set operatsiyasini moslashtirish {#customizing-the-set-operation}
 
-Sometimes you may want the `set` and `update` operations of a `linkedSignal` to write back to the source of truth instead of updating the `linkedSignal`'s value directly. You can customize this behavior by passing a `set` function in the options.
+Baʼzan `linkedSignal`'ning `set` va `update` operatsiyalari `linkedSignal`'ning qiymatini bevosita yangilash oʻrniga haqiqat manbasiga (source of truth) qayta yozishini istashingiz mumkin. Bu xatti-harakatni opsiyalarda `set` funksiyasini uzatish orqali moslashtirishingiz mumkin.
 
-The custom `set` function receives two arguments:
+Maxsus `set` funksiyasi ikki argument qabul qiladi:
 
-1. The new value being set.
-2. A `rawSet` function, which you can invoke to update the `linkedSignal`'s internal state directly (matching the default behavior).
+1. Oʻrnatilayotgan yangi qiymat.
+2. `rawSet` funksiyasi — uni `linkedSignal`'ning ichki holatini bevosita yangilash uchun chaqirishingiz mumkin (sukut boʻyicha xatti-harakatga mos).
 
-NOTE: Using `rawSet` allows you to update the `linkedSignal`'s value directly. This can be useful to prevent the computation from running, for example if it is an expensive derivation and you already know the result.
+NOTE: `rawSet`'dan foydalanish `linkedSignal`'ning qiymatini bevosita yangilash imkonini beradi. Bu hisoblashning ishga tushishini oldini olish uchun foydali boʻlishi mumkin, masalan, agar u qimmat hosil qilish boʻlsa va natijani allaqachon bilsangiz.
 
-### Writing back to a source signal
+### Manba signaliga qayta yozish {#writing-back-to-a-source-signal}
 
-Consider a component that displays and allows editing temperature in Fahrenheit, but uses a Celsius signal as its source of truth:
+Temperaturani Farengeytda koʻrsatuvchi va tahrirlash imkonini beruvchi, lekin haqiqat manbasi sifatida Selsiy signalidan foydalanuvchi komponentni koʻrib chiqaylik:
 
 ```typescript
 const tempC = signal(0);
@@ -163,9 +163,9 @@ console.log(tempC()); // 100
 console.log(tempF()); // 212
 ```
 
-### Updating a property inside a parent object
+### Ota obyekt ichidagi xususiyatni yangilash {#updating-a-property-inside-a-parent-object}
 
-Another common scenario is updating a specific property inside a parent object. The parent is held in a signal, and you link to a nested property:
+Yana bir keng tarqalgan holat — ota obyekt ichidagi muayyan xususiyatni yangilash. Ota obyekt signalda saqlanadi va siz ichki (nested) xususiyatga bogʻlanasiz:
 
 ```typescript
 interface Order {

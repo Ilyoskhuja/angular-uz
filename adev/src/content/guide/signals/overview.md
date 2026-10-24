@@ -1,20 +1,20 @@
 <docs-decorative-header title="Angular Signals" imgSrc="adev/src/assets/images/signals.svg"> <!-- markdownlint-disable-line -->
-Angular Signals is a system that granularly tracks how and where your state is used throughout an application, allowing the framework to optimize rendering updates.
+Angular Signals — holatingiz ilova boʻylab qanday va qayerda ishlatilishini aniq (granulyar) kuzatib boruvchi tizim boʻlib, bu freymvorkka render yangilanishlarini optimallashtirish imkonini beradi.
 </docs-decorative-header>
 
-TIP: Check out Angular's [Essentials](essentials/signals) before diving into this comprehensive guide.
+TIP: Bu toʻliq qoʻllanmaga shoʻngʻishdan oldin Angular'ning [Asoslari](essentials/signals) bilan tanishib chiqing.
 
-## What are signals?
+## Signallar nima? {#what-are-signals}
 
-A **signal** is a wrapper around a value that notifies interested consumers when that value changes. Signals can contain any value, from primitives to complex data structures.
+**Signal** — qiymat atrofidagi oʻram boʻlib, u qiymat oʻzgarganda manfaatdor isteʼmolchilarni (consumers) xabardor qiladi. Signallar istalgan qiymatni — primitivlardan murakkab maʼlumot tuzilmalarigacha — saqlashi mumkin.
 
-You read a signal's value by calling its getter function, which allows Angular to track where the signal is used.
+Signalning qiymatini uning getter funksiyasini chaqirish orqali oʻqiysiz; bu Angular'ga signal qayerda ishlatilayotganini kuzatish imkonini beradi.
 
-Signals may be either _writable_ or _read-only_.
+Signallar _yoziladigan_ (writable) yoki _faqat oʻqish uchun_ (read-only) boʻlishi mumkin.
 
-### Writable signals
+### Yoziladigan signallar {#writable-signals}
 
-Writable signals provide an API for updating their values directly. You create writable signals by calling the `signal` function with the signal's initial value:
+Yoziladigan signallar oʻz qiymatlarini bevosita yangilash uchun API taqdim etadi. Yoziladigan signallarni `signal` funksiyasini signalning boshlangʻich qiymati bilan chaqirib yaratasiz:
 
 ```ts
 const count = signal(0);
@@ -23,24 +23,24 @@ const count = signal(0);
 console.log('The count is: ' + count());
 ```
 
-To change the value of a writable signal, either `.set()` it directly:
+Yoziladigan signalning qiymatini oʻzgartirish uchun uni bevosita `.set()` qiling:
 
 ```ts
 count.set(3);
 ```
 
-or use the `.update()` operation to compute a new value from the previous one:
+yoki oldingi qiymatdan yangi qiymatni hisoblash uchun `.update()` operatsiyasidan foydalaning:
 
 ```ts
 // Increment the count by 1.
 count.update((value) => value + 1);
 ```
 
-Writable signals have the type `WritableSignal`.
+Yoziladigan signallar `WritableSignal` turiga ega.
 
-#### Converting writable signals to readonly
+#### Yoziladigan signallarni faqat oʻqish uchun signalga aylantirish {#converting-writable-signals-to-readonly}
 
-`WritableSignal` provides an `asReadonly()` method that returns a readonly version of the signal. This is useful when you want to expose a signal's value to consumers without allowing them to modify it directly:
+`WritableSignal` signalning faqat oʻqish uchun versiyasini qaytaruvchi `asReadonly()` metodini taqdim etadi. Bu signal qiymatini isteʼmolchilarga, ularga uni bevosita oʻzgartirish imkonini bermasdan, ochmoqchi boʻlganingizda foydali:
 
 ```ts
 @Service()
@@ -67,42 +67,42 @@ export class AwesomeCounter {
 }
 ```
 
-The readonly signal reflects any changes made to the original writable signal, but cannot be modified using `set()` or `update()` methods.
+Faqat oʻqish uchun signal asl yoziladigan signalga kiritilgan har qanday oʻzgarishni aks ettiradi, lekin uni `set()` yoki `update()` metodlari bilan oʻzgartirib boʻlmaydi.
 
-IMPORTANT: The readonly signals do **not** have any built-in mechanism that would prevent deep-mutation of their value.
+IMPORTANT: Faqat oʻqish uchun signallarda ularning qiymatini chuqur oʻzgartirishdan (deep-mutation) himoya qiladigan hech qanday oʻrnatilgan mexanizm **yoʻq**.
 
-### Computed signals
+### Hisoblangan signallar (computed) {#computed-signals}
 
-**Computed signals** are read-only signals that derive their value from other signals. You define computed signals using the `computed` function and specifying a derivation:
+**Hisoblangan signallar** (computed signals) — qiymatini boshqa signallardan hosil qiluvchi, faqat oʻqish uchun signallar. Hisoblangan signallarni `computed` funksiyasi yordamida, hosil qilish (derivation) funksiyasini koʻrsatib aniqlaysiz:
 
 ```typescript
 const count: WritableSignal<number> = signal(0);
 const doubleCount: Signal<number> = computed(() => count() * 2);
 ```
 
-The `doubleCount` signal depends on the `count` signal. Whenever `count` updates, Angular knows that `doubleCount` needs to update as well.
+`doubleCount` signali `count` signaliga bogʻliq. `count` yangilanganda Angular `doubleCount` ham yangilanishi kerakligini biladi.
 
-#### Computed signals are both lazily evaluated and memoized
+#### Hisoblangan signallar dangasa hisoblanadi va memoizatsiya qilinadi {#computed-signals-are-both-lazily-evaluated-and-memoized}
 
-`doubleCount`'s derivation function does not run to calculate its value until the first time you read `doubleCount`. The calculated value is then cached, and if you read `doubleCount` again, it will return the cached value without recalculating.
+`doubleCount`'ning hosil qilish funksiyasi siz `doubleCount`'ni birinchi marta oʻqimaguningizcha uning qiymatini hisoblash uchun ishga tushmaydi. Hisoblangan qiymat keyin keshlanadi va `doubleCount`'ni yana oʻqisangiz, u qayta hisoblamasdan keshlangan qiymatni qaytaradi.
 
-If you then change `count`, Angular knows that `doubleCount`'s cached value is no longer valid, and the next time you read `doubleCount` its new value will be calculated.
+Agar keyin `count`'ni oʻzgartirsangiz, Angular `doubleCount`'ning keshlangan qiymati endi yaroqsiz ekanini biladi va `doubleCount`'ni keyingi safar oʻqiganingizda uning yangi qiymati hisoblanadi.
 
-As a result, you can safely perform computationally expensive derivations in computed signals, such as filtering arrays.
+Natijada, hisoblangan signallarda massivlarni filtrlash kabi hisoblash jihatidan qimmat hosil qilishlarni xavfsiz bajarishingiz mumkin.
 
-#### Computed signals are not writable signals
+#### Hisoblangan signallar yoziladigan signallar emas {#computed-signals-are-not-writable-signals}
 
-You cannot directly assign values to a computed signal. That is,
+Hisoblangan signalga bevosita qiymat tayinlay olmaysiz. Yaʼni,
 
 ```ts
 doubleCount.set(3);
 ```
 
-produces a compilation error, because `doubleCount` is not a `WritableSignal`.
+kompilyatsiya xatosiga olib keladi, chunki `doubleCount` `WritableSignal` emas.
 
-#### Computed signal dependencies are dynamic
+#### Hisoblangan signalning bogʻliqliklari dinamik {#computed-signal-dependencies-are-dynamic}
 
-Only the signals actually read during the derivation are tracked. For example, in this `computed` the `count` signal is only read if the `showCount` signal is true:
+Faqat hosil qilish davomida haqiqatda oʻqilgan signallar kuzatiladi. Masalan, ushbu `computed`'da `count` signali faqat `showCount` signali true boʻlganda oʻqiladi:
 
 ```ts
 const showCount = signal(false);
@@ -116,29 +116,29 @@ const conditionalCount = computed(() => {
 });
 ```
 
-When you read `conditionalCount`, if `showCount` is `false` the "Nothing to see here!" message is returned _without_ reading the `count` signal. This means that if you later update `count` it will _not_ result in a recomputation of `conditionalCount`.
+`conditionalCount`'ni oʻqiganingizda, agar `showCount` `false` boʻlsa, "Nothing to see here!" xabari `count` signalini oʻqimasdan qaytariladi. Bu shuni anglatadiki, keyinroq `count`'ni yangilasangiz, bu `conditionalCount`'ning qayta hisoblanishiga olib kelmaydi.
 
-If you set `showCount` to `true` and then read `conditionalCount` again, the derivation will re-execute and take the branch where `showCount` is `true`, returning the message which shows the value of `count`. Changing `count` will then invalidate `conditionalCount`'s cached value.
+Agar `showCount`'ni `true` qilib oʻrnatib, keyin `conditionalCount`'ni yana oʻqisangiz, hosil qilish qayta bajariladi va `showCount` `true` boʻlgan shoxobchaga oʻtib, `count` qiymatini koʻrsatuvchi xabarni qaytaradi. Shundan keyin `count`'ni oʻzgartirish `conditionalCount`'ning keshlangan qiymatini yaroqsiz qiladi.
 
-Note that dependencies can be removed during a derivation as well as added. If you later set `showCount` back to `false`, then `count` will no longer be considered a dependency of `conditionalCount`.
+Eʼtibor bering, hosil qilish davomida bogʻliqliklar qoʻshilishi bilan birga olib tashlanishi ham mumkin. Agar keyinroq `showCount`'ni yana `false` qilib oʻrnatsangiz, `count` endi `conditionalCount`'ning bogʻliqligi hisoblanmaydi.
 
-## Reactive contexts
+## Reaktiv kontekstlar {#reactive-contexts}
 
-A **reactive context** is a runtime state where Angular monitors signal reads to establish a dependency. The code reading the signal is the _consumer_, and the signal being read is the _producer_.
+**Reaktiv kontekst** — Angular bogʻliqlik oʻrnatish uchun signal oʻqishlarini kuzatadigan ishga tushish vaqti (runtime) holati. Signalni oʻqiyotgan kod — _isteʼmolchi_ (consumer), oʻqilayotgan signal esa — _ishlab chiqaruvchi_ (producer).
 
-Angular automatically enters a reactive context when:
+Angular quyidagi hollarda avtomatik ravishda reaktiv kontekstga kiradi:
 
-- Executing an `effect`, `afterRenderEffect` callback.
-- Evaluating a `computed` signal.
-- Evaluating a `linkedSignal`.
-- Evaluating a `resource`'s params function.
-- Rendering a component template (including bindings in the [host property](guide/components/host-elements#binding-to-the-host-element)).
+- `effect`, `afterRenderEffect` callback'ini bajarishda.
+- `computed` signalini hisoblashda.
+- `linkedSignal`'ni hisoblashda.
+- `resource`'ning params funksiyasini hisoblashda.
+- Komponent shablonini render qilishda (shu jumladan [host xususiyatidagi](guide/components/host-elements#binding-to-the-host-element) bogʻlashlar).
 
-During these operations, Angular creates a _live_ connection. If a tracked signal changes, Angular will _eventually_ re-run the consumer.
+Ushbu operatsiyalar davomida Angular _jonli_ aloqa yaratadi. Agar kuzatilayotgan signal oʻzgarsa, Angular isteʼmolchini _oxir-oqibat_ qayta ishga tushiradi.
 
-### Asserts the reactive context
+### Reaktiv kontekstni tekshirish (assert) {#asserts-the-reactive-context}
 
-Angular provides the `assertNotInReactiveContext` helper function to assert that code is not executing within a reactive context. Pass a reference to the calling function so the error message points to the correct API entry point if the assertion fails. This produces a clearer, more actionable error message than a generic reactive context error.
+Angular kodning reaktiv kontekst ichida bajarilmayotganini tasdiqlash (assert) uchun `assertNotInReactiveContext` yordamchi funksiyasini taqdim etadi. Chaqiruvchi funksiyaga havola uzating, shunda tekshiruv muvaffaqiyatsiz boʻlganda xato xabari toʻgʻri API kirish nuqtasiga ishora qiladi. Bu umumiy reaktiv kontekst xatosiga nisbatan aniqroq va amaliy xato xabarini beradi.
 
 ```ts
 import {assertNotInReactiveContext} from '@angular/core';
@@ -149,11 +149,11 @@ function subscribeToEvents() {
 }
 ```
 
-### Reading without tracking dependencies
+### Bogʻliqliklarni kuzatmasdan oʻqish {#reading-without-tracking-dependencies}
 
-Rarely, you may want to execute code which may read signals within a reactive function such as `computed` or `effect` _without_ creating a dependency.
+Kamdan-kam hollarda `computed` yoki `effect` kabi reaktiv funksiya ichida signallarni oʻqishi mumkin boʻlgan kodni bogʻliqlik yaratmasdan bajarishni istashingiz mumkin.
 
-For example, suppose that when `currentUser` changes, the value of a `counter` should be logged. You could create an `effect` which reads both signals:
+Masalan, `currentUser` oʻzgarganda `counter` qiymati logga yozilishi kerak deb faraz qilaylik. Ikkala signalni ham oʻqiydigan `effect` yaratishingiz mumkin edi:
 
 ```ts
 effect(() => {
@@ -161,9 +161,9 @@ effect(() => {
 });
 ```
 
-This example will log a message when _either_ `currentUser` or `counter` changes. However, if the effect should only run when `currentUser` changes, then the read of `counter` is only incidental and changes to `counter` shouldn't log a new message.
+Bu misol `currentUser` _yoki_ `counter` oʻzgarganda xabarni logga yozadi. Biroq, agar effect faqat `currentUser` oʻzgarganda ishga tushishi kerak boʻlsa, `counter`'ni oʻqish shunchaki tasodifiy boʻlib, `counter`'dagi oʻzgarishlar yangi xabarni logga yozmasligi kerak.
 
-You can prevent a signal read from being tracked by calling its getter with `untracked`:
+Signal oʻqilishining kuzatilishini uning getter'ini `untracked` bilan chaqirish orqali oldini olishingiz mumkin:
 
 ```ts
 effect(() => {
@@ -171,7 +171,7 @@ effect(() => {
 });
 ```
 
-`untracked` is also useful when an effect needs to invoke some external code which shouldn't be treated as a dependency:
+`untracked` effect bogʻliqlik sifatida qaralmasligi kerak boʻlgan tashqi kodni chaqirishi kerak boʻlganda ham foydali:
 
 ```ts
 effect(() => {
@@ -184,9 +184,9 @@ effect(() => {
 });
 ```
 
-### Reactive context and async operations
+### Reaktiv kontekst va asinxron operatsiyalar {#reactive-context-and-async-operations}
 
-The reactive context is only active for synchronous code. Any signal reads that occur after an asynchronous boundary will not be tracked as dependencies.
+Reaktiv kontekst faqat sinxron kod uchun faol. Asinxron chegaradan keyin sodir boʻladigan har qanday signal oʻqishlari bogʻliqlik sifatida kuzatilmaydi.
 
 ```ts {avoid}
 effect(async () => {
@@ -196,7 +196,7 @@ effect(async () => {
 });
 ```
 
-To ensure all signal reads are tracked, read signals before the `await`. This includes passing them as arguments to the awaited function, since arguments are evaluated synchronously:
+Barcha signal oʻqishlari kuzatilishini taʼminlash uchun signallarni `await`'dan oldin oʻqing. Bunga ularni kutilayotgan (awaited) funksiyaga argument sifatida uzatish ham kiradi, chunki argumentlar sinxron hisoblanadi:
 
 ```ts {prefer}
 effect(async () => {
@@ -213,26 +213,26 @@ effect(async () => {
 });
 ```
 
-## Advanced derivations
+## Murakkab hosil qilishlar {#advanced-derivations}
 
-While `computed` handles simple readonly derivations, you might find yourself needing a writable state that is dependent on other signals.
-For more information see the [Dependent state with linkedSignal](/guide/signals/linked-signal) guide.
+`computed` oddiy faqat oʻqish uchun hosil qilishlarni hal qilsa-da, sizga boshqa signallarga bogʻliq boʻlgan yoziladigan holat kerak boʻlib qolishi mumkin.
+Koʻproq maʼlumot uchun [linkedSignal bilan bogʻliq holat](/guide/signals/linked-signal) qoʻllanmasiga qarang.
 
-All signal APIs are synchronous— `signal`, `computed`, `input`, etc. However, applications often need to deal with data that is available asynchronously. A `Resource` gives you a way to incorporate async data into your application's signal-based code and still allow you to access its data synchronously. For more information see the [Async reactivity with resources](/guide/signals/resource) guide.
+Barcha signal API'lari sinxron — `signal`, `computed`, `input` va boshqalar. Biroq ilovalar koʻpincha asinxron tarzda mavjud boʻladigan maʼlumotlar bilan ishlashi kerak. `Resource` asinxron maʼlumotlarni ilovangizning signallarga asoslangan kodiga kiritish va shunga qaramay uning maʼlumotlariga sinxron tarzda kirish imkonini beradi. Koʻproq maʼlumot uchun [Resource'lar bilan asinxron reaktivlik](/guide/signals/resource) qoʻllanmasiga qarang.
 
-## Executing side effects on non-reactive APIs
+## Reaktiv boʻlmagan API'larda yon taʼsirlarni bajarish {#executing-side-effects-on-non-reactive-apis}
 
-Synchronous or asynchronous derivations are recommended when we want to react to state changes. However, this doesn't cover all the possible use cases, and you'll sometimes find yourself in a situation where you need to react to signal changes on non-reactive APIs. Use `effect` or `afterRenderEffect` for those specific use cases. For more information see [Side effects for non-reactive APIs](/guide/signals/effect) guide.
+Holat oʻzgarishlariga javob berishni istaganimizda sinxron yoki asinxron hosil qilishlar tavsiya etiladi. Biroq bu barcha mumkin boʻlgan holatlarni qamrab olmaydi va baʼzan reaktiv boʻlmagan API'larda signal oʻzgarishlariga javob berish zarur boʻlgan vaziyatga tushib qolasiz. Bunday maxsus holatlar uchun `effect` yoki `afterRenderEffect`'dan foydalaning. Koʻproq maʼlumot uchun [Reaktiv boʻlmagan API'lar uchun yon taʼsirlar](/guide/signals/effect) qoʻllanmasiga qarang.
 
-## Reading signals in `OnPush` components
+## `OnPush` komponentlarida signallarni oʻqish {#reading-signals-in-onpush-components}
 
-When you read a signal within an `OnPush` component's template, Angular tracks the signal as a dependency of that component. When the value of that signal changes, Angular automatically [marks](api/core/ChangeDetectorRef#markForCheck) the component to ensure it gets updated the next time change detection runs. Refer to the [Skipping component subtrees](best-practices/skipping-subtrees) guide for more information about `OnPush` components.
+`OnPush` komponentining shablonida signalni oʻqiganingizda, Angular bu signalni oʻsha komponentning bogʻliqligi sifatida kuzatadi. Bu signalning qiymati oʻzgarganda Angular komponentni avtomatik ravishda [belgilaydi](api/core/ChangeDetectorRef#markForCheck), shunda u oʻzgarishlarni aniqlash keyingi safar ishga tushganda yangilanadi. `OnPush` komponentlari haqida koʻproq maʼlumot olish uchun [Komponent pastki daraxtlarini oʻtkazib yuborish](best-practices/skipping-subtrees) qoʻllanmasiga qarang.
 
-## Advanced topics
+## Qoʻshimcha mavzular {#advanced-topics}
 
-### Signal equality functions
+### Signal tenglik funksiyalari {#signal-equality-functions}
 
-When creating a signal, you can optionally provide an equality function, which will be used to check whether the new value is actually different than the previous one.
+Signal yaratishda ixtiyoriy ravishda tenglik funksiyasini berishingiz mumkin; u yangi qiymat oldingisidan haqiqatda farq qiladimi-yoʻqmi tekshirish uchun ishlatiladi.
 
 ```ts
 import isEqual from 'lodash/isEqual';
@@ -245,13 +245,13 @@ const data = signal(['test'], {equal: isEqual});
 data.set(['test']);
 ```
 
-Equality functions can be provided to both writable and computed signals.
+Tenglik funksiyalarini yoziladigan signallarga ham, hisoblangan signallarga ham berish mumkin.
 
-HELPFUL: By default, signals use referential equality ([`Object.is()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is) comparison).
+HELPFUL: Sukut boʻyicha signallar referens tengligidan ([`Object.is()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is) taqqoslashidan) foydalanadi.
 
-### Type checking signals
+### Signallarning turini tekshirish {#type-checking-signals}
 
-You can use `isSignal` to check if a value is a `Signal`:
+Qiymat `Signal` ekanini tekshirish uchun `isSignal`'dan foydalanishingiz mumkin:
 
 ```ts
 const count = signal(0);
@@ -262,7 +262,7 @@ isSignal(doubled); // true
 isSignal(42); // false
 ```
 
-To specifically check if a signal is writable, use `isWritableSignal`:
+Signal yoziladigan ekanini aniq tekshirish uchun `isWritableSignal`'dan foydalaning:
 
 ```ts
 const count = signal(0);
@@ -272,11 +272,11 @@ isWritableSignal(count); // true
 isWritableSignal(doubled); // false
 ```
 
-## Using signals with RxJS
+## Signallardan RxJS bilan foydalanish {#using-signals-with-rxjs}
 
-See [RxJS interop with Angular signals](ecosystem/rxjs-interop) for details on interoperability between signals and RxJS.
+Signallar va RxJS oʻrtasidagi oʻzaro muvofiqlik (interoperability) haqida batafsil maʼlumot uchun [Angular signallari bilan RxJS interop](ecosystem/rxjs-interop) sahifasiga qarang.
 
-## Debugging signals
+## Signallarni debug qilish {#debugging-signals}
 
-Angular DevTools can visualize the signal graph of a component or directive, showing how its signals, computeds, effects, and other reactive nodes depend on each other.
-See [Debug the signal graph](tools/devtools/signals) to learn how to open, read, and inspect the graph.
+Angular DevTools komponent yoki direktivaning signal grafigini vizuallashtirib, uning signallari, computed'lari, effect'lari va boshqa reaktiv tugunlari bir-biriga qanday bogʻliq ekanini koʻrsatishi mumkin.
+Grafikni qanday ochish, oʻqish va tekshirishni bilish uchun [Signal grafigini debug qilish](tools/devtools/signals) sahifasiga qarang.

@@ -1,10 +1,10 @@
-# Async reactivity with resources
+# Resource'lar bilan asinxron reaktivlik
 
-All signal APIs are synchronous— `signal`, `computed`, `input`, etc. However, applications often need to deal with data that is available asynchronously. A `Resource` gives you a way to incorporate async data into your application's signal-based code and still allow you to access its data synchronously.
+Barcha signal API'lari sinxron — `signal`, `computed`, `input` va boshqalar. Biroq ilovalar koʻpincha asinxron tarzda mavjud boʻladigan maʼlumotlar bilan ishlashi kerak. `Resource` asinxron maʼlumotlarni ilovangizning signallarga asoslangan kodiga kiritish va shunga qaramay uning maʼlumotlariga sinxron tarzda kirish imkonini beradi.
 
-You can use a `Resource` to perform any kind of async operation, but the most common use-case for `Resource` is fetching data from a server. The following example creates a resource to fetch some user data.
+`Resource`'dan har qanday asinxron operatsiyani bajarish uchun foydalanishingiz mumkin, lekin `Resource` uchun eng keng tarqalgan foydalanish holati — serverdan maʼlumot olish (fetching). Quyidagi misol foydalanuvchi maʼlumotlarini olish uchun resource yaratadi.
 
-The easiest way to create a `Resource` is the `resource` function.
+`Resource` yaratishning eng oson yoʻli — `resource` funksiyasi.
 
 ```typescript
 import {computed, resource, Signal} from '@angular/core';
@@ -35,37 +35,37 @@ const firstName = computed(() => {
 });
 ```
 
-The `resource` function accepts a `ResourceOptions` object with two main properties: `params` and `loader`.
+`resource` funksiyasi ikkita asosiy xususiyatga ega `ResourceOptions` obyektini qabul qiladi: `params` va `loader`.
 
-The `params` property defines a reactive computation that produces a parameter value. Whenever signals read in this computation change, the resource produces a new parameter value, similar to `computed`.
+`params` xususiyati parametr qiymatini hosil qiluvchi reaktiv hisoblashni belgilaydi. Bu hisoblashda oʻqilgan signallar oʻzgarganda resource, `computed`'ga oʻxshab, yangi parametr qiymatini hosil qiladi.
 
-The `loader` property defines a `ResourceLoader`— an async function that retrieves some state. The resource calls the loader every time the `params` computation produces a new value, passing that value to the loader. See [Resource loaders](#resource-loaders) below for more details.
+`loader` xususiyati `ResourceLoader`'ni — biror holatni oluvchi asinxron funksiyani belgilaydi. Resource `params` hisoblashi yangi qiymat hosil qilgan har safar loader'ni chaqiradi va bu qiymatni loader'ga uzatadi. Batafsil maʼlumot uchun quyidagi [Resource loader'lari](#resource-loaders) boʻlimiga qarang.
 
-`Resource` has a `value` signal that contains the results of the loader.
+`Resource` loader natijalarini saqlovchi `value` signaliga ega.
 
-## Resource loaders
+## Resource loader'lari {#resource-loaders}
 
-When creating a resource, you specify a `ResourceLoader`. This loader is an async function that accepts a single parameter— a `ResourceLoaderParams` object— and returns a value.
+Resource yaratganingizda `ResourceLoader`'ni koʻrsatasiz. Bu loader — bitta parametrni (`ResourceLoaderParams` obyektini) qabul qiluvchi va qiymat qaytaruvchi asinxron funksiya.
 
-The `ResourceLoaderParams` object contains three properties: `params`, `previous`, and `abortSignal`.
+`ResourceLoaderParams` obyekti uchta xususiyatga ega: `params`, `previous` va `abortSignal`.
 
-| Property      | Description                                                                                                                                      |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `params`      | The value of the resource's `params` computation.                                                                                                |
-| `previous`    | An object with a `status` property, containing the previous `ResourceStatus`.                                                                    |
-| `abortSignal` | An [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal). See [Aborting requests](#aborting-requests) below for details. |
+| Xususiyat     | Tavsif                                                                                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `params`      | Resource'ning `params` hisoblashi qiymati.                                                                                                                  |
+| `previous`    | Oldingi `ResourceStatus`'ni saqlovchi `status` xususiyatiga ega obyekt.                                                                                     |
+| `abortSignal` | [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal). Batafsil maʼlumot uchun quyidagi [Soʻrovlarni bekor qilish](#aborting-requests) boʻlimiga qarang. |
 
-If the `params` computation returns `undefined`, the loader function does not run and the resource status becomes `'idle'`.
+Agar `params` hisoblashi `undefined` qaytarsa, loader funksiyasi ishga tushmaydi va resource holati `'idle'` boʻladi.
 
-### Streaming resources
+### Oqimli (streaming) resource'lar {#streaming-resources}
 
-Some asynchronous data sources produce multiple values over time instead of returning a single result. Examples include WebSockets, Server-Sent Events (SSE), and Firestore `onSnapshot` listeners.
+Baʼzi asinxron maʼlumot manbalari bitta natija qaytarish oʻrniga vaqt oʻtishi bilan bir nechta qiymat hosil qiladi. Bunga WebSocket'lar, Server-Sent Events (SSE) va Firestore `onSnapshot` tinglovchilari misol boʻladi.
 
-Use `stream` for these continuously updating data sources. Unlike `loader`, which resolves once for each request, `stream` returns a signal whose value can continue to update as new data becomes available.
+Bunday uzluksiz yangilanadigan maʼlumot manbalari uchun `stream`'dan foydalaning. Har bir soʻrov uchun bir marta hal boʻladigan (resolve) `loader`'dan farqli oʻlaroq, `stream` yangi maʼlumotlar paydo boʻlishi bilan qiymati yangilanishda davom etishi mumkin boʻlgan signal qaytaradi.
 
-Use `loader` for one-time asynchronous operations, such as fetching data from an HTTP endpoint.
+HTTP endpoint'dan maʼlumot olish kabi bir martalik asinxron operatsiyalar uchun `loader`'dan foydalaning.
 
-In this example, `userUpdates` simulates an external source such as a WebSocket or SSE connection.
+Bu misolda `userUpdates` WebSocket yoki SSE ulanishi kabi tashqi manbani simulyatsiya qiladi.
 
 ```typescript
 const userUpdates = signal({value: 'Alice'});
@@ -78,11 +78,11 @@ const userResource = resource({
 userUpdates.set({value: 'Bob'});
 ```
 
-### Aborting requests
+### Soʻrovlarni bekor qilish {#aborting-requests}
 
-A resource aborts an outstanding loading operation if the `params` computation changes while the resource is loading.
+Agar resource yuklanayotgan vaqtda `params` hisoblashi oʻzgarsa, resource tugallanmagan yuklash operatsiyasini bekor qiladi.
 
-You can use the `abortSignal` in `ResourceLoaderParams` to respond to aborted requests. For example, the native `fetch` function accepts an `AbortSignal`:
+Bekor qilingan soʻrovlarga javob berish uchun `ResourceLoaderParams`'dagi `abortSignal`'dan foydalanishingiz mumkin. Masalan, tabiiy (native) `fetch` funksiyasi `AbortSignal` qabul qiladi:
 
 ```typescript
 const userId: Signal<string> = getUserId();
@@ -97,11 +97,11 @@ const userResource = resource({
 });
 ```
 
-See [`AbortSignal` on MDN](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) for more details on request cancellation with `AbortSignal`.
+`AbortSignal` bilan soʻrovlarni bekor qilish haqida batafsil maʼlumot uchun [MDN'dagi `AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) sahifasiga qarang.
 
-### Reloading
+### Qayta yuklash {#reloading}
 
-You can programmatically trigger a resource's `loader` by calling the `reload` method.
+`reload` metodini chaqirish orqali resource'ning `loader`'ini dasturiy tarzda ishga tushirishingiz mumkin.
 
 ```typescript
 const userId: Signal<string> = getUserId();
@@ -116,36 +116,36 @@ const userResource = resource({
 userResource.reload();
 ```
 
-## Resource status
+## Resource holati {#resource-status}
 
-The resource object has several signal properties for reading the status of the asynchronous loader.
+Resource obyekti asinxron loader'ning holatini oʻqish uchun bir nechta signal xususiyatlariga ega.
 
-| Property    | Description                                                                                                     |
-| ----------- | --------------------------------------------------------------------------------------------------------------- |
-| `value`     | The most recent value of the resource, or `undefined` if no value has been received.                            |
-| `hasValue`  | Whether the resource has a value.                                                                               |
-| `error`     | The most recent error encountered while running the resource's loader, or `undefined` if no error has occurred. |
-| `isLoading` | Whether the resource loader is currently running.                                                               |
-| `status`    | The resource's specific `ResourceStatus`, as described below.                                                   |
+| Xususiyat   | Tavsif                                                                                                                 |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `value`     | Resource'ning eng soʻnggi qiymati yoki hech qanday qiymat olinmagan boʻlsa `undefined`.                                |
+| `hasValue`  | Resource qiymatga egami-yoʻqmi.                                                                                        |
+| `error`     | Resource'ning loader'ini ishga tushirishda yuzaga kelgan eng soʻnggi xato yoki hech qanday xato boʻlmagan boʻlsa `undefined`. |
+| `isLoading` | Resource loader'i hozirda ishlayaptimi-yoʻqmi.                                                                         |
+| `status`    | Resource'ning quyida tavsiflangan muayyan `ResourceStatus`'i.                                                          |
 
-The `status` signal provides a specific `ResourceStatus` that describes the state of the resource using a string constant.
+`status` signali resource'ning holatini satr konstantasi yordamida tavsiflovchi muayyan `ResourceStatus`'ni taqdim etadi.
 
-| Status        | `value()`         | Description                                                                  |
-| ------------- | :---------------- | ---------------------------------------------------------------------------- |
-| `'idle'`      | `undefined`       | The resource has no valid request and the loader has not run.                |
-| `'error'`     | Throws an error   | The loader has encountered an error.                                         |
-| `'loading'`   | `undefined`       | The loader is running as a result of the `params` value changing.            |
-| `'reloading'` | Previous value    | The loader is running as a result of calling the resource's `reload` method. |
-| `'resolved'`  | Resolved value    | The loader has completed.                                                    |
-| `'local'`     | Locally set value | The resource's value has been set locally via `.set()` or `.update()`        |
+| Holat         | `value()`               | Tavsif                                                                          |
+| ------------- | :---------------------- | ------------------------------------------------------------------------------- |
+| `'idle'`      | `undefined`             | Resource yaroqli soʻrovga ega emas va loader ishga tushmagan.                    |
+| `'error'`     | Xato tashlaydi          | Loader xatoga duch kelgan.                                                      |
+| `'loading'`   | `undefined`             | Loader `params` qiymatining oʻzgarishi natijasida ishlayapti.                   |
+| `'reloading'` | Oldingi qiymat          | Loader resource'ning `reload` metodi chaqirilishi natijasida ishlayapti.         |
+| `'resolved'`  | Hal boʻlgan qiymat      | Loader tugallangan.                                                             |
+| `'local'`     | Lokal oʻrnatilgan qiymat | Resource'ning qiymati `.set()` yoki `.update()` orqali lokal tarzda oʻrnatilgan |
 
-You can use this status information to conditionally display user interface elements, such as loading indicators and error messages.
+Bu holat maʼlumotlaridan yuklash indikatorlari va xato xabarlari kabi foydalanuvchi interfeysi elementlarini shartli koʻrsatish uchun foydalanishingiz mumkin.
 
-## Caching `resource` data with SSR
+## `resource` maʼlumotlarini SSR bilan keshlash {#caching-resource-data-with-ssr}
 
-When an application renders on the server, a resource loader runs once to produce the initial HTML. During hydration, the browser normally runs the same loader again.
+Ilova serverda render qilinganda, resource loader'i boshlangʻich HTML'ni hosil qilish uchun bir marta ishga tushadi. Gidratsiya davomida brauzer odatda oʻsha loader'ni yana ishga tushiradi.
 
-To reuse the server result, provide an `id` for the resource. Angular stores the resolved value in `TransferState` on the server and uses it on the client to initialize the resource in a `'resolved'` state.
+Server natijasini qayta ishlatish uchun resource'ga `id` bering. Angular hal boʻlgan qiymatni serverda `TransferState`'da saqlaydi va klientda resource'ni `'resolved'` holatida ishga tushirish uchun undan foydalanadi.
 
 ```ts
 const userId: Signal<string> = getUserId();
@@ -157,13 +157,13 @@ const userResource = resource({
 });
 ```
 
-The `id` value must be unique within your application and identical on the server and the client so that Angular can match the cached entry to the resource that requested it.
+`id` qiymati ilovangiz ichida noyob boʻlishi va serverda ham, klientda ham bir xil boʻlishi kerak, shunda Angular keshlangan yozuvni uni soʻragan resource bilan moslashtira oladi.
 
-IMPORTANT: Because the cached value is serialized into the page's HTML, avoid setting `id` on resources that load data specific to the user who triggered the server-side render, especially if the rendered HTML can be cached or shared between users.
+IMPORTANT: Keshlangan qiymat sahifaning HTML'iga serializatsiya qilingani uchun, server tomonida render qilishni ishga tushirgan foydalanuvchiga xos maʼlumotlarni yuklovchi resource'larga `id` oʻrnatishdan saqlaning, ayniqsa render qilingan HTML keshlanishi yoki foydalanuvchilar oʻrtasida ulashilishi mumkin boʻlsa.
 
-## Chaining resources
+## Resource'larni zanjirlash {#chaining-resources}
 
-Sometimes one resource depends on the result of another. You can express this dependency using the `chain` function available in the `params` context object.
+Baʼzan bir resource boshqasining natijasiga bogʻliq boʻladi. Bu bogʻliqlikni `params` kontekst obyektida mavjud `chain` funksiyasi yordamida ifodalashingiz mumkin.
 
 ```typescript
 import {resource} from '@angular/core';
@@ -179,20 +179,20 @@ const companyResource = resource({
 });
 ```
 
-Here `companyResource` depends on the user's `companyId`, which is only known once `userResource` has loaded. `chain(userResource)` reads the value of `userResource` and automatically propagates its status to `companyResource`:
+Bu yerda `companyResource` foydalanuvchining `companyId`'siga bogʻliq, u esa faqat `userResource` yuklanganidan keyin maʼlum boʻladi. `chain(userResource)` `userResource`'ning qiymatini oʻqiydi va uning holatini `companyResource`'ga avtomatik ravishda tarqatadi:
 
-- If `userResource` is **idle**, `companyResource` also becomes `idle`.
-- If `userResource` is **loading** or **reloading**, `companyResource` enters the `loading` state and its loader does not run. Note that during `reloading`, `chain` does not return the previously resolved value.
-- If `userResource` is in an **error** state, `companyResource` also enters the `error` state.
-- If `userResource` is **resolved** or **local**, `chain` returns its current value, which `companyResource` then uses as its params.
+- Agar `userResource` **idle** boʻlsa, `companyResource` ham `idle` boʻladi.
+- Agar `userResource` **loading** yoki **reloading** boʻlsa, `companyResource` `loading` holatiga kiradi va uning loader'i ishga tushmaydi. Eʼtibor bering, `reloading` davomida `chain` oldin hal boʻlgan qiymatni qaytarmaydi.
+- Agar `userResource` **error** holatida boʻlsa, `companyResource` ham `error` holatiga kiradi.
+- Agar `userResource` **resolved** yoki **local** boʻlsa, `chain` uning joriy qiymatini qaytaradi va `companyResource` undan oʻz params'i sifatida foydalanadi.
 
-When `chain` propagates a status from `userResource` (`idle`, `loading`, `reloading`, or `error`), the params function does not continue. When `userResource` is `resolved` or `local`, `chain` returns its value, which can itself be `undefined`. The example handles this with `chain(userResource)?.companyId`, so an `undefined` value results in `undefined` params and `companyResource` becomes `idle`.
+`chain` `userResource`'dan holatni (`idle`, `loading`, `reloading` yoki `error`) tarqatganda, params funksiyasi davom etmaydi. `userResource` `resolved` yoki `local` boʻlganda `chain` uning qiymatini qaytaradi, bu qiymat oʻzi ham `undefined` boʻlishi mumkin. Misol buni `chain(userResource)?.companyId` bilan hal qiladi, shunda `undefined` qiymat `undefined` params'ga olib keladi va `companyResource` `idle` boʻladi.
 
-NOTE: Pass the chained value directly as the params value rather than wrapping it in an object. A params value like `{companyId: undefined}` is still a defined value, so the loader would run with an `undefined` `companyId` instead of the resource becoming `idle`.
+NOTE: Zanjirlangan qiymatni obyektga oʻrash oʻrniga bevosita params qiymati sifatida uzating. `{companyId: undefined}` kabi params qiymati hali ham aniqlangan (defined) qiymat hisoblanadi, shuning uchun resource `idle` boʻlish oʻrniga loader `undefined` `companyId` bilan ishga tushib ketadi.
 
-### Chaining vs. reading resource values directly
+### Zanjirlash va resource qiymatlarini bevosita oʻqish {#chaining-vs-reading-resource-values-directly}
 
-You might be tempted to read a resource's value directly inside `params`:
+Resource'ning qiymatini `params` ichida bevosita oʻqishga moyil boʻlishingiz mumkin:
 
 ```typescript {avoid, header: 'reads value() directly without status propagation'}
 const companyResource = resource({
@@ -204,17 +204,17 @@ const companyResource = resource({
 });
 ```
 
-While this works, returning `undefined` from `params` makes the resource go `idle` rather than reflecting the actual state of the upstream resource. Using `chain` is preferred because it correctly mirrors `loading` and `error` states.
+Bu ishlasa-da, `params`'dan `undefined` qaytarish resource'ni yuqori oqimdagi resource'ning haqiqiy holatini aks ettirish oʻrniga `idle` holatiga oʻtkazadi. `chain`'dan foydalanish afzal, chunki u `loading` va `error` holatlarini toʻgʻri aks ettiradi.
 
-Reach for `chain` only when the downstream resource performs its own async work that depends on the upstream value. If you only need to derive a value synchronously from a resource, use `computed` instead.
+`chain`'ga faqat quyi oqimdagi resource yuqori oqimdagi qiymatga bogʻliq oʻz asinxron ishini bajarganda murojaat qiling. Agar resource'dan faqat sinxron tarzda qiymat hosil qilishingiz kerak boʻlsa, oʻrniga `computed`'dan foydalaning.
 
-## Reactive data fetching with `httpResource`
+## `httpResource` bilan reaktiv maʼlumot olish {#reactive-data-fetching-with-httpresource}
 
-[`httpResource`](/guide/http/http-resource) is a wrapper around `HttpClient` that gives you the request status and response as signals. It makes HTTP requests through the Angular HTTP stack, including interceptors.
+[`httpResource`](/guide/http/http-resource) — `HttpClient` atrofidagi oʻram boʻlib, soʻrov holati va javobni signallar sifatida beradi. U HTTP soʻrovlarini Angular HTTP steki orqali, shu jumladan interceptor'lar orqali bajaradi.
 
-## Resource composition with snapshots
+## Snapshot'lar bilan resource kompozitsiyasi {#resource-composition-with-snapshots}
 
-A `ResourceSnapshot` is a structured representation of a resource's current state. Every resource has a `snapshot` property that provides a signal of its current state.
+`ResourceSnapshot` — resource'ning joriy holatining strukturalangan tasviri. Har bir resource oʻz joriy holatining signalini taqdim etuvchi `snapshot` xususiyatiga ega.
 
 ```ts
 const userId: Signal<string> = getUserId();
@@ -227,11 +227,11 @@ const userResource = resource({
 const userSnapshot = userResource.snapshot;
 ```
 
-Each snapshot contains a `status` and either a `value` or an `error`.
+Har bir snapshot `status`'ni va `value` yoki `error`'dan birini oʻz ichiga oladi.
 
-### Composing resources with snapshots
+### Snapshot'lar bilan resource'larni kompozitsiya qilish {#composing-resources-with-snapshots}
 
-You can create new resources from snapshots using `resourceFromSnapshots`. This enables composition with signal APIs like `computed` and `linkedSignal` to transform resource behavior.
+`resourceFromSnapshots` yordamida snapshot'lardan yangi resource'lar yaratishingiz mumkin. Bu resource xatti-harakatini oʻzgartirish uchun `computed` va `linkedSignal` kabi signal API'lari bilan kompozitsiya qilish imkonini beradi.
 
 ```ts
 import {linkedSignal, resourceFromSnapshots, Resource, ResourceSnapshot} from '@angular/core';

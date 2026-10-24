@@ -1,6 +1,6 @@
-# Effects
+# Effect'lar
 
-Signals are useful because they notify interested consumers when they change. An **effect** is an operation that runs whenever one or more signal values change. You can create an effect with the `effect` function:
+Signallar foydali, chunki ular oʻzgarganda manfaatdor isteʼmolchilarni xabardor qiladi. **Effect** — bir yoki bir nechta signal qiymati oʻzgarganda ishga tushadigan operatsiya. Effect'ni `effect` funksiyasi bilan yaratishingiz mumkin:
 
 ```ts
 import {effect} from '@angular/core';
@@ -10,30 +10,30 @@ effect(() => {
 });
 ```
 
-Effects always run **at least once.** When an effect runs, it tracks any signal value reads. Whenever any of these signal values change, the effect runs again. Similar to computed signals, effects keep track of their dependencies dynamically, and only track signals which were read in the most recent execution.
+Effect'lar har doim **kamida bir marta** ishga tushadi. Effect ishga tushganda, u har qanday signal qiymati oʻqilishini kuzatadi. Bu signal qiymatlaridan birortasi oʻzgarganda effect yana ishga tushadi. Hisoblangan signallarga oʻxshab, effect'lar oʻz bogʻliqliklarini dinamik tarzda kuzatib boradi va faqat eng soʻnggi bajarilishda oʻqilgan signallarni kuzatadi.
 
-Effects always execute **asynchronously**, during the change detection process.
+Effect'lar har doim oʻzgarishlarni aniqlash jarayoni davomida **asinxron** bajariladi.
 
-## Use cases for effects
+## Effect'lardan foydalanish holatlari {#use-cases-for-effects}
 
-Effects should be the last API you reach for. Always prefer `computed()` for derived values and `linkedSignal()` for values that can be both derived and manually set. If you find yourself copying data from one signal to another with an effect, it's a sign you should move your source-of-truth higher up and use `computed()` or `linkedSignal()` instead. Effects are best for syncing signal state to imperative, non-signal APIs.
+Effect'lar siz murojaat qiladigan eng soʻnggi API boʻlishi kerak. Hosil qilingan qiymatlar uchun har doim `computed()`'ni, hosil qilinishi ham, qoʻlda oʻrnatilishi ham mumkin boʻlgan qiymatlar uchun esa `linkedSignal()`'ni afzal koʻring. Agar effect yordamida maʼlumotlarni bir signaldan boshqasiga nusxalayotganingizni sezsangiz, bu haqiqat manbaingizni (source of truth) yuqoriroqqa koʻchirib, oʻrniga `computed()` yoki `linkedSignal()`'dan foydalanishingiz kerakligining belgisidir. Effect'lar signal holatini imperativ, signal boʻlmagan API'lar bilan sinxronlashtirish uchun eng mos keladi.
 
-TIP: There are no situations where effect is good, only situations where it is appropriate.
+TIP: Effect yaxshi boʻlgan vaziyatlar yoʻq, faqat u oʻrinli boʻlgan vaziyatlar bor.
 
-- Logging signal values, either for analytics or as a debugging tool.
-- Keeping data in sync with different kinds of storage: `window.localStorage`, session storage, cookies, etc.
-- Adding custom DOM behavior that can't be expressed with template syntax.
-- Performing custom rendering to a `<canvas>` element, charting library, or other third party UI library.
+- Signal qiymatlarini analitika uchun yoki debug vositasi sifatida logga yozish.
+- Maʼlumotlarni turli xil saqlash joylari bilan sinxron holda ushlab turish: `window.localStorage`, session storage, cookie'lar va h.k.
+- Shablon sintaksisi bilan ifodalab boʻlmaydigan maxsus DOM xatti-harakatini qoʻshish.
+- `<canvas>` elementiga, diagramma kutubxonasiga yoki boshqa uchinchi tomon UI kutubxonasiga maxsus render qilishni bajarish.
 
-<docs-callout critical title="When not to use effects">
-Avoid using effects for propagation of state changes. This can result in `ExpressionChangedAfterItHasBeenChecked` errors, infinite circular updates, or unnecessary change detection cycles.
+<docs-callout critical title="Effect'lardan qachon foydalanmaslik kerak">
+Holat oʻzgarishlarini tarqatish uchun effect'lardan foydalanmang. Bu `ExpressionChangedAfterItHasBeenChecked` xatolariga, cheksiz aylanma yangilanishlarga yoki keraksiz oʻzgarishlarni aniqlash sikllariga olib kelishi mumkin.
 
-Instead, use `computed` signals to model state that depends on other state.
+Buning oʻrniga, boshqa holatga bogʻliq boʻlgan holatni modellashtirish uchun `computed` signallaridan foydalaning.
 </docs-callout>
 
-## Injection context
+## Inyeksiya konteksti {#injection-context}
 
-By default, you can only create an `effect()` within an [injection context](guide/di/dependency-injection-context) (where you have access to the `inject` function). The easiest way to satisfy this requirement is to call `effect` within a component, directive, or service `constructor`:
+Sukut boʻyicha `effect()`'ni faqat [inyeksiya konteksti](guide/di/dependency-injection-context) ichida (`inject` funksiyasiga kirish imkoniga ega boʻlgan joyda) yaratishingiz mumkin. Bu talabni qondirishning eng oson yoʻli — `effect`'ni komponent, direktiva yoki servisning `constructor`'i ichida chaqirish:
 
 ```ts
 @Component(/* ... */)
@@ -49,7 +49,7 @@ export class EffectiveCounter {
 }
 ```
 
-To create an effect outside the constructor, you can pass an `Injector` to `effect` via its options:
+Effect'ni konstruktordan tashqarida yaratish uchun `effect`'ga uning opsiyalari orqali `Injector` uzatishingiz mumkin:
 
 ```ts
 @Component(/* ... */)
@@ -68,35 +68,35 @@ export class EffectiveCounter {
 }
 ```
 
-## Execution of effects
+## Effect'larning bajarilishi {#execution-of-effects}
 
-Angular implicitly defines two implicit behaviors for its effects depending on the context they were created in.
+Angular effect'lari uchun, ular yaratilgan kontekstga qarab, ikki xil yashirin (implicit) xatti-harakatni belgilaydi.
 
-A "View Effect" is an `effect` created in the context of a component instantiation. This includes effects created by services that are tied to component injectors.<br>
-A "Root Effect" is created in the context of a root provided service instantiation.
+"View Effect" — komponentni yaratish (instantiation) kontekstida yaratilgan `effect`. Bunga komponent injector'lariga bogʻlangan servislar tomonidan yaratilgan effect'lar ham kiradi.<br>
+"Root Effect" — root darajasida taqdim etilgan servisni yaratish kontekstida yaratiladi.
 
-The execution of both kinds of `effect` are tied to the change detection process.
+`effect`'ning ikkala turining bajarilishi ham oʻzgarishlarni aniqlash jarayoniga bogʻlangan.
 
-- "View effects" are executed _before_ their corresponding component is checked by the change detection process.
-- "Root effects" are executed prior to all components being checked by the change detection process.
+- "View effect"lar oʻzlariga tegishli komponent oʻzgarishlarni aniqlash jarayoni tomonidan tekshirilishidan _oldin_ bajariladi.
+- "Root effect"lar barcha komponentlar oʻzgarishlarni aniqlash jarayoni tomonidan tekshirilishidan oldin bajariladi.
 
-In both cases, if at least one of the effect dependencies changed during the effect execution, the effect will re-run before moving ahead on the change detection process.
+Ikkala holatda ham, agar effect bajarilishi davomida effect bogʻliqliklaridan kamida bittasi oʻzgargan boʻlsa, oʻzgarishlarni aniqlash jarayoni davom etishidan oldin effect qayta ishga tushadi.
 
-## Destroying effects
+## Effect'larni yoʻq qilish {#destroying-effects}
 
-When a component or directive is destroyed, Angular automatically cleans up any associated effects.
+Komponent yoki direktiva yoʻq qilinganda Angular unga tegishli barcha effect'larni avtomatik ravishda tozalaydi.
 
-An `effect` can be created in two different contexts that will affect when it's destroyed:
+`effect` qachon yoʻq qilinishiga taʼsir qiluvchi ikki xil kontekstda yaratilishi mumkin:
 
-- A "View effect" is destroyed when the component is destroyed.
-- A "Root effect" is destroyed when the application is destroyed.
+- "View effect" komponent yoʻq qilinganda yoʻq qilinadi.
+- "Root effect" ilova yoʻq qilinganda yoʻq qilinadi.
 
-Effects return an `EffectRef`. You can use the ref's `destroy` method to manually dispose of an effect. You can combine this with the `manualCleanup` option when creating an effect to disable automatic cleanup. Be careful to actually destroy such effects when they're no longer required.
+Effect'lar `EffectRef` qaytaradi. Effect'ni qoʻlda yoʻq qilish uchun ref'ning `destroy` metodidan foydalanishingiz mumkin. Avtomatik tozalashni oʻchirish uchun buni effect yaratishdagi `manualCleanup` opsiyasi bilan birlashtirishingiz mumkin. Bunday effect'lar endi kerak boʻlmaganda ularni haqiqatan ham yoʻq qilishga eʼtibor bering.
 
-## Effect cleanup functions
+## Effect tozalash funksiyalari {#effect-cleanup-functions}
 
-When a component or directive is destroyed, Angular automatically cleans up any associated effects.
-Effects might start long-running operations, which you should cancel if the effect is destroyed or runs again before the first operation finished. When you create an effect, your function can optionally accept an `onCleanup` function as its first parameter. This `onCleanup` function lets you register a callback that is invoked before the next run of the effect begins, or when the effect is destroyed.
+Komponent yoki direktiva yoʻq qilinganda Angular unga tegishli barcha effect'larni avtomatik ravishda tozalaydi.
+Effect'lar uzoq davom etadigan operatsiyalarni boshlashi mumkin; agar effect yoʻq qilinsa yoki birinchi operatsiya tugashidan oldin qayta ishga tushsa, ularni bekor qilishingiz kerak. Effect yaratganingizda, funksiyangiz ixtiyoriy ravishda birinchi parametr sifatida `onCleanup` funksiyasini qabul qilishi mumkin. Bu `onCleanup` funksiyasi effect'ning keyingi ishga tushishi boshlanishidan oldin yoki effect yoʻq qilinganda chaqiriladigan callback'ni roʻyxatdan oʻtkazish imkonini beradi.
 
 ```ts
 effect((onCleanup) => {
@@ -112,11 +112,11 @@ effect((onCleanup) => {
 });
 ```
 
-## Side effects on DOM elements
+## DOM elementlaridagi yon taʼsirlar {#side-effects-on-dom-elements}
 
-The `effect` function is a general-purpose tool for running code in reaction to signal changes. However, it runs _before_ the Angular updates the DOM. In some situations, you may need to manually inspect or modify the DOM, or integrate a 3rd-party library that requires direct DOM access.
+`effect` funksiyasi — signal oʻzgarishlariga javoban kod bajarish uchun umumiy maqsadli vosita. Biroq u Angular DOM'ni yangilashidan _oldin_ ishga tushadi. Baʼzi vaziyatlarda DOM'ni qoʻlda tekshirish yoki oʻzgartirish, yoki DOM'ga bevosita kirishni talab qiladigan uchinchi tomon kutubxonasini integratsiya qilish kerak boʻlishi mumkin.
 
-For these situations, you can use `afterRenderEffect`. It functions like `effect`, but runs after Angular has finished rendering and committed its changes to the DOM.
+Bunday vaziyatlar uchun `afterRenderEffect`'dan foydalanishingiz mumkin. U `effect` kabi ishlaydi, lekin Angular render qilishni tugatib, oʻzgarishlarini DOM'ga kiritganidan keyin ishga tushadi.
 
 ```ts
 @Component(/* ... */)
@@ -141,28 +141,28 @@ export class MyFancyChart {
 }
 ```
 
-In this example `afterRenderEffect` is used to update a chart created by a 3rd party library.
+Bu misolda `afterRenderEffect` uchinchi tomon kutubxonasi tomonidan yaratilgan diagrammani yangilash uchun ishlatilgan.
 
-TIP: You often don't need `afterRenderEffect` to check for DOM changes. APIs like `ResizeObserver`, `MutationObserver` and `IntersectionObserver` are preferred to `effect` or `afterRenderEffect` when possible.
+TIP: DOM oʻzgarishlarini tekshirish uchun koʻpincha `afterRenderEffect` kerak boʻlmaydi. Imkon boʻlganda `ResizeObserver`, `MutationObserver` va `IntersectionObserver` kabi API'lar `effect` yoki `afterRenderEffect`'dan afzal koʻriladi.
 
-### Render phases
+### Render fazalari {#render-phases}
 
-Accessing the DOM and mutating it can impact the performance of your application, for example by triggering too many unnecessary [reflows](https://developer.mozilla.org/en-US/docs/Glossary/Reflow).
+DOM'ga kirish va uni oʻzgartirish ilovangiz unumdorligiga taʼsir qilishi mumkin, masalan, juda koʻp keraksiz [reflow](https://developer.mozilla.org/en-US/docs/Glossary/Reflow)'larni keltirib chiqarish orqali.
 
-To optimize those operations, `afterRenderEffect` offers four phases to group the callbacks and execute them in an optimized order.
+Bu operatsiyalarni optimallashtirish uchun `afterRenderEffect` callback'larni guruhlash va ularni optimallashtirilgan tartibda bajarish uchun toʻrtta fazani taklif qiladi.
 
-The phases are:
+Fazalar quyidagilar:
 
-| Phase            | Description                                                                                                                                                                                        |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `earlyRead`      | Use this phase to read from the DOM before a subsequent write callback, for example to perform custom layout that the browser doesn't natively support. Prefer the read phase if reading can wait. |
-| `write`          | Use this phase to write to the DOM. **Never** read from the DOM in this phase.                                                                                                                     |
-| `mixedReadWrite` | Use this phase to read from and write to the DOM simultaneously. Never use this phase if it is possible to divide the work among the other phases instead.                                         |
-| `read`           | Use this phase to read from the DOM. **Never** write to the DOM in this phase.                                                                                                                     |
+| Faza             | Tavsif                                                                                                                                                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `earlyRead`      | Bu fazadan keyingi yozish callback'idan oldin DOM'dan oʻqish uchun foydalaning, masalan, brauzer tabiiy ravishda qoʻllab-quvvatlamaydigan maxsus layout'ni bajarish uchun. Agar oʻqish kutishi mumkin boʻlsa, read fazasini afzal koʻring. |
+| `write`          | Bu fazadan DOM'ga yozish uchun foydalaning. Bu fazada DOM'dan **hech qachon** oʻqimang.                                                                                                                             |
+| `mixedReadWrite` | Bu fazadan DOM'dan oʻqish va unga yozishni bir vaqtda bajarish uchun foydalaning. Agar ishni boshqa fazalar oʻrtasida taqsimlash mumkin boʻlsa, bu fazadan hech qachon foydalanmang.                                 |
+| `read`           | Bu fazadan DOM'dan oʻqish uchun foydalaning. Bu fazada DOM'ga **hech qachon** yozmang.                                                                                                                              |
 
-Using these phases helps prevent layout thrashing and ensures that your DOM operations are performed in a safe and efficient manner.
+Bu fazalardan foydalanish layout thrashing'ning oldini olishga yordam beradi va DOM operatsiyalaringiz xavfsiz va samarali tarzda bajarilishini taʼminlaydi.
 
-You can specify the phases by passing an object with a callback for each phase to `afterRenderEffect`:
+Fazalarni `afterRenderEffect`'ga har bir faza uchun callback'ga ega obyekt uzatish orqali koʻrsatishingiz mumkin:
 
 ```ts
 afterRenderEffect({
@@ -181,27 +181,27 @@ afterRenderEffect({
 });
 ```
 
-CRITICAL: If you don't specify the phase, `afterRenderEffect` runs callbacks during the `mixedReadWrite` phase. This may worsen application performance by causing additional DOM reflows.
+CRITICAL: Agar fazani koʻrsatmasangiz, `afterRenderEffect` callback'larni `mixedReadWrite` fazasida ishga tushiradi. Bu qoʻshimcha DOM reflow'larini keltirib chiqarib, ilova unumdorligini yomonlashtirishi mumkin.
 
-#### Phase executions
+#### Fazalarning bajarilishi {#phase-executions}
 
-The `earlyRead` phase callback receives only the cleanup function. Each subsequent phase receives the return value of the previous phase's callback as a Signal. You can use this to coordinate work across phases.
+`earlyRead` fazasining callback'i faqat tozalash funksiyasini qabul qiladi. Har bir keyingi faza oldingi faza callback'ining qaytargan qiymatini Signal sifatida qabul qiladi. Bundan fazalar oʻrtasidagi ishni muvofiqlashtirish uchun foydalanishingiz mumkin.
 
-Effects run in the following phase order:
+Effect'lar quyidagi faza tartibida ishga tushadi:
 
 1. `earlyRead`
 2. `write`
 3. `mixedReadWrite`
 4. `read`
 
-If one of the phases modifies a signal value tracked by `afterRenderEffect`, the affected phases execute again.
+Agar fazalardan biri `afterRenderEffect` tomonidan kuzatilayotgan signal qiymatini oʻzgartirsa, taʼsirlangan fazalar yana bajariladi.
 
-#### Cleanup
+#### Tozalash {#cleanup}
 
-Each phase provides a cleanup callback function as argument. The cleanup callbacks are executed when the `afterRenderEffect` is destroyed or before re-running phase effects.
+Har bir faza argument sifatida tozalash callback funksiyasini taqdim etadi. Tozalash callback'lari `afterRenderEffect` yoʻq qilinganda yoki faza effect'lari qayta ishga tushishidan oldin bajariladi.
 
-### Server-side rendering caveats
+### Server tomonida render qilish bilan bogʻliq eslatmalar {#server-side-rendering-caveats}
 
-`afterRenderEffect`, similarly to `afterNextRender`/`afterEveryRender`, only runs on the client.
+`afterRenderEffect`, `afterNextRender`/`afterEveryRender` kabi, faqat klientda ishga tushadi.
 
-NOTE: Components are not guaranteed to be [hydrated](/guide/hydration) before the callback runs. You must use caution when directly reading or writing the DOM and layout.
+NOTE: Callback ishga tushishidan oldin komponentlar [gidratsiya qilingan](/guide/hydration) boʻlishi kafolatlanmaydi. DOM va layout'ni bevosita oʻqish yoki yozishda ehtiyot boʻlishingiz kerak.

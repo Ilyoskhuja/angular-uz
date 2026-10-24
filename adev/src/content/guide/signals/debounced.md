@@ -1,8 +1,8 @@
-# Debouncing signals with `debounced`
+# `debounced` bilan signallarni debounce qilish
 
-IMPORTANT: `debounced` is [experimental](reference/releases#experimental). It's ready for you to try, but it might change before it is stable.
+IMPORTANT: `debounced` — [eksperimental](reference/releases#experimental). U sinab koʻrishingiz uchun tayyor, lekin barqaror boʻlishidan oldin oʻzgarishi mumkin.
 
-Use `debounced` to delay reacting to a signal's value until it stops changing. It returns a `Resource` whose value reflects the debounced value of the source signal.
+Signal qiymatiga javob berishni u oʻzgarishdan toʻxtaguncha kechiktirish uchun `debounced`'dan foydalaning. U qiymati manba signalining debounce qilingan qiymatini aks ettiruvchi `Resource` qaytaradi.
 
 ```angular-ts
 import {Component, debounced, resource, signal} from '@angular/core';
@@ -31,17 +31,17 @@ export class Search {
 }
 ```
 
-`debounced` takes the source signal and a wait duration in milliseconds. The returned resource's `value()` always contains the last settled value, and `status()` tells you whether a new value is still pending.
+`debounced` manba signalini va millisekundlarda kutish davomiyligini qabul qiladi. Qaytarilgan resource'ning `value()`'si har doim eng soʻnggi oʻrnashgan (settled) qiymatni saqlaydi, `status()` esa yangi qiymat hali kutilayotganini (pending) bildiradi.
 
-## Status during debounce
+## Debounce davomidagi holat {#status-during-debounce}
 
-While the debounce timer is counting down, `status()` is `'loading'` and `value()` returns the previously resolved value. When the timer expires, the resource settles to `'resolved'`. If the source signal throws, the resource enters `'error'` immediately; no timer runs.
+Debounce taymeri sanab turganda `status()` `'loading'` boʻladi va `value()` oldin hal boʻlgan qiymatni qaytaradi. Taymer tugaganda resource `'resolved'` holatiga oʻrnashadi. Agar manba signali xato tashlasa, resource darhol `'error'` holatiga kiradi; taymer ishga tushmaydi.
 
-See [Resource status](/guide/signals/resource#resource-status) for the full list of statuses and their `value()` behavior.
+Holatlarning toʻliq roʻyxati va ularning `value()` xatti-harakati uchun [Resource holati](/guide/signals/resource#resource-status) boʻlimiga qarang.
 
-## Custom wait function
+## Maxsus kutish funksiyasi {#custom-wait-function}
 
-Instead of a millisecond duration, you can pass a function that returns a `Promise<void>`. The resource resolves when the promise resolves. If the source signal changes before the promise settles, Angular discards the previous promise and starts a new one.
+Millisekundlardagi davomiylik oʻrniga `Promise<void>` qaytaruvchi funksiya uzatishingiz mumkin. Promise hal boʻlganda resource ham hal boʻladi. Agar promise oʻrnashishidan oldin manba signali oʻzgarsa, Angular oldingi promise'ni bekor qilib, yangisini boshlaydi.
 
 ```ts
 debouncedQuery = debounced(query, (value, lastSnapshot) => {
@@ -53,13 +53,13 @@ debouncedQuery = debounced(query, (value, lastSnapshot) => {
 });
 ```
 
-See the `DebounceTimer` type in the API reference for details.
+Batafsil maʼlumot uchun API maʼlumotnomasidagi `DebounceTimer` turiga qarang.
 
-## Equality
+## Tenglik {#equality}
 
-By default, `debounced` uses `Object.is` to compare values.
+Sukut boʻyicha `debounced` qiymatlarni taqqoslash uchun `Object.is`'dan foydalanadi.
 
-Provide a custom equality function with the `equal` option when the default identity check is too strict:
+Sukut boʻyicha identiklik tekshiruvi juda qattiq boʻlganda `equal` opsiyasi bilan maxsus tenglik funksiyasini bering:
 
 ```ts
 debouncedFilter = debounced(filter, 200, {
@@ -67,11 +67,11 @@ debouncedFilter = debounced(filter, 200, {
 });
 ```
 
-## Injection context
+## Inyeksiya konteksti {#injection-context}
 
-`debounced` must be called inside an [injection context](guide/di/dependency-injection-context). Angular automatically destroys the debounced resource and cancels any pending timer when the injector is destroyed.
+`debounced` [inyeksiya konteksti](guide/di/dependency-injection-context) ichida chaqirilishi kerak. Injector yoʻq qilinganda Angular debounce qilingan resource'ni avtomatik ravishda yoʻq qiladi va kutilayotgan har qanday taymerni bekor qiladi.
 
-To use `debounced` outside of an injection context, pass an explicit `Injector` via the options:
+`debounced`'dan inyeksiya kontekstidan tashqarida foydalanish uchun opsiyalar orqali aniq `Injector` uzating:
 
 ```ts
 @Service()
