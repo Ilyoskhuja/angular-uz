@@ -1,49 +1,49 @@
-<docs-decorative-header title="Dependency injection in Angular" imgSrc="adev/src/assets/images/dependency_injection.svg"> <!-- markdownlint-disable-line -->
+<docs-decorative-header title="Angular'da bogʻliqliklarni inyeksiya qilish" imgSrc="adev/src/assets/images/dependency_injection.svg"> <!-- markdownlint-disable-line -->
 
-Dependency Injection (DI) is a design pattern you use to organize and share code across your application by supplying dependencies to a class instead of creating them inside it.
+Bogʻliqliklarni inyeksiya qilish (Dependency Injection, DI) — bogʻliqliklarni klass ichida yaratish oʻrniga ularni klassga tashqaridan taqdim etish orqali kodni ilovangiz boʻylab tartibga solish va ulashish uchun ishlatiladigan dizayn namunasi.
 </docs-decorative-header>
 
-TIP: Check out Angular's [Essentials](essentials/dependency-injection) before diving into this comprehensive guide.
+TIP: Bu keng qamrovli qoʻllanmaga kirishdan oldin Angular'ning [Asoslar](essentials/dependency-injection) boʻlimi bilan tanishib chiqing.
 
-As an application grows, developers often need to reuse and share functionality across different parts of the codebase. [Dependency Injection (DI)](https://en.wikipedia.org/wiki/Dependency_injection) helps you achieve this by allowing you to provide dependencies to a class instead of creating them directly inside it. This makes different parts of the application more reusable and easier to manage.
+Ilova kattalashgani sari dasturchilar koʻpincha funksionallikni kod bazasining turli qismlarida qayta ishlatish va ulashishga ehtiyoj sezadilar. [Bogʻliqliklarni inyeksiya qilish (DI)](https://en.wikipedia.org/wiki/Dependency_injection) bogʻliqliklarni klass ichida bevosita yaratish oʻrniga ularni klassga taqdim etish imkonini berib, bunga erishishga yordam beradi. Bu ilovaning turli qismlarini koʻproq qayta ishlatiladigan va boshqarish uchun osonroq qiladi.
 
-Dependency injection is a popular pattern because it allows developers to address common challenges such as:
+Bogʻliqliklarni inyeksiya qilish mashhur namuna, chunki u dasturchilarga quyidagi kabi keng tarqalgan muammolarni hal qilish imkonini beradi:
 
-- **Improved code maintainability**: Dependency injection promotes a clear separation of concerns, making code easier to refactor and reducing duplication.
-- **Scalability**: You can reuse modular functionality across different parts of an application, making it easier to scale.
-- **Better testing**: DI allows unit tests to use [test doubles](https://en.wikipedia.org/wiki/Test_double) in place of real implementations when needed.
+- **Kodni qoʻllab-quvvatlash osonlashadi**: bogʻliqliklarni inyeksiya qilish masʼuliyatlarning aniq ajratilishiga yordam beradi, bu kodni refaktoring qilishni osonlashtiradi va takrorlanishni kamaytiradi.
+- **Masshtablanuvchanlik**: modulli funksionallikni ilovaning turli qismlarida qayta ishlatishingiz mumkin, bu masshtablashni osonlashtiradi.
+- **Yaxshiroq testlash**: DI unit testlarga zarur boʻlganda haqiqiy realizatsiyalar oʻrniga [test dublyorlaridan (test doubles)](https://en.wikipedia.org/wiki/Test_double) foydalanish imkonini beradi.
 
-## How does dependency injection work in Angular?
+## Angular'da bogʻliqliklarni inyeksiya qilish qanday ishlaydi? {#how-does-dependency-injection-work-in-angular}
 
-A dependency is any object, value, function, or service that a class requires to work but does not create itself. Instead, you provide it from the outside, creating a clear relationship between different parts of the application.
+Bogʻliqlik — klass ishlashi uchun zarur boʻlgan, lekin oʻzi yaratmaydigan har qanday obyekt, qiymat, funksiya yoki servis. Buning oʻrniga siz uni tashqaridan taqdim etasiz va shu bilan ilovaning turli qismlari oʻrtasida aniq munosabat yaratasiz.
 
-You interact with a dependency injection system in two main ways:
+Siz bogʻliqliklarni inyeksiya qilish tizimi bilan ikki asosiy yoʻl bilan ishlaysiz:
 
-- You can _provide_, or make available, values.
-- You can _inject_, or ask for, those values as dependencies.
+- Qiymatlarni _taqdim etishingiz_ (provide), yaʼni mavjud qilishingiz mumkin.
+- Oʻsha qiymatlarni bogʻliqlik sifatida _inyeksiya qilishingiz_, yaʼni soʻrashingiz mumkin.
 
-In this context, "values" can refer to any JavaScript value, including objects, functions, or class instances. Common types of injected dependencies include:
+Bu kontekstda "qiymatlar" deganda har qanday JavaScript qiymati, jumladan obyektlar, funksiyalar yoki klass nusxalari tushuniladi. Inyeksiya qilinadigan bogʻliqliklarning keng tarqalgan turlari quyidagilar:
 
-- **Configuration values**: Environment-specific constants, API URLs, feature flags, etc.
-- **Factories**: Functions that create objects or values based on runtime conditions
-- **Services**: Classes that provide common functionality, business logic, or state
+- **Konfiguratsiya qiymatlari**: muhitga xos konstantalar, API URL'lari, feature flag'lar va h.k.
+- **Fabrikalar (factories)**: ishga tushirish vaqtidagi shartlarga qarab obyekt yoki qiymatlar yaratuvchi funksiyalar
+- **Servislar**: umumiy funksionallik, biznes mantiq yoki holatni taqdim etuvchi klasslar
 
-Angular components and directives automatically participate in DI, meaning that you can inject dependencies into them and make them available for injection.
+Angular komponentlari va direktivalari DI'da avtomatik ishtirok etadi, yaʼni siz ularga bogʻliqliklarni inyeksiya qilishingiz va ularni inyeksiya uchun mavjud qilishingiz mumkin.
 
-## What are services?
+## Servislar nima? {#what-are-services}
 
-An Angular _service_ is a TypeScript class decorated with `@Service`, which allows you to inject an instance of the class as a dependency. Services are the most common way of sharing data and functionality across an application.
+Angular _servisi_ — `@Service` bilan dekoratsiyalangan TypeScript klassi boʻlib, u klass nusxasini bogʻliqlik sifatida inyeksiya qilish imkonini beradi. Servislar ilova boʻylab maʼlumot va funksionallikni ulashishning eng keng tarqalgan usuli.
 
-Common types of services include:
+Servislarning keng tarqalgan turlari quyidagilar:
 
-- **Data clients:** Abstracts the details of making requests to a server for data retrieval and mutation
-- **State management:** Defines state shared across multiple components or pages
-- **Authentication and authorization:** Manages user authentication, token storage, and access control
-- **Logging and error handling:** Establishes a common API for logging or communicating error states to the user
-- **Event handling and dispatch:** Handles events or notifications that are not associated with a specific component, or for dispatching events and notifications to components, following the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern)
-- **Utility functions:** Offers reusable utility functions like data formatting, validation, or calculations
+- **Maʼlumot klientlari:** maʼlumotlarni olish va oʻzgartirish uchun serverga soʻrov yuborish tafsilotlarini abstraktlashtiradi
+- **Holatni boshqarish:** bir nechta komponent yoki sahifalar oʻrtasida ulashiladigan holatni aniqlaydi
+- **Autentifikatsiya va avtorizatsiya:** foydalanuvchi autentifikatsiyasi, tokenlarni saqlash va kirishni nazorat qilishni boshqaradi
+- **Loglash va xatolarga ishlov berish:** loglash yoki xato holatlarini foydalanuvchiga yetkazish uchun umumiy API oʻrnatadi
+- **Hodisalarga ishlov berish va tarqatish:** [observer namunasiga](https://en.wikipedia.org/wiki/Observer_pattern) amal qilib, muayyan komponentga bogʻliq boʻlmagan hodisa yoki bildirishnomalarga ishlov beradi yoki hodisa va bildirishnomalarni komponentlarga tarqatadi
+- **Yordamchi funksiyalar:** maʼlumotlarni formatlash, validatsiya yoki hisob-kitoblar kabi qayta ishlatiladigan yordamchi funksiyalarni taqdim etadi
 
-The following example declares a service named `AnalyticsLogger`:
+Quyidagi misol `AnalyticsLogger` nomli servisni eʼlon qiladi:
 
 ```ts
 import {Service} from '@angular/core';
@@ -60,15 +60,15 @@ export class AnalyticsLogger {
 }
 ```
 
-NOTE: The `@Service` makes this service available throughout your entire application as a singleton. This is the recommended approach for most services.
+NOTE: `@Service` bu servisni butun ilovangiz boʻylab singleton sifatida mavjud qiladi. Bu koʻpchilik servislar uchun tavsiya etilgan yondashuv.
 
-HELPFUL: The [`@Service`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator) decorator is an ergonomic shorthand for `@Injectable({providedIn: 'root'})`.
+HELPFUL: [`@Service`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator) dekoratori `@Injectable({providedIn: 'root'})` uchun qulay qisqa yozuv.
 
-## Injecting dependencies with `inject()`
+## `inject()` yordamida bogʻliqliklarni inyeksiya qilish {#injecting-dependencies-with-inject}
 
-You can inject dependencies using Angular's `inject()` function.
+Bogʻliqliklarni Angular'ning `inject()` funksiyasi yordamida inyeksiya qilishingiz mumkin.
 
-Here is an example of a navigation bar that injects `AnalyticsLogger` and Angular `Router` service to allow users to navigate to a different page while tracking the event.
+Quyida foydalanuvchilarga hodisani kuzatib borish bilan birga boshqa sahifaga oʻtish imkonini berish uchun `AnalyticsLogger` va Angular'ning `Router` servisini inyeksiya qiluvchi navigatsiya paneliga misol keltirilgan.
 
 ```angular-ts
 import {Component, inject} from '@angular/core';
@@ -91,9 +91,9 @@ export class Navbar {
 }
 ```
 
-### Where can `inject()` be used?
+### `inject()` qayerda ishlatilishi mumkin? {#where-can-inject-be-used}
 
-You can inject dependencies during construction of a component, directive, or service. The call to [`inject`](/api/core/inject) can appear in either the `constructor` or in a field initializer. Here are some common examples:
+Bogʻliqliklarni komponent, direktiva yoki servis yaratilayotgan paytda inyeksiya qilishingiz mumkin. [`inject`](/api/core/inject) chaqiruvi `constructor` ichida ham, maydon initsializatorida ham boʻlishi mumkin. Quyida bir nechta keng tarqalgan misollar keltirilgan:
 
 ```ts
 @Component(/* ... */)
@@ -137,18 +137,18 @@ export const authGuard = () => {
 };
 ```
 
-Angular uses the term "injection context" to describe any place in your code where you can call [`inject`](/api/core/inject). While component, directive, and service construction is the most common, see [injection contexts](/guide/di/dependency-injection-context) for more details.
+Angular kodingizda [`inject`](/api/core/inject) chaqirish mumkin boʻlgan har qanday joyni tavsiflash uchun "inyeksiya konteksti" (injection context) atamasini ishlatadi. Komponent, direktiva va servis yaratilishi eng keng tarqalgan holat boʻlsa-da, batafsil maʼlumot uchun [inyeksiya kontekstlari](/guide/di/dependency-injection-context) boʻlimiga qarang.
 
-For more information, see the [inject API docs](api/core/inject#usage-notes).
+Koʻproq maʼlumot uchun [inject API hujjatlariga](api/core/inject#usage-notes) qarang.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-Now that you understand the fundamentals of dependency injection in Angular, you're ready to learn how to create your own services.
+Endi siz Angular'da bogʻliqliklarni inyeksiya qilish asoslarini tushunganingizdan soʻng, oʻz servislaringizni qanday yaratishni oʻrganishga tayyorsiz.
 
-The next guide, [Creating and using services](guide/di/creating-and-using-services), will show you:
+Keyingi qoʻllanma, [Servislarni yaratish va ulardan foydalanish](guide/di/creating-and-using-services), sizga quyidagilarni koʻrsatadi:
 
-- How to create a service with the Angular CLI or manually
-- How the `providedIn: 'root'` pattern works
-- How to inject services into components and other services
+- Angular CLI yordamida yoki qoʻlda servisni qanday yaratish
+- `providedIn: 'root'` namunasi qanday ishlaydi
+- Servislarni komponentlar va boshqa servislarga qanday inyeksiya qilish
 
-This covers the most common use case for services in Angular applications.
+Bu Angular ilovalarida servislarning eng keng tarqalgan foydalanish holatini qamrab oladi.

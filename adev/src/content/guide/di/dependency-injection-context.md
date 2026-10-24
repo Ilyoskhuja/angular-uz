@@ -1,26 +1,26 @@
-# Injection context
+# Inyeksiya konteksti
 
-The dependency injection (DI) system relies on a runtime context where the current injector is available.
+Bogʻliqliklarni inyeksiya qilish (DI) tizimi joriy injector mavjud boʻlgan ishga tushirish vaqti kontekstiga (runtime context) tayanadi.
 
-This means that injectors only work when you execute code within this context.
+Bu injector'lar faqat kodni shu kontekst ichida bajarganingizda ishlaydi degani.
 
-You have an injection context available in the following situations:
+Inyeksiya konteksti (injection context) quyidagi holatlarda mavjud boʻladi:
 
-- During construction (via the `constructor`) of a class instantiated by the DI system, such as an `@Injectable` or `@Component`.
-- In field initializers of such classes.
-- In the factory function specified for `useFactory` of a `Provider` or an `@Injectable`.
-- In the `factory` function specified for an `InjectionToken`.
-- Within a stack frame that runs in an injection context.
+- DI tizimi tomonidan yaratilgan klass, masalan `@Injectable` yoki `@Component`, yaratilayotgan paytda (`constructor` orqali).
+- Bunday klasslarning maydon initsializatorlarida.
+- `Provider` yoki `@Injectable`'ning `useFactory` uchun koʻrsatilgan fabrika funksiyasida.
+- `InjectionToken` uchun koʻrsatilgan `factory` funksiyasida.
+- Inyeksiya kontekstida ishlaydigan stek freymi (stack frame) ichida.
 
-Knowing when you are in an injection context allows you to use the [`inject`](api/core/inject) function to retrieve dependencies.
+Qachon inyeksiya kontekstida ekaningizni bilish bogʻliqliklarni olish uchun [`inject`](api/core/inject) funksiyasidan foydalanish imkonini beradi.
 
-NOTE: For basic examples of using `inject()` in class constructors and field initializers, see the [overview guide](/guide/di#where-can-inject-be-used).
+NOTE: Klass konstruktorlari va maydon initsializatorlarida `inject()` ishlatishning asosiy misollari uchun [umumiy koʻrinish qoʻllanmasiga](/guide/di#where-can-inject-be-used) qarang.
 
-## Stack frame in context
+## Kontekstdagi stek freymi {#stack-frame-in-context}
 
-Some APIs are designed to run within an injection context. This is the case, for example, with router guards. This allows you to use [`inject`](api/core/inject) within the guard function to access services.
+Baʼzi API'lar inyeksiya konteksti ichida ishlash uchun moʻljallangan. Masalan, router himoyachilari (guard) shunday. Bu servislarga murojaat qilish uchun himoyachi funksiyasi ichida [`inject`](api/core/inject) funksiyasidan foydalanish imkonini beradi.
 
-Here is an example for `CanActivateFn`
+Quyida `CanActivateFn` uchun misol keltirilgan
 
 ```ts {highlight: [3]}
 const canActivateTeam: CanActivateFn = (
@@ -31,10 +31,10 @@ const canActivateTeam: CanActivateFn = (
 };
 ```
 
-## Run within an injection context
+## Inyeksiya konteksti ichida ishga tushirish {#run-within-an-injection-context}
 
-If you need to run a function within an injection context without already being in one, you can use `runInInjectionContext`.
-This requires access to an injector, such as the `EnvironmentInjector`:
+Agar inyeksiya kontekstida boʻlmagan holda funksiyani inyeksiya konteksti ichida ishga tushirishingiz kerak boʻlsa, `runInInjectionContext` funksiyasidan foydalanishingiz mumkin.
+Bu `EnvironmentInjector` kabi injector'ga kirishni talab qiladi:
 
 ```ts {highlight: [7], header:"hero.service.ts"}
 @Service()
@@ -49,11 +49,11 @@ export class HeroService {
 }
 ```
 
-Note that [`inject`](/api/core/inject) returns an instance only if the injector can resolve the requested token.
+Eʼtibor bering, [`inject`](/api/core/inject) nusxani faqat injector soʻralgan tokenni hal qila olgan taqdirda qaytaradi.
 
-## Asserts the context
+## Kontekstni tekshirish {#asserts-the-context}
 
-Angular provides the `assertInInjectionContext` helper function to verify that the current context is an injection context and throw a clear error if it is not. Pass a reference to the calling function so the error message points to the correct API entry point. This produces a clearer, more actionable message than the default generic injection error.
+Angular joriy kontekst inyeksiya konteksti ekanligini tekshirish va agar unday boʻlmasa, aniq xato chiqarish uchun `assertInInjectionContext` yordamchi funksiyasini taqdim etadi. Xato xabari toʻgʻri API kirish nuqtasiga ishora qilishi uchun chaqiruvchi funksiyaga havolani uzating. Bu sukut boʻyicha chiqariladigan umumiy inyeksiya xatosiga nisbatan aniqroq va amaliy xabar beradi.
 
 ```ts
 import {ElementRef, assertInInjectionContext, inject} from '@angular/core';
@@ -64,7 +64,7 @@ export function injectNativeElement<T extends Element>(): T {
 }
 ```
 
-You can then call this helper **from an injection context** (constructor, field initializer, provider factory, or code executed via `runInInjectionContext`):
+Shundan soʻng bu yordamchi funksiyani **inyeksiya kontekstidan** (konstruktor, maydon initsializatori, provider fabrikasi yoki `runInInjectionContext` orqali bajarilgan kod) chaqirishingiz mumkin:
 
 ```ts
 import {Component, inject} from '@angular/core';
@@ -80,6 +80,6 @@ export class PreviewCard {
 }
 ```
 
-## Using DI outside of a context
+## DI'dan kontekstdan tashqarida foydalanish {#using-di-outside-of-a-context}
 
-If you call [`inject`](api/core/inject) or `assertInInjectionContext` outside of an injection context, Angular throws [error NG0203](/errors/NG0203).
+Agar [`inject`](api/core/inject) yoki `assertInInjectionContext` funksiyasini inyeksiya kontekstidan tashqarida chaqirsangiz, Angular [NG0203 xatosini](/errors/NG0203) chiqaradi.

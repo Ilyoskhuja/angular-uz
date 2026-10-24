@@ -1,26 +1,26 @@
-# Optimizing client application size with lightweight injection tokens
+# Yengil inyeksiya tokenlari yordamida klient ilovasi hajmini optimallashtirish
 
-This page provides a conceptual overview of a dependency injection technique that is recommended for library developers.
-Designing your library with _lightweight injection tokens_ helps optimize the bundle size of client applications that use your library.
+Bu sahifa kutubxona dasturchilariga tavsiya etiladigan bogʻliqliklarni inyeksiya qilish usulining konseptual umumiy koʻrinishini beradi.
+Kutubxonangizni _yengil inyeksiya tokenlari_ (lightweight injection tokens) bilan loyihalash kutubxonangizdan foydalanadigan klient ilovalarining bundle hajmini optimallashtirishga yordam beradi.
 
-You can manage the dependency structure among your components and injectable services to optimize bundle size by using tree-shakable providers.
-This normally ensures that if a provided component or service is never actually used by the application, the compiler can remove its code from the bundle.
+Tree-shaking qilinadigan provider'lardan foydalanib, bundle hajmini optimallashtirish uchun komponentlaringiz va inyeksiya qilinadigan servislaringiz orasidagi bogʻliqlik tuzilmasini boshqarishingiz mumkin.
+Bu odatda taqdim etilgan komponent yoki servis ilova tomonidan hech qachon haqiqatan ishlatilmasa, kompilyator uning kodini bundle'dan olib tashlay olishini taʼminlaydi.
 
-Due to the way Angular stores injection tokens, it is possible that such an unused component or service can end up in the bundle anyway.
-This page describes a dependency injection design pattern that supports proper tree-shaking by using lightweight injection tokens.
+Angular inyeksiya tokenlarini saqlash usuli tufayli bunday ishlatilmagan komponent yoki servis baribir bundle'ga tushib qolishi mumkin.
+Bu sahifa yengil inyeksiya tokenlaridan foydalanib, toʻgʻri tree-shaking'ni qoʻllab-quvvatlovchi bogʻliqliklarni inyeksiya qilish dizayn namunasini tavsiflaydi.
 
-The lightweight injection token design pattern is especially important for library developers.
-It ensures that when an application uses only some of your library's capabilities, the unused code can be eliminated from the client's application bundle.
+Yengil inyeksiya tokeni dizayn namunasi kutubxona dasturchilari uchun ayniqsa muhim.
+U ilova kutubxonangiz imkoniyatlarining faqat bir qismidan foydalanganda, ishlatilmagan kodni klient ilovasining bundle'idan olib tashlash mumkinligini taʼminlaydi.
 
-When an application uses your library, there might be some services that your library supplies which the client application doesn't use.
-In this case, the application developer should expect that service to be tree-shaken, and not contribute to the size of the compiled application.
-Because the application developer cannot know about or remedy a tree-shaking problem in the library, it is the responsibility of the library developer to do so.
-To prevent the retention of unused components, your library should use the lightweight injection token design pattern.
+Ilova kutubxonangizdan foydalanganda, kutubxonangiz taqdim etadigan, lekin klient ilovasi ishlatmaydigan baʼzi servislar boʻlishi mumkin.
+Bunday holda ilova dasturchisi oʻsha servis tree-shaking qilinishini va kompilyatsiya qilingan ilova hajmiga taʼsir qilmasligini kutadi.
+Ilova dasturchisi kutubxonadagi tree-shaking muammosi haqida bila olmagani yoki uni tuzata olmagani sababli, buni qilish kutubxona dasturchisining masʼuliyatidir.
+Ishlatilmagan komponentlarning saqlanib qolishini oldini olish uchun kutubxonangiz yengil inyeksiya tokeni dizayn namunasidan foydalanishi kerak.
 
-## When tokens are retained
+## Tokenlar qachon saqlanib qoladi {#when-tokens-are-retained}
 
-To better explain the condition under which token retention occurs, consider a library that provides a library-card component.
-This component contains a body and can contain an optional header:
+Token saqlanib qolish holati qanday sharoitda yuz berishini yaxshiroq tushuntirish uchun kutubxona kartasi (library-card) komponentini taqdim etuvchi kutubxonani koʻrib chiqaylik.
+Bu komponent tanadan (body) iborat va ixtiyoriy sarlavha (header) qismini oʻz ichiga olishi mumkin:
 
 ```html
 <lib-card>
@@ -28,7 +28,7 @@ This component contains a body and can contain an optional header:
 </lib-card>
 ```
 
-In a likely implementation, the `<lib-card>` component uses `contentChild` or `contentChildren` to get `<lib-header>` and `<lib-body>`, as in the following:
+Ehtimoliy realizatsiyada `<lib-card>` komponenti `<lib-header>` va `<lib-body>` elementlarini olish uchun quyidagi kabi `contentChild` yoki `contentChildren` funksiyasidan foydalanadi:
 
 ```ts {highlight: [14]}
 import {Component, contentChild} from '@angular/core';
@@ -48,35 +48,35 @@ class LibCard {
 }
 ```
 
-Because `<lib-header>` is optional, the element can appear in the template in its minimal form, `<lib-card />`.
-In this case, `<lib-header>` is not used and you would expect it to be tree-shaken, but that is not what happens.
-This is because `LibCard` actually contains two references to the `LibHeader`:
+`<lib-header>` ixtiyoriy boʻlgani uchun element shablonda oʻzining minimal shaklida, `<lib-card />` koʻrinishida, paydo boʻlishi mumkin.
+Bu holda `<lib-header>` ishlatilmaydi va siz uning tree-shaking qilinishini kutgan boʻlardingiz, lekin aslida bunday boʻlmaydi.
+Buning sababi shundaki, `LibCard` aslida `LibHeader`'ga ikkita havolani oʻz ichiga oladi:
 
 ```ts
 readonly header = contentChild(LibHeader);
 ```
 
-- One of these references is in the _type position_-- that is, it specifies `LibHeader` as a type: `readonly header: Signal<LibHeader|undefined>`.
-- The other reference is in the _value position_-- that is, `LibHeader` is the value passed into the `contentChild` function: `contentChild(LibHeader)`.
+- Bu havolalardan biri _tur pozitsiyasida_ (type position) -- yaʼni u `LibHeader`'ni tur sifatida koʻrsatadi: `readonly header: Signal<LibHeader|undefined>`.
+- Ikkinchi havola _qiymat pozitsiyasida_ (value position) -- yaʼni `LibHeader` `contentChild` funksiyasiga uzatiladigan qiymat: `contentChild(LibHeader)`.
 
-The compiler handles token references in these positions differently:
+Kompilyator bu pozitsiyalardagi token havolalariga turlicha ishlov beradi:
 
-- The compiler erases _type position_ references after conversion from TypeScript, so they have no impact on tree-shaking.
-- The compiler must keep _value position_ references at runtime, which **prevents** the component from being tree-shaken.
+- Kompilyator _tur pozitsiyasidagi_ havolalarni TypeScript'dan konvertatsiya qilgandan keyin oʻchirib tashlaydi, shuning uchun ular tree-shaking'ga taʼsir qilmaydi.
+- Kompilyator _qiymat pozitsiyasidagi_ havolalarni ishga tushirish vaqtida saqlab qolishi kerak, bu esa komponentning tree-shaking qilinishiga **toʻsqinlik qiladi**.
 
-In the example, the compiler retains the `LibHeader` token that occurs in the value position.
-This prevents the referenced component from being tree-shaken, even if the application does not actually use `<lib-header>` anywhere.
-If `LibHeader` 's code, template, and styles combine to become too large, including it unnecessarily can significantly increase the size of the client application.
+Misolda kompilyator qiymat pozitsiyasida uchraydigan `LibHeader` tokenini saqlab qoladi.
+Bu, ilova `<lib-header>`'ni hech qayerda haqiqatan ishlatmasa ham, havola qilingan komponentning tree-shaking qilinishiga toʻsqinlik qiladi.
+Agar `LibHeader`'ning kodi, shabloni va stillari birgalikda juda katta boʻlib ketsa, uni keraksiz ravishda qoʻshish klient ilovasining hajmini sezilarli darajada oshirishi mumkin.
 
-## When to use the lightweight injection token pattern
+## Yengil inyeksiya tokeni namunasini qachon ishlatish kerak {#when-to-use-the-lightweight-injection-token-pattern}
 
-The tree-shaking problem arises when a component is used as an injection token.
-There are two cases when that can happen:
+Tree-shaking muammosi komponent inyeksiya tokeni sifatida ishlatilganda yuzaga keladi.
+Bu ikki holatda yuz berishi mumkin:
 
-- The token is used in the value position of a [content query](guide/components/queries#content-queries).
-- The token is used with the `inject` function.
+- Token [kontent soʻrovining](guide/components/queries#content-queries) qiymat pozitsiyasida ishlatiladi.
+- Token `inject` funksiyasi bilan ishlatiladi.
 
-In the following example, both uses of the `CustomOther` token cause retention of `CustomOther`, preventing it from being tree-shaken when it is not used:
+Quyidagi misolda `CustomOther` tokenining ikkala ishlatilishi ham `CustomOther`'ning saqlanib qolishiga sabab boʻladi va u ishlatilmaganda tree-shaking qilinishiga toʻsqinlik qiladi:
 
 ```ts {highlight: [[2],[4]]}
 class App {
@@ -86,18 +86,18 @@ class App {
 }
 ```
 
-Although tokens used only as type specifiers are removed when converted to JavaScript, all tokens used for dependency injection are needed at runtime.
-When using `inject(CustomOther)`, `CustomOther` is passed as a value argument.
-The token is now in a value position, which causes the tree-shaker to keep the reference.
+Faqat tur koʻrsatkichi sifatida ishlatiladigan tokenlar JavaScript'ga konvertatsiya qilinganda olib tashlansa-da, bogʻliqliklarni inyeksiya qilish uchun ishlatiladigan barcha tokenlar ishga tushirish vaqtida kerak boʻladi.
+`inject(CustomOther)` ishlatilganda `CustomOther` qiymat argumenti sifatida uzatiladi.
+Token endi qiymat pozitsiyasida boʻladi, bu esa tree-shaker'ning havolani saqlab qolishiga sabab boʻladi.
 
-HELPFUL: Libraries should use [tree-shakable providers](guide/di/defining-dependency-providers) for all services, providing dependencies at the root level rather than in components or modules.
+HELPFUL: Kutubxonalar barcha servislar uchun [tree-shaking qilinadigan provider'lardan](guide/di/defining-dependency-providers) foydalanishi va bogʻliqliklarni komponentlar yoki modullarda emas, balki root darajasida taqdim etishi kerak.
 
-## Using lightweight injection tokens
+## Yengil inyeksiya tokenlaridan foydalanish {#using-lightweight-injection-tokens}
 
-The lightweight injection token design pattern consists of using a small abstract class as an injection token, and providing the actual implementation at a later stage.
-The abstract class is retained, not tree-shaken, but it is small and has no material impact on the application size.
+Yengil inyeksiya tokeni dizayn namunasi kichik abstrakt klassni inyeksiya tokeni sifatida ishlatish va haqiqiy realizatsiyani keyingi bosqichda taqdim etishdan iborat.
+Abstrakt klass saqlanib qoladi, tree-shaking qilinmaydi, lekin u kichik va ilova hajmiga sezilarli taʼsir koʻrsatmaydi.
 
-The following example shows how this works for the `LibHeader`:
+Quyidagi misol bu `LibHeader` uchun qanday ishlashini koʻrsatadi:
 
 ```ts {highlight: [[1],[5], [15]]}
 abstract class LibHeaderToken {}
@@ -118,30 +118,30 @@ class LibCard {
 }
 ```
 
-In this example, the `LibCard` implementation no longer refers to `LibHeader` in either the type position or the value position.
-This lets full tree-shaking of `LibHeader` take place.
-The `LibHeaderToken` is retained, but it is only a class declaration, with no concrete implementation.
-It is small and does not materially impact the application size when retained after compilation.
+Bu misolda `LibCard` realizatsiyasi endi `LibHeader`'ga na tur pozitsiyasida, na qiymat pozitsiyasida murojaat qiladi.
+Bu `LibHeader`'ning toʻliq tree-shaking qilinishiga imkon beradi.
+`LibHeaderToken` saqlanib qoladi, lekin u aniq realizatsiyasi boʻlmagan shunchaki klass eʼloni.
+U kichik va kompilyatsiyadan keyin saqlanib qolganda ilova hajmiga sezilarli taʼsir qilmaydi.
 
-Instead, `LibHeader` itself implements the abstract `LibHeaderToken` class.
-You can safely use that token as the provider in the component definition, allowing Angular to correctly inject the concrete type.
+Buning oʻrniga `LibHeader`'ning oʻzi abstrakt `LibHeaderToken` klassini amalga oshiradi.
+Bu tokenni komponent taʼrifida provider sifatida xavfsiz ishlatishingiz mumkin, bu Angular'ga aniq turni toʻgʻri inyeksiya qilish imkonini beradi.
 
-To summarize, the lightweight injection token pattern consists of the following:
+Xulosa qilib aytganda, yengil inyeksiya tokeni namunasi quyidagilardan iborat:
 
-1. A lightweight injection token that is represented as an abstract class.
-2. A component definition that implements the abstract class.
-3. Injection of the lightweight pattern, using `contentChild` or `contentChildren`.
-4. A provider in the implementation of the lightweight injection token which associates the lightweight injection token with the implementation.
+1. Abstrakt klass sifatida ifodalangan yengil inyeksiya tokeni.
+2. Abstrakt klassni amalga oshiruvchi komponent taʼrifi.
+3. `contentChild` yoki `contentChildren` yordamida yengil namunani inyeksiya qilish.
+4. Yengil inyeksiya tokenini realizatsiya bilan bogʻlovchi, yengil inyeksiya tokeni realizatsiyasidagi provider.
 
-### Use the lightweight injection token for API definition
+### API taʼrifi uchun yengil inyeksiya tokenidan foydalanish {#use-the-lightweight-injection-token-for-api-definition}
 
-A component that injects a lightweight injection token might need to invoke a method in the injected class.
-The token is now an abstract class. Since the injectable component implements that class, you must also declare an abstract method in the abstract lightweight injection token class.
-The implementation of the method, with all its code overhead, resides in the injectable component that can be tree-shaken.
-This lets the parent communicate with the child, if it is present, in a type-safe manner.
+Yengil inyeksiya tokenini inyeksiya qiladigan komponentga inyeksiya qilingan klassdagi metodni chaqirish kerak boʻlishi mumkin.
+Token endi abstrakt klass. Inyeksiya qilinadigan komponent oʻsha klassni amalga oshirgani uchun siz abstrakt yengil inyeksiya tokeni klassida abstrakt metodni ham eʼlon qilishingiz kerak.
+Metodning realizatsiyasi, uning barcha kod yuki bilan birga, tree-shaking qilinishi mumkin boʻlgan inyeksiya qilinadigan komponentda joylashadi.
+Bu ota komponentga bola komponent mavjud boʻlsa, u bilan tur jihatidan xavfsiz tarzda muloqot qilish imkonini beradi.
 
-For example, the `LibCard` now queries `LibHeaderToken` rather than `LibHeader`.
-The following example shows how the pattern lets `LibCard` communicate with the `LibHeader` without actually referring to `LibHeader`:
+Masalan, `LibCard` endi `LibHeader` oʻrniga `LibHeaderToken`'ni soʻraydi.
+Quyidagi misol namuna `LibCard`'ga `LibHeader`'ga haqiqatan murojaat qilmasdan `LibHeader` bilan qanday muloqot qilish imkonini berishini koʻrsatadi:
 
 ```ts {highlight: [[2],[7],[11],[19]]}
 abstract class LibHeaderToken {
@@ -172,15 +172,15 @@ class LibCard implements AfterContentInit {
 }
 ```
 
-In this example, the parent queries the token to get the child component, and stores the resulting component reference if it is present.
-Before calling a method in the child, the parent component checks to see if the child component is present.
-If the child component has been tree-shaken, there is no runtime reference to it, and no call to its method.
+Bu misolda ota komponent bola komponentni olish uchun tokenni soʻraydi va agar u mavjud boʻlsa, natijaviy komponent havolasini saqlaydi.
+Boladagi metodni chaqirishdan oldin ota komponent bola komponent mavjudligini tekshiradi.
+Agar bola komponent tree-shaking qilingan boʻlsa, unga ishga tushirish vaqtida havola boʻlmaydi va uning metodi chaqirilmaydi.
 
-### Naming your lightweight injection token
+### Yengil inyeksiya tokeningizni nomlash {#naming-your-lightweight-injection-token}
 
-Lightweight injection tokens are only useful with components.
-The [Angular Style Guide](style-guide) suggests that you name components without the suffix `Component`.
-The example `LibHeader` follows this convention.
+Yengil inyeksiya tokenlari faqat komponentlar bilan foydali.
+[Angular uslub qoʻllanmasi](style-guide) komponentlarni `Component` qoʻshimchasisiz nomlashni tavsiya qiladi.
+`LibHeader` misoli shu konvensiyaga amal qiladi.
 
-You should maintain the relationship between the component and its token while still distinguishing between them.
-The recommended style is to use the component base name with the suffix `Token` to name your lightweight injection tokens: `LibHeaderToken`.
+Komponent va uning tokeni oʻrtasidagi bogʻliqlikni saqlab qolgan holda, ularni bir-biridan farqlashingiz kerak.
+Tavsiya etilgan uslub — yengil inyeksiya tokenlaringizni nomlash uchun komponentning asosiy nomini `Token` qoʻshimchasi bilan ishlatish: `LibHeaderToken`.

@@ -1,14 +1,14 @@
-# Lazy loading services
+# Servislarni kechiktirib yuklash (lazy loading)
 
-IMPORTANT: For lazy loading to work, the service you load must be auto-provided. Decorate it with either `@Injectable({providedIn: 'root'})` or [`@Service()`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator). Without auto-provisioning, Angular has no way to construct the service after it loads.
+IMPORTANT: Kechiktirilgan yuklash (lazy loading) ishlashi uchun yuklayotgan servisingiz avtomatik taqdim etilgan boʻlishi kerak. Uni `@Injectable({providedIn: 'root'})` yoki [`@Service()`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator) bilan dekoratsiyalang. Avtomatik taqdim etishsiz Angular servisni yuklangandan keyin yaratishning imkoniga ega boʻlmaydi.
 
-Angular's `injectAsync` function lets you load a service on demand, only when it's actually needed. This is useful when a service depends on a large library or rarely used feature, and you don't want to pay for it on the initial page load.
+Angular'ning `injectAsync` funksiyasi servisni talab boʻyicha, faqat u haqiqatan kerak boʻlganda yuklash imkonini beradi. Bu servis katta kutubxonaga yoki kamdan-kam ishlatiladigan imkoniyatga bogʻliq boʻlganda va siz buning uchun sahifaning dastlabki yuklanishida toʻlashni istamaganingizda foydali.
 
-When you use `injectAsync`, the service's code is split out by your bundler into a separate JavaScript chunk and downloaded the first time you ask for the instance. Once loaded, Angular resolves the service through the regular DI system, so it can still depend on other injectables and behaves like any other singleton.
+`injectAsync` ishlatganingizda, servisning kodi bundler tomonidan alohida JavaScript chunk'iga ajratiladi va nusxani birinchi marta soʻraganingizda yuklab olinadi. Yuklangandan soʻng Angular servisni odatiy DI tizimi orqali hal qiladi, shuning uchun u boshqa inyeksiya qilinadigan obyektlarga bogʻliq boʻlishi va har qanday boshqa singleton kabi ishlashi mumkin.
 
-## Lazily injecting a service
+## Servisni kechiktirib inyeksiya qilish {#lazily-injecting-a-service}
 
-Imagine a `ReportExporter` that depends on a heavy spreadsheet library. Most users open the report; only a few click **Export**. Load the exporter on demand:
+Ogʻir elektron jadval kutubxonasiga bogʻliq boʻlgan `ReportExporter` servisini tasavvur qiling. Koʻpchilik foydalanuvchilar hisobotni ochadi; faqat baʼzilari **Export** tugmasini bosadi. Eksport qiluvchini talab boʻyicha yuklang:
 
 ```angular-ts
 import {Component, injectAsync} from '@angular/core';
@@ -27,9 +27,9 @@ export class Report {
 }
 ```
 
-The first call to `this.exporter()` triggers the dynamic import and resolves the service from DI. Subsequent calls reuse the same promise, so the chunk is only fetched once.
+`this.exporter()` funksiyasining birinchi chaqiruvi dinamik importni ishga tushiradi va servisni DI'dan hal qiladi. Keyingi chaqiruvlar oʻsha promise'ni qayta ishlatadi, shuning uchun chunk faqat bir marta yuklab olinadi.
 
-If the lazy-loaded service is the [default export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export#using_the_default_export), pass the dynamic import directly, Angular unwraps the `default` for you:
+Agar kechiktirib yuklanadigan servis [default export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export#using_the_default_export) boʻlsa, dinamik importni bevosita uzating, Angular `default`'ni siz uchun oʻzi ajratib oladi:
 
 ```ts {header: "report-exporter.ts"}
 @Service()
@@ -42,11 +42,11 @@ export default class ReportExporter {
 private exporter = injectAsync(() => import('./report-exporter'));
 ```
 
-## Prefetching the dependency
+## Bogʻliqlikni oldindan yuklash (prefetch) {#prefetching-the-dependency}
 
-By default, the lazy chunk is only fetched when you invoke the returned function. You can start the download earlier by passing a `prefetch` trigger in the options. A trigger is any function that returns a `Promise`, when it resolves, Angular kicks off the loader.
+Sukut boʻyicha kechiktirilgan chunk faqat qaytarilgan funksiyani chaqirganingizda yuklab olinadi. Opsiyalarda `prefetch` triggerini uzatish orqali yuklab olishni oldinroq boshlashingiz mumkin. Trigger — `Promise` qaytaruvchi har qanday funksiya, u hal boʻlganda Angular yuklovchini ishga tushiradi.
 
-Angular ships with `onIdle`, a built-in trigger that waits until the browser becomes idle:
+Angular brauzer boʻsh (idle) holatga oʻtishini kutuvchi oʻrnatilgan `onIdle` triggeri bilan birga keladi:
 
 ```ts
 import {Component, injectAsync, onIdle} from '@angular/core';
@@ -59,17 +59,17 @@ export class Report {
 }
 ```
 
-You can also configure `onIdle` with a maximum wait time so the prefetch always happens within a known window, even on busy pages:
+Shuningdek, oldindan yuklash band sahifalarda ham har doim maʼlum vaqt oraligʻida sodir boʻlishi uchun `onIdle`'ni maksimal kutish vaqti bilan sozlashingiz mumkin:
 
 ```ts
 injectAsync(loader, {prefetch: () => onIdle({timeout: 1_000})});
 ```
 
-NOTE: Prefetching is opportunistic. If the user invokes the feature before the prefetch fires, Angular still loads the dependency immediately and resolves your `await` as soon as it's ready.
+NOTE: Oldindan yuklash imkoniyatga qarab amalga oshiriladi. Agar foydalanuvchi oldindan yuklash ishga tushishidan oldin imkoniyatni chaqirsa, Angular bogʻliqlikni baribir darhol yuklaydi va tayyor boʻlishi bilan `await`'ingizni hal qiladi.
 
-## Provide a custom prefetch trigger
+## Maxsus prefetch triggerini taqdim etish {#provide-a-custom-prefetch-trigger}
 
-A `PrefetchTrigger` is just a function that returns a promise, the loader runs as soon as the promise resolves. Use this to align prefetching with your own signals, such as a hover or a scheduler tick:
+`PrefetchTrigger` — bu shunchaki promise qaytaruvchi funksiya, yuklovchi promise hal boʻlishi bilanoq ishga tushadi. Bundan oldindan yuklashni oʻz signallaringiz, masalan, hover yoki planlashtiruvchi (scheduler) tiki bilan moslashtirish uchun foydalaning:
 
 ```ts
 import {PrefetchTrigger} from '@angular/core';

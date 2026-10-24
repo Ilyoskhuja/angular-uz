@@ -1,20 +1,20 @@
-# Creating and using services
+# Servislarni yaratish va ulardan foydalanish
 
-Services are reusable pieces of code that you can share across your Angular application. You commonly use them to handle data fetching, business logic, or other functionality that multiple components need to access.
+Servislar — Angular ilovangiz boʻylab ulashishingiz mumkin boʻlgan qayta ishlatiladigan kod boʻlaklari. Siz ulardan odatda maʼlumotlarni olish, biznes mantiq yoki bir nechta komponentlar foydalanishi kerak boʻlgan boshqa funksionallik bilan ishlash uchun foydalanasiz.
 
-## Creating a service
+## Servis yaratish {#creating-a-service}
 
-You can create a service using the [Angular CLI](tools/cli) with the following command:
+[Angular CLI](tools/cli) yordamida quyidagi buyruq bilan servis yaratishingiz mumkin:
 
 ```bash
 ng generate service CUSTOM_NAME
 ```
 
-This command creates a dedicated `CUSTOM_NAME.ts` file in your `src` directory.
+Bu buyruq `src` papkangizda alohida `CUSTOM_NAME.ts` faylini yaratadi.
 
-You can also manually create a service by adding the `@Service()` decorator to a TypeScript class. This tells Angular that you can use the class as an injectable dependency.
+Shuningdek, TypeScript klassiga `@Service()` dekoratorini qoʻshish orqali servisni qoʻlda ham yaratishingiz mumkin. Bu Angular'ga klassni inyeksiya qilinadigan bogʻliqlik sifatida ishlatish mumkinligini bildiradi.
 
-The following example defines a service that allows users to add and retrieve data:
+Quyidagi misol foydalanuvchilarga maʼlumot qoʻshish va olish imkonini beruvchi servisni aniqlaydi:
 
 ```ts {header: "src/app/basic-data-store.ts"}
 import {Service} from '@angular/core';
@@ -33,36 +33,36 @@ export class BasicDataStore {
 }
 ```
 
-## How services become available
+## Servislar qanday mavjud boʻladi {#how-services-become-available}
 
-Services are provisioned at the root level by default. When a service is provided globally, Angular guarantees three main benefits:
+Servislar sukut boʻyicha root darajasida taqdim etiladi. Servis global taqdim etilganda, Angular uchta asosiy afzallikni kafolatlaydi:
 
-- **Singleton Instance:** Creates a single, shared instance for the entire application.
-- **Global Availability:** Automatically accessible anywhere without manual provider registration.
-- **Tree-shakability:** Ensures the service is excluded from the final production bundle if your code never explicitly uses it.
+- **Singleton nusxa:** butun ilova uchun yagona, umumiy nusxa yaratadi.
+- **Global mavjudlik:** provider'ni qoʻlda roʻyxatdan oʻtkazmasdan istalgan joydan avtomatik foydalanish mumkin.
+- **Tree-shaking imkoniyati:** agar kodingiz servisni hech qayerda aniq ishlatmasa, uning yakuniy production bundle'dan chiqarib tashlanishini taʼminlaydi.
 
-### Using the `@Service` vs `@Injectable` decorator
+### `@Service` va `@Injectable` dekoratorlaridan foydalanish {#using-the-service-vs-injectable-decorator}
 
-The `@Service` decorator serves as a modern, ergonomic shorthand for the traditional `@Injectable({ providedIn: 'root' })` syntax.
+`@Service` dekoratori anʼanaviy `@Injectable({ providedIn: 'root' })` sintaksisi uchun zamonaviy, qulay qisqa yozuv vazifasini bajaradi.
 
-Use this quick reference to decide which decorator fits your scenario:
+Qaysi dekorator sizning holatingizga mos kelishini aniqlash uchun ushbu qisqa maʼlumotnomadan foydalaning:
 
-| Feature / Requirement                         | `@Service` | `@Injectable`                           |
-| --------------------------------------------- | ---------- | --------------------------------------- |
-| **`inject()` function support**               | Yes        | Yes                                     |
-| **Constructor-based DI**                      | ❌ No      | Yes                                     |
-| **Implicit root singleton provider**          | Yes        | ❌ No (requires `{providedIn: 'root'}`) |
-| **Advanced provider keys (`useClass`, etc.)** | ❌ No      | Yes                                     |
-| **Custom initialization factories**           | Yes        | Yes                                     |
-| **Non-root scopes (`platform`, etc.)**        | ❌ No      | Yes                                     |
+| Imkoniyat / Talab                                      | `@Service` | `@Injectable`                              |
+| ------------------------------------------------------ | ---------- | ------------------------------------------ |
+| **`inject()` funksiyasini qoʻllab-quvvatlash**         | Ha         | Ha                                         |
+| **Konstruktor asosidagi DI**                           | ❌ Yoʻq    | Ha                                         |
+| **Yashirin root singleton provider**                   | Ha         | ❌ Yoʻq (`{providedIn: 'root'}` talab qilinadi) |
+| **Kengaytirilgan provider kalitlari (`useClass` va h.k.)** | ❌ Yoʻq | Ha                                         |
+| **Maxsus initsializatsiya fabrikalari**                | Ha         | Ha                                         |
+| **Root boʻlmagan qamrovlar (`platform` va h.k.)**      | ❌ Yoʻq    | Ha                                         |
 
-### Replacing the implementation with a factory
+### Realizatsiyani fabrika bilan almashtirish {#replacing-the-implementation-with-a-factory}
 
-If you need to control how the singleton is created, for example, to swap in a different implementation depending on the environment, pass a `factory` function.
+Agar singleton qanday yaratilishini boshqarishingiz kerak boʻlsa, masalan, muhitga qarab boshqa realizatsiyani qoʻyish uchun, `factory` funksiyasini uzating.
 
-The factory runs in an [injection context](guide/di/dependency-injection-context), so you can use [`inject()`](api/core/inject) inside it to read other dependencies.
+Fabrika [inyeksiya kontekstida](guide/di/dependency-injection-context) ishlaydi, shuning uchun boshqa bogʻliqliklarni oʻqish uchun uning ichida [`inject()`](api/core/inject) funksiyasidan foydalanishingiz mumkin.
 
-The following `Analytics` service is a no-op locally so events don't pollute the console during development. In production, the factory reads an `ANALYTICS_ENABLED` token and returns a `GoogleAnalytics` subclass that forwards events to the real tracker:
+Quyidagi `Analytics` servisi lokal muhitda hech narsa qilmaydi (no-op), shunda ishlab chiqish davomida hodisalar konsolni toʻldirmaydi. Production'da fabrika `ANALYTICS_ENABLED` tokenini oʻqiydi va hodisalarni haqiqiy kuzatuvchiga yoʻnaltiruvchi `GoogleAnalytics` subklassini qaytaradi:
 
 ```ts {header: "src/app/analytics.ts"}
 import {inject, InjectionToken, Service} from '@angular/core';
@@ -84,11 +84,11 @@ class GoogleAnalytics extends Analytics {
 }
 ```
 
-NOTE: The `factory` option replaces the `useClass`, `useValue`, `useExisting`, and `useFactory` options of `@Injectable`. If you need any of those, keep using `@Injectable`.
+NOTE: `factory` opsiyasi `@Injectable`'ning `useClass`, `useValue`, `useExisting` va `useFactory` opsiyalarining oʻrnini bosadi. Agar sizga ulardan birortasi kerak boʻlsa, `@Injectable`'dan foydalanishda davom eting.
 
-### Opting out of automatic provisioning
+### Avtomatik taqdim etishdan voz kechish {#opting-out-of-automatic-provisioning}
 
-By default, `@Service` provides the class at the root injector. If you want to provide it manually, for example, to scope it to a specific route or component, set `autoProvided: false`:
+Sukut boʻyicha `@Service` klassni root injector'da taqdim etadi. Agar uni qoʻlda taqdim etmoqchi boʻlsangiz, masalan, uni muayyan marshrut yoki komponent bilan cheklash uchun, `autoProvided: false` qiymatini oʻrnating:
 
 ```ts {header: "src/app/analytics-logger.ts"}
 import {Service} from '@angular/core';
@@ -101,21 +101,21 @@ export class AnalyticsLogger {
 }
 ```
 
-You are then responsible for adding the service to a `providers` array, just like with a plain `@Injectable()`:
+Shundan soʻng, oddiy `@Injectable()` bilan boʻlgani kabi, servisni `providers` massiviga qoʻshish uchun siz javobgar boʻlasiz:
 
-### When to use `@Service` vs `@Injectable`
+### Qachon `@Service`, qachon `@Injectable` ishlatish kerak {#when-to-use-service-vs-injectable}
 
-Reach for `@Service` when you are creating a new singleton class that uses `inject()` for its dependencies. Keep using `@Injectable` when you need any of the following:
+Bogʻliqliklari uchun `inject()` ishlatuvchi yangi singleton klass yaratayotganingizda `@Service`'ni tanlang. Quyidagilardan birortasi kerak boʻlganda `@Injectable`'dan foydalanishda davom eting:
 
-- **Constructor-based dependency injection.** `@Service` only supports the [`inject()`](api/core/inject) function.
-- **Advanced provider configuration** such as `useClass`, `useValue`, `useExisting`, or `useFactory`. `@Service` exposes a single `factory` option instead.
-- **Non-root scopes** such as `providedIn: 'platform'`.
+- **Konstruktor asosida bogʻliqliklarni inyeksiya qilish.** `@Service` faqat [`inject()`](api/core/inject) funksiyasini qoʻllab-quvvatlaydi.
+- **Kengaytirilgan provider konfiguratsiyasi**, masalan `useClass`, `useValue`, `useExisting` yoki `useFactory`. `@Service` buning oʻrniga yagona `factory` opsiyasini taqdim etadi.
+- **Root boʻlmagan qamrovlar**, masalan `providedIn: 'platform'`.
 
-## Injecting a service
+## Servisni inyeksiya qilish {#injecting-a-service}
 
-Once you've created a service with `providedIn: 'root'`, you can inject it anywhere in your application using the `inject()` function from `@angular/core`.
+`providedIn: 'root'` bilan servis yaratganingizdan soʻng, uni `@angular/core`'dagi `inject()` funksiyasi yordamida ilovangizning istalgan joyiga inyeksiya qilishingiz mumkin.
 
-### Injecting into a component
+### Komponentga inyeksiya qilish {#injecting-into-a-component}
 
 ```angular-ts
 import {Component, inject} from '@angular/core';
@@ -135,7 +135,7 @@ export class Example {
 }
 ```
 
-### Injecting into another service
+### Boshqa servisga inyeksiya qilish {#injecting-into-another-service}
 
 ```ts
 import {inject, Service} from '@angular/core';
@@ -156,13 +156,13 @@ export class BasicDataStore {
 }
 ```
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-While `providedIn: 'root'` covers most use cases, Angular also provides additional ways you can configure services for more specialized scenarios:
+`providedIn: 'root'` koʻpchilik foydalanish holatlarini qamrab olsa-da, Angular yanada maxsus stsenariylar uchun servislarni sozlashning qoʻshimcha usullarini ham taqdim etadi:
 
-- **Component-specific instances** - When components need their own isolated service instances
-- **Manual configuration** - For services that require runtime configuration
-- **Factory providers** - For dynamic service creation based on runtime conditions
-- **Value providers** - For providing configuration objects or constants
+- **Komponentga xos nusxalar** - komponentlarga oʻzlarining alohida servis nusxalari kerak boʻlganda
+- **Qoʻlda sozlash** - ishga tushirish vaqtida sozlashni talab qiluvchi servislar uchun
+- **Fabrika provider'lari** - ishga tushirish vaqtidagi shartlarga asoslanib servislarni dinamik yaratish uchun
+- **Qiymat provider'lari** - konfiguratsiya obyektlari yoki konstantalarni taqdim etish uchun
 
-You can learn more about these advanced patterns in the next guide: [defining dependency providers](/guide/di/defining-dependency-providers).
+Bu kengaytirilgan namunalar haqida keyingi qoʻllanmada koʻproq bilib olishingiz mumkin: [bogʻliqlik provider'larini aniqlash](/guide/di/defining-dependency-providers).
