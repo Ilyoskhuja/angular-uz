@@ -1,114 +1,114 @@
-<docs-decorative-header title="Forms in Angular" imgSrc="adev/src/assets/images/overview.svg"> <!-- markdownlint-disable-line -->
-Handling user input with forms is the cornerstone of many common applications.
+<docs-decorative-header title="Angular'da formalar" imgSrc="adev/src/assets/images/overview.svg"> <!-- markdownlint-disable-line -->
+Formalar orqali foydalanuvchi kiritmalarini qayta ishlash koʻplab keng tarqalgan ilovalarning poydevoridir.
 </docs-decorative-header>
 
-Applications use forms to enable users to log in, to update a profile, to enter sensitive information, and to perform many other data-entry tasks.
+Ilovalar formalardan foydalanuvchilarga tizimga kirish, profilni yangilash, maxfiy maʼlumotlarni kiritish va boshqa koʻplab maʼlumot kiritish vazifalarini bajarish imkonini berish uchun foydalanadi.
 
-Angular provides two different approaches to handling user input through forms: reactive and template-driven.
+Angular formalar orqali foydalanuvchi kiritmalarini qayta ishlashning ikki xil yondashuvini taqdim etadi: reaktiv va shablonga asoslangan.
 
-Both capture user input events from the view, validate the input, create a form and data model, and provide a way to track changes.
+Ikkalasi ham view'dan foydalanuvchi kiritish hodisalarini ushlaydi, kiritmani validatsiya qiladi, forma va maʼlumotlar modelini yaratadi va oʻzgarishlarni kuzatish usulini taqdim etadi.
 
-TIP: If you're looking for the new Signal Forms, check out our [essential Signal Forms guide](/essentials/signal-forms)!
+TIP: Agar yangi Signal Forms'ni izlayotgan boʻlsangiz, [Signal Forms boʻyicha asosiy qoʻllanmamizga](/essentials/signal-forms) qarang!
 
-This guide provides information to help you decide which type of form works best for your situation.
-It introduces the common building blocks used by both approaches.
-It also summarizes the key differences between the two approaches, and demonstrates those differences in the context of setup, data flow, and testing.
+Ushbu qoʻllanma sizning vaziyatingiz uchun qaysi forma turi eng mos kelishini hal qilishga yordam beruvchi maʼlumotlarni taqdim etadi.
+U ikkala yondashuvda ham qoʻllaniladigan umumiy qurilish bloklari bilan tanishtiradi.
+Shuningdek, u ikki yondashuv oʻrtasidagi asosiy farqlarni umumlashtiradi va bu farqlarni sozlash, maʼlumotlar oqimi va testlash kontekstida koʻrsatib beradi.
 
-## Choosing an approach
+## Yondashuvni tanlash {#choosing-an-approach}
 
-Reactive forms and template-driven forms process and manage form data differently.
-Each approach offers different advantages.
+Reaktiv formalar va shablonga asoslangan formalar forma maʼlumotlarini turlicha qayta ishlaydi va boshqaradi.
+Har bir yondashuv oʻziga xos afzalliklarni taqdim etadi.
 
-| Forms                 | Details                                                                                                                                                                                                                                                                                                                                                                                                             |
-| :-------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Reactive forms        | Provide direct, explicit access to the underlying form's object model. Compared to template-driven forms, they are more robust: they're more scalable, reusable, and testable. If forms are a key part of your application, or you're already using reactive patterns for building your application, use reactive forms.                                                                                            |
-| Template-driven forms | Rely on directives in the template to create and manipulate the underlying object model. They are useful for adding a simple form to an app, such as an email list signup form. They're straightforward to add to an app, but they don't scale as well as reactive forms. If you have very basic form requirements and logic that can be managed solely in the template, template-driven forms could be a good fit. |
+| Formalar                     | Tafsilotlar                                                                                                                                                                                                                                                                                                                                                                                                              |
+| :--------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Reaktiv formalar             | Asosiy forma obyekt modeliga toʻgʻridan-toʻgʻri, aniq (explicit) kirishni taqdim etadi. Shablonga asoslangan formalar bilan solishtirganda ular ancha mustahkam: ular yaxshiroq masshtablanadi, qayta foydalaniladi va testlanadi. Agar formalar ilovangizning asosiy qismi boʻlsa yoki ilovangizni qurishda allaqachon reaktiv namunalardan foydalanayotgan boʻlsangiz, reaktiv formalardan foydalaning.                 |
+| Shablonga asoslangan formalar | Asosiy obyekt modelini yaratish va boshqarish uchun shablondagi direktivalarga tayanadi. Ular ilovaga oddiy forma, masalan, email roʻyxatiga obuna formasini qoʻshish uchun qulay. Ularni ilovaga qoʻshish oson, lekin ular reaktiv formalar kabi yaxshi masshtablanmaydi. Agar sizda juda oddiy forma talablari va faqat shablonning oʻzida boshqarish mumkin boʻlgan mantiq boʻlsa, shablonga asoslangan formalar yaxshi tanlov boʻlishi mumkin. |
 
-### Key differences
+### Asosiy farqlar {#key-differences}
 
-The following table summarizes the key differences between reactive and template-driven forms.
+Quyidagi jadval reaktiv va shablonga asoslangan formalar oʻrtasidagi asosiy farqlarni umumlashtiradi.
 
-|                                                   | Reactive                             | Template-driven                 |
-| :------------------------------------------------ | :----------------------------------- | :------------------------------ |
-| [Setup of form model](#setting-up-the-form-model) | Explicit, created in component class | Implicit, created by directives |
-| [Data model](#mutability-of-the-data-model)       | Structured and immutable             | Unstructured and mutable        |
-| [Data flow](#data-flow-in-forms)                  | Synchronous                          | Asynchronous                    |
-| [Form validation](#form-validation)               | Functions                            | Directives                      |
+|                                                       | Reaktiv                                   | Shablonga asoslangan                  |
+| :---------------------------------------------------- | :---------------------------------------- | :------------------------------------ |
+| [Forma modelini sozlash](#setting-up-the-form-model)  | Aniq (explicit), komponent klassida yaratiladi | Bilvosita (implicit), direktivalar tomonidan yaratiladi |
+| [Maʼlumotlar modeli](#mutability-of-the-data-model)   | Tuzilmali va oʻzgarmas (immutable)        | Tuzilmasiz va oʻzgaruvchan (mutable)  |
+| [Maʼlumotlar oqimi](#data-flow-in-forms)              | Sinxron                                   | Asinxron                              |
+| [Forma validatsiyasi](#form-validation)               | Funksiyalar                               | Direktivalar                          |
 
-### Scalability
+### Masshtablanuvchanlik {#scalability}
 
-If forms are a central part of your application, scalability is very important.
-Being able to reuse form models across components is critical.
+Agar formalar ilovangizning markaziy qismi boʻlsa, masshtablanuvchanlik juda muhim.
+Forma modellarini komponentlar boʻylab qayta ishlata olish hal qiluvchi ahamiyatga ega.
 
-Reactive forms are more scalable than template-driven forms.
-They provide direct access to the underlying form API, and use [synchronous data flow](#data-flow-in-reactive-forms) between the view and the data model, which makes creating large-scale forms easier.
-Reactive forms require less setup for testing, and testing does not require deep understanding of change detection to properly test form updates and validation.
+Reaktiv formalar shablonga asoslangan formalarga qaraganda yaxshiroq masshtablanadi.
+Ular asosiy forma API'siga toʻgʻridan-toʻgʻri kirishni taqdim etadi va view bilan maʼlumotlar modeli oʻrtasida [sinxron maʼlumotlar oqimidan](#data-flow-in-reactive-forms) foydalanadi, bu esa katta hajmdagi formalarni yaratishni osonlashtiradi.
+Reaktiv formalar testlash uchun kamroq sozlashni talab qiladi, va forma yangilanishlari hamda validatsiyasini toʻgʻri testlash uchun oʻzgarishlarni aniqlashni chuqur tushunish talab etilmaydi.
 
-Template-driven forms focus on simple scenarios and are not as reusable.
-They abstract away the underlying form API, and use [asynchronous data flow](#data-flow-in-template-driven-forms) between the view and the data model.
-The abstraction of template-driven forms also affects testing.
-Tests are deeply reliant on manual change detection execution to run properly, and require more setup.
+Shablonga asoslangan formalar oddiy stsenariylarga qaratilgan va qayta foydalanish uchun unchalik qulay emas.
+Ular asosiy forma API'sini abstraksiyalaydi va view bilan maʼlumotlar modeli oʻrtasida [asinxron maʼlumotlar oqimidan](#data-flow-in-template-driven-forms) foydalanadi.
+Shablonga asoslangan formalarning abstraksiyasi testlashga ham taʼsir qiladi.
+Testlar toʻgʻri ishlashi uchun oʻzgarishlarni aniqlashni qoʻlda ishga tushirishga kuchli bogʻliq boʻladi va koʻproq sozlashni talab qiladi.
 
-## Setting up the form model
+## Forma modelini sozlash {#setting-up-the-form-model}
 
-Both reactive and template-driven forms track value changes between the form input elements that users interact with and the form data in your component model.
-The two approaches share underlying building blocks, but differ in how you create and manage the common form-control instances.
+Reaktiv formalar ham, shablonga asoslangan formalar ham foydalanuvchilar oʻzaro aloqada boʻladigan forma input elementlari bilan komponent modelingizdagi forma maʼlumotlari oʻrtasidagi qiymat oʻzgarishlarini kuzatadi.
+Ikkala yondashuv umumiy asosiy qurilish bloklariga ega, lekin umumiy forma kontrol (form-control) nusxalarini qanday yaratish va boshqarishingiz bilan farqlanadi.
 
-### Common form foundation classes
+### Umumiy forma asos klasslari {#common-form-foundation-classes}
 
-Both reactive and template-driven forms are built on the following base classes.
+Reaktiv formalar ham, shablonga asoslangan formalar ham quyidagi asos klasslar ustiga qurilgan.
 
-| Base classes           | Details                                                                             |
-| :--------------------- | :---------------------------------------------------------------------------------- |
-| `FormControl`          | Tracks the value and validation status of an individual form control.               |
-| `FormGroup`            | Tracks the same values and status for a collection of form controls.                |
-| `FormArray`            | Tracks the same values and status for an array of form controls.                    |
-| `ControlValueAccessor` | Creates a bridge between Angular `FormControl` instances and built-in DOM elements. |
+| Asos klasslar          | Tafsilotlar                                                                             |
+| :--------------------- | :-------------------------------------------------------------------------------------- |
+| `FormControl`          | Alohida forma kontrolining qiymati va validatsiya holatini kuzatadi.                    |
+| `FormGroup`            | Forma kontrollari toʻplami uchun xuddi shu qiymatlar va holatni kuzatadi.               |
+| `FormArray`            | Forma kontrollari massivi uchun xuddi shu qiymatlar va holatni kuzatadi.                |
+| `ControlValueAccessor` | Angular `FormControl` nusxalari bilan oʻrnatilgan DOM elementlari oʻrtasida koʻprik yaratadi. |
 
-### Setup in reactive forms
+### Reaktiv formalarda sozlash {#setup-in-reactive-forms}
 
-With reactive forms, you define the form model directly in the component class.
-The `[formControl]` directive links the explicitly created `FormControl` instance to a specific form element in the view, using an internal value accessor.
+Reaktiv formalarda forma modelini toʻgʻridan-toʻgʻri komponent klassida aniqlaysiz.
+`[formControl]` direktivasi aniq yaratilgan `FormControl` nusxasini ichki qiymat accessor'i yordamida view'dagi maʼlum forma elementiga bogʻlaydi.
 
-The following component implements an input field for a single control, using reactive forms.
-In this example, the form model is the `FormControl` instance.
+Quyidagi komponent reaktiv formalardan foydalanib, bitta kontrol uchun input maydonini amalga oshiradi.
+Bu misolda forma modeli `FormControl` nusxasidir.
 
 <docs-code language="angular-ts" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.ts"/>
 
-IMPORTANT: In reactive forms, the form model is the source of truth; it provides the value and status of the form element at any given point in time, through the `[formControl]` directive on the `<input>` element.
+IMPORTANT: Reaktiv formalarda forma modeli haqiqat manbai (source of truth) hisoblanadi; u `<input>` elementidagi `[formControl]` direktivasi orqali forma elementining qiymati va holatini istalgan vaqtda taqdim etadi.
 
-### Setup in template-driven forms
+### Shablonga asoslangan formalarda sozlash {#setup-in-template-driven-forms}
 
-In template-driven forms, the form model is implicit, rather than explicit.
-The directive `NgModel` creates and manages a `FormControl` instance for a given form element.
+Shablonga asoslangan formalarda forma modeli aniq emas, balki bilvosita boʻladi.
+`NgModel` direktivasi berilgan forma elementi uchun `FormControl` nusxasini yaratadi va boshqaradi.
 
-The following component implements the same input field for a single control, using template-driven forms.
+Quyidagi komponent shablonga asoslangan formalardan foydalanib, bitta kontrol uchun xuddi shu input maydonini amalga oshiradi.
 
 <docs-code language="angular-ts" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.ts"/>
 
-IMPORTANT: In a template-driven form, the source of truth is the template. The `NgModel` directive automatically manages the `FormControl` instance for you.
+IMPORTANT: Shablonga asoslangan formada haqiqat manbai shablondir. `NgModel` direktivasi `FormControl` nusxasini siz uchun avtomatik boshqaradi.
 
-## Data flow in forms
+## Formalarda maʼlumotlar oqimi {#data-flow-in-forms}
 
-When an application contains a form, Angular must keep the view in sync with the component model and the component model in sync with the view.
-As users change values and make selections through the view, the new values must be reflected in the data model.
-Similarly, when the program logic changes values in the data model, those values must be reflected in the view.
+Ilovada forma boʻlsa, Angular view'ni komponent modeli bilan, komponent modelini esa view bilan sinxron holatda saqlashi kerak.
+Foydalanuvchilar view orqali qiymatlarni oʻzgartirib, tanlovlar qilganda, yangi qiymatlar maʼlumotlar modelida aks etishi kerak.
+Shunga oʻxshab, dastur mantigʻi maʼlumotlar modelidagi qiymatlarni oʻzgartirganda, bu qiymatlar view'da aks etishi kerak.
 
-Reactive and template-driven forms differ in how they handle data flowing from the user or from programmatic changes.
-The following diagrams illustrate both kinds of data flow for each type of form, using the favorite-color input field defined above.
+Reaktiv va shablonga asoslangan formalar foydalanuvchidan yoki dasturiy oʻzgarishlardan keladigan maʼlumotlar oqimini qayta ishlash usuli bilan farqlanadi.
+Quyidagi diagrammalar yuqorida aniqlangan sevimli rang (favorite-color) input maydonidan foydalanib, har bir forma turi uchun ikkala turdagi maʼlumotlar oqimini koʻrsatadi.
 
-### Data flow in reactive forms
+### Reaktiv formalarda maʼlumotlar oqimi {#data-flow-in-reactive-forms}
 
-In reactive forms, each form element in the view is directly linked to the form model (a `FormControl` instance).
-Updates from the view to the model and from the model to the view are synchronous and do not depend on how the UI is rendered.
+Reaktiv formalarda view'dagi har bir forma elementi forma modeliga (`FormControl` nusxasiga) toʻgʻridan-toʻgʻri bogʻlangan.
+View'dan modelga va modeldan view'ga yangilanishlar sinxron boʻlib, UI qanday render qilinishiga bogʻliq emas.
 
-The view-to-model diagram shows how data flows when an input field's value is changed from the view through the following steps:
+View'dan modelga diagrammasi input maydonining qiymati view'dan oʻzgartirilganda maʼlumotlar quyidagi qadamlar orqali qanday oqishini koʻrsatadi:
 
-1. The user types a value into the input element, in this case the favorite color _Blue_.
-1. The form input element emits an "input" event with the latest value.
-1. The `ControlValueAccessor` listening for events on the form input element immediately relays the new value to the `FormControl` instance.
-1. The `FormControl` instance emits the new value through the `valueChanges` observable.
-1. Any subscribers to the `valueChanges` observable receive the new value.
+1. Foydalanuvchi input elementiga qiymat kiritadi, bu holda sevimli rang _Blue_.
+1. Forma input elementi eng soʻnggi qiymat bilan "input" hodisasini chiqaradi.
+1. Forma input elementidagi hodisalarni tinglayotgan `ControlValueAccessor` yangi qiymatni darhol `FormControl` nusxasiga uzatadi.
+1. `FormControl` nusxasi yangi qiymatni `valueChanges` observable'i orqali chiqaradi.
+1. `valueChanges` observable'ining barcha obunachilari yangi qiymatni oladi.
 
 ```mermaid
 flowchart TB
@@ -123,12 +123,12 @@ flowchart TB
     FC-.->|Fires a 'valueChanges' event to observers|O
 ```
 
-The model-to-view diagram shows how a programmatic change to the model is propagated to the view through the following steps.
+Modeldan view'ga diagrammasi modeldagi dasturiy oʻzgarish view'ga quyidagi qadamlar orqali qanday tarqalishini koʻrsatadi.
 
-1. The user calls the `favoriteColorControl.setValue()` method, which updates the `FormControl` value.
-1. The `FormControl` instance emits the new value through the `valueChanges` observable.
-1. Any subscribers to the `valueChanges` observable receive the new value.
-1. The control value accessor on the form input element updates the element with the new value.
+1. Foydalanuvchi `favoriteColorControl.setValue()` metodini chaqiradi, bu `FormControl` qiymatini yangilaydi.
+1. `FormControl` nusxasi yangi qiymatni `valueChanges` observable'i orqali chiqaradi.
+1. `valueChanges` observable'ining barcha obunachilari yangi qiymatni oladi.
+1. Forma input elementidagi kontrol qiymat accessor'i elementni yangi qiymat bilan yangilaydi.
 
 ```mermaid
 flowchart TB
@@ -143,19 +143,19 @@ flowchart TB
     CVA-->|"Updates the value of the &lt;input&gt;"|I
 ```
 
-### Data flow in template-driven forms
+### Shablonga asoslangan formalarda maʼlumotlar oqimi {#data-flow-in-template-driven-forms}
 
-In template-driven forms, each form element is linked to a directive that manages the form model internally.
+Shablonga asoslangan formalarda har bir forma elementi forma modelini ichki boshqaradigan direktivaga bogʻlangan.
 
-The view-to-model diagram shows how data flows when an input field's value is changed from the view through the following steps.
+View'dan modelga diagrammasi input maydonining qiymati view'dan oʻzgartirilganda maʼlumotlar quyidagi qadamlar orqali qanday oqishini koʻrsatadi.
 
-1. The user types _Blue_ into the input element.
-1. The input element emits an "input" event with the value _Blue_.
-1. The control value accessor attached to the input triggers the `setValue()` method on the `FormControl` instance.
-1. The `FormControl` instance emits the new value through the `valueChanges` observable.
-1. Any subscribers to the `valueChanges` observable receive the new value.
-1. The control value accessor also calls the `NgModel.viewToModelUpdate()` method which emits an `ngModelChange` event.
-1. Because the component template uses two-way data binding for the `favoriteColor` property, the `favoriteColor` property in the component is updated to the value emitted by the `ngModelChange` event \(_Blue_\).
+1. Foydalanuvchi input elementiga _Blue_ kiritadi.
+1. Input elementi _Blue_ qiymati bilan "input" hodisasini chiqaradi.
+1. Input'ga biriktirilgan kontrol qiymat accessor'i `FormControl` nusxasidagi `setValue()` metodini ishga tushiradi.
+1. `FormControl` nusxasi yangi qiymatni `valueChanges` observable'i orqali chiqaradi.
+1. `valueChanges` observable'ining barcha obunachilari yangi qiymatni oladi.
+1. Kontrol qiymat accessor'i shuningdek `NgModel.viewToModelUpdate()` metodini chaqiradi, bu esa `ngModelChange` hodisasini chiqaradi.
+1. Komponent shabloni `favoriteColor` xususiyati uchun ikki tomonlama maʼlumot bogʻlashdan foydalangani sababli, komponentdagi `favoriteColor` xususiyati `ngModelChange` hodisasi chiqargan qiymatga \(_Blue_\) yangilanadi.
 
 ```mermaid
 flowchart TB
@@ -176,17 +176,17 @@ flowchart TB
     C-->|Updates the value of the two-way bound property|P
 ```
 
-The model-to-view diagram shows how data flows from model to view when the `favoriteColor` changes from _Blue_ to _Red_, through the following steps
+Modeldan view'ga diagrammasi `favoriteColor` _Blue_'dan _Red_'ga oʻzgarganda maʼlumotlar modeldan view'ga quyidagi qadamlar orqali qanday oqishini koʻrsatadi
 
-1. The `favoriteColor` value is updated in the component.
-1. Change detection begins.
-1. During change detection, the `ngOnChanges` lifecycle hook is called on the `NgModel` directive instance because the value of one of its inputs has changed.
-1. The `ngOnChanges()` method queues an async task to set the value for the internal `FormControl` instance.
-1. Change detection completes.
-1. On the next tick, the task to set the `FormControl` instance value is executed.
-1. The `FormControl` instance emits the latest value through the `valueChanges` observable.
-1. Any subscribers to the `valueChanges` observable receive the new value.
-1. The control value accessor updates the form input element in the view with the latest `favoriteColor` value.
+1. `favoriteColor` qiymati komponentda yangilanadi.
+1. Oʻzgarishlarni aniqlash boshlanadi.
+1. Oʻzgarishlarni aniqlash davomida `NgModel` direktivasi nusxasida `ngOnChanges` hayot sikli hook'i chaqiriladi, chunki uning input'laridan birining qiymati oʻzgargan.
+1. `ngOnChanges()` metodi ichki `FormControl` nusxasi uchun qiymatni oʻrnatuvchi asinxron vazifani navbatga qoʻyadi.
+1. Oʻzgarishlarni aniqlash yakunlanadi.
+1. Keyingi tick'da `FormControl` nusxasi qiymatini oʻrnatish vazifasi bajariladi.
+1. `FormControl` nusxasi eng soʻnggi qiymatni `valueChanges` observable'i orqali chiqaradi.
+1. `valueChanges` observable'ining barcha obunachilari yangi qiymatni oladi.
+1. Kontrol qiymat accessor'i view'dagi forma input elementini eng soʻnggi `favoriteColor` qiymati bilan yangilaydi.
 
 ```mermaid
 flowchart TB
@@ -217,111 +217,111 @@ flowchart TB
     end
 ```
 
-NOTE: `NgModel` triggers a second change detection to avoid `ExpressionChangedAfterItHasBeenChecked` errors, because the value change originates in an input binding.
+NOTE: `NgModel` `ExpressionChangedAfterItHasBeenChecked` xatolaridan qochish uchun ikkinchi oʻzgarishlarni aniqlashni ishga tushiradi, chunki qiymat oʻzgarishi input bogʻlashidan kelib chiqadi.
 
-### Mutability of the data model
+### Maʼlumotlar modelining oʻzgaruvchanligi {#mutability-of-the-data-model}
 
-The change-tracking method plays a role in the efficiency of your application.
+Oʻzgarishlarni kuzatish usuli ilovangizning samaradorligida rol oʻynaydi.
 
-| Forms                 | Details                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| :-------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Reactive forms        | Keep the data model pure by providing it as an immutable data structure. Each time a change is triggered on the data model, the `FormControl` instance returns a new data model rather than updating the existing data model. This gives you the ability to track unique changes to the data model through the control's observable. Change detection is more efficient because it only needs to update on unique changes. Because data updates follow reactive patterns, you can integrate with observable operators to transform data. |
-| Template-driven forms | Rely on mutability with two-way data binding to update the data model in the component as changes are made in the template. Because there are no unique changes to track on the data model when using two-way data binding, change detection is less efficient at determining when updates are required.                                                                                                                                                                                                                                 |
+| Formalar                     | Tafsilotlar                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| :--------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Reaktiv formalar             | Maʼlumotlar modelini oʻzgarmas (immutable) maʼlumotlar tuzilmasi sifatida taqdim etib, uni toza saqlaydi. Maʼlumotlar modelida har safar oʻzgarish ishga tushganda `FormControl` nusxasi mavjud maʼlumotlar modelini yangilash oʻrniga yangi maʼlumotlar modelini qaytaradi. Bu sizga kontrolning observable'i orqali maʼlumotlar modelidagi noyob oʻzgarishlarni kuzatish imkonini beradi. Oʻzgarishlarni aniqlash samaraliroq, chunki u faqat noyob oʻzgarishlarda yangilanishi kerak. Maʼlumot yangilanishlari reaktiv namunalarga amal qilgani sababli, maʼlumotlarni oʻzgartirish uchun observable operatorlari bilan integratsiya qilishingiz mumkin. |
+| Shablonga asoslangan formalar | Shablonda oʻzgarishlar kiritilganda komponentdagi maʼlumotlar modelini yangilash uchun ikki tomonlama maʼlumot bogʻlash bilan oʻzgaruvchanlikka (mutability) tayanadi. Ikki tomonlama maʼlumot bogʻlashdan foydalanilganda maʼlumotlar modelida kuzatish uchun noyob oʻzgarishlar boʻlmagani sababli, oʻzgarishlarni aniqlash yangilanishlar qachon zarurligini aniqlashda kamroq samarali boʻladi.                                                                                                                                                              |
 
-The difference is demonstrated in the previous examples that use the favorite-color input element.
+Bu farq sevimli rang input elementidan foydalanadigan oldingi misollarda koʻrsatilgan.
 
-- With reactive forms, the **`FormControl` instance** always returns a new value when the control's value is updated
-- With template-driven forms, the **favorite color property** is always modified to its new value
+- Reaktiv formalarda **`FormControl` nusxasi** kontrol qiymati yangilanganda har doim yangi qiymat qaytaradi
+- Shablonga asoslangan formalarda **sevimli rang xususiyati** har doim oʻzining yangi qiymatiga oʻzgartiriladi
 
-## Form validation
+## Forma validatsiyasi {#form-validation}
 
-Validation is an integral part of managing any set of forms.
-Whether you're checking for required fields or querying an external API for an existing username, Angular provides a set of built-in validators as well as the ability to create custom validators.
+Validatsiya har qanday formalar toʻplamini boshqarishning ajralmas qismidir.
+Majburiy maydonlarni tekshirayotgan boʻlasizmi yoki mavjud foydalanuvchi nomini tashqi API'dan soʻrayotgan boʻlasizmi, Angular oʻrnatilgan validatorlar toʻplamini, shuningdek maxsus validatorlar yaratish imkoniyatini taqdim etadi.
 
-| Forms                 | Details                                                                                                      |
-| :-------------------- | :----------------------------------------------------------------------------------------------------------- |
-| Reactive forms        | Define custom validators as **functions** that receive a control to validate                                 |
-| Template-driven forms | Tied to template **directives**, and must provide custom validator directives that wrap validation functions |
+| Formalar                     | Tafsilotlar                                                                                                              |
+| :--------------------------- | :----------------------------------------------------------------------------------------------------------------------- |
+| Reaktiv formalar             | Maxsus validatorlarni validatsiya qilinadigan kontrolni qabul qiluvchi **funksiyalar** sifatida aniqlaydi                 |
+| Shablonga asoslangan formalar | Shablon **direktivalariga** bogʻlangan va validatsiya funksiyalarini oʻrab turuvchi maxsus validator direktivalarini taqdim etishi kerak |
 
-For more information, see [Form Validation](guide/forms/form-validation#validating-input-in-reactive-forms).
+Koʻproq maʼlumot uchun [Forma validatsiyasi](guide/forms/form-validation#validating-input-in-reactive-forms) boʻlimiga qarang.
 
-## Testing
+## Testlash {#testing}
 
-Testing plays a large part in complex applications.
-A simpler testing strategy is useful when validating that your forms function correctly.
-Reactive forms and template-driven forms have different levels of reliance on rendering the UI to perform assertions based on form control and form field changes.
-The following examples demonstrate the process of testing forms with reactive and template-driven forms.
+Testlash murakkab ilovalarda katta rol oʻynaydi.
+Formalaringiz toʻgʻri ishlashini tekshirishda soddaroq testlash strategiyasi foydali boʻladi.
+Reaktiv formalar va shablonga asoslangan formalar forma kontroli va forma maydoni oʻzgarishlariga asoslangan tekshiruvlarni (assertion) bajarish uchun UI render qilishga turli darajada bogʻliq.
+Quyidagi misollar reaktiv va shablonga asoslangan formalar bilan formalarni testlash jarayonini koʻrsatadi.
 
-### Testing reactive forms
+### Reaktiv formalarni testlash {#testing-reactive-forms}
 
-Reactive forms provide a relatively straightforward testing strategy because they provide synchronous access to the form and data models, and they can be tested without rendering the UI.
-In these tests, status and data are queried and manipulated through the control without interacting with the change detection cycle.
+Reaktiv formalar nisbatan sodda testlash strategiyasini taqdim etadi, chunki ular forma va maʼlumotlar modellariga sinxron kirishni taʼminlaydi va UI'ni render qilmasdan testlanishi mumkin.
+Bu testlarda holat va maʼlumotlar oʻzgarishlarni aniqlash sikli bilan oʻzaro aloqa qilmasdan, kontrol orqali soʻraladi va boshqariladi.
 
-The following tests use the favorite-color components from previous examples to verify the view-to-model and model-to-view data flows for a reactive form.
+Quyidagi testlar reaktiv forma uchun view'dan modelga va modeldan view'ga maʼlumotlar oqimlarini tekshirish uchun oldingi misollardagi sevimli rang komponentlaridan foydalanadi.
 
 <!--todo: make consistent with other topics -->
 
-#### Verifying view-to-model data flow
+#### View'dan modelga maʼlumotlar oqimini tekshirish {#verifying-view-to-model-data-flow}
 
-The first example performs the following steps to verify the view-to-model data flow.
+Birinchi misol view'dan modelga maʼlumotlar oqimini tekshirish uchun quyidagi qadamlarni bajaradi.
 
-1. Query the view for the form input element, and create a custom "input" event for the test.
-1. Set the new value for the input to _Red_, and dispatch the "input" event on the form input element.
-1. Assert that the component's `favoriteColorControl` value matches the value from the input.
+1. View'dan forma input elementini soʻrang va test uchun maxsus "input" hodisasini yarating.
+1. Input uchun yangi qiymatni _Red_ ga oʻrnating va forma input elementida "input" hodisasini joʻnating (dispatch).
+1. Komponentning `favoriteColorControl` qiymati input'dagi qiymatga mos kelishini tekshiring.
 
-<docs-code header="Favorite color test - view to model" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.spec.ts" region="view-to-model"/>
+<docs-code header="Sevimli rang testi - view'dan modelga" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.spec.ts" region="view-to-model"/>
 
-The next example performs the following steps to verify the model-to-view data flow.
+Keyingi misol modeldan view'ga maʼlumotlar oqimini tekshirish uchun quyidagi qadamlarni bajaradi.
 
-1. Use the `favoriteColorControl`, a `FormControl` instance, to set the new value.
-1. Query the view for the form input element.
-1. Assert that the new value set on the control matches the value in the input.
+1. Yangi qiymatni oʻrnatish uchun `FormControl` nusxasi boʻlgan `favoriteColorControl`'dan foydalaning.
+1. View'dan forma input elementini soʻrang.
+1. Kontrolda oʻrnatilgan yangi qiymat input'dagi qiymatga mos kelishini tekshiring.
 
-<docs-code header="Favorite color test - model to view" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.spec.ts" region="model-to-view"/>
+<docs-code header="Sevimli rang testi - modeldan view'ga" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.spec.ts" region="model-to-view"/>
 
-### Testing template-driven forms
+### Shablonga asoslangan formalarni testlash {#testing-template-driven-forms}
 
-Writing tests with template-driven forms requires a detailed knowledge of the change detection process and an understanding of how directives run on each cycle to ensure that elements are queried, tested, or changed at the correct time.
+Shablonga asoslangan formalar bilan testlar yozish elementlar toʻgʻri vaqtda soʻralishi, testlanishi yoki oʻzgartirilishini taʼminlash uchun oʻzgarishlarni aniqlash jarayonini batafsil bilishni va direktivalar har bir siklda qanday ishlashini tushunishni talab qiladi.
 
-The following tests use the favorite color components mentioned earlier to verify the data flows from view to model and model to view for a template-driven form.
+Quyidagi testlar shablonga asoslangan forma uchun view'dan modelga va modeldan view'ga maʼlumotlar oqimlarini tekshirish uchun avval aytib oʻtilgan sevimli rang komponentlaridan foydalanadi.
 
-The following test verifies the data flow from view to model.
+Quyidagi test view'dan modelga maʼlumotlar oqimini tekshiradi.
 
-<docs-code header="Favorite color test - view to model" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.spec.ts" region="view-to-model"/>
+<docs-code header="Sevimli rang testi - view'dan modelga" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.spec.ts" region="view-to-model"/>
 
-Here are the steps performed in the view to model test.
+View'dan modelga testida bajariladigan qadamlar quyidagilar.
 
-1. Query the view for the form input element, and create a custom "input" event for the test.
-1. Set the new value for the input to _Red_, and dispatch the "input" event on the form input element.
-1. Run change detection through the test fixture.
-1. Assert that the component `favoriteColor` property value matches the value from the input.
+1. View'dan forma input elementini soʻrang va test uchun maxsus "input" hodisasini yarating.
+1. Input uchun yangi qiymatni _Red_ ga oʻrnating va forma input elementida "input" hodisasini joʻnating.
+1. Test fixture orqali oʻzgarishlarni aniqlashni ishga tushiring.
+1. Komponentning `favoriteColor` xususiyati qiymati input'dagi qiymatga mos kelishini tekshiring.
 
-The following test verifies the data flow from model to view.
+Quyidagi test modeldan view'ga maʼlumotlar oqimini tekshiradi.
 
-<docs-code header="Favorite color test - model to view" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.spec.ts" region="model-to-view"/>
+<docs-code header="Sevimli rang testi - modeldan view'ga" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.spec.ts" region="model-to-view"/>
 
-Here are the steps performed in the model to view test.
+Modeldan view'ga testida bajariladigan qadamlar quyidagilar.
 
-1. Use the component instance to set the value of the `favoriteColor` property.
-1. Run change detection through the test fixture.
-1. Use `await fixture.whenStable()` to wait for the next rendering.
-1. Query the view for the form input element.
-1. Assert that the input value matches the value of the `favoriteColor` property in the component instance.
+1. `favoriteColor` xususiyati qiymatini oʻrnatish uchun komponent nusxasidan foydalaning.
+1. Test fixture orqali oʻzgarishlarni aniqlashni ishga tushiring.
+1. Keyingi render qilishni kutish uchun `await fixture.whenStable()`'dan foydalaning.
+1. View'dan forma input elementini soʻrang.
+1. Input qiymati komponent nusxasidagi `favoriteColor` xususiyati qiymatiga mos kelishini tekshiring.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-To learn more about reactive forms, see the following guides:
+Reaktiv formalar haqida koʻproq bilish uchun quyidagi qoʻllanmalarga qarang:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/reactive-forms" title="Reactive forms"/>
-  <docs-pill href="guide/forms/form-validation#validating-input-in-reactive-forms" title="Form validation"/>
-  <docs-pill href="guide/forms/dynamic-forms" title="Dynamic forms"/>
+  <docs-pill href="guide/forms/reactive-forms" title="Reaktiv formalar"/>
+  <docs-pill href="guide/forms/form-validation#validating-input-in-reactive-forms" title="Forma validatsiyasi"/>
+  <docs-pill href="guide/forms/dynamic-forms" title="Dinamik formalar"/>
 </docs-pill-row>
 
-To learn more about template-driven forms, see the following guides:
+Shablonga asoslangan formalar haqida koʻproq bilish uchun quyidagi qoʻllanmalarga qarang:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/template-driven-forms" title="Template Driven Forms tutorial" />
-  <docs-pill href="guide/forms/form-validation#validating-input-in-template-driven-forms" title="Form validation" />
-  <docs-pill href="api/forms/NgForm" title="NgForm directive API reference" />
+  <docs-pill href="guide/forms/template-driven-forms" title="Shablonga asoslangan formalar darsligi" />
+  <docs-pill href="guide/forms/form-validation#validating-input-in-template-driven-forms" title="Forma validatsiyasi" />
+  <docs-pill href="api/forms/NgForm" title="NgForm direktivasi API maʼlumotnomasi" />
 </docs-pill-row>

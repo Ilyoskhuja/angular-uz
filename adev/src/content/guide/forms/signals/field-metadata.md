@@ -1,12 +1,12 @@
-# Field metadata
+# Maydon metamaʼlumotlari
 
-Field metadata is reactive data you can attach to an individual field. Angular's built-in constraint validators like `required()` and `min()` use this system internally. In other words, every time you call a validator, you're contributing to a metadata key for that particular field.
+Maydon metamaʼlumotlari (field metadata) — bu alohida maydonga biriktirishingiz mumkin boʻlgan reaktiv maʼlumotlar. Angular'ning `required()` va `min()` kabi oʻrnatilgan cheklov validatorlari bu tizimdan ichki ravishda foydalanadi. Boshqacha aytganda, har safar validatorni chaqirganingizda siz oʻsha maydon uchun metamaʼlumot kalitiga hissa qoʻshasiz.
 
-This guide covers the metadata system in depth: how reducers combine contributions from multiple schema rules, how to write custom reducers, how reading composes with `hasMetadata()`, and how managed metadata ties lifecycle-aware objects to individual fields.
+Ushbu qoʻllanma metamaʼlumotlar tizimini chuqur yoritadi: reducer'lar bir nechta sxema qoidalaridan kelgan hissalarni qanday birlashtiradi, maxsus reducer'larni qanday yozish, oʻqish `hasMetadata()` bilan qanday uygʻunlashadi va boshqariladigan metamaʼlumotlar (managed metadata) hayot siklini hisobga oluvchi obyektlarni alohida maydonlarga qanday bogʻlaydi.
 
-## You have already been using metadata
+## Siz metamaʼlumotlardan allaqachon foydalanmoqdasiz {#you-have-already-been-using-metadata}
 
-When you call `required()` in a schema and read `.required()` on the resulting field in a template, you are using the metadata system. `state.required` is not a special-case property. It is a convenience getter that returns the current value of a built-in `REQUIRED` metadata key.
+Sxemada `required()`'ni chaqirib, shablonda hosil boʻlgan maydondagi `.required()`'ni oʻqiganingizda siz metamaʼlumotlar tizimidan foydalanasiz. `state.required` alohida holat uchun yaratilgan maxsus xususiyat emas. Bu oʻrnatilgan `REQUIRED` metamaʼlumot kalitining joriy qiymatini qaytaruvchi qulay getter.
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -36,38 +36,38 @@ export class Registration {
 }
 ```
 
-Calling `required(path.username)` contributes a value to the `REQUIRED` metadata key on that field. Reading `registrationForm.username().required()` returns the accumulated value. The metadata key is the bridge connecting the two.
+`required(path.username)`'ni chaqirish oʻsha maydondagi `REQUIRED` metamaʼlumot kalitiga qiymat qoʻshadi. `registrationForm.username().required()`'ni oʻqish toʻplangan qiymatni qaytaradi. Metamaʼlumot kaliti bu ikkisini bogʻlovchi koʻprikdir.
 
-Several built-in constraint validators follow this pattern:
+Bir nechta oʻrnatilgan cheklov validatorlari shu namunaga amal qiladi:
 
-| Validator     | Metadata key               | Type                  | `FieldState` getter |
-| ------------- | -------------------------- | --------------------- | ------------------- |
-| `required()`  | `REQUIRED`                 | `boolean`             | `required`          |
-| `min()`       | `MIN` selects `MIN_NUMBER` | `number \| undefined` | `min`               |
-| `max()`       | `MAX` selects `MAX_NUMBER` | `number \| undefined` | `max`               |
-| `minDate()`   | `MIN` selects `MIN_DATE`   | `Date \| undefined`   | `min`               |
-| `maxDate()`   | `MAX` selects `MAX_DATE`   | `Date \| undefined`   | `max`               |
-| `minLength()` | `MIN_LENGTH`               | `number \| undefined` | `minLength`         |
-| `maxLength()` | `MAX_LENGTH`               | `number \| undefined` | `maxLength`         |
-| `pattern()`   | `PATTERN`                  | `RegExp[]`            | `pattern`           |
+| Validator     | Metamaʼlumot kaliti        | Turi                  | `FieldState` getter'i |
+| ------------- | -------------------------- | --------------------- | --------------------- |
+| `required()`  | `REQUIRED`                 | `boolean`             | `required`            |
+| `min()`       | `MIN` `MIN_NUMBER`'ni tanlaydi | `number \| undefined` | `min`             |
+| `max()`       | `MAX` `MAX_NUMBER`'ni tanlaydi | `number \| undefined` | `max`             |
+| `minDate()`   | `MIN` `MIN_DATE`'ni tanlaydi   | `Date \| undefined`   | `min`             |
+| `maxDate()`   | `MAX` `MAX_DATE`'ni tanlaydi   | `Date \| undefined`   | `max`             |
+| `minLength()` | `MIN_LENGTH`               | `number \| undefined` | `minLength`           |
+| `maxLength()` | `MAX_LENGTH`               | `number \| undefined` | `maxLength`           |
+| `pattern()`   | `PATTERN`                  | `RegExp[]`            | `pattern`             |
 
-Non-constraint validators like `email()` and `validate()` do not contribute to metadata. They run their check and surface a validation error, but they do not publish a reactive value for templates to read.
+`email()` va `validate()` kabi cheklov boʻlmagan validatorlar metamaʼlumotlarga hissa qoʻshmaydi. Ular oʻz tekshiruvini bajarib, validatsiya xatosini chiqaradi, lekin shablonlar oʻqishi uchun reaktiv qiymat eʼlon qilmaydi.
 
-## When to use custom metadata
+## Maxsus metamaʼlumotlardan qachon foydalanish kerak {#when-to-use-custom-metadata}
 
-When you need reactive data attached to a specific field that built-in state signals like `valid()`, `disabled()`, and `touched()` do not cover, use **custom metadata**.
+Maʼlum bir maydonga biriktirilgan, `valid()`, `disabled()` va `touched()` kabi oʻrnatilgan holat signallari qamrab olmaydigan reaktiv maʼlumotlar kerak boʻlganda **maxsus metamaʼlumotlardan** foydalaning.
 
-Some examples might include:
+Baʼzi misollar quyidagilarni oʻz ichiga olishi mumkin:
 
-- **Configuration attached to reusable field schemas.** A currency symbol on a price field, so any template or custom control rendering the field can display it. Or `MIN_DATE` and `MAX_DATE` on a date field, read by a reusable range picker.
-- **Parsed values shared between rules on one field.** A phone number parsed once into E.164 format, so a format validator and a uniqueness check both read the same canonical form without reparsing.
-- **Display hints assembled from the field's state.** A severity level (`'info' | 'warning' | 'error'`) that the UI maps to badges and icons, or a context-aware help message that changes based on what the user has typed and which other fields are filled in.
+- **Qayta foydalaniladigan maydon sxemalariga biriktirilgan konfiguratsiya.** Narx maydonidagi valyuta belgisi, shunda maydonni render qiluvchi har qanday shablon yoki maxsus kontrol uni koʻrsata oladi. Yoki sana maydonidagi `MIN_DATE` va `MAX_DATE`, ularni qayta foydalaniladigan diapazon tanlagich oʻqiydi.
+- **Bir maydondagi qoidalar oʻrtasida ulashiladigan tahlil qilingan qiymatlar.** Bir marta E.164 formatiga tahlil qilingan telefon raqami, shunda format validatori ham, noyoblik tekshiruvi ham qayta tahlil qilmasdan bir xil kanonik shaklni oʻqiydi.
+- **Maydon holatidan yigʻilgan koʻrsatish koʻrsatmalari.** UI belgilar (badge) va ikonkalarga moslashtiradigan jiddiylik darajasi (`'info' | 'warning' | 'error'`) yoki foydalanuvchi nima kiritgani va boshqa qaysi maydonlar toʻldirilganiga qarab oʻzgaradigan kontekstga mos yordam xabari.
 
-If you find yourself keeping a parallel `Map<fieldKey, value>` alongside your form to track something per field, that is a sign metadata is the right tool. Metadata stays colocated with the schema, stays reactive, and participates in the field's lifecycle.
+Agar formangiz yonida har bir maydon boʻyicha nimanidir kuzatish uchun parallel `Map<fieldKey, value>` saqlayotganingizni sezsangiz, bu metamaʼlumotlar toʻgʻri vosita ekanligining belgisi. Metamaʼlumotlar sxema bilan birga joylashgan boʻlib qoladi, reaktiv boʻlib qoladi va maydonning hayot siklida ishtirok etadi.
 
-## Creating a metadata key
+## Metamaʼlumot kalitini yaratish {#creating-a-metadata-key}
 
-When you want to create a custom key, call `createMetadataKey<TWrite>()`. The type parameter describes the value your schema rules will contribute.
+Maxsus kalit yaratmoqchi boʻlganingizda `createMetadataKey<TWrite>()`'ni chaqiring. Tur parametri sxema qoidalaringiz hissa qoʻshadigan qiymatni tavsiflaydi.
 
 ```ts
 import {createMetadataKey} from '@angular/forms/signals';
@@ -75,13 +75,13 @@ import {createMetadataKey} from '@angular/forms/signals';
 export const USERNAME_HELP = createMetadataKey<string>();
 ```
 
-Every `createMetadataKey()` call creates a new unique key. Two calls with matching type parameters are still two distinct keys, so define each key once at module scope and import it wherever it's needed.
+Har bir `createMetadataKey()` chaqiruvi yangi noyob kalit yaratadi. Bir xil tur parametrlariga ega ikki chaqiruv hali ham ikkita alohida kalit hisoblanadi, shuning uchun har bir kalitni modul darajasida bir marta aniqlang va kerak boʻlgan joyda import qiling.
 
-NOTE: A key created without a reducer uses "override" semantics by default: the last contribution wins if multiple rules set the key.
+NOTE: Reducer'siz yaratilgan kalit sukut boʻyicha "override" (qayta yozish) semantikasidan foydalanadi: agar bir nechta qoida kalitni oʻrnatsa, oxirgi hissa gʻolib boʻladi.
 
-## Setting values from a schema
+## Sxemadan qiymatlarni oʻrnatish {#setting-values-from-a-schema}
 
-When you need to register a value for the key on a specific field, use `metadata(path, key, logic)` inside a schema function.
+Maʼlum bir maydonda kalit uchun qiymatni roʻyxatdan oʻtkazish kerak boʻlganda sxema funksiyasi ichida `metadata(path, key, logic)`'dan foydalaning.
 
 ```angular-ts
 import {Component, computed, signal} from '@angular/core';
@@ -124,19 +124,19 @@ export class Registration {
 }
 ```
 
-The logic function receives the field's context, which exposes `value` as a signal of the field's current value, `state` as the field's `FieldState`, and methods like `valueOf(path)` and `stateOf(path)` for reading other fields in the same form. Any signal the function reads becomes a reactive dependency: when `value()` changes, the metadata recomputes, and any template reading the key updates.
+Mantiq funksiyasi maydon kontekstini qabul qiladi, bu kontekst maydonning joriy qiymati signali sifatida `value`'ni, maydonning `FieldState`'i sifatida `state`'ni va shu formadagi boshqa maydonlarni oʻqish uchun `valueOf(path)` va `stateOf(path)` kabi metodlarni ochib beradi. Funksiya oʻqigan har qanday signal reaktiv bogʻliqlikka aylanadi: `value()` oʻzgarganda metamaʼlumot qayta hisoblanadi va kalitni oʻqiyotgan har qanday shablon yangilanadi.
 
-## Reading metadata from a field
+## Maydondan metamaʼlumotlarni oʻqish {#reading-metadata-from-a-field}
 
-`hasMetadata(key)` returns `true` if any schema rule registered the key on this field. `state.metadata(key)` returns `undefined` when no rule has registered the key, and a signal of the current reduced value otherwise.
+`hasMetadata(key)` agar biror sxema qoidasi bu maydonda kalitni roʻyxatdan oʻtkazgan boʻlsa `true` qaytaradi. `state.metadata(key)` hech bir qoida kalitni roʻyxatdan oʻtkazmagan boʻlsa `undefined`, aks holda joriy qisqartirilgan (reduced) qiymat signalini qaytaradi.
 
 ```ts
 registrationForm.username().hasMetadata(USERNAME_HELP); // true if any metadata() rule registered this key
 ```
 
-The shape of that inner value (whether it can itself be `undefined`, what type it holds) depends on the key's reducer. Reducers are covered in the next section.
+Bu ichki qiymatning shakli (uning oʻzi `undefined` boʻlishi mumkinmi, qanday turni saqlaydi) kalitning reducer'iga bogʻliq. Reducer'lar keyingi boʻlimda yoritiladi.
 
-When the key may not be registered, gate the read with `hasMetadata()`:
+Kalit roʻyxatdan oʻtkazilmagan boʻlishi mumkin boʻlganda oʻqishni `hasMetadata()` bilan himoyalang:
 
 ```angular-html
 @if (registrationForm.username().hasMetadata(USERNAME_HELP)) {
@@ -144,27 +144,27 @@ When the key may not be registered, gate the read with `hasMetadata()`:
 }
 ```
 
-When you know a rule always registers the key (because the schema in the same file does so), you can skip the `hasMetadata()` check and use optional chaining as a compact alternative:
+Qoida kalitni har doim roʻyxatdan oʻtkazishini bilsangiz (chunki shu fayldagi sxema buni qiladi), `hasMetadata()` tekshiruvini oʻtkazib yuborib, ixcham muqobil sifatida ixtiyoriy zanjirlashdan (optional chaining) foydalanishingiz mumkin:
 
 ```ts
 const message = registrationForm.username().metadata(USERNAME_HELP)?.();
 // message: string | undefined
 ```
 
-Or, when the rule is guaranteed to have registered, drop the optional chain and assert:
+Yoki qoida roʻyxatdan oʻtkazganiga kafolat boʻlsa, ixtiyoriy zanjirni olib tashlab, tasdiqlang (assert):
 
 ```ts
 const message = registrationForm.username().metadata(USERNAME_HELP)!();
 // message: string | undefined (still, because the inner value may be undefined)
 ```
 
-The component example above uses optional chaining inside a `computed()` so the template binds to a plain `string`, with an empty fallback for the initial frame.
+Yuqoridagi komponent misoli `computed()` ichida ixtiyoriy zanjirlashdan foydalanadi, shunda shablon dastlabki kadr uchun boʻsh zaxira qiymat bilan oddiy `string`'ga bogʻlanadi.
 
-This is the whole API for a single contributor. The next section covers what happens when more than one schema rule contributes to the same key, and how to combine those contributions with reducers.
+Bu bitta hissa qoʻshuvchi uchun butun API. Keyingi boʻlim bir nechta sxema qoidasi bir xil kalitga hissa qoʻshganda nima sodir boʻlishini va bu hissalarni reducer'lar bilan qanday birlashtirishni yoritadi.
 
-## Combining contributions with reducers
+## Hissalarni reducer'lar bilan birlashtirish {#combining-contributions-with-reducers}
 
-Override semantics work when only one rule contributes to a key on a given field. As soon as two rules contribute, the first value is silently discarded:
+Override semantikasi berilgan maydondagi kalitga faqat bitta qoida hissa qoʻshganda ishlaydi. Ikki qoida hissa qoʻshishi bilanoq birinchi qiymat jimgina tashlab yuboriladi:
 
 ```ts
 const HELP = createMetadataKey<string>();
@@ -175,9 +175,9 @@ form(model, (path) => {
 });
 ```
 
-After both rules run, `state.metadata(HELP)!()` returns only the second message. This is almost never what you want. Contributions often come from different sources: two schemas composed with `apply()` that each attach help text, or multiple validation rules that each contribute a hint.
+Ikkala qoida ishlagandan keyin `state.metadata(HELP)!()` faqat ikkinchi xabarni qaytaradi. Bu deyarli hech qachon siz xohlagan narsa emas. Hissalar koʻpincha turli manbalardan keladi: `apply()` bilan birlashtirilgan, har biri yordam matni biriktiruvchi ikki sxema yoki har biri koʻrsatma qoʻshuvchi bir nechta validatsiya qoidasi.
 
-To combine contributions, pass a reducer to `createMetadataKey()`. A reducer describes how to fold individual values into an accumulated result:
+Hissalarni birlashtirish uchun `createMetadataKey()`'ga reducer uzating. Reducer alohida qiymatlarni toʻplangan natijaga qanday yigʻishni tavsiflaydi:
 
 ```ts
 import {createMetadataKey, MetadataReducer} from '@angular/forms/signals';
@@ -195,48 +195,48 @@ form(model, (path) => {
 // ]
 ```
 
-Notice the two type parameters on `createMetadataKey<TWrite, TAcc>`: the first is the type each rule contributes, the second is the type the reducer produces. With `list()`, rules contribute a `string` and the field reads back a `string[]`.
+`createMetadataKey<TWrite, TAcc>`'dagi ikki tur parametriga eʼtibor bering: birinchisi har bir qoida hissa qoʻshadigan tur, ikkinchisi reducer hosil qiladigan tur. `list()` bilan qoidalar `string` hissa qoʻshadi va maydon `string[]` oʻqib qaytaradi.
 
-### Built-in reducers
+### Oʻrnatilgan reducer'lar {#built-in-reducers}
 
-Angular provides six built-in reducers on the [`MetadataReducer`](api/forms/signals/MetadataReducer) namespace. `override()` has two forms with slightly different semantics, listed separately in the table:
+Angular [`MetadataReducer`](api/forms/signals/MetadataReducer) nomlar maydonida oltita oʻrnatilgan reducer'ni taqdim etadi. `override()` biroz farqli semantikaga ega ikki shaklga ega boʻlib, jadvalda alohida keltirilgan:
 
-| Reducer        | Accumulator type      | What it does                                                           | Initial value |
-| -------------- | --------------------- | ---------------------------------------------------------------------- | ------------- |
-| `list<T>()`    | `T[]`                 | Accepts `T \| undefined` contributions; appends non-`undefined` values | `[]`          |
-| `or()`         | `boolean`             | `true` if any contribution is `true`                                   | `false`       |
-| `and()`        | `boolean`             | `true` only if every contribution is `true`                            | `true`        |
-| `min()`        | `number \| undefined` | Keeps the smallest contributed number                                  | `undefined`   |
-| `max()`        | `number \| undefined` | Keeps the largest contributed number                                   | `undefined`   |
-| `override()`   | `T \| undefined`      | Last contribution replaces previous (the default)                      | `undefined`   |
-| `override(fn)` | `T`                   | Same, but with a provided initial value                                | `fn()`        |
+| Reducer        | Akkumulyator turi     | Nima qiladi                                                                   | Boshlangʻich qiymat |
+| -------------- | --------------------- | ----------------------------------------------------------------------------- | ------------------- |
+| `list<T>()`    | `T[]`                 | `T \| undefined` hissalarni qabul qiladi; `undefined` boʻlmagan qiymatlarni qoʻshadi | `[]`           |
+| `or()`         | `boolean`             | Biror hissa `true` boʻlsa `true`                                              | `false`             |
+| `and()`        | `boolean`             | Faqat har bir hissa `true` boʻlsa `true`                                      | `true`              |
+| `min()`        | `number \| undefined` | Hissa qoʻshilgan eng kichik sonni saqlaydi                                    | `undefined`         |
+| `max()`        | `number \| undefined` | Hissa qoʻshilgan eng katta sonni saqlaydi                                     | `undefined`         |
+| `override()`   | `T \| undefined`      | Oxirgi hissa oldingilarini almashtiradi (sukut boʻyicha)                      | `undefined`         |
+| `override(fn)` | `T`                   | Xuddi shu, lekin berilgan boshlangʻich qiymat bilan                           | `fn()`              |
 
-`list()` is the only built-in reducer whose item type is wider than its accumulator's element type. A rule may contribute `undefined` and the reducer will silently drop it. This is how the built-in `PATTERN` key handles dynamic `pattern()` rules whose logic function returns `undefined`: the `undefined` contribution is skipped rather than included in the final regex list.
+`list()` — element turi akkumulyatorining element turidan kengroq boʻlgan yagona oʻrnatilgan reducer. Qoida `undefined` hissa qoʻshishi mumkin va reducer uni jimgina tashlab yuboradi. Oʻrnatilgan `PATTERN` kaliti mantiq funksiyasi `undefined` qaytaradigan dinamik `pattern()` qoidalarini shunday qayta ishlaydi: `undefined` hissa yakuniy regex roʻyxatiga kiritilmaydi, balki oʻtkazib yuboriladi.
 
-### How built-in validator keys use reducers
+### Oʻrnatilgan validator kalitlari reducer'lardan qanday foydalanadi {#how-built-in-validator-keys-use-reducers}
 
-While `MetadataReducer.min()` and `MetadataReducer.max()` are reducers, you may be surprised to learn that they are not validators. `MetadataReducer.min()` picks the smallest contribution to a key, while the `min()` validator enforces a lower bound on a field's value. They share a name but solve different problems.
+`MetadataReducer.min()` va `MetadataReducer.max()` reducer'lar boʻlsa-da, ular validator emasligini bilib hayron qolishingiz mumkin. `MetadataReducer.min()` kalitga qoʻshilgan eng kichik hissani tanlaydi, `min()` validatori esa maydon qiymati uchun quyi chegarani taʼminlaydi. Ular bir xil nomga ega, lekin turli masalalarni hal qiladi.
 
-The built-in constraint keys pick their reducers based on what "strictest" means for the constraint, which is often the opposite of what the key's name suggests:
+Oʻrnatilgan cheklov kalitlari oʻz reducer'larini cheklov uchun "eng qattiq" nimani anglatishiga qarab tanlaydi, bu koʻpincha kalit nomi taklif qilganining teskarisi boʻladi:
 
-| Key          | Reducer          | Reasoning                                                                                                                              |
-| ------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `REQUIRED`   | `or()`           | If any `required()` rule evaluates to `true`, the field is required.                                                                   |
-| `MIN_NUMBER` | `max()`          | A minimum-number constraint is strictest when largest. If one rule requires `>= 5` and another `>= 10`, the effective minimum is `10`. |
-| `MIN_DATE`   | `max()`          | Same logic as `MIN_NUMBER`: the latest required date wins.                                                                             |
-| `MAX_NUMBER` | `min()`          | A maximum-number constraint is strictest when smallest. If one rule caps at `100` and another at `50`, the effective maximum is `50`.  |
-| `MAX_DATE`   | `min()`          | Same logic as `MAX_NUMBER`: the earliest allowed date wins.                                                                            |
-| `MIN_LENGTH` | `max()`          | Same logic as `MIN_NUMBER`: the longest required length wins.                                                                          |
-| `MAX_LENGTH` | `min()`          | Same logic as `MAX_NUMBER`: the shortest allowed length wins.                                                                          |
-| `PATTERN`    | `list<RegExp>()` | Each `pattern()` call contributes a regex; the value must match all of them.                                                           |
+| Kalit        | Reducer          | Asos                                                                                                                                       |
+| ------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `REQUIRED`   | `or()`           | Agar biror `required()` qoidasi `true` deb baholansa, maydon majburiy.                                                                     |
+| `MIN_NUMBER` | `max()`          | Minimal son cheklovi eng katta boʻlganda eng qattiq. Agar bir qoida `>= 5`, boshqasi `>= 10` talab qilsa, amaldagi minimum `10`.          |
+| `MIN_DATE`   | `max()`          | `MIN_NUMBER` bilan bir xil mantiq: eng kech talab qilingan sana gʻolib boʻladi.                                                            |
+| `MAX_NUMBER` | `min()`          | Maksimal son cheklovi eng kichik boʻlganda eng qattiq. Agar bir qoida `100`, boshqasi `50` bilan cheklasa, amaldagi maksimum `50`.        |
+| `MAX_DATE`   | `min()`          | `MAX_NUMBER` bilan bir xil mantiq: eng erta ruxsat etilgan sana gʻolib boʻladi.                                                            |
+| `MIN_LENGTH` | `max()`          | `MIN_NUMBER` bilan bir xil mantiq: eng uzun talab qilingan uzunlik gʻolib boʻladi.                                                         |
+| `MAX_LENGTH` | `min()`          | `MAX_NUMBER` bilan bir xil mantiq: eng qisqa ruxsat etilgan uzunlik gʻolib boʻladi.                                                        |
+| `PATTERN`    | `list<RegExp>()` | Har bir `pattern()` chaqiruvi regex hissa qoʻshadi; qiymat ularning barchasiga mos kelishi kerak.                                           |
 
-`MIN` and `MAX` are selection keys. They point to the concrete key that matches the field's value type, such as `MIN_NUMBER` for `min()` and `MIN_DATE` for `minDate()`. This is why `field().min()` and `field().max()` work for both numeric and date fields.
+`MIN` va `MAX` tanlov kalitlaridir. Ular maydonning qiymat turiga mos keladigan aniq kalitga ishora qiladi, masalan `min()` uchun `MIN_NUMBER` va `minDate()` uchun `MIN_DATE`. Shuning uchun `field().min()` va `field().max()` sonli maydonlar uchun ham, sana maydonlari uchun ham ishlaydi.
 
-This pairing of "strictest wins" is why calling `min(path.age, 18)` and `min(path.age, 21)` in two composed schemas works correctly. Each call registers its own validator that enforces its specific bound (so a value below either bound fails validation). Separately, each call contributes to the `MIN_NUMBER` key, and `state.min!()` reports the aggregate (`21`) so UI and custom controls can read the effective minimum.
+"Eng qattigʻi gʻolib" tamoyilining bu juftligi ikki birlashtirilgan sxemada `min(path.age, 18)` va `min(path.age, 21)`'ni chaqirish nima uchun toʻgʻri ishlashini tushuntiradi. Har bir chaqiruv oʻz aniq chegarasini taʼminlovchi oʻz validatorini roʻyxatdan oʻtkazadi (shuning uchun ikkala chegaradan past qiymat validatsiyadan oʻtmaydi). Bundan alohida, har bir chaqiruv `MIN_NUMBER` kalitiga hissa qoʻshadi va `state.min!()` jamlangan qiymatni (`21`) xabar qiladi, shunda UI va maxsus kontrollar amaldagi minimumni oʻqiy oladi.
 
-### Writing a custom reducer
+### Maxsus reducer yozish {#writing-a-custom-reducer}
 
-When you want to write your own reducer, implement an object matching the `MetadataReducer<TAcc, TItem>` interface:
+Oʻz reducer'ingizni yozmoqchi boʻlganingizda `MetadataReducer<TAcc, TItem>` interfeysiga mos obyektni amalga oshiring:
 
 ```ts
 interface MetadataReducer<TAcc, TItem> {
@@ -245,7 +245,7 @@ interface MetadataReducer<TAcc, TItem> {
 }
 ```
 
-You can define a custom reducer when none of the built-ins match the semantics you need. For example, a `SEVERITY` key that keeps the most severe level contributed by any rule:
+Oʻrnatilganlarning hech biri sizga kerakli semantikaga mos kelmasa, maxsus reducer aniqlashingiz mumkin. Masalan, biror qoida tomonidan qoʻshilgan eng jiddiy darajani saqlaydigan `SEVERITY` kaliti:
 
 ```ts
 import {createMetadataKey, type MetadataReducer} from '@angular/forms/signals';
@@ -265,7 +265,7 @@ const maxSeverity: MetadataReducer<Severity | undefined, Severity> = {
 export const SEVERITY = createMetadataKey<Severity, Severity | undefined>(maxSeverity);
 ```
 
-Any number of rules can now contribute a severity, and the field reports the highest:
+Endi istalgan sondagi qoidalar jiddiylik darajasi hissa qoʻshishi mumkin va maydon eng yuqorisini xabar qiladi:
 
 ```ts
 form(model, (path) => {
@@ -277,17 +277,17 @@ form(model, (path) => {
 });
 ```
 
-The reducer runs whenever any contribution's signals change, so `state.metadata(SEVERITY)!()` stays in sync with the current worst case across all rules.
+Reducer biror hissaning signallari oʻzgarganda ishga tushadi, shuning uchun `state.metadata(SEVERITY)!()` barcha qoidalar boʻylab joriy eng yomon holat bilan sinxron boʻlib qoladi.
 
-TIP: Keep your reducers pure: `reduce()` should depend only on its two arguments, and `getInitial()` should return the same value every time it is called. Reducers run inside a reactive computation that re-executes when any contribution's signals change, so impure reducers produce inconsistent metadata.
+TIP: Reducer'laringizni toza (pure) saqlang: `reduce()` faqat oʻzining ikki argumentiga bogʻliq boʻlishi, `getInitial()` esa har safar chaqirilganda bir xil qiymat qaytarishi kerak. Reducer'lar biror hissaning signallari oʻzgarganda qayta bajariladigan reaktiv hisoblash ichida ishlaydi, shuning uchun toza boʻlmagan reducer'lar nomuvofiq metamaʼlumotlar hosil qiladi.
 
-## Attaching lifecycle-aware objects with managed metadata
+## Boshqariladigan metamaʼlumotlar bilan hayot siklini hisobga oluvchi obyektlarni biriktirish {#attaching-lifecycle-aware-objects-with-managed-metadata}
 
-Managed metadata stores a lifecycle-aware object on a field instead of a reactive value. Use it for per-field objects like a `resource()` that fetches external data, an `effect()` that syncs to an outside system, or a service handle scoped to a single field.
+Boshqariladigan metamaʼlumotlar (managed metadata) maydonda reaktiv qiymat oʻrniga hayot siklini hisobga oluvchi obyektni saqlaydi. Undan tashqi maʼlumotlarni yuklovchi `resource()`, tashqi tizim bilan sinxronlovchi `effect()` yoki bitta maydon doirasidagi servis tutqichi kabi har bir maydonga xos obyektlar uchun foydalaning.
 
-### Creating a managed key
+### Boshqariladigan kalit yaratish {#creating-a-managed-key}
 
-When you want to define a managed key, call `createManagedMetadataKey<TRead, TWrite>(create)`. The `create` function you pass produces the value the key holds.
+Boshqariladigan kalit aniqlamoqchi boʻlganingizda `createManagedMetadataKey<TRead, TWrite>(create)`'ni chaqiring. Siz uzatadigan `create` funksiyasi kalit saqlaydigan qiymatni hosil qiladi.
 
 ```ts
 import {Signal} from '@angular/core';
@@ -308,15 +308,15 @@ export const URL_PREVIEW = createManagedMetadataKey((_state, url: Signal<string 
 });
 ```
 
-The `create` function receives the field's `FieldState` and a `Signal<TAcc>` of data contributed by `metadata()` rules for this key, and returns whatever object should live on the field. The return value is stored as-is: unlike non-managed keys, the framework does not wrap it in a `computed()`.
+`create` funksiyasi maydonning `FieldState`'ini va bu kalit uchun `metadata()` qoidalari hissa qoʻshgan maʼlumotlarning `Signal<TAcc>`'ini qabul qiladi va maydonda yashashi kerak boʻlgan har qanday obyektni qaytaradi. Qaytarilgan qiymat qanday boʻlsa shunday saqlanadi: boshqarilmaydigan kalitlardan farqli oʻlaroq, freymvork uni `computed()`'ga oʻramaydi.
 
-`create` runs once when a field is constructed, inside the field's injection context. That lets you call `inject()`, `resource()`, and `effect()` inside `create`, and ties cleanup to the field's lifecycle: when the field is destroyed, Angular destroys the injection context, and any `resource()`, `effect()`, or `DestroyRef` callback you registered there cleans up automatically.
+`create` maydon yaratilganda bir marta, maydonning inyeksiya kontekstida ishlaydi. Bu `create` ichida `inject()`, `resource()` va `effect()`'ni chaqirish imkonini beradi va tozalashni maydonning hayot sikliga bogʻlaydi: maydon yoʻq qilinganda Angular inyeksiya kontekstini yoʻq qiladi va u yerda roʻyxatdan oʻtkazgan har qanday `resource()`, `effect()` yoki `DestroyRef` callback'i avtomatik tozalanadi.
 
-Because `create` itself is not reactive, any behavior that needs to respond to signal changes has to live inside an `effect()`, `resource()`, or `httpResource()` set up during that initial call. `URL_PREVIEW` demonstrates the pattern: the `httpResource()` reads the URL signal inside its request function, so the request re-runs whenever the signal changes. The schema rule (`metadata(path.url, URL_PREVIEW, ({value}) => value())`) decides what data to feed in; the managed key decides what to do with it.
+`create`'ning oʻzi reaktiv boʻlmagani sababli, signal oʻzgarishlariga javob berishi kerak boʻlgan har qanday xatti-harakat oʻsha dastlabki chaqiruv davomida oʻrnatilgan `effect()`, `resource()` yoki `httpResource()` ichida yashashi kerak. `URL_PREVIEW` bu namunani koʻrsatadi: `httpResource()` oʻz soʻrov funksiyasi ichida URL signalini oʻqiydi, shuning uchun signal oʻzgarganda soʻrov qayta ishga tushadi. Sxema qoidasi (`metadata(path.url, URL_PREVIEW, ({value}) => value())`) qanday maʼlumot uzatishni hal qiladi; boshqariladigan kalit u bilan nima qilishni hal qiladi.
 
-### Using a managed key in a form
+### Formada boshqariladigan kalitdan foydalanish {#using-a-managed-key-in-a-form}
 
-When you need to use a managed key in a form, register a `metadata()` rule for the key, and then read the returned object from the field state.
+Formada boshqariladigan kalitdan foydalanish kerak boʻlganda kalit uchun `metadata()` qoidasini roʻyxatdan oʻtkazing, keyin qaytarilgan obyektni maydon holatidan oʻqing.
 
 ```angular-ts
 import {Component, computed, signal} from '@angular/core';
@@ -374,24 +374,24 @@ export class LinkEditor {
 }
 ```
 
-Each array item gets its own `URL_PREVIEW` resource because `applyEach` registers the schema rules against each item independently. When the user adds a link, `create` runs for the new item's field. When a link is removed (not shown here, but a common pattern), the framework tears down that field's injector along with the resource.
+Har bir massiv elementi oʻzining `URL_PREVIEW` resursini oladi, chunki `applyEach` sxema qoidalarini har bir element uchun mustaqil roʻyxatdan oʻtkazadi. Foydalanuvchi havola qoʻshganda `create` yangi elementning maydoni uchun ishlaydi. Havola olib tashlanganda (bu yerda koʻrsatilmagan, lekin keng tarqalgan namuna) freymvork oʻsha maydonning injector'ini resurs bilan birga yoʻq qiladi.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-Remember that metadata exists so reactive data can travel with the field through schema composition, accumulate across rules, and tear down with the field's lifecycle. It leverages the same system Angular's built-in validators use, and can be tailored to your own use cases.
+Esda tuting: metamaʼlumotlar reaktiv maʼlumotlar sxema kompozitsiyasi orqali maydon bilan birga sayohat qilishi, qoidalar boʻylab toʻplanishi va maydonning hayot sikli bilan birga yoʻq qilinishi uchun mavjud. U Angular'ning oʻrnatilgan validatorlari foydalanadigan tizimdan foydalanadi va oʻz holatlaringizga moslashtirilishi mumkin.
 
-For detailed API documentation, see:
+Batafsil API hujjatlari uchun qarang:
 
-- [`createMetadataKey()`](api/forms/signals/createMetadataKey) - Define a metadata key with optional reducer
-- [`createManagedMetadataKey()`](api/forms/signals/createManagedMetadataKey) - Define a lifecycle-aware metadata key
-- [`metadata()`](api/forms/signals/metadata) - Contribute a value to a metadata key in a schema
-- [`MetadataReducer`](api/forms/signals/MetadataReducer) - Built-in reducers for combining contributions
+- [`createMetadataKey()`](api/forms/signals/createMetadataKey) - Ixtiyoriy reducer bilan metamaʼlumot kalitini aniqlash
+- [`createManagedMetadataKey()`](api/forms/signals/createManagedMetadataKey) - Hayot siklini hisobga oluvchi metamaʼlumot kalitini aniqlash
+- [`metadata()`](api/forms/signals/metadata) - Sxemada metamaʼlumot kalitiga qiymat hissa qoʻshish
+- [`MetadataReducer`](api/forms/signals/MetadataReducer) - Hissalarni birlashtirish uchun oʻrnatilgan reducer'lar
 
-For additional related guides on Signal Forms, check out:
+Signal Forms boʻyicha qoʻshimcha tegishli qoʻllanmalar uchun qarang:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/form-logic" title="Adding form logic" />
-  <docs-pill href="guide/forms/signals/validation" title="Validation" />
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
-  <docs-pill href="guide/forms/signals/async-operations" title="Async operations" />
+  <docs-pill href="guide/forms/signals/form-logic" title="Forma mantigʻini qoʻshish" />
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya" />
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish" />
+  <docs-pill href="guide/forms/signals/async-operations" title="Asinxron operatsiyalar" />
 </docs-pill-row>
