@@ -1,23 +1,23 @@
-# Migrating existing forms to Signal Forms
+# Mavjud formalarni Signal Forms'ga migratsiya qilish
 
-This guide provides strategies for migrating existing codebases to Signal Forms, focusing on interoperability with
-existing Reactive Forms.
+Ushbu qoʻllanma mavjud kod bazalarini Signal Forms'ga migratsiya qilish strategiyalarini taqdim etadi va mavjud
+reaktiv formalar (Reactive Forms) bilan oʻzaro moslikka (interoperability) eʼtibor qaratadi.
 
-## Top-down migration using `compatForm`
+## `compatForm` yordamida yuqoridan pastga migratsiya {#top-down-migration-using-compatform}
 
-Sometimes you may want to use existing reactive `FormControl` instances within a Signal Form. This is useful for
-controls that involve:
+Baʼzan Signal Form ichida mavjud reaktiv `FormControl` nusxalaridan foydalanishni istashingiz mumkin. Bu quyidagilarni oʻz ichiga olgan
+kontrollar uchun foydali:
 
-- Complex asynchronous logic.
-- Intricate RxJS operators that are not yet ported.
-- Integration with existing third-party libraries.
+- Murakkab asinxron logika.
+- Hali koʻchirilmagan (port qilinmagan) murakkab RxJS operatorlari.
+- Mavjud uchinchi tomon kutubxonalari bilan integratsiya.
 
-### Integrating a `FormControl` into a signal form
+### `FormControl`'ni signal formaga integratsiya qilish {#integrating-a-formcontrol-into-a-signal-form}
 
-Consider an existing `passwordControl` that uses a specialized `enterprisePasswordValidator`. Instead of rewriting the
-validator, you can bridge the control into your signal state.
+Maxsus `enterprisePasswordValidator`'dan foydalanadigan mavjud `passwordControl`'ni koʻrib chiqaylik. Validatorni qayta yozish oʻrniga,
+kontrolni signal holatingizga koʻprik orqali ulashingiz mumkin.
 
-We can do it using `compatForm`:
+Buni `compatForm` yordamida qilishimiz mumkin:
 
 ```typescript
 import {signal} from '@angular/core';
@@ -48,7 +48,7 @@ const isPasswordValid = f.password().valid();
 const passwordErrors = f.password().errors(); // Returns CompatValidationError if the existing validator fails
 ```
 
-In the template, use standard reactive syntax by binding the underlying control:
+Shablonda asosiy kontrolni bogʻlab, standart reaktiv sintaksisdan foydalaning:
 
 ```angular-html
 <form novalidate>
@@ -81,10 +81,10 @@ In the template, use standard reactive syntax by binding the underlying control:
   <docs-code header="app.html" path="adev/src/content/examples/signal-forms/src/compat-form-control-integration/app/app.html"/>
 </docs-code-multifile>
 
-### Integrating a `FormGroup` into a signal form
+### `FormGroup`'ni signal formaga integratsiya qilish {#integrating-a-formgroup-into-a-signal-form}
 
-You can also wrap an entire `FormGroup`. This is common when a reusable sub-section of a form—such as an
-**Address Block**—is still managed by existing Reactive Forms.
+Butun `FormGroup`'ni ham oʻrashingiz mumkin. Bu formaning qayta ishlatiladigan kichik boʻlimi — masalan,
+**Manzil bloki** — hali ham mavjud reaktiv formalar tomonidan boshqarilayotgan holatlarda keng tarqalgan.
 
 ```typescript
 import {signal} from '@angular/core';
@@ -109,8 +109,8 @@ const f = compatForm(checkoutModel, (p) => {
 });
 ```
 
-The `shippingAddress` field acts as a branch in your Signal Form tree. You can bind these nested controls in your
-template by accessing the underlying existing controls via `.control()`:
+`shippingAddress` maydoni Signal Form daraxtingizda shox (branch) vazifasini bajaradi. Ushbu ichki kontrollarni shablonda
+`.control()` orqali asosiy mavjud kontrollarga murojaat qilib bogʻlashingiz mumkin:
 
 ```angular-html
 <form novalidate>
@@ -179,9 +179,9 @@ template by accessing the underlying existing controls via `.control()`:
   <docs-code header="app.html" path="adev/src/content/examples/signal-forms/src/compat-form-group-integration/app/app.html"/>
 </docs-code-multifile>
 
-### Accessing values
+### Qiymatlarga murojaat qilish {#accessing-values}
 
-While `compatForm` proxies value access on the `FormControl` level, the full form value preserves the control:
+`compatForm` qiymatga murojaatni `FormControl` darajasida proksilasa-da, formaning toʻliq qiymati kontrolni saqlab qoladi:
 
 ```typescript
 const passwordControl = new FormControl('password' /** ... */);
@@ -196,7 +196,7 @@ form.password().value(); // 'password'
 form().value(); // { email: '', password: FormControl}
 ```
 
-If you need the whole form value, you'd have to build it manually:
+Agar sizga formaning butun qiymati kerak boʻlsa, uni qoʻlda tuzishingiz kerak boʻladi:
 
 ```typescript
 const formValue = computed(() => ({
@@ -205,12 +205,12 @@ const formValue = computed(() => ({
 })); // {email: '', password: ''}
 ```
 
-## Bottom-up migration
+## Pastdan yuqoriga migratsiya {#bottom-up-migration}
 
-### Integrating a Signal Form into a `FormGroup`
+### Signal Form'ni `FormGroup`'ga integratsiya qilish {#integrating-a-signal-form-into-a-formgroup}
 
-You can use `SignalFormControl` to expose a signal-based form as a standard `FormControl`. This is useful when you want
-to migrate leaf nodes of a form to Signals while keeping the parent `FormGroup` structure.
+Signallarga asoslangan formani standart `FormControl` sifatida taqdim etish uchun `SignalFormControl`'dan foydalanishingiz mumkin. Bu ota `FormGroup` tuzilmasini
+saqlab qolgan holda formaning barg tugunlarini (leaf nodes) signallarga migratsiya qilmoqchi boʻlganingizda foydali.
 
 ```typescript
 import {Component, signal} from '@angular/core';
@@ -235,9 +235,9 @@ export class UserProfile {
 }
 ```
 
-The `SignalFormControl` synchronizes values bi-directionally between the **Signal Forms** system and the **Reactive Forms** system:
+`SignalFormControl` qiymatlarni **Signal Forms** tizimi va **reaktiv formalar** tizimi oʻrtasida ikki yoʻnalishda sinxronlaydi:
 
-- **Signal -> Reactive**: Updating the value via Signal Forms updates the Reactive Form control immediately.
+- **Signal -> Reaktiv**: Qiymatni Signal Forms orqali yangilash reaktiv forma kontrolini darhol yangilaydi.
 
 ```typescript
 // Signal Forms update
@@ -247,7 +247,7 @@ this.emailControl.fieldTree().value.set('new@example.com');
 console.log(this.form.value); // {email: 'new@example.com'}
 ```
 
-- **Reactive -> Signal**: Updating the value via the parent `FormGroup` updates the Signal Forms state.
+- **Reaktiv -> Signal**: Qiymatni ota `FormGroup` orqali yangilash Signal Forms holatini yangilaydi.
 
 ```typescript
 // Reactive Forms update
@@ -257,9 +257,9 @@ this.form.patchValue({email: 'other@example.com'});
 console.log(this.emailControl.fieldTree().value()); // 'other@example.com'
 ```
 
-### Binding `SignalFormControl`
+### `SignalFormControl`'ni bogʻlash {#binding-signalformcontrol}
 
-To use `SignalFormControl` in a `FormGroup`, pass it as a control and bind it in the template using `.fieldTree`:
+`SignalFormControl`'ni `FormGroup`'da ishlatish uchun uni kontrol sifatida uzating va shablonda `.fieldTree` yordamida bogʻlang:
 
 ```typescript
 readonly emailControl = new SignalFormControl('', (p) => { required(p); });
@@ -286,11 +286,11 @@ readonly form = new FormGroup({
 <input [formControl]="emailControl" />
 ```
 
-### Why `SignalFormControl` takes a value instead of a signal
+### Nima uchun `SignalFormControl` signal oʻrniga qiymat qabul qiladi {#why-signalformcontrol-takes-a-value-instead-of-a-signal}
 
-In standard Signal Forms, you create a form by passing a signal: `form(mySignal)`.
+Standart Signal Forms'da formani signal uzatib yaratasiz: `form(mySignal)`.
 
-However, `SignalFormControl` takes a **raw value** (like a string or object) as its first argument:
+Biroq, `SignalFormControl` birinchi argument sifatida **xom qiymat** (masalan, satr yoki obyekt) qabul qiladi:
 
 ```typescript
 // Takes a raw value, not a signal
@@ -299,20 +299,20 @@ const userControl = new SignalFormControl({
 });
 ```
 
-`SignalFormControl` creates the signal internally to intercept writes and trigger the **synchronous updates** expected by Reactive Forms.
+`SignalFormControl` yozishlarni ushlab qolish va reaktiv formalar kutadigan **sinxron yangilanishlarni** ishga tushirish uchun signalni ichki ravishda yaratadi.
 
-You can still access the internal signal via `.sourceValue`:
+Ichki signalga `.sourceValue` orqali hali ham murojaat qilishingiz mumkin:
 
 ```typescript
 const value = userControl.sourceValue();
 ```
 
-### Disabling/Enabling control
+### Kontrolni oʻchirish/yoqish {#disabling-enabling-control}
 
-Imperative APIs for changing the enabled/disabled state (like `enable()`, `disable()`) are intentionally not supported
-in `SignalFormControl`. This is because the state of the control should be derived from the signal state and rules.
+Yoqilgan/oʻchirilgan holatni oʻzgartirish uchun imperativ API'lar (masalan, `enable()`, `disable()`) `SignalFormControl`'da
+ataylab qoʻllab-quvvatlanmaydi. Chunki kontrol holati signal holati va qoidalardan hosil qilinishi kerak.
 
-Attempting to call disable/enable would throw an error.
+disable/enable'ni chaqirishga urinish xatoga olib keladi.
 
 ```typescript {avoid}
 import {signal, effect} from '@angular/core';
@@ -335,7 +335,7 @@ export class UserProfile {
 }
 ```
 
-Instead, use disabled rule:
+Buning oʻrniga disabled qoidasidan foydalaning:
 
 ```typescript {prefer}
 import {signal} from '@angular/core';
@@ -358,12 +358,12 @@ export class UserProfile {
 }
 ```
 
-### Dynamic manipulation
+### Dinamik boshqarish {#dynamic-manipulation}
 
-Imperative APIs for adding or removing validators (like `addValidators()`, `removeValidators()`, `setValidators()`) are
-intentionally not supported in `SignalFormControl`.
+Validatorlarni qoʻshish yoki olib tashlash uchun imperativ API'lar (masalan, `addValidators()`, `removeValidators()`, `setValidators()`)
+`SignalFormControl`'da ataylab qoʻllab-quvvatlanmaydi.
 
-Attempting to call these methods will throw an error.
+Ushbu metodlarni chaqirishga urinish xatoga olib keladi.
 
 ```typescript {avoid}
 export class UserProfile {
@@ -382,7 +382,7 @@ export class UserProfile {
 }
 ```
 
-Instead, use `applyWhen` rule to conditionally apply validators:
+Buning oʻrniga validatorlarni shartli qoʻllash uchun `applyWhen` qoidasidan foydalaning:
 
 ```typescript {prefer}
 import {signal} from '@angular/core';
@@ -405,18 +405,18 @@ export class UserProfile {
 }
 ```
 
-### Manual Error Selection
+### Xatolarni qoʻlda belgilash {#manual-error-selection}
 
-The `setErrors()` and `markAsPending()` methods are not supported. In Signal Forms, errors are derived from validation
-rules and async validation status. If you need to report an error, it should be done declaratively via a validation rule
-in the schema.
+`setErrors()` va `markAsPending()` metodlari qoʻllab-quvvatlanmaydi. Signal Forms'da xatolar validatsiya
+qoidalari va asinxron validatsiya holatidan hosil qilinadi. Agar xato haqida xabar berish kerak boʻlsa, bu sxemadagi validatsiya qoidasi orqali
+deklarativ tarzda bajarilishi kerak.
 
-## Automatic status classes
+## Avtomatik holat klasslari {#automatic-status-classes}
 
-Reactive/Template Forms automatically adds [class attributes](/guide/forms/template-driven-forms#track-control-states) (
-such as `.ng-valid` or `.ng-dirty`) to facilitate styling control states. Signal Forms does not do that.
+Reaktiv/shablonga asoslangan formalar kontrol holatlariga stil berishni osonlashtirish uchun avtomatik ravishda [class atributlarini](/guide/forms/template-driven-forms#track-control-states) (
+masalan, `.ng-valid` yoki `.ng-dirty`) qoʻshadi. Signal Forms buni qilmaydi.
 
-If you want to preserve this behavior, you can provide the `NG_STATUS_CLASSES` preset:
+Agar bu xatti-harakatni saqlab qolmoqchi boʻlsangiz, `NG_STATUS_CLASSES` presetini taqdim etishingiz mumkin:
 
 ```typescript
 import {provideSignalFormsConfig} from '@angular/forms/signals';
@@ -431,7 +431,7 @@ bootstrapApplication(App, {
 });
 ```
 
-You can also provide your own custom configuration to apply whatever classes you wish based on you custom logic:
+Shuningdek, oʻz maxsus logikangizga asoslanib istalgan klasslarni qoʻllash uchun oʻz maxsus konfiguratsiyangizni ham taqdim etishingiz mumkin:
 
 ```typescript
 import {provideSignalFormsConfig} from '@angular/forms/signals';
@@ -450,18 +450,16 @@ bootstrapApplication(App, {
 });
 ```
 
-## Custom Controls
+## Maxsus kontrollar {#custom-controls}
 
-Any [custom Signal Form Control](guide/forms/signals/custom-controls) can be
-used with Reactive (and Template-Driven) Forms as-is. This allows you to
-migrate existing `ControlValueAccessor` implementations to
-`FormValueControl`/`FormCheckboxControl` without breaking existing usages.
+Har qanday [maxsus Signal Form kontroli](guide/forms/signals/custom-controls) reaktiv (va shablonga asoslangan) formalar bilan
+oʻzgarishsiz ishlatilishi mumkin. Bu mavjud `ControlValueAccessor` implementatsiyalarini mavjud foydalanishlarni buzmasdan
+`FormValueControl`/`FormCheckboxControl`'ga migratsiya qilish imkonini beradi.
 
-IMPORTANT: Do **not** implement both `ControlValueAccessor` and
-`FormValueControl`/`FormCheckboxControl` on the same component. Implement one or
-the other.
+IMPORTANT: Bir komponentda `ControlValueAccessor` va `FormValueControl`/`FormCheckboxControl`'ning ikkalasini ham
+implementatsiya **qilmang**. Ulardan birini implementatsiya qiling.
 
-Given the following custom control:
+Quyidagi maxsus kontrol berilgan deylik:
 
 ```angular-ts
 import {Component, model} from '@angular/core';
@@ -486,9 +484,9 @@ export class BasicInput implements FormValueControl<string> {
 }
 ```
 
-You can use this custom control with reactive forms as you would a native input
-or a custom control based on `ControlValueAccessor`. For example, consider this
-simple component with a Reactive Form.
+Ushbu maxsus kontrolni reaktiv formalar bilan tabiiy (native) input yoki `ControlValueAccessor`'ga asoslangan maxsus kontrol kabi
+ishlatishingiz mumkin. Masalan, reaktiv formaga ega ushbu
+oddiy komponentni koʻrib chiqaylik.
 
 ```angular-ts
 import {Component} from '@angular/core';
@@ -512,5 +510,5 @@ export class ExampleComponent {
 }
 ```
 
-Any change to the custom `app-basic-input` control will be reflected in the
-reactive `FormControl`.
+Maxsus `app-basic-input` kontrolidagi har qanday oʻzgarish reaktiv `FormControl`'da
+aks etadi.

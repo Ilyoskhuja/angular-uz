@@ -1,37 +1,37 @@
-# Form submission
+# Formani yuborish
 
-When a user submits a form, your application typically needs to handle multiple concerns at once: surfacing validation errors, preventing duplicate submission, sending data to a server, and much more. Handling each of these manually can be tedious and prone to error.
+Foydalanuvchi formani yuborganda, ilovangiz odatda bir vaqtning oʻzida bir nechta masalani hal qilishi kerak boʻladi: validatsiya xatolarini koʻrsatish, takroriy yuborishning oldini olish, maʼlumotlarni serverga joʻnatish va boshqalar. Bularning har birini qoʻlda bajarish zerikarli va xatolarga moyil boʻlishi mumkin.
 
-Signal Forms provides a `submit()` function that helps you manage the form submission lifecycle. This guide walks through how to use it.
+Signal Forms formani yuborish hayot siklini boshqarishga yordam beradigan `submit()` funksiyasini taqdim etadi. Ushbu qoʻllanma undan qanday foydalanishni koʻrsatib beradi.
 
-## What does `submit()` do?
+## `submit()` nima qiladi? {#what-does-submit-do}
 
-The `submit()` function runs through a specific sequence:
+`submit()` funksiyasi maʼlum bir ketma-ketlikni bajaradi:
 
-1. **Mark interactive fields as touched** — Fields that display errors only after being touched will now show their validation errors. Hidden, disabled, and readonly fields are skipped.
-1. **Check validation** — If any validation rules have failed, submission stops and the `action` function does not run.
-1. **Run the action** — The `action` function executes with the form's current value. While it runs, `submitting()` returns `true`.
-1. **Handle the result** — If the action returns errors, they are routed to their target fields. If it returns nothing, the submission is treated as successful.
+1. **Interaktiv maydonlarni tegilgan (touched) deb belgilaydi** — Xatolarni faqat tegilgandan keyin koʻrsatadigan maydonlar endi oʻz validatsiya xatolarini koʻrsatadi. Yashirin, oʻchirilgan va faqat oʻqish uchun maydonlar oʻtkazib yuboriladi.
+1. **Validatsiyani tekshiradi** — Agar biror validatsiya qoidasi bajarilmagan boʻlsa, yuborish toʻxtaydi va `action` funksiyasi ishga tushmaydi.
+1. **Action'ni bajaradi** — `action` funksiyasi formaning joriy qiymati bilan bajariladi. U ishlayotgan vaqtda `submitting()` `true` qaytaradi.
+1. **Natijani qayta ishlaydi** — Agar action xatolar qaytarsa, ular oʻz maqsadli maydonlariga yoʻnaltiriladi. Agar u hech narsa qaytarmasa, yuborish muvaffaqiyatli deb hisoblanadi.
 
-The `submit()` function returns a `Promise<boolean>` that resolves to `true` when the action completes without errors, and `false` when validation fails, the action returns errors, or a submission is already in progress. If the action throws, the promise rejects with that error.
+`submit()` funksiyasi `Promise<boolean>` qaytaradi: action xatosiz yakunlanganda u `true` ga, validatsiya muvaffaqiyatsiz boʻlganda, action xatolar qaytarganda yoki yuborish allaqachon davom etayotgan boʻlganda `false` ga yechiladi (resolve). Agar action xato tashlasa, promise shu xato bilan rad etiladi (reject).
 
-## Setting up form submission with `FormRoot`
+## `FormRoot` bilan formani yuborishni sozlash {#setting-up-form-submission-with-formroot}
 
-The most common way to use the `submit()` function is through the `FormRoot` directive.
+`submit()` funksiyasidan foydalanishning eng keng tarqalgan usuli — `FormRoot` direktivi orqali.
 
-The `FormRoot` directive handles three things automatically when bound to a `<form>` element:
+`FormRoot` direktivi `<form>` elementiga bogʻlanganda uchta narsani avtomatik bajaradi:
 
-1. **Sets [`novalidate`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form#novalidate)** — Disables the browser's built-in validation so Signal Forms manages validation instead
-1. **Prevents default** — Stops the browser from navigating on form submission
-1. **Calls `submit()`** — Triggers the submission flow when the user submits the form, if the form was created with a `submission` option
+1. **[`novalidate`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form#novalidate) oʻrnatadi** — Brauzerning oʻrnatilgan validatsiyasini oʻchiradi, shunda validatsiyani uning oʻrniga Signal Forms boshqaradi
+1. **Sukut boʻyicha xatti-harakatning oldini oladi** — Forma yuborilganda brauzerning boshqa sahifaga oʻtishini toʻxtatadi
+1. **`submit()`'ni chaqiradi** — Agar forma `submission` opsiyasi bilan yaratilgan boʻlsa, foydalanuvchi formani yuborganda yuborish jarayonini ishga tushiradi
 
-NOTE: The `FormRoot` directive sets the `novalidate` attribute on the `form` element automatically. You do not need to add it manually when using `FormRoot`.
+NOTE: `FormRoot` direktivi `form` elementiga `novalidate` atributini avtomatik oʻrnatadi. `FormRoot`'dan foydalanganda uni qoʻlda qoʻshishingiz shart emas.
 
-`FormRoot` handles the submission event, but you still need to tell it _what to do_ with the form data. That requires three things:
+`FormRoot` yuborish hodisasini qayta ishlaydi, lekin siz hali ham unga forma maʼlumotlari bilan _nima qilish kerakligini_ aytishingiz kerak. Buning uchun uchta narsa talab qilinadi:
 
-1. Bind your form to the `FormRoot` directive
-1. Pass a `submission` option to the `form()` function
-1. Define an `action` function within the `submission` option that manages the submitted data
+1. Formangizni `FormRoot` direktiviga bogʻlang
+1. `form()` funksiyasiga `submission` opsiyasini uzating
+1. `submission` opsiyasi ichida yuborilgan maʼlumotlarni boshqaradigan `action` funksiyasini aniqlang
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -82,13 +82,13 @@ export class Contact {
 }
 ```
 
-The `action` function runs only when no validation rules have failed. By default, pending async validators do not block submission (see [Controlling validation gating](#controlling-validation-gating-with-ignorevalidators) for more details). The action receives the field tree and a `detail` object with `root` and `submitted` field trees, which is useful when submitting a sub-form.
+`action` funksiyasi faqat hech bir validatsiya qoidasi buzilmagan holda ishga tushadi. Sukut boʻyicha kutilayotgan (pending) asinxron validatorlar yuborishni bloklamaydi (batafsil maʼlumot uchun [Validatsiya toʻsigʻini boshqarish](#controlling-validation-gating-with-ignorevalidators) boʻlimiga qarang). Action maydonlar daraxtini va `root` hamda `submitted` maydonlar daraxtlariga ega `detail` obyektini qabul qiladi; bu kichik formani (sub-form) yuborishda foydali.
 
-After validation passes, the action itself may still fail due to scenarios such as a network error or duplicate entry. In those cases, you can surface the failure by returning the error(s). On the other hand, to indicate success, you only need to return `null` or `undefined`, or call an empty `return`.
+Validatsiya muvaffaqiyatli oʻtgandan keyin ham action tarmoq xatosi yoki takroriy yozuv kabi holatlar tufayli muvaffaqiyatsiz boʻlishi mumkin. Bunday hollarda xato(lar)ni qaytarib, muvaffaqiyatsizlikni koʻrsatishingiz mumkin. Boshqa tomondan, muvaffaqiyatni bildirish uchun faqat `null` yoki `undefined` qaytarish yoki boʻsh `return` chaqirish kifoya.
 
-## Showing submission state with `submitting()`
+## `submitting()` bilan yuborish holatini koʻrsatish {#showing-submission-state-with-submitting}
 
-When you need to track whether the form is in the process of submitting, Signal Forms provides a `submitting()` signal that returns `true` while the `action` function is running. Use it to show loading indicators or disable the submit button to prevent duplicate submissions.
+Formaning yuborish jarayonida ekanligini kuzatish kerak boʻlganda, Signal Forms `action` funksiyasi ishlayotgan vaqtda `true` qaytaradigan `submitting()` signalini taqdim etadi. Undan yuklanish indikatorlarini koʻrsatish yoki takroriy yuborishlarning oldini olish uchun yuborish tugmasini oʻchirishda foydalaning.
 
 ```angular-html
 <button type="submit" [disabled]="contactForm().submitting()">
@@ -100,17 +100,17 @@ When you need to track whether the form is in the process of submitting, Signal 
 </button>
 ```
 
-Once the `action` function succeeds or returns an error, the `submitting()` signal automatically resets back to `false`.
+`action` funksiyasi muvaffaqiyatli yakunlangach yoki xato qaytargach, `submitting()` signali avtomatik ravishda `false` holatiga qaytadi.
 
-## Managing submission errors
+## Yuborish xatolarini boshqarish {#managing-submission-errors}
 
-### Server errors
+### Server xatolari {#server-errors}
 
-When your `action` function communicates with a server, the server may return errors that need to appear on specific fields. Return these errors from the `action` to route them to their target fields.
+`action` funksiyangiz server bilan aloqa qilganda, server muayyan maydonlarda koʻrinishi kerak boʻlgan xatolarni qaytarishi mumkin. Ushbu xatolarni maqsadli maydonlariga yoʻnaltirish uchun ularni `action`'dan qaytaring.
 
-#### Errors on the submitted field
+#### Yuborilgan maydondagi xatolar {#errors-on-the-submitted-field}
 
-By default, errors returned from the `action` are assigned to the submitted field (the field tree you passed to `submit()`):
+Sukut boʻyicha `action`'dan qaytarilgan xatolar yuborilgan maydonga (`submit()`'ga uzatgan maydonlar daraxtingizga) biriktiriladi:
 
 ```ts
 action: async (field) => {
@@ -121,9 +121,9 @@ action: async (field) => {
 };
 ```
 
-#### Errors on specific fields
+#### Muayyan maydonlardagi xatolar {#errors-on-specific-fields}
 
-When you want to route an error to a specific field, include a `fieldTree` property pointing to that field:
+Xatoni muayyan maydonga yoʻnaltirmoqchi boʻlsangiz, oʻsha maydonga ishora qiluvchi `fieldTree` xususiyatini qoʻshing:
 
 ```ts
 action: async (field) => {
@@ -134,9 +134,9 @@ action: async (field) => {
 };
 ```
 
-#### Multiple errors
+#### Bir nechta xato {#multiple-errors}
 
-When you want to report errors on multiple fields, return an array:
+Bir nechta maydonda xatolar haqida xabar bermoqchi boʻlsangiz, massiv qaytaring:
 
 ```ts
 action: async (field) => {
@@ -151,17 +151,17 @@ action: async (field) => {
 };
 ```
 
-### Auto-clearing submission errors
+### Yuborish xatolarini avtomatik tozalash {#auto-clearing-submission-errors}
 
-Submission errors clear automatically when the user edits the field. If the `action` returns an error on the email field, that error disappears as soon as the user changes the email value.
+Foydalanuvchi maydonni tahrirlaganda yuborish xatolari avtomatik tozalanadi. Agar `action` email maydonida xato qaytarsa, foydalanuvchi email qiymatini oʻzgartirishi bilan bu xato yoʻqoladi.
 
-This differs from validation errors, which recompute reactively. Validation rules run again on each change and may produce the same error. Submission errors are one-time results from the server — once cleared, they do not reappear unless the form is submitted again.
+Bu reaktiv tarzda qayta hisoblanadigan validatsiya xatolaridan farq qiladi. Validatsiya qoidalari har bir oʻzgarishda qayta ishga tushadi va bir xil xatoni yana chiqarishi mumkin. Yuborish xatolari esa serverdan kelgan bir martalik natijalardir — bir marta tozalangach, forma qayta yuborilmaguncha ular yana paydo boʻlmaydi.
 
-TIP: Submission errors appear alongside validation errors in the field's `errors()` signal. For guidance on displaying errors in your template, see the [Field State Management guide](guide/forms/signals/field-state-management).
+TIP: Yuborish xatolari maydonning `errors()` signalida validatsiya xatolari bilan birga koʻrinadi. Shablonda xatolarni koʻrsatish boʻyicha koʻrsatmalar uchun [Maydon holatini boshqarish qoʻllanmasiga](guide/forms/signals/field-state-management) qarang.
 
-## Handling invalid submissions with `onInvalid`
+## `onInvalid` bilan notoʻgʻri yuborishlarni qayta ishlash {#handling-invalid-submissions-with-oninvalid}
 
-When validation fails, the `action` function does not run. If you need to respond to a failed submission attempt — such as scrolling to the first error, showing a toast, or focusing an invalid field — use the `onInvalid` callback.
+Validatsiya muvaffaqiyatsiz boʻlganda `action` funksiyasi ishga tushmaydi. Agar muvaffaqiyatsiz yuborish urinishiga javob berishingiz kerak boʻlsa — masalan, birinchi xatoga aylantirish (scroll), toast koʻrsatish yoki notoʻgʻri maydonga fokus berish — `onInvalid` callback'idan foydalaning.
 
 ```ts
 contactForm = form(
@@ -184,17 +184,17 @@ contactForm = form(
 );
 ```
 
-The `onInvalid` callback receives the same `(field, detail)` parameters as `action`. It runs after all interactive fields are marked as touched, so validation errors are already visible in the UI when it executes.
+`onInvalid` callback'i `action` bilan bir xil `(field, detail)` parametrlarini qabul qiladi. U barcha interaktiv maydonlar tegilgan deb belgilangandan keyin ishga tushadi, shuning uchun u bajarilayotganda validatsiya xatolari UI'da allaqachon koʻrinib turadi.
 
-## Controlling validation gating with `ignoreValidators`
+## `ignoreValidators` bilan validatsiya toʻsigʻini boshqarish {#controlling-validation-gating-with-ignorevalidators}
 
-By default, `submit()` ignores pending validators. If no validators have failed, the action runs even if some async validators are still in progress. The `ignoreValidators` option gives you control over this behavior.
+Sukut boʻyicha `submit()` kutilayotgan validatorlarni eʼtiborsiz qoldiradi. Agar hech bir validator muvaffaqiyatsiz boʻlmagan boʻlsa, baʼzi asinxron validatorlar hali davom etayotgan boʻlsa ham action ishga tushadi. `ignoreValidators` opsiyasi bu xatti-harakatni boshqarish imkonini beradi.
 
-| Value       | Behavior                                                                 |
-| ----------- | ------------------------------------------------------------------------ |
-| `'pending'` | Submit if no validators have failed, even if some are pending (default)  |
-| `'none'`    | Submit only if all validators pass — pending validators block submission |
-| `'all'`     | Always submit regardless of validation state                             |
+| Qiymat      | Xatti-harakat                                                                                       |
+| ----------- | --------------------------------------------------------------------------------------------------- |
+| `'pending'` | Hech bir validator muvaffaqiyatsiz boʻlmasa, baʼzilari kutilayotgan boʻlsa ham yuboradi (sukut boʻyicha) |
+| `'none'`    | Faqat barcha validatorlar oʻtganda yuboradi — kutilayotgan validatorlar yuborishni bloklaydi        |
+| `'all'`     | Validatsiya holatidan qatʼi nazar har doim yuboradi                                                 |
 
 ```ts
 contactForm = form(
@@ -214,11 +214,11 @@ contactForm = form(
 );
 ```
 
-Use `'none'` when your form has async validators (such as checking username availability) and you need all validation to complete before submitting. Use `'all'` for draft-saving scenarios where you want to persist data regardless of validation state.
+Formangizda asinxron validatorlar boʻlsa (masalan, foydalanuvchi nomining bandligini tekshirish) va yuborishdan oldin butun validatsiya yakunlanishi kerak boʻlsa, `'none'`'dan foydalaning. Validatsiya holatidan qatʼi nazar maʼlumotlarni saqlamoqchi boʻlgan qoralamani saqlash holatlari uchun `'all'`'dan foydalaning.
 
-## Manual submission with `submit()`
+## `submit()` bilan qoʻlda yuborish {#manual-submission-with-submit}
 
-The `FormRoot` directive is the most common way to trigger submission, but you can also call `submit()` directly. This is useful for multi-step wizards, auto-save, or triggering submission from outside the form element.
+`FormRoot` direktivi yuborishni ishga tushirishning eng keng tarqalgan usuli, lekin `submit()`'ni toʻgʻridan-toʻgʻri chaqirishingiz ham mumkin. Bu koʻp bosqichli ustalar (wizard), avtomatik saqlash yoki yuborishni forma elementidan tashqaridan ishga tushirish uchun foydali.
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -269,9 +269,9 @@ export class Contact {
 }
 ```
 
-## Handling side effects
+## Yon taʼsirlarni qayta ishlash {#handling-side-effects}
 
-The `submit()` function returns a `Promise<boolean>` — `true` when the action completes without errors, `false` when validation fails, the action returns errors, or a submission is already in progress. If the action throws, the promise rejects. Use this to trigger side effects like navigation or notifications.
+`submit()` funksiyasi `Promise<boolean>` qaytaradi — action xatosiz yakunlanganda `true`, validatsiya muvaffaqiyatsiz boʻlganda, action xatolar qaytarganda yoki yuborish allaqachon davom etayotgan boʻlganda `false`. Agar action xato tashlasa, promise rad etiladi. Undan navigatsiya yoki bildirishnomalar kabi yon taʼsirlarni ishga tushirish uchun foydalaning.
 
 ```ts
 async onSave() {
@@ -285,7 +285,7 @@ async onSave() {
 }
 ```
 
-When the action produces data that a side effect needs, such as a server-generated ID, handle the side effect inside the action:
+Action yon taʼsirga kerak boʻladigan maʼlumotni, masalan, server tomonidan yaratilgan ID'ni ishlab chiqarganda, yon taʼsirni action ichida bajaring:
 
 ```ts
 async onSave() {
@@ -296,7 +296,7 @@ async onSave() {
 }
 ```
 
-When using `FormRoot`, side effects also go inside the `action` since `FormRoot` calls `submit()` internally:
+`FormRoot`'dan foydalanganda yon taʼsirlar ham `action` ichiga joylashtiriladi, chunki `FormRoot` `submit()`'ni ichki ravishda chaqiradi:
 
 ```ts
 submission: {
@@ -312,16 +312,16 @@ submission: {
 }
 ```
 
-## Concurrent submissions
+## Parallel yuborishlar {#concurrent-submissions}
 
-When a submission is in progress, subsequent calls to `submit()` for the same form or any of its descendants return `false` immediately without running the action. This prevents duplicate submissions and side effects if a user triggers the submit action multiple times quickly.
+Yuborish davom etayotganda, oʻsha forma yoki uning istalgan avlodi uchun `submit()`'ning keyingi chaqiruvlari action'ni ishga tushirmasdan darhol `false` qaytaradi. Bu foydalanuvchi yuborish amalini tez ketma-ket bir necha marta ishga tushirganda takroriy yuborishlar va yon taʼsirlarning oldini oladi.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-This guide covered submitting forms and handling form submission errors. Related guides explore other aspects of Signal Forms:
+Ushbu qoʻllanma formalarni yuborish va formani yuborish xatolarini qayta ishlashni qamrab oldi. Tegishli qoʻllanmalar Signal Forms'ning boshqa jihatlarini oʻrganadi:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/validation" title="Validation" />
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
-  <docs-pill href="guide/forms/signals/form-logic" title="Adding form logic" />
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya" />
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish" />
+  <docs-pill href="guide/forms/signals/form-logic" title="Forma logikasini qoʻshish" />
 </docs-pill-row>
