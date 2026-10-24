@@ -1,118 +1,118 @@
-# Reactive forms
+# Reaktiv formalar
 
-Reactive forms provide a model-driven approach to handling form inputs whose values change over time.
-This guide shows you how to create and update a basic form control, use multiple controls in a group, validate form values, and create dynamic forms where you can add or remove controls at runtime.
+Reaktiv formalar qiymatlari vaqt oʻtishi bilan oʻzgaradigan forma input'larini boshqarishga modelga asoslangan yondashuvni taqdim etadi.
+Bu qoʻllanma sizga asosiy forma boshqaruv elementini (form control) yaratish va yangilash, guruhda bir nechta boshqaruv elementlaridan foydalanish, forma qiymatlarini validatsiya qilish va ish vaqtida boshqaruv elementlarini qoʻshish yoki olib tashlash mumkin boʻlgan dinamik formalar yaratishni koʻrsatadi.
 
-## Overview of reactive forms
+## Reaktiv formalarning umumiy koʻrinishi {#overview-of-reactive-forms}
 
-Reactive forms use an explicit and immutable approach to managing the state of a form at a given point in time.
-Each change to the form state returns a new state, which maintains the integrity of the model between changes.
-Reactive forms are built around observable streams, where form inputs and values are provided as streams that can be accessed synchronously.
+Reaktiv formalar forma holatini maʼlum bir vaqt nuqtasida boshqarishga aniq va oʻzgarmas (immutable) yondashuvdan foydalanadi.
+Forma holatidagi har bir oʻzgarish yangi holat qaytaradi, bu esa oʻzgarishlar orasida model yaxlitligini saqlaydi.
+Reaktiv formalar observable oqimlar atrofida qurilgan boʻlib, bunda forma input'lari va qiymatlari sinxron tarzda murojaat qilish mumkin boʻlgan oqimlar sifatida taqdim etiladi.
 
-Reactive forms also provide a straightforward path to testing because you are assured that your data is consistent and predictable when requested.
-Any consumers of these streams can safely manipulate the data.
+Reaktiv formalar shuningdek, testlash uchun ham toʻgʻri yoʻl ochadi, chunki soʻralgan paytda maʼlumotlaringiz izchil va oldindan aytib boʻladigan boʻlishiga ishonchingiz komil boʻladi.
+Bu oqimlarning har qanday isteʼmolchisi maʼlumotlarni xavfsiz tarzda oʻzgartirishi mumkin.
 
-Reactive forms differ from [template-driven forms](guide/forms/template-driven-forms) in distinct ways.
-Reactive forms provide synchronous access to the data model, immutability with observable operators, and change tracking through observable streams.
+Reaktiv formalar [shablonga asoslangan formalardan](guide/forms/template-driven-forms) bir qancha jihatlari bilan farq qiladi.
+Reaktiv formalar maʼlumotlar modeliga sinxron murojaat, observable operatorlari bilan oʻzgarmaslik va observable oqimlar orqali oʻzgarishlarni kuzatishni taʼminlaydi.
 
-Template-driven forms allow direct access to modify data in your template, but are less explicit than reactive forms because they rely on directives embedded in the template, along with mutable data to track changes asynchronously.
-See the [Forms Overview](guide/forms) for detailed comparisons between the two paradigms.
+Shablonga asoslangan formalar shablonda maʼlumotlarni oʻzgartirish uchun bevosita murojaatga imkon beradi, lekin reaktiv formalarga qaraganda kamroq aniq, chunki ular shablonga joylashtirilgan direktivalarga, shuningdek, oʻzgarishlarni asinxron kuzatish uchun oʻzgaruvchan maʼlumotlarga tayanadi.
+Ikki paradigmaning batafsil taqqoslanishi uchun [Formalar umumiy koʻrinishiga](guide/forms) qarang.
 
-## Adding a basic form control
+## Asosiy forma boshqaruv elementini qoʻshish {#adding-a-basic-form-control}
 
-There are three steps to using form controls.
+Forma boshqaruv elementlaridan foydalanish uchun uchta qadam bor.
 
-1. Generate a new component and register the reactive forms module. This module declares the reactive-form directives required to use reactive forms.
-1. Instantiate a new `FormControl`.
-1. Register the `FormControl` in the template.
+1. Yangi komponent yarating va reaktiv formalar modulini roʻyxatdan oʻtkazing. Bu modul reaktiv formalardan foydalanish uchun zarur boʻlgan reaktiv forma direktivalarini eʼlon qiladi.
+1. Yangi `FormControl` nusxasini yarating.
+1. `FormControl` ni shablonda roʻyxatdan oʻtkazing.
 
-You can then display the form by adding the component to the template.
+Keyin komponentni shablonga qoʻshib formani koʻrsatishingiz mumkin.
 
-The following examples show how to add a single form control.
-In the example, the user enters their name into an input field, captures that input value, and displays the current value of the form control element.
+Quyidagi misollar bitta forma boshqaruv elementini qanday qoʻshishni koʻrsatadi.
+Misolda foydalanuvchi oʻz ismini input maydoniga kiritadi, bu input qiymati olinadi va forma boshqaruv elementining joriy qiymati koʻrsatiladi.
 
 <docs-workflow>
 
-<docs-step title="Generate a new component and import the ReactiveFormsModule">
-Use the CLI command `ng generate component` to generate a component in your project and import `ReactiveFormsModule` from the `@angular/forms` package and add it to your Component's `imports` array.
+<docs-step title="Yangi komponent yarating va ReactiveFormsModule'ni import qiling">
+Loyihangizda komponent yaratish uchun CLI'ning `ng generate component` buyrugʻidan foydalaning, `@angular/forms` paketidan `ReactiveFormsModule` ni import qiling va uni komponentingizning `imports` massiviga qoʻshing.
 
 <docs-code header="name-editor.component.ts (excerpt)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="imports" />
 </docs-step>
 
-<docs-step title="Declare a FormControl instance">
-Use the constructor of `FormControl` to set its initial value, which in this case is an empty string. By creating these controls in your component class, you get immediate access to listen for, update, and validate the state of the form input.
+<docs-step title="FormControl nusxasini eʼlon qiling">
+Boshlangʻich qiymatini, bu holatda boʻsh satrni, oʻrnatish uchun `FormControl` konstruktoridan foydalaning. Bu boshqaruv elementlarini komponent klassingizda yaratish orqali siz forma input'ining holatini tinglash, yangilash va validatsiya qilish imkoniga darhol ega boʻlasiz.
 
 <docs-code header="name-editor.component.ts" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="create-control"/>
 </docs-step>
 
-<docs-step title="Register the control in the template">
-After you create the control in the component class, you must associate it with a form control element in the template. Update the template with the form control using the `formControl` binding provided by `FormControlDirective`, which is also included in the `ReactiveFormsModule`.
+<docs-step title="Boshqaruv elementini shablonda roʻyxatdan oʻtkazing">
+Boshqaruv elementini komponent klassida yaratganingizdan soʻng, uni shablondagi forma boshqaruv elementi bilan bogʻlashingiz kerak. `FormControlDirective` tomonidan taqdim etiladigan va `ReactiveFormsModule` ga ham kiritilgan `formControl` bogʻlashidan foydalanib, shablonni forma boshqaruv elementi bilan yangilang.
 
 <docs-code header="name-editor.component.html" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" region="control-binding" />
 
-Using the template binding syntax, the form control is now registered to the `name` input element in the template. The form control and DOM element communicate with each other: the view reflects changes in the model, and the model reflects changes in the view.
+Shablon bogʻlash sintaksisidan foydalanib, forma boshqaruv elementi endi shablondagi `name` input elementida roʻyxatdan oʻtkazildi. Forma boshqaruv elementi va DOM elementi bir-biri bilan muloqot qiladi: view modeldagi oʻzgarishlarni aks ettiradi, model esa view'dagi oʻzgarishlarni aks ettiradi.
 </docs-step>
 
-<docs-step title="Display the component">
-The `FormControl` assigned to the `name` property is displayed when the `<app-name-editor>` component is added to a template.
+<docs-step title="Komponentni koʻrsating">
+`name` xususiyatiga biriktirilgan `FormControl` `<app-name-editor>` komponenti shablonga qoʻshilganda koʻrsatiladi.
 
 <docs-code header="app.component.html (name editor)" path="adev/src/content/examples/reactive-forms/src/app/app.component.1.html" region="app-name-editor"/>
 </docs-step>
 </docs-workflow>
 
-### Displaying a form control value
+### Forma boshqaruv elementi qiymatini koʻrsatish {#displaying-a-form-control-value}
 
-You can display the value in the following ways:
+Qiymatni quyidagi usullar bilan koʻrsatishingiz mumkin:
 
-- Through the `valueChanges` observable where you can listen for changes in the form's value in the template using `AsyncPipe` or in the component class using the `subscribe()` method
-- With the `value` property, which gives you a snapshot of the current value
+- `valueChanges` observable'i orqali, bunda forma qiymatidagi oʻzgarishlarni shablonda `AsyncPipe` yordamida yoki komponent klassida `subscribe()` metodi yordamida tinglashingiz mumkin
+- Joriy qiymatning oniy holatini (snapshot) beradigan `value` xususiyati bilan
 
-The following example shows you how to display the current value using interpolation in the template.
+Quyidagi misol shablonda interpolyatsiya yordamida joriy qiymatni qanday koʻrsatishni koʻrsatadi.
 
 <docs-code header="name-editor.component.html (control value)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" region="display-value"/>
 
-The displayed value changes as you update the form control element.
+Forma boshqaruv elementini yangilaganingizda koʻrsatilgan qiymat ham oʻzgaradi.
 
-Reactive forms provide access to information about a given control through properties and methods provided with each instance.
-These properties and methods of the underlying [AbstractControl](api/forms/AbstractControl 'API reference') class are used to control form state and determine when to display messages when handling [input validation](#validating-form-input 'Learn more about validating form input').
+Reaktiv formalar har bir nusxa bilan taqdim etiladigan xususiyatlar va metodlar orqali berilgan boshqaruv elementi haqidagi maʼlumotlarga murojaat qilish imkonini beradi.
+Asosiy [AbstractControl](api/forms/AbstractControl 'API reference') klassining bu xususiyatlari va metodlari forma holatini boshqarish va [input validatsiyasi](#validating-form-input 'Learn more about validating form input') bilan ishlashda xabarlarni qachon koʻrsatishni aniqlash uchun ishlatiladi.
 
-Read about other `FormControl` properties and methods in the [API Reference](api/forms/FormControl 'Detailed syntax reference').
+`FormControl` ning boshqa xususiyatlari va metodlari haqida [API maʼlumotnomasida](api/forms/FormControl 'Detailed syntax reference') oʻqing.
 
-### Replacing a form control value
+### Forma boshqaruv elementi qiymatini almashtirish {#replacing-a-form-control-value}
 
-Reactive forms have methods to change a control's value programmatically, which gives you the flexibility to update the value without user interaction.
-A form control instance provides a `setValue()` method that updates the value of the form control and validates the structure of the value provided against the control's structure.
-For example, when retrieving form data from a backend API or service, use the `setValue()` method to update the control to its new value, replacing the old value entirely.
+Reaktiv formalar boshqaruv elementi qiymatini programmatik tarzda oʻzgartirish uchun metodlarga ega, bu sizga qiymatni foydalanuvchi ishtirokisiz yangilash imkonini beradi.
+Forma boshqaruv elementi nusxasi forma boshqaruv elementining qiymatini yangilaydigan va berilgan qiymat tuzilmasini boshqaruv elementi tuzilmasiga nisbatan validatsiya qiladigan `setValue()` metodini taqdim etadi.
+Masalan, forma maʼlumotlarini backend API yoki servisdan olganda, boshqaruv elementini yangi qiymatiga yangilash va eski qiymatni butunlay almashtirish uchun `setValue()` metodidan foydalaning.
 
-The following example adds a method to the component class to update the value of the control to _Nancy_ using the `setValue()` method.
+Quyidagi misol komponent klassiga `setValue()` metodi yordamida boshqaruv elementi qiymatini _Nancy_ ga yangilaydigan metod qoʻshadi.
 
 <docs-code header="name-editor.component.ts (update value)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="update-value"/>
 
-Update the template with a button to simulate a name update.
-When you click the **Update Name** button, the value entered in the form control element is reflected as its current value.
+Ism yangilanishini simulyatsiya qilish uchun shablonga tugma qoʻshing.
+**Update Name** tugmasini bosganingizda, forma boshqaruv elementiga kiritilgan qiymat uning joriy qiymati sifatida aks etadi.
 
 <docs-code header="name-editor.component.html (update value)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" region="update-value"/>
 
-The form model is the source of truth for the control, so when you click the button, the value of the input is changed within the component class, overriding its current value.
+Forma modeli boshqaruv elementi uchun haqiqat manbai hisoblanadi, shuning uchun tugmani bosganingizda input qiymati komponent klassi ichida oʻzgartiriladi va uning joriy qiymati qayta yoziladi.
 
-HELPFUL: In this example, you're using a single control.
-When using the `setValue()` method with a [form group](#grouping-form-controls) or [form array](#creating-dynamic-forms) instance, the value needs to match the structure of the group or array.
+HELPFUL: Bu misolda siz bitta boshqaruv elementidan foydalanyapsiz.
+`setValue()` metodini [forma guruhi](#grouping-form-controls) yoki [forma massivi](#creating-dynamic-forms) nusxasi bilan ishlatganda qiymat guruh yoki massiv tuzilmasiga mos kelishi kerak.
 
-## Grouping form controls
+## Forma boshqaruv elementlarini guruhlash {#grouping-form-controls}
 
-Forms typically contain several related controls.
-Reactive forms provide two ways of grouping multiple related controls into a single input form.
+Formalar odatda bir nechta oʻzaro bogʻliq boshqaruv elementlarini oʻz ichiga oladi.
+Reaktiv formalar bir nechta oʻzaro bogʻliq boshqaruv elementlarini bitta kirish formasiga guruhlashning ikki usulini taqdim etadi.
 
-| Form groups | Details                                                                                                                                                                                                                                                |
+| Forma guruhlari | Tafsilotlar                                                                                                                                                                                                                                                |
 | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Form group  | Defines a form with a fixed set of controls that you can manage together. Form group basics are discussed in this section. You can also [nest form groups](#creating-nested-form-groups 'See more about nesting groups') to create more complex forms. |
-| Form array  | Defines a dynamic form, where you can add and remove controls at run time. You can also nest form arrays to create more complex forms. For more about this option, see [Creating dynamic forms](#creating-dynamic-forms).                              |
+| Forma guruhi  | Birgalikda boshqarishingiz mumkin boʻlgan qatʼiy belgilangan boshqaruv elementlari toʻplamiga ega formani belgilaydi. Forma guruhi asoslari ushbu boʻlimda muhokama qilinadi. Murakkabroq formalar yaratish uchun [forma guruhlarini ichma-ich joylashtirishingiz](#creating-nested-form-groups 'See more about nesting groups') ham mumkin. |
+| Forma massivi  | Ish vaqtida boshqaruv elementlarini qoʻshish va olib tashlash mumkin boʻlgan dinamik formani belgilaydi. Murakkabroq formalar yaratish uchun forma massivlarini ichma-ich joylashtirishingiz ham mumkin. Bu variant haqida koʻproq bilish uchun [Dinamik formalar yaratish](#creating-dynamic-forms) boʻlimiga qarang.                              |
 
-Just as a form control instance gives you control over a single input field, a form group instance tracks the form state of a group of form control instances \(for example, a form\).
-Each control in a form group instance is tracked by name when creating the form group.
-The following example shows how to manage multiple form control instances in a single group.
+Forma boshqaruv elementi nusxasi sizga bitta input maydoni ustidan nazoratni bergani kabi, forma guruhi nusxasi forma boshqaruv elementlari nusxalari guruhining \(masalan, formaning\) forma holatini kuzatib boradi.
+Forma guruhi nusxasidagi har bir boshqaruv elementi forma guruhi yaratilayotganda nomi boʻyicha kuzatiladi.
+Quyidagi misol bitta guruhda bir nechta forma boshqaruv elementi nusxalarini qanday boshqarishni koʻrsatadi.
 
-Generate a `ProfileEditor` component and import the `FormGroup` and `FormControl` classes from the `@angular/forms` package.
+`ProfileEditor` komponentini yarating va `@angular/forms` paketidan `FormGroup` va `FormControl` klasslarini import qiling.
 
 ```shell
 ng generate component ProfileEditor
@@ -120,156 +120,156 @@ ng generate component ProfileEditor
 
 <docs-code header="profile-editor.component.ts (imports)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="imports"/>
 
-To add a form group to this component, take the following steps.
+Bu komponentga forma guruhini qoʻshish uchun quyidagi qadamlarni bajaring.
 
-1. Create a `FormGroup` instance.
-1. Associate the `FormGroup` model and view.
-1. Save the form data.
+1. `FormGroup` nusxasini yarating.
+1. `FormGroup` modelini va view'ni bogʻlang.
+1. Forma maʼlumotlarini saqlang.
 
 <docs-workflow>
 
-<docs-step title="Create a FormGroup instance">
-Create a property in the component class named `profileForm` and set the property to a new form group instance. To initialize the form group, provide the constructor with an object of named keys mapped to their control.
+<docs-step title="FormGroup nusxasini yarating">
+Komponent klassida `profileForm` nomli xususiyat yarating va bu xususiyatga yangi forma guruhi nusxasini oʻrnating. Forma guruhini ishga tushirish uchun konstruktorga nomlangan kalitlari oʻz boshqaruv elementlariga moslashtirilgan obyektni bering.
 
-For the profile form, add two form control instances with the names `firstName` and `lastName`
+Profil formasi uchun `firstName` va `lastName` nomli ikkita forma boshqaruv elementi nusxasini qoʻshing
 
 <docs-code header="profile-editor.component.ts (form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="formgroup"/>
 
-The individual form controls are now collected within a group. A `FormGroup` instance provides its model value as an object reduced from the values of each control in the group. A form group instance has the same properties (such as `value` and `untouched`) and methods (such as `setValue()`) as a form control instance.
+Alohida forma boshqaruv elementlari endi guruh ichida jamlangan. `FormGroup` nusxasi oʻz model qiymatini guruhdagi har bir boshqaruv elementi qiymatlaridan yigʻilgan obyekt sifatida taqdim etadi. Forma guruhi nusxasi forma boshqaruv elementi nusxasi bilan bir xil xususiyatlarga (masalan, `value` va `untouched`) va metodlarga (masalan, `setValue()`) ega.
 </docs-step>
 
-<docs-step title="Associate the FormGroup model and view">
-A form group tracks the status and changes for each of its controls, so if one of the controls changes, the parent control also emits a new status or value change. The model for the group is maintained from its members. After you define the model, you must update the template to reflect the model in the view.
+<docs-step title="FormGroup modelini va view'ni bogʻlang">
+Forma guruhi oʻzining har bir boshqaruv elementining holati va oʻzgarishlarini kuzatib boradi, shuning uchun boshqaruv elementlaridan biri oʻzgarsa, ota boshqaruv elementi ham yangi holat yoki qiymat oʻzgarishini chiqaradi. Guruh modeli uning aʼzolaridan tashkil topadi. Modelni belgilaganingizdan soʻng, modelni view'da aks ettirish uchun shablonni yangilashingiz kerak.
 
 <docs-code header="profile-editor.component.html (template form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" region="formgroup"/>
 
-Just as a form group contains a group of controls, the _profileForm_ `FormGroup` is bound to the `form` element with the `FormGroup` directive, creating a communication layer between the model and the form containing the inputs. The `formControlName` input provided by the `FormControlName` directive binds each individual input to the form control defined in `FormGroup`. The form controls communicate with their respective elements. They also communicate changes to the form group instance, which provides the source of truth for the model value.
+Forma guruhi boshqaruv elementlari guruhini oʻz ichiga olgani kabi, _profileForm_ `FormGroup` `FormGroup` direktivasi bilan `form` elementiga bogʻlanadi va model bilan input'larni oʻz ichiga olgan forma oʻrtasida muloqot qatlamini yaratadi. `FormControlName` direktivasi tomonidan taqdim etiladigan `formControlName` input'i har bir alohida input'ni `FormGroup` da belgilangan forma boshqaruv elementiga bogʻlaydi. Forma boshqaruv elementlari oʻzlariga tegishli elementlar bilan muloqot qiladi. Ular shuningdek, oʻzgarishlarni model qiymati uchun haqiqat manbai boʻlgan forma guruhi nusxasiga ham yetkazadi.
 </docs-step>
 
-<docs-step title="Save form data">
-The `ProfileEditor` component accepts input from the user, but in a real scenario you want to capture the form value and make it available for further processing outside the component. The `FormGroup` directive listens for the `submit` event emitted by the `form` element and emits an `ngSubmit` event that you can bind to a callback function. Add an `ngSubmit` event listener to the `form` tag with the `onSubmit()` callback method.
+<docs-step title="Forma maʼlumotlarini saqlang">
+`ProfileEditor` komponenti foydalanuvchidan kiritilgan maʼlumotlarni qabul qiladi, lekin haqiqiy stsenariyda siz forma qiymatini olib, uni komponentdan tashqarida keyingi qayta ishlash uchun taqdim etishni istaysiz. `FormGroup` direktivasi `form` elementi tomonidan chiqariladigan `submit` hodisasini tinglaydi va callback funksiyasiga bogʻlashingiz mumkin boʻlgan `ngSubmit` hodisasini chiqaradi. `form` tegiga `onSubmit()` callback metodi bilan `ngSubmit` hodisa tinglovchisini qoʻshing.
 
 <docs-code header="profile-editor.component.html (submit event)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" region="ng-submit"/>
 
-The `onSubmit()` method in the `ProfileEditor` component captures the current value of `profileForm`. Use `output()` to keep the form encapsulated and to provide the form value outside the component. The following example uses `console.warn` to log a message to the browser console.
+`ProfileEditor` komponentidagi `onSubmit()` metodi `profileForm` ning joriy qiymatini oladi. Formani inkapsulyatsiyalangan holda saqlash va forma qiymatini komponentdan tashqariga taqdim etish uchun `output()` dan foydalaning. Quyidagi misol brauzer konsoliga xabar chiqarish uchun `console.warn` dan foydalanadi.
 
 <docs-code header="profile-editor.component.ts (submit method)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="on-submit"/>
 
-The `submit` event is emitted by the `form` tag using the built-in DOM event. You trigger the event by clicking a button with `submit` type. This lets the user press the **Enter** key to submit the completed form.
+`submit` hodisasi `form` tegi tomonidan oʻrnatilgan DOM hodisasi yordamida chiqariladi. Siz hodisani `submit` turidagi tugmani bosish orqali ishga tushirasiz. Bu foydalanuvchiga toʻldirilgan formani yuborish uchun **Enter** tugmasini bosish imkonini beradi.
 
-Use a `button` element to add a button to the bottom of the form to trigger the form submission.
+Formani yuborishni ishga tushirish uchun forma pastiga tugma qoʻshishda `button` elementidan foydalaning.
 
 <docs-code header="profile-editor.component.html (submit button)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" region="submit-button"/>
 
-The button in the preceding snippet also has a `disabled` binding attached to it to disable the button when `profileForm` is invalid. You aren't performing any validation yet, so the button is always enabled. Basic form validation is covered in the [Validating form input](#validating-form-input) section.
+Yuqoridagi parchadagi tugmada `profileForm` yaroqsiz boʻlganda tugmani oʻchirib qoʻyish uchun `disabled` bogʻlashi ham biriktirilgan. Siz hali hech qanday validatsiya qilmayapsiz, shuning uchun tugma har doim yoqilgan boʻladi. Asosiy forma validatsiyasi [Forma input'ini validatsiya qilish](#validating-form-input) boʻlimida yoritilgan.
 </docs-step>
 
-<docs-step title="Display the component {#display-the-component-form-group}">
-To display the `ProfileEditor` component that contains the form, add it to a component template.
+<docs-step title="Komponentni koʻrsating {#display-the-component-form-group}">
+Formani oʻz ichiga olgan `ProfileEditor` komponentini koʻrsatish uchun uni komponent shabloniga qoʻshing.
 
 <docs-code header="app.component.html (profile editor)" path="adev/src/content/examples/reactive-forms/src/app/app.component.1.html" region="app-profile-editor"/>
 
-`ProfileEditor` lets you manage the form control instances for the `firstName` and `lastName` controls within the form group instance.
+`ProfileEditor` forma guruhi nusxasi ichidagi `firstName` va `lastName` boshqaruv elementlari uchun forma boshqaruv elementi nusxalarini boshqarish imkonini beradi.
 </docs-step>
 </docs-workflow>
 
-### Creating nested form groups
+### Ichma-ich forma guruhlarini yaratish {#creating-nested-form-groups}
 
-Form groups can accept both individual form control instances and other form group instances as children.
-This makes composing complex form models easier to maintain and logically group together.
+Forma guruhlari bola sifatida alohida forma boshqaruv elementi nusxalarini ham, boshqa forma guruhi nusxalarini ham qabul qilishi mumkin.
+Bu murakkab forma modellarini tuzishni, ularga xizmat koʻrsatishni va mantiqiy guruhlashni osonlashtiradi.
 
-When building complex forms, managing the different areas of information is easier in smaller sections.
-Using a nested form group instance lets you break large forms groups into smaller, more manageable ones.
+Murakkab formalar yaratishda maʼlumotlarning turli sohalarini kichikroq boʻlimlarda boshqarish osonroq.
+Ichma-ich forma guruhi nusxasidan foydalanish katta forma guruhlarini kichikroq, boshqarish osonroq guruhlarga ajratish imkonini beradi.
 
-To make more complex forms, use the following steps.
+Murakkabroq formalar yaratish uchun quyidagi qadamlardan foydalaning.
 
-1. Create a nested group.
-1. Group the nested form in the template.
+1. Ichki guruh yarating.
+1. Ichki formani shablonda guruhlang.
 
-Some types of information naturally fall into the same group.
-A name and address are typical examples of such nested groups, and are used in the following examples.
+Baʼzi maʼlumot turlari tabiiy ravishda bir guruhga tushadi.
+Ism va manzil bunday ichki guruhlarning odatiy misollari boʻlib, quyidagi misollarda ishlatiladi.
 
 <docs-workflow>
-<docs-step title="Create a nested group">
-To create a nested group in `profileForm`, add a nested `address` element to the form group instance.
+<docs-step title="Ichki guruh yarating">
+`profileForm` da ichki guruh yaratish uchun forma guruhi nusxasiga ichki `address` elementini qoʻshing.
 
 <docs-code header="profile-editor.component.ts (nested form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="nested-formgroup"/>
 
-In this example, `address group` combines the current `firstName` and `lastName` controls with the new `street`, `city`, `state`, and `zip` controls. Even though the `address` element in the form group is a child of the overall `profileForm` element in the form group, the same rules apply with value and status changes. Changes in status and value from the nested form group propagate to the parent form group, maintaining consistency with the overall model.
+Bu misolda `address group` joriy `firstName` va `lastName` boshqaruv elementlarini yangi `street`, `city`, `state` va `zip` boshqaruv elementlari bilan birlashtiradi. Forma guruhidagi `address` elementi forma guruhidagi umumiy `profileForm` elementining bolasi boʻlsa-da, qiymat va holat oʻzgarishlarida bir xil qoidalar amal qiladi. Ichki forma guruhidagi holat va qiymat oʻzgarishlari ota forma guruhiga tarqaladi va umumiy model bilan izchillikni saqlaydi.
 </docs-step>
 
-<docs-step title="Group the nested form in the template">
-After you update the model in the component class, update the template to connect the form group instance and its input elements. Add the `address` form group containing the `street`, `city`, `state`, and `zip` fields to the `ProfileEditor` template.
+<docs-step title="Ichki formani shablonda guruhlang">
+Komponent klassida modelni yangilaganingizdan soʻng, forma guruhi nusxasi va uning input elementlarini ulash uchun shablonni yangilang. `street`, `city`, `state` va `zip` maydonlarini oʻz ichiga olgan `address` forma guruhini `ProfileEditor` shabloniga qoʻshing.
 
 <docs-code header="profile-editor.component.html (template nested form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" region="formgroupname"/>
 
-The `ProfileEditor` form is displayed as one group, but the model is broken down further to represent the logical grouping areas.
+`ProfileEditor` formasi bitta guruh sifatida koʻrsatiladi, lekin model mantiqiy guruhlash sohalarini ifodalash uchun yanada boʻlinadi.
 
-Display the value for the form group instance in the component template using the `value` property and `JsonPipe`.
+Komponent shablonida forma guruhi nusxasining qiymatini `value` xususiyati va `JsonPipe` yordamida koʻrsating.
 </docs-step>
 </docs-workflow>
 
-### Updating parts of the data model
+### Maʼlumotlar modelining qismlarini yangilash {#updating-parts-of-the-data-model}
 
-When updating the value for a form group instance that contains multiple controls, you might only want to update parts of the model.
-This section covers how to update specific parts of a form control data model.
+Bir nechta boshqaruv elementlarini oʻz ichiga olgan forma guruhi nusxasining qiymatini yangilashda siz modelning faqat qismlarini yangilashni istashingiz mumkin.
+Bu boʻlim forma boshqaruv elementi maʼlumotlar modelining muayyan qismlarini qanday yangilashni yoritadi.
 
-There are two ways to update the model value:
+Model qiymatini yangilashning ikki usuli bor:
 
-| Methods        | Details                                                                                                                                                               |
+| Metodlar        | Tafsilotlar                                                                                                                                                               |
 | :------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `setValue()`   | Set a new value for an individual control. The `setValue()` method strictly adheres to the structure of the form group and replaces the entire value for the control. |
-| `patchValue()` | Replace any properties defined in the object that have changed in the form model.                                                                                     |
+| `setValue()`   | Alohida boshqaruv elementi uchun yangi qiymat oʻrnatadi. `setValue()` metodi forma guruhi tuzilmasiga qatʼiy rioya qiladi va boshqaruv elementining butun qiymatini almashtiradi. |
+| `patchValue()` | Forma modelida oʻzgargan, obyektda belgilangan har qanday xususiyatlarni almashtiradi.                                                                                     |
 
-The strict checks of the `setValue()` method help catch nesting errors in complex forms, while `patchValue()` fails silently on those errors.
+`setValue()` metodining qatʼiy tekshiruvlari murakkab formalarda ichma-ich joylashish xatolarini aniqlashga yordam beradi, `patchValue()` esa bunday xatolarda jimgina ishdan chiqadi.
 
-In `ProfileEditorComponent`, use the `updateProfile` method with the following example to update the first name and street address for the user.
+`ProfileEditorComponent` da foydalanuvchining ismi va koʻcha manzilini yangilash uchun quyidagi misol bilan `updateProfile` metodidan foydalaning.
 
 <docs-code header="profile-editor.component.ts (patch value)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="patch-value"/>
 
-Simulate an update by adding a button to the template to update the user profile on demand.
+Foydalanuvchi profilini talab boʻyicha yangilash uchun shablonga tugma qoʻshib yangilanishni simulyatsiya qiling.
 
 <docs-code header="profile-editor.component.html (update value)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" region="patch-value"/>
 
-When a user clicks the button, the `profileForm` model is updated with new values for `firstName` and `street`. Notice that `street` is provided in an object inside the `address` property.
-This is necessary because the `patchValue()` method applies the update against the model structure.
-`patchValue()` only updates properties that the form model defines.
+Foydalanuvchi tugmani bosganda `profileForm` modeli `firstName` va `street` uchun yangi qiymatlar bilan yangilanadi. `street` ning `address` xususiyati ichidagi obyektda berilganiga eʼtibor bering.
+Bu zarur, chunki `patchValue()` metodi yangilanishni model tuzilmasiga nisbatan qoʻllaydi.
+`patchValue()` faqat forma modeli belgilagan xususiyatlarni yangilaydi.
 
-## Using the FormBuilder service to generate controls
+## Boshqaruv elementlarini yaratish uchun FormBuilder servisidan foydalanish {#using-the-formbuilder-service-to-generate-controls}
 
-Creating form control instances manually can become repetitive when dealing with multiple forms.
-The `FormBuilder` service provides convenient methods for generating controls.
+Bir nechta formalar bilan ishlashda forma boshqaruv elementi nusxalarini qoʻlda yaratish takroriy boʻlib qolishi mumkin.
+`FormBuilder` servisi boshqaruv elementlarini yaratish uchun qulay metodlarni taqdim etadi.
 
-Use the following steps to take advantage of this service.
+Bu servisdan foydalanish uchun quyidagi qadamlarni bajaring.
 
-1. Import the `FormBuilder` class.
-1. Inject the `FormBuilder` service.
-1. Generate the form contents.
+1. `FormBuilder` klassini import qiling.
+1. `FormBuilder` servisini inyeksiya qiling.
+1. Forma tarkibini yarating.
 
-The following examples show how to refactor the `ProfileEditor` component to use the form builder service to create form control and form group instances.
+Quyidagi misollar forma boshqaruv elementi va forma guruhi nusxalarini yaratish uchun form builder servisidan foydalanishga `ProfileEditor` komponentini qanday refaktoring qilishni koʻrsatadi.
 
 <docs-workflow>
-<docs-step title="Import the FormBuilder class">
-Import the `FormBuilder` class from the `@angular/forms` package.
+<docs-step title="FormBuilder klassini import qiling">
+`@angular/forms` paketidan `FormBuilder` klassini import qiling.
 
 <docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-builder-imports"/>
 
 </docs-step>
 
-<docs-step title="Inject the FormBuilder service">
-The `FormBuilder` service is an injectable provider from the reactive forms module. Use the `inject()` function to inject this dependency in your component.
+<docs-step title="FormBuilder servisini inyeksiya qiling">
+`FormBuilder` servisi reaktiv formalar modulidan inyeksiya qilinadigan provider hisoblanadi. Bu bogʻliqlikni komponentingizga inyeksiya qilish uchun `inject()` funksiyasidan foydalaning.
 
 <docs-code header="profile-editor.component.ts (property init)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="inject-form-builder"/>
 
 </docs-step>
-<docs-step title="Generate form controls">
-The `FormBuilder` service has three methods: `control()`, `group()`, and `array()`. These are factory methods for generating instances in your component classes including form controls, form groups, and form arrays. Use the `group` method to create the `profileForm` controls.
+<docs-step title="Forma boshqaruv elementlarini yarating">
+`FormBuilder` servisi uchta metodga ega: `control()`, `group()` va `array()`. Bular komponent klasslaringizda forma boshqaruv elementlari, forma guruhlari va forma massivlarini oʻz ichiga olgan nusxalarni yaratish uchun fabrika metodlaridir. `profileForm` boshqaruv elementlarini yaratish uchun `group` metodidan foydalaning.
 
 <docs-code header="profile-editor.component.ts (form builder)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-builder"/>
 
-In the preceding example, you use the `group()` method with the same object to define the properties in the model. The value for each control name is an array containing the initial value as the first item in the array.
+Yuqoridagi misolda modeldagi xususiyatlarni belgilash uchun `group()` metodini xuddi shu obyekt bilan ishlatasiz. Har bir boshqaruv elementi nomi uchun qiymat — massivning birinchi elementi sifatida boshlangʻich qiymatni oʻz ichiga olgan massiv.
 
-TIP: You can define the control with just the initial value, but if your controls need sync or async validation, add sync and async validators as the second and third items in the array. Compare using the form builder to creating the instances manually.
+TIP: Boshqaruv elementini faqat boshlangʻich qiymat bilan belgilashingiz mumkin, lekin boshqaruv elementlaringizga sinxron yoki asinxron validatsiya kerak boʻlsa, massivning ikkinchi va uchinchi elementlari sifatida sinxron va asinxron validatorlarni qoʻshing. Form builder'dan foydalanishni nusxalarni qoʻlda yaratish bilan taqqoslang.
 
   <docs-code-multifile>
     <docs-code header="profile-editor.component.ts (instances)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="formgroup-compare"/>
@@ -279,109 +279,109 @@ TIP: You can define the control with just the initial value, but if your control
 
 </docs-workflow>
 
-## Validating form input
+## Forma input'ini validatsiya qilish {#validating-form-input}
 
-_Form validation_ is used to ensure that user input is complete and correct.
-This section covers adding a single validator to a form control and displaying the overall form status.
-Form validation is covered more extensively in the [Form Validation](guide/forms/form-validation) guide.
+_Forma validatsiyasi_ foydalanuvchi kiritgan maʼlumotlarning toʻliq va toʻgʻri boʻlishini taʼminlash uchun ishlatiladi.
+Bu boʻlim forma boshqaruv elementiga bitta validator qoʻshish va formaning umumiy holatini koʻrsatishni yoritadi.
+Forma validatsiyasi [Forma validatsiyasi](guide/forms/form-validation) qoʻllanmasida kengroq yoritilgan.
 
-Use the following steps to add form validation.
+Forma validatsiyasini qoʻshish uchun quyidagi qadamlardan foydalaning.
 
-1. Import a validator function in your form component.
-1. Add the validator to the field in the form.
-1. Add logic to handle the validation status.
+1. Forma komponentingizga validator funksiyasini import qiling.
+1. Validatorni formadagi maydonga qoʻshing.
+1. Validatsiya holatini boshqarish uchun mantiq qoʻshing.
 
-The most common validation is making a field required.
-The following example shows how to add a required validation to the `firstName` control and display the result of validation.
+Eng keng tarqalgan validatsiya — maydonni majburiy qilish.
+Quyidagi misol `firstName` boshqaruv elementiga majburiylik validatsiyasini qanday qoʻshishni va validatsiya natijasini koʻrsatishni koʻrsatadi.
 
 <docs-workflow>
-<docs-step title="Import a validator function">
-Reactive forms include a set of validator functions for common use cases. These functions receive a control to validate against and return an error object or a null value based on the validation check.
+<docs-step title="Validator funksiyasini import qiling">
+Reaktiv formalar keng tarqalgan holatlar uchun validator funksiyalari toʻplamini oʻz ichiga oladi. Bu funksiyalar validatsiya qilinadigan boshqaruv elementini qabul qiladi va validatsiya tekshiruvi asosida xato obyekti yoki null qiymatini qaytaradi.
 
-Import the `Validators` class from the `@angular/forms` package.
+`@angular/forms` paketidan `Validators` klassini import qiling.
 
 <docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="validator-imports"/>
 </docs-step>
 
-<docs-step title="Make a field required">
-In the `ProfileEditor` component, add the `Validators.required` static method as the second item in the array for the `firstName` control.
+<docs-step title="Maydonni majburiy qiling">
+`ProfileEditor` komponentida `firstName` boshqaruv elementi uchun massivning ikkinchi elementi sifatida `Validators.required` statik metodini qoʻshing.
 
 <docs-code header="profile-editor.component.ts (required validator)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="required-validator"/>
 </docs-step>
 
-<docs-step title="Display form status">
-When you add a required field to the form control, its initial status is invalid. This invalid status propagates to the parent form group element, making its status invalid. Access the current status of the form group instance through its `status` property.
+<docs-step title="Forma holatini koʻrsating">
+Forma boshqaruv elementiga majburiy maydon qoʻshganingizda uning boshlangʻich holati yaroqsiz (invalid) boʻladi. Bu yaroqsiz holat ota forma guruhi elementiga tarqaladi va uning holatini ham yaroqsiz qiladi. Forma guruhi nusxasining joriy holatiga uning `status` xususiyati orqali murojaat qiling.
 
-Display the current status of `profileForm` using interpolation.
+`profileForm` ning joriy holatini interpolyatsiya yordamida koʻrsating.
 
 <docs-code header="profile-editor.component.html (display status)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" region="display-status"/>
 
-The **Submit** button is disabled because `profileForm` is invalid due to the required `firstName` form control. After you fill out the `firstName` input, the form becomes valid and the **Submit** button is enabled.
+**Submit** tugmasi oʻchirib qoʻyilgan, chunki majburiy `firstName` forma boshqaruv elementi sababli `profileForm` yaroqsiz. `firstName` input'ini toʻldirganingizdan soʻng forma yaroqli boʻladi va **Submit** tugmasi yoqiladi.
 
-For more on form validation, visit the [Form Validation](guide/forms/form-validation) guide.
+Forma validatsiyasi haqida koʻproq bilish uchun [Forma validatsiyasi](guide/forms/form-validation) qoʻllanmasiga murojaat qiling.
 </docs-step>
 </docs-workflow>
 
-## Creating dynamic forms
+## Dinamik formalar yaratish {#creating-dynamic-forms}
 
-`FormArray` is an alternative to `FormGroup` for managing any number of unnamed controls.
-As with form group instances, you can dynamically insert and remove controls from form array instances, and the form array instance value and validation status is calculated from its child controls.
-However, you don't need to define a key for each control by name, so this is a great option if you don't know the number of child values in advance.
+`FormArray` — istalgan sondagi nomsiz boshqaruv elementlarini boshqarish uchun `FormGroup` ga muqobil.
+Forma guruhi nusxalaridagi kabi, forma massivi nusxalariga boshqaruv elementlarini dinamik tarzda qoʻshishingiz va olib tashlashingiz mumkin, forma massivi nusxasining qiymati va validatsiya holati esa uning bola boshqaruv elementlaridan hisoblanadi.
+Biroq, har bir boshqaruv elementi uchun nom boʻyicha kalit belgilashingiz shart emas, shuning uchun bola qiymatlar sonini oldindan bilmasangiz, bu ajoyib variant.
 
-To define a dynamic form, take the following steps.
+Dinamik formani belgilash uchun quyidagi qadamlarni bajaring.
 
-1. Import the `FormArray` class.
-1. Define a `FormArray` control.
-1. Access the `FormArray` control with a getter method.
-1. Display the form array in a template.
+1. `FormArray` klassini import qiling.
+1. `FormArray` boshqaruv elementini belgilang.
+1. `FormArray` boshqaruv elementiga getter metodi orqali murojaat qiling.
+1. Forma massivini shablonda koʻrsating.
 
-The following example shows you how to manage an array of _aliases_ in `ProfileEditor`.
+Quyidagi misol `ProfileEditor` da _taxalluslar_ (aliases) massivini qanday boshqarishni koʻrsatadi.
 
 <docs-workflow>
-<docs-step title="Import the `FormArray` class">
-Import the `FormArray` class from `@angular/forms` to use for type information. The `FormBuilder` service is ready to create a `FormArray` instance.
+<docs-step title="`FormArray` klassini import qiling">
+Tip maʼlumoti uchun foydalanish maqsadida `@angular/forms` dan `FormArray` klassini import qiling. `FormBuilder` servisi `FormArray` nusxasini yaratishga tayyor.
 
 <docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-array-imports"/>
 </docs-step>
 
-<docs-step title="Define a `FormArray` control">
-You can initialize a form array with any number of controls, from zero to many, by defining them in an array. Add an `aliases` property to the form group instance for `profileForm` to define the form array.
+<docs-step title="`FormArray` boshqaruv elementini belgilang">
+Forma massivini massivda belgilash orqali noldan koʻpgacha istalgan sondagi boshqaruv elementlari bilan ishga tushirishingiz mumkin. Forma massivini belgilash uchun `profileForm` forma guruhi nusxasiga `aliases` xususiyatini qoʻshing.
 
-Use the `FormBuilder.array()` method to define the array, and the `FormBuilder.control()` method to populate the array with an initial control.
+Massivni belgilash uchun `FormBuilder.array()` metodidan, massivni boshlangʻich boshqaruv elementi bilan toʻldirish uchun esa `FormBuilder.control()` metodidan foydalaning.
 
 <docs-code header="profile-editor.component.ts (aliases form array)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="aliases"/>
 
-The aliases control in the form group instance is now populated with a single control until more controls are added dynamically.
+Forma guruhi nusxasidagi aliases boshqaruv elementi endi dinamik tarzda koʻproq boshqaruv elementlari qoʻshilmaguncha bitta boshqaruv elementi bilan toʻldirilgan.
 </docs-step>
 
-<docs-step title="Access the `FormArray` control">
-A getter provides access to the aliases in the form array instance compared to repeating the `profileForm.get()` method to get each instance. The form array instance represents an undefined number of controls in an array. It's convenient to access a control through a getter, and this approach is straightforward to repeat for additional controls. <br />
+<docs-step title="`FormArray` boshqaruv elementiga murojaat qiling">
+Har bir nusxani olish uchun `profileForm.get()` metodini takrorlash oʻrniga getter forma massivi nusxasidagi taxalluslarga murojaat qilish imkonini beradi. Forma massivi nusxasi massivdagi noaniq sondagi boshqaruv elementlarini ifodalaydi. Boshqaruv elementiga getter orqali murojaat qilish qulay va bu yondashuvni qoʻshimcha boshqaruv elementlari uchun takrorlash oson. <br />
 
-Use the getter syntax to create an `aliases` class property to retrieve the alias's form array control from the parent form group.
+Ota forma guruhidan taxalluslar forma massivi boshqaruv elementini olish uchun getter sintaksisidan foydalanib `aliases` klass xususiyatini yarating.
 
 <docs-code header="profile-editor.component.ts (aliases getter)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="aliases-getter"/>
 
-Because the returned control is of the type `AbstractControl`, you need to provide an explicit type to access the method syntax for the form array instance. Define a method to dynamically insert an alias control into the alias's form array. The `FormArray.push()` method inserts the control as a new item in the array, and you can also pass an array of controls to FormArray.push() to register multiple controls at once.
+Qaytarilgan boshqaruv elementi `AbstractControl` tipida boʻlgani uchun forma massivi nusxasining metod sintaksisiga murojaat qilish uchun aniq tip koʻrsatishingiz kerak. Taxalluslar forma massiviga taxallus boshqaruv elementini dinamik tarzda qoʻshish uchun metod belgilang. `FormArray.push()` metodi boshqaruv elementini massivga yangi element sifatida qoʻshadi, shuningdek, bir vaqtning oʻzida bir nechta boshqaruv elementini roʻyxatdan oʻtkazish uchun FormArray.push() ga boshqaruv elementlari massivini ham uzatishingiz mumkin.
 
 <docs-code header="profile-editor.component.ts (add alias)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="add-alias"/>
 
-In the template, each control is displayed as a separate input field.
+Shablonda har bir boshqaruv elementi alohida input maydoni sifatida koʻrsatiladi.
 
 </docs-step>
 
-<docs-step title="Display the form array in the template">
+<docs-step title="Forma massivini shablonda koʻrsating">
 
-To attach the aliases from your form model, you must add it to the template. Similar to the `formGroupName` input provided by `FormGroupName`, `formArrayName` binds communication from the form array instance to the template with `FormArrayName`.
+Forma modelingizdagi taxalluslarni biriktirish uchun ularni shablonga qoʻshishingiz kerak. `FormGroupName` tomonidan taqdim etiladigan `formGroupName` input'iga oʻxshab, `formArrayName` `FormArrayName` yordamida forma massivi nusxasidan shablonga muloqotni bogʻlaydi.
 
-Add the following template HTML after the `<div>` closing the `formGroupName` element.
+`formGroupName` elementini yopuvchi `<div>` dan keyin quyidagi shablon HTML'ini qoʻshing.
 
 <docs-code header="profile-editor.component.html (aliases form array template)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" region="formarrayname"/>
 
-The `@for` block iterates over each form control instance provided by the aliases form array instance. Because form array elements are unnamed, you assign the index to the `i` variable and pass it to each control to bind it to the `formControlName` input.
+`@for` bloki aliases forma massivi nusxasi tomonidan taqdim etilgan har bir forma boshqaruv elementi nusxasi boʻylab iteratsiya qiladi. Forma massivi elementlari nomsiz boʻlgani uchun indeksni `i` oʻzgaruvchisiga biriktirasiz va uni `formControlName` input'iga bogʻlash uchun har bir boshqaruv elementiga uzatasiz.
 
-Each time a new alias instance is added, the new form array instance is provided its control based on the index. This lets you track each individual control when calculating the status and value of the root control.
+Har safar yangi taxallus nusxasi qoʻshilganda yangi forma massivi nusxasiga indeks asosida oʻz boshqaruv elementi beriladi. Bu ildiz boshqaruv elementining holati va qiymatini hisoblashda har bir alohida boshqaruv elementini kuzatish imkonini beradi.
 
-NOTE: In zoneless applications, mutating a reactive forms model (for example calling `FormArray.push()`) does not automatically schedule component change detection. If your template depends on structural model changes such as `aliases.controls`, make sure the component notifies Angular to run change detection, for example by bridging a forms observable to `ChangeDetectorRef.markForCheck()`:
+NOTE: Zoneless ilovalarda reaktiv formalar modelini oʻzgartirish (masalan, `FormArray.push()` ni chaqirish) komponentning oʻzgarishlarni aniqlashini avtomatik ravishda rejalashtirmaydi. Agar shabloningiz `aliases.controls` kabi tuzilmaviy model oʻzgarishlariga bogʻliq boʻlsa, komponent Angular'ga oʻzgarishlarni aniqlashni ishga tushirish kerakligini bildirishiga ishonch hosil qiling, masalan, formalar observable'ini `ChangeDetectorRef.markForCheck()` ga ulash orqali:
 
 ```ts
 import {ChangeDetectorRef, Component, inject} from '@angular/core';
@@ -401,10 +401,10 @@ export class ProfileEditor {
 
 </docs-step>
 
-### Using `FormArrayDirective` for top-level form arrays
+### Yuqori darajadagi forma massivlari uchun `FormArrayDirective` dan foydalanish {#using-formarraydirective-for-top-level-form-arrays}
 
-You can bind a `FormArray` directly to a `<form>` element by using the `FormArrayDirective`.  
-This is useful when the form does not use a top-level `FormGroup`, and the array itself represents the full form model.
+`FormArrayDirective` yordamida `FormArray` ni bevosita `<form>` elementiga bogʻlashingiz mumkin.  
+Bu forma yuqori darajadagi `FormGroup` dan foydalanmaganda va massivning oʻzi toʻliq forma modelini ifodalaganda foydali.
 
 ```angular-ts
 import {Component} from '@angular/core';
@@ -427,30 +427,30 @@ export class FormArrayExampleComponent {
 }
 ```
 
-<docs-step title="Add an alias">
+<docs-step title="Taxallus qoʻshing">
 
-Initially, the form contains one `Alias` field. To add another field, click the **Add Alias** button. You can also validate the array of aliases reported by the form model displayed by `Form Value` at the bottom of the template. Instead of a form control instance for each alias, you can compose another form group instance with additional fields. The process of defining a control for each item is the same.
+Dastlab forma bitta `Alias` maydonini oʻz ichiga oladi. Yana bir maydon qoʻshish uchun **Add Alias** tugmasini bosing. Shuningdek, shablon pastidagi `Form Value` da koʻrsatilgan forma modeli xabar qilgan taxalluslar massivini ham tekshirishingiz mumkin. Har bir taxallus uchun forma boshqaruv elementi nusxasi oʻrniga qoʻshimcha maydonlarga ega boshqa forma guruhi nusxasini tuzishingiz mumkin. Har bir element uchun boshqaruv elementini belgilash jarayoni bir xil.
 </docs-step>
 
 </docs-workflow>
 
-## Unified control state change events
+## Boshqaruv elementi holati oʻzgarishining yagona hodisalari {#unified-control-state-change-events}
 
-All form controls expose a single unified stream of **control state change events** through the `events` observable on `AbstractControl` (`FormControl`, `FormGroup`, `FormArray`, and `FormRecord`).
-This unified stream lets you react to **value**, **status**, **pristine**, **touched**, and **reset** state changes, as well as **form-level actions** such as **submit**, allowing you to handle all updates with a single subscription instead of wiring multiple observables.
+Barcha forma boshqaruv elementlari `AbstractControl` (`FormControl`, `FormGroup`, `FormArray` va `FormRecord`) dagi `events` observable'i orqali **boshqaruv elementi holati oʻzgarishi hodisalarining** yagona birlashtirilgan oqimini taqdim etadi.
+Bu yagona oqim **value**, **status**, **pristine**, **touched** va **reset** holat oʻzgarishlariga, shuningdek, **submit** kabi **forma darajasidagi harakatlarga** reaksiya bildirish imkonini beradi va bir nechta observable'larni ulash oʻrniga barcha yangilanishlarni bitta obuna bilan boshqarish imkonini beradi.
 
-### Event types
+### Hodisa turlari {#event-types}
 
-Each item emitted by `events` is an instance of a specific event class:
+`events` tomonidan chiqarilgan har bir element muayyan hodisa klassining nusxasi hisoblanadi:
 
-- **`ValueChangeEvent`** — when the control’s **value** changes.
-- **`StatusChangeEvent`** — when the control’s **validation status** updates to one of the `FormControlStatus` values (`VALID`, `INVALID`, `PENDING`, or `DISABLED`).
-- **`PristineChangeEvent`** — when the control’s **pristine/dirty** state changes.
-- **`TouchedChangeEvent`** — when the control’s **touched/untouched** state changes.
-- **`FormResetEvent`** — when a control or form is reset, either via the `reset()` API or a native action.
-- **`FormSubmittedEvent`** — when the form is submitted.
+- **`ValueChangeEvent`** — boshqaruv elementining **qiymati** oʻzgarganda.
+- **`StatusChangeEvent`** — boshqaruv elementining **validatsiya holati** `FormControlStatus` qiymatlaridan biriga (`VALID`, `INVALID`, `PENDING` yoki `DISABLED`) yangilanganda.
+- **`PristineChangeEvent`** — boshqaruv elementining **pristine/dirty** holati oʻzgarganda.
+- **`TouchedChangeEvent`** — boshqaruv elementining **touched/untouched** holati oʻzgarganda.
+- **`FormResetEvent`** — boshqaruv elementi yoki forma `reset()` API'si yoki tabiiy harakat orqali qayta tiklanganda.
+- **`FormSubmittedEvent`** — forma yuborilganda.
 
-All event classes extend `ControlEvent` and include a `source` reference to the `AbstractControl` that originated the change, which is useful in large forms.
+Barcha hodisa klasslari `ControlEvent` dan meros oladi va oʻzgarishni boshlagan `AbstractControl` ga `source` havolasini oʻz ichiga oladi, bu katta formalarda foydali.
 
 ```ts
 import {Component} from '@angular/core';
@@ -502,9 +502,9 @@ export class UnifiedEventsBasicComponent {
 }
 ```
 
-### Filtering specific events
+### Muayyan hodisalarni filtrlash {#filtering-specific-events}
 
-Prefer RxJS operators when you only need a subset of event types.
+Sizga hodisa turlarining faqat bir qismi kerak boʻlganda RxJS operatorlarini afzal koʻring.
 
 ```ts
 import {filter} from 'rxjs/operators';
@@ -515,9 +515,9 @@ control.events
   .subscribe((e) => console.log('Status:', e.status));
 ```
 
-### Unifying from multiple subscriptions
+### Bir nechta obunani birlashtirish {#unifying-from-multiple-subscriptions}
 
-**Before**
+**Oldin**
 
 ```ts
 import {combineLatest} from 'rxjs';
@@ -527,7 +527,7 @@ combineLatest([control.valueChanges, control.statusChanges]).subscribe(([value, 
 });
 ```
 
-**After**
+**Keyin**
 
 ```ts
 control.events.subscribe((e) => {
@@ -535,13 +535,13 @@ control.events.subscribe((e) => {
 });
 ```
 
-NOTE: On value change, the emit happens right after a value of this control is updated. The value of a parent control (for example if this FormControl is a part of a FormGroup) is updated later, so accessing a value of a parent control (using the `value` property) from the callback of this event might result in getting a value that has not been updated yet. Subscribe to the `events` of the parent control instead.
+NOTE: Qiymat oʻzgarganda hodisa bu boshqaruv elementining qiymati yangilangandan keyin darhol chiqariladi. Ota boshqaruv elementining qiymati (masalan, agar bu FormControl FormGroup ning bir qismi boʻlsa) keyinroq yangilanadi, shuning uchun bu hodisaning callback'idan ota boshqaruv elementining qiymatiga (`value` xususiyati orqali) murojaat qilish hali yangilanmagan qiymatni olishga olib kelishi mumkin. Buning oʻrniga ota boshqaruv elementining `events` iga obuna boʻling.
 
-## Managing form control state
+## Forma boshqaruv elementi holatini boshqarish {#managing-form-control-state}
 
-Reactive forms track control state through **touched/untouched** and **pristine/dirty**. Angular updates these automatically during DOM interactions, but you can also manage them programmatically.
+Reaktiv formalar boshqaruv elementi holatini **touched/untouched** va **pristine/dirty** orqali kuzatadi. Angular DOM bilan oʻzaro taʼsir paytida bularni avtomatik yangilaydi, lekin siz ularni programmatik tarzda ham boshqarishingiz mumkin.
 
-**[`markAsTouched`](api/forms/FormControl#markAsTouched)** — Marks a control or form as touched by focus and blur events that do not change the value. Propagates to parent controls by default.
+**[`markAsTouched`](api/forms/FormControl#markAsTouched)** — boshqaruv elementi yoki formani qiymatni oʻzgartirmaydigan focus va blur hodisalari orqali touched deb belgilaydi. Sukut boʻyicha ota boshqaruv elementlariga tarqaladi.
 
 ```ts
 // Show validation errors after user leaves a field
@@ -551,7 +551,7 @@ onEmailBlur() {
 }
 ```
 
-**[`markAsUntouched`](api/forms/FormControl#markAsUntouched)** — Marks a control or form as untouched. Cascades to all child controls and recalculates the touched status of all parent controls.
+**[`markAsUntouched`](api/forms/FormControl#markAsUntouched)** — boshqaruv elementi yoki formani untouched deb belgilaydi. Barcha bola boshqaruv elementlariga kaskad tarzda tarqaladi va barcha ota boshqaruv elementlarining touched holatini qayta hisoblaydi.
 
 ```ts
 // Reset form state after successful submission
@@ -561,7 +561,7 @@ onSubmitSuccess() {
 }
 ```
 
-**[`markAsDirty`](api/forms/FormControl#markAsDirty)** — Marks a control or form as dirty, meaning the value has been changed. Propagates to parent controls by default.
+**[`markAsDirty`](api/forms/FormControl#markAsDirty)** — boshqaruv elementi yoki formani dirty deb belgilaydi, yaʼni qiymat oʻzgartirilgan. Sukut boʻyicha ota boshqaruv elementlariga tarqaladi.
 
 ```ts
 // Mark programmatically changed values as modified
@@ -572,7 +572,7 @@ autofillAddress() {
 }
 ```
 
-**[`markAsPristine`](api/forms/FormControl#markAsPristine)** — Marks a control or form as pristine. Marks all child controls as pristine and recalculates the pristine status of all parent controls.
+**[`markAsPristine`](api/forms/FormControl#markAsPristine)** — boshqaruv elementi yoki formani pristine deb belgilaydi. Barcha bola boshqaruv elementlarini pristine deb belgilaydi va barcha ota boshqaruv elementlarining pristine holatini qayta hisoblaydi.
 
 ```ts
 // Reset pristine state after saving to track new changes
@@ -583,7 +583,7 @@ saveForm() {
 }
 ```
 
-**[`markAllAsDirty`](api/forms/FormControl#markAllAsDirty)** — Marks the control or form and all its descendant controls as dirty.
+**[`markAllAsDirty`](api/forms/FormControl#markAllAsDirty)** — boshqaruv elementi yoki formani va uning barcha avlod boshqaruv elementlarini dirty deb belgilaydi.
 
 ```ts
 // Mark imported data as dirty
@@ -593,7 +593,7 @@ loadData(data: FormData) {
 }
 ```
 
-**[`markAllAsTouched`](api/forms/FormControl#markAllAsTouched)** — Marks the control or form and all its descendant controls as touched. Useful for showing validation errors across the entire form.
+**[`markAllAsTouched`](api/forms/FormControl#markAllAsTouched)** — boshqaruv elementi yoki formani va uning barcha avlod boshqaruv elementlarini touched deb belgilaydi. Butun forma boʻylab validatsiya xatolarini koʻrsatish uchun foydali.
 
 ```ts
 // Show all validation errors before submission
@@ -606,13 +606,13 @@ onSubmit() {
 }
 ```
 
-## Controlling event emission and propagation
+## Hodisalarni chiqarish va tarqalishini boshqarish {#controlling-event-emission-and-propagation}
 
-When updating form controls programmatically, you have precise control over how changes propagate through the form hierarchy and whether events are emitted.
+Forma boshqaruv elementlarini programmatik tarzda yangilashda oʻzgarishlar forma ierarxiyasi boʻylab qanday tarqalishi va hodisalar chiqarilishi yoki chiqarilmasligi ustidan aniq nazoratga egasiz.
 
-### Understanding event emission
+### Hodisalarni chiqarishni tushunish {#understanding-event-emission}
 
-By default `emitEvent: true`, any change to a control emits events through the `valueChanges` and `statusChanges` observables. Setting `emitEvent: false` suppresses these emissions, which is useful when setting values programmatically without triggering reactive behavior like auto-save, avoiding circular updates between controls, or performing bulk updates where events should emit only once at the end.
+Sukut boʻyicha `emitEvent: true` boʻlganda boshqaruv elementidagi har qanday oʻzgarish `valueChanges` va `statusChanges` observable'lari orqali hodisalar chiqaradi. `emitEvent: false` ni oʻrnatish bu chiqarishlarni bostiradi, bu avtomatik saqlash kabi reaktiv xatti-harakatni ishga tushirmasdan qiymatlarni programmatik tarzda oʻrnatish, boshqaruv elementlari oʻrtasidagi aylanma yangilanishlardan qochish yoki hodisalar faqat oxirida bir marta chiqarilishi kerak boʻlgan ommaviy yangilanishlarni bajarishda foydali.
 
 ```ts
 @Component({/* ... */})
@@ -636,9 +636,9 @@ export class BlogPostEditor {
 }
 ```
 
-### Understanding propagation control
+### Tarqalishni boshqarishni tushunish {#understanding-propagation-control}
 
-By default `onlySelf: false`, updates cascade to parent controls, recalculating their values and validation status. Setting `onlySelf: true` isolates the update to the current control, preventing parent notification. This is useful for batch operations where you want to manually trigger the parent update once.
+Sukut boʻyicha `onlySelf: false` boʻlganda yangilanishlar ota boshqaruv elementlariga kaskad tarzda tarqalib, ularning qiymatlari va validatsiya holatini qayta hisoblaydi. `onlySelf: true` ni oʻrnatish yangilanishni joriy boshqaruv elementi bilan cheklaydi va otaga xabar berishning oldini oladi. Bu ota yangilanishini qoʻlda bir marta ishga tushirishni istagan ommaviy amallar uchun foydali.
 
 ```ts
 updatePostalCodeValidator(country: string) {
@@ -653,20 +653,20 @@ updatePostalCodeValidator(country: string) {
 }
 ```
 
-HELPFUL: For dynamically managing validators at runtime, see the [Managing validators dynamically in reactive forms](guide/forms/form-validation#managing-validators-dynamically-in-reactive-forms) section in the Form Validation guide.
+HELPFUL: Ish vaqtida validatorlarni dinamik boshqarish haqida Forma validatsiyasi qoʻllanmasidagi [Reaktiv formalarda validatorlarni dinamik boshqarish](guide/forms/form-validation#managing-validators-dynamically-in-reactive-forms) boʻlimiga qarang.
 
-## Utility functions for narrowing form control types
+## Forma boshqaruv elementi tiplarini toraytirish uchun yordamchi funksiyalar {#utility-functions-for-narrowing-form-control-types}
 
-Angular provides four utility functions that help determine the concrete type of an `AbstractControl`. These functions act as **type guards** and narrow the control type when they return `true`, which lets you safely access subtype-specific properties inside the same block.
+Angular `AbstractControl` ning aniq tipini aniqlashga yordam beradigan toʻrtta yordamchi funksiyani taqdim etadi. Bu funksiyalar **tip himoyachilari (type guards)** sifatida ishlaydi va `true` qaytarganda boshqaruv elementi tipini toraytiradi, bu esa xuddi shu blok ichida kichik tipga xos xususiyatlarga xavfsiz murojaat qilish imkonini beradi.
 
-| Utility function | Details                                             |
+| Yordamchi funksiya | Tafsilotlar                                             |
 | :--------------- | :-------------------------------------------------- |
-| `isFormControl`  | Returns `true` when the control is a `FormControl`. |
-| `isFormGroup`    | Returns `true` when the control is a `FormGroup`    |
-| `isFormRecord`   | Returns `true` when the control is a `FormRecord`   |
-| `isFormArray`    | Returns `true` when the control is a `FormArray`    |
+| `isFormControl`  | Boshqaruv elementi `FormControl` boʻlganda `true` qaytaradi. |
+| `isFormGroup`    | Boshqaruv elementi `FormGroup` boʻlganda `true` qaytaradi    |
+| `isFormRecord`   | Boshqaruv elementi `FormRecord` boʻlganda `true` qaytaradi   |
+| `isFormArray`    | Boshqaruv elementi `FormArray` boʻlganda `true` qaytaradi    |
 
-These helpers are particularly useful in **custom validators**, where the function signature receives an `AbstractControl`, but the logic is intended for a specific control kind.
+Bu yordamchilar funksiya signaturasi `AbstractControl` qabul qiladigan, lekin mantiq muayyan boshqaruv elementi turi uchun moʻljallangan **maxsus validatorlarda** ayniqsa foydali.
 
 ```ts
 import {AbstractControl, isFormArray} from '@angular/forms';
@@ -682,29 +682,29 @@ export function positiveValues(control: AbstractControl) {
 }
 ```
 
-## Reactive forms API summary
+## Reaktiv formalar API'sining qisqacha mazmuni {#reactive-forms-api-summary}
 
-The following table lists the base classes and services used to create and manage reactive form controls.
-For complete syntax details, see the API reference documentation for the [Forms package](api#angular_forms 'API reference').
+Quyidagi jadvalda reaktiv forma boshqaruv elementlarini yaratish va boshqarish uchun ishlatiladigan asosiy klasslar va servislar keltirilgan.
+Toʻliq sintaksis tafsilotlari uchun [Forms paketi](api#angular_forms 'API reference') API maʼlumotnomasi hujjatlariga qarang.
 
-### Classes
+### Klasslar {#classes}
 
-| Class             | Details                                                                                                                                                                                 |
-| :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AbstractControl` | The abstract base class for the concrete form control classes `FormControl`, `FormGroup`, and `FormArray`. It provides their common behaviors and properties.                           |
-| `FormControl`     | Manages the value and validity status of an individual form control. It corresponds to an HTML form control such as `<input>` or `<select>`.                                            |
-| `FormGroup`       | Manages the value and validity state of a group of `AbstractControl` instances. The group's properties include its child controls. The top-level form in your component is `FormGroup`. |
-| `FormArray`       | Manages the value and validity state of a numerically indexed array of `AbstractControl` instances.                                                                                     |
-| `FormBuilder`     | An injectable service that provides factory methods for creating control instances.                                                                                                     |
-| `FormRecord`      | Tracks the value and validity state of a collection of `FormControl` instances, each of which has the same value type.                                                                  |
+| Klass             | Tafsilotlar                                                                                                                                                                                 |
+| :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AbstractControl` | Aniq forma boshqaruv elementi klasslari `FormControl`, `FormGroup` va `FormArray` uchun abstrakt asosiy klass. Ularning umumiy xatti-harakatlari va xususiyatlarini taqdim etadi.                           |
+| `FormControl`     | Alohida forma boshqaruv elementining qiymati va yaroqlilik holatini boshqaradi. `<input>` yoki `<select>` kabi HTML forma boshqaruv elementiga mos keladi.                                            |
+| `FormGroup`       | `AbstractControl` nusxalari guruhining qiymati va yaroqlilik holatini boshqaradi. Guruhning xususiyatlari uning bola boshqaruv elementlarini oʻz ichiga oladi. Komponentingizdagi yuqori darajadagi forma `FormGroup` hisoblanadi. |
+| `FormArray`       | Raqamli indekslangan `AbstractControl` nusxalari massivining qiymati va yaroqlilik holatini boshqaradi.                                                                                     |
+| `FormBuilder`     | Boshqaruv elementi nusxalarini yaratish uchun fabrika metodlarini taqdim etadigan inyeksiya qilinadigan servis.                                                                                     |
+| `FormRecord`      | Har biri bir xil qiymat tipiga ega boʻlgan `FormControl` nusxalari toʻplamining qiymati va yaroqlilik holatini kuzatadi.                                                                  |
 
-### Directives
+### Direktivalar {#directives}
 
-| Directive              | Details                                                                                    |
+| Direktiva              | Tafsilotlar                                                                                    |
 | :--------------------- | :----------------------------------------------------------------------------------------- |
-| `FormControlDirective` | Syncs a standalone `FormControl` instance to a form control element.                       |
-| `FormControlName`      | Syncs `FormControl` in an existing `FormGroup` instance to a form control element by name. |
-| `FormGroupDirective`   | Syncs an existing `FormGroup` instance to a DOM element.                                   |
-| `FormGroupName`        | Syncs a nested `FormGroup` instance to a DOM element.                                      |
-| `FormArrayName`        | Syncs a nested `FormArray` instance to a DOM element.                                      |
-| `FormArrayDirective`   | Syncs a standalone `FormArray` instance to a DOM element.                                  |
+| `FormControlDirective` | Mustaqil `FormControl` nusxasini forma boshqaruv elementi bilan sinxronlaydi.                       |
+| `FormControlName`      | Mavjud `FormGroup` nusxasidagi `FormControl` ni nomi boʻyicha forma boshqaruv elementi bilan sinxronlaydi. |
+| `FormGroupDirective`   | Mavjud `FormGroup` nusxasini DOM elementi bilan sinxronlaydi.                                   |
+| `FormGroupName`        | Ichki `FormGroup` nusxasini DOM elementi bilan sinxronlaydi.                                      |
+| `FormArrayName`        | Ichki `FormArray` nusxasini DOM elementi bilan sinxronlaydi.                                      |
+| `FormArrayDirective`   | Mustaqil `FormArray` nusxasini DOM elementi bilan sinxronlaydi.                                  |
