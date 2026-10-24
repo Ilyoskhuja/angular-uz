@@ -1,23 +1,23 @@
-# Components in Angular
+# Angular'da komponentlar
 
-Components are the foundational building blocks for any Angular application. Each component has three parts:
+Komponentlar — har qanday Angular ilovasining asosiy qurilish bloklari. Har bir komponent uch qismdan iborat:
 
-- TypeScript class
-- HTML template
-- CSS styles
+- TypeScript klassi
+- HTML shabloni
+- CSS stillari
 
-NOTE: Learn more about [components in the essentials guide](/essentials/components).
+NOTE: [Asoslar qoʻllanmasidagi komponentlar](/essentials/components) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to update the template and styles of a component.
+Bu mashgʻulotda komponentning shabloni va stillarini qanday yangilashni oʻrganasiz.
 
 <hr />
 
-This is a great opportunity for you to get started with Angular.
+Bu Angular bilan ishlashni boshlash uchun ajoyib imkoniyat.
 
 <docs-workflow>
 
-<docs-step title="Update the component template">
-Update the `template` property to read `Hello Universe`
+<docs-step title="Komponent shablonini yangilang">
+`template` xususiyatini `Hello Universe` deb oʻqiladigan qilib yangilang
 
 ```ts
 template: `
@@ -25,11 +25,11 @@ template: `
 `,
 ```
 
-When you changed the HTML template, the preview updated with your message. Let's go one step further: change the color of the text.
+HTML shablonini oʻzgartirganingizda, oldindan koʻrish (preview) oynasi sizning xabaringiz bilan yangilandi. Keling, yana bir qadam oldinga boramiz: matn rangini oʻzgartiring.
 </docs-step>
 
-<docs-step title="Update the component styles">
-Update the styles value and change the `color` property from `blue` to `#a144eb`.
+<docs-step title="Komponent stillarini yangilang">
+Stillar qiymatini yangilang va `color` xususiyatini `blue`'dan `#a144eb`'ga oʻzgartiring.
 
 ```ts
 styles: `
@@ -39,9 +39,9 @@ styles: `
 `,
 ```
 
-When you check the preview, you'll find that the text color will be changed.
+Oldindan koʻrish oynasini tekshirsangiz, matn rangi oʻzgarganini koʻrasiz.
 </docs-step>
 
 </docs-workflow>
 
-In Angular, you can use all the browser supported CSS and HTML that's available. If you'd like, you can store your template and styles in separate files.
+Angular'da brauzer qoʻllab-quvvatlaydigan barcha mavjud CSS va HTML'dan foydalanishingiz mumkin. Agar xohlasangiz, shablon va stillaringizni alohida fayllarda saqlashingiz mumkin.

@@ -1,20 +1,20 @@
-# Optimizing images
+# Rasmlarni optimallashtirish
 
-Images are a big part of many applications, and can be a major contributor to application performance problems, including low [Core Web Vitals](https://web.dev/explore/learn-core-web-vitals) scores.
+Rasmlar koʻplab ilovalarning katta qismini tashkil qiladi va past [Core Web Vitals](https://web.dev/explore/learn-core-web-vitals) ballari kabi ilova unumdorligi muammolarining asosiy sababchisi boʻlishi mumkin.
 
-Image optimization can be a complex topic, but Angular handles most of it for you, with the `NgOptimizedImage` directive.
+Rasmlarni optimallashtirish murakkab mavzu boʻlishi mumkin, lekin Angular `NgOptimizedImage` direktivasi yordamida buning koʻp qismini siz uchun bajaradi.
 
-NOTE: Learn more about [image optimization with NgOptimizedImage in the in-depth guide](/guide/image-optimization).
+NOTE: [Chuqur qoʻllanmada NgOptimizedImage bilan rasmlarni optimallashtirish](/guide/image-optimization) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to use `NgOptimizedImage` to ensure your images are loaded efficiently.
+Bu mashgʻulotda rasmlaringiz samarali yuklanishini taʼminlash uchun `NgOptimizedImage`'dan qanday foydalanishni oʻrganasiz.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Import the NgOptimizedImage directive">
+<docs-step title="NgOptimizedImage direktivasini import qiling">
 
-In order to leverage the `NgOptimizedImage` directive, first import it from the `@angular/common` library and add it to the component `imports` array.
+`NgOptimizedImage` direktivasidan foydalanish uchun avval uni `@angular/common` kutubxonasidan import qiling va komponentning `imports` massiviga qoʻshing.
 
 ```ts
 import { NgOptimizedImage } from '@angular/common';
@@ -27,9 +27,9 @@ import { NgOptimizedImage } from '@angular/common';
 
 </docs-step>
 
-<docs-step title="Update the src attribute to be ngSrc">
+<docs-step title="src atributini ngSrc'ga oʻzgartiring">
 
-To enable the `NgOptimizedImage` directive, swap out the `src` attribute for `ngSrc`. This applies for both static image sources (i.e., `src`) and dynamic image sources (i.e., `[src]`).
+`NgOptimizedImage` direktivasini yoqish uchun `src` atributini `ngSrc`'ga almashtiring. Bu statik rasm manbalariga (yaʼni `src`) ham, dinamik rasm manbalariga (yaʼni `[src]`) ham tegishli.
 
 ```angular-ts {highlight:[[7],[11]]}
 import { NgOptimizedImage } from '@angular/common';
@@ -52,11 +52,11 @@ imports: [NgOptimizedImage],
 
 </docs-step>
 
-<docs-step title="Add width and height attributes">
+<docs-step title="width va height atributlarini qoʻshing">
 
-Note that in the above code example, each image has both `width` and `height` attributes. In order to prevent [layout shift](https://web.dev/articles/cls), the `NgOptimizedImage` directive requires both size attributes on each image.
+Yuqoridagi kod misolida har bir rasmda `width` va `height` atributlarining ikkalasi ham borligiga eʼtibor bering. [Layout shift](https://web.dev/articles/cls) yuz berishining oldini olish uchun `NgOptimizedImage` direktivasi har bir rasmda ikkala oʻlcham atributini talab qiladi.
 
-In situations where you can't or don't want to specify a static `height` and `width` for images, you can use [the `fill` attribute](/guide/image-optimization#using-fill-mode) to tell the image to act like a "background image", filling its containing element:
+Rasmlar uchun statik `height` va `width` koʻrsata olmaydigan yoki koʻrsatishni istamaydigan holatlarda rasmga oʻzini oʻz ichiga olgan elementni toʻldiradigan "fon rasmi" kabi tutishini aytish uchun [`fill` atributidan](/guide/image-optimization#using-fill-mode) foydalanishingiz mumkin:
 
 ```angular-html
 // Container div has 'position: "relative"'
@@ -65,13 +65,13 @@ In situations where you can't or don't want to specify a static `height` and `wi
 </div>
 ```
 
-NOTE: For the `fill` image to render properly, its parent element must be styled with `position: "relative"`, `position: "fixed"`, or `position: "absolute"`.
+NOTE: `fill` rasmi toʻgʻri render qilinishi uchun uning ota elementi `position: "relative"`, `position: "fixed"` yoki `position: "absolute"` stiliga ega boʻlishi kerak.
 
 </docs-step>
 
-<docs-step title="Prioritize important images">
+<docs-step title="Muhim rasmlarga ustuvorlik bering">
 
-One of the most important optimizations for loading performance is to prioritize any image which might be the ["LCP element"](https://web.dev/articles/optimize-lcp), which is the largest on-screen graphical element when the page loads. To optimize your loading times, make sure to add the `priority` attribute to your "hero image" or any other images that you think could be an LCP element.
+Yuklash unumdorligi uchun eng muhim optimallashtirishlardan biri — ["LCP element"](https://web.dev/articles/optimize-lcp) boʻlishi mumkin boʻlgan har qanday rasmga ustuvorlik berish; LCP element — sahifa yuklanganda ekrandagi eng katta grafik element. Yuklash vaqtlarini optimallashtirish uchun "hero image"ingizga yoki LCP element boʻlishi mumkin deb hisoblagan boshqa rasmlarga `priority` atributini qoʻshishni unutmang.
 
 ```ts
 <img ngSrc="www.example.com/image.png" height="600" width="800" priority />
@@ -79,26 +79,26 @@ One of the most important optimizations for loading performance is to prioritize
 
 </docs-step>
 
-<docs-step title="Optional: Use an image loader">
+<docs-step title="Ixtiyoriy: rasm yuklovchisidan (image loader) foydalaning">
 
-`NgOptimizedImage` allows you to specify an [image loader](guide/image-optimization#configuring-an-image-loader-for-ngoptimizedimage), which tells the directive how to format URLs for your images. Using a loader allows you to define your images with short, relative URLs:
+`NgOptimizedImage` [rasm yuklovchisini](guide/image-optimization#configuring-an-image-loader-for-ngoptimizedimage) koʻrsatish imkonini beradi; u direktivaga rasmlaringiz uchun URL'larni qanday formatlashni aytadi. Yuklovchidan foydalanish rasmlaringizni qisqa, nisbiy URL'lar bilan aniqlash imkonini beradi:
 
 ```ts
 providers: [provideImgixLoader('https://my.base.url/')],
 ```
 
-Final URL will be 'https://my.base.url/image.png'
+Yakuniy URL 'https://my.base.url/image.png' boʻladi
 
 ```angular-html
 <img ngSrc="image.png" height="600" width="800" />
 ```
 
-Image loaders are for more than just convenience--they allow you to use the full capabilities of `NgOptimizedImage`. Learn more about these optimizations and the built-in loaders for popular CDNs [here](guide/image-optimization#configuring-an-image-loader-for-ngoptimizedimage).
+Rasm yuklovchilari shunchaki qulaylik uchun emas — ular `NgOptimizedImage`'ning toʻliq imkoniyatlaridan foydalanish imkonini beradi. Bu optimallashtirishlar va mashhur CDN'lar uchun oʻrnatilgan yuklovchilar haqida koʻproq [bu yerda](guide/image-optimization#configuring-an-image-loader-for-ngoptimizedimage) bilib oling.
 
 </docs-step>
 
 </docs-workflow>
 
-By adding this directive to your workflow, your images are now loading using best practices with the help of Angular 🎉
+Bu direktivani ish jarayoningizga qoʻshish orqali rasmlaringiz endi Angular yordamida eng yaxshi amaliyotlar asosida yuklanadi 🎉
 
-If you would like to learn more, check out the [documentation for `NgOptimizedImage`](guide/image-optimization). Keep up the great work and let's learn about routing next.
+Koʻproq bilmoqchi boʻlsangiz, [`NgOptimizedImage` hujjatlariga](guide/image-optimization) qarang. Ajoyib ishni davom ettiring, keyin marshrutlash haqida oʻrganamiz.

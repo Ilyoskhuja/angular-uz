@@ -1,16 +1,16 @@
-# Component input properties
+# Komponent input xususiyatlari
 
-Sometimes app development requires you to send data into a component. This data can be used to customize a component or perhaps send information from a parent component to a child component.
+Baʼzan ilova yaratishda komponentga maʼlumot yuborish kerak boʻladi. Bu maʼlumotdan komponentni sozlash yoki, masalan, ota komponentdan bola komponentga axborot yuborish uchun foydalanish mumkin.
 
-Angular uses a concept called `input`. This is similar to `props` in other frameworks. To create an `input` property, use the `input()` function.
+Angular `input` deb nomlangan tushunchadan foydalanadi. Bu boshqa freymvorklardagi `props`'ga oʻxshaydi. `input` xususiyatini yaratish uchun `input()` funksiyasidan foydalaning.
 
-NOTE: Learn more about [accepting data with input properties in the inputs guide](/guide/components/inputs).
+NOTE: [Inputlar qoʻllanmasida input xususiyatlari orqali maʼlumot qabul qilish](/guide/components/inputs) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to use the `input()` function to send information to components.
+Bu mashgʻulotda komponentlarga axborot yuborish uchun `input()` funksiyasidan qanday foydalanishni oʻrganasiz.
 
 <hr>
 
-To create an `input` property, add the `input()` function to initialize a property of a component class:
+`input` xususiyatini yaratish uchun komponent klassining xususiyatini ishga tushirishda `input()` funksiyasini qoʻshing:
 
 ```ts {header:"user.ts"}
 class User {
@@ -18,7 +18,7 @@ class User {
 }
 ```
 
-When you are ready to pass in a value through an `input`, values can be set in templates using the attribute syntax. Here's an example:
+`input` orqali qiymat uzatishga tayyor boʻlganingizda, qiymatlarni shablonlarda atribut sintaksisi yordamida oʻrnatish mumkin. Misol:
 
 ```angular-ts {header:"app.ts", highlight:[3]}
 @Component({
@@ -28,7 +28,7 @@ When you are ready to pass in a value through an `input`, values can be set in t
 export class App {}
 ```
 
-The `input` function returns an `InputSignal`. You can read the value by calling the signal.
+`input` funksiyasi `InputSignal` qaytaradi. Qiymatni signalni chaqirish orqali oʻqishingiz mumkin.
 
 ```angular-ts {header:"user.ts"}
 @Component({
@@ -39,19 +39,19 @@ The `input` function returns an `InputSignal`. You can read the value by calling
 
 <docs-workflow>
 
-<docs-step title="Define an `input()` property">
-Update the code in `user.ts` to define an `input` property on the `User` called `name` and specify the `string` type. For now, don't set an initial value and invoke `input()` without arguments. Be sure to update the template to invoke and interpolate the `name` property at the end of the sentence.
+<docs-step title="`input()` xususiyatini aniqlang">
+`user.ts`'dagi kodni `User`'da `name` nomli `input` xususiyatini aniqlaydigan va `string` turini koʻrsatadigan qilib yangilang. Hozircha boshlangʻich qiymat oʻrnatmang va `input()`'ni argumentlarsiz chaqiring. Shablonni gap oxirida `name` xususiyatini chaqirib interpolatsiya qiladigan qilib yangilashni unutmang.
 </docs-step>
 
-<docs-step title="Pass a value to the `input` property">
-Update the code in `app.ts` to send in the `name` property with a value of `"Simran"`.
+<docs-step title="`input` xususiyatiga qiymat uzating">
+`app.ts`'dagi kodni `name` xususiyatini `"Simran"` qiymati bilan yuboradigan qilib yangilang.
 <br>
 
-When the code has been successfully updated, the app will display `The user's name is Simran`.
+Kod muvaffaqiyatli yangilangach, ilova `The user's name is Simran` deb koʻrsatadi.
 </docs-step>
 
 </docs-workflow>
 
-While this is great, it is only one direction of the component communication. What if you want to send information and data to a parent component from a child component? Check out the next lesson to find out.
+Bu ajoyib boʻlsa-da, komponentlar muloqotining faqat bir yoʻnalishi. Agar bola komponentdan ota komponentga axborot va maʼlumot yubormoqchi boʻlsangiz-chi? Bilish uchun keyingi darsga oʻting.
 
-P.S. you are doing great - keep going 🎉
+P.S. ajoyib ishlayapsiz — davom eting 🎉

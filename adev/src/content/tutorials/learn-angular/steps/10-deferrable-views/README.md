@@ -1,22 +1,22 @@
-# Deferrable Views
+# Kechiktiriladigan view'lar
 
-Sometimes in app development, you end up with a lot of components that you need to reference in your app, but some of those don't need to be loaded right away for various reasons.
+Baʼzan ilova yaratishda ilovangizda murojaat qilish kerak boʻlgan juda koʻp komponentlar paydo boʻladi, lekin ulardan baʼzilarini turli sabablarga koʻra darhol yuklash shart emas.
 
-Maybe they are below the visible fold or are heavy components that aren't interacted with until later. In that case, we can load some of those resources later with deferrable views.
+Ehtimol ular koʻrinadigan qismdan pastda joylashgan yoki keyinroqgacha ular bilan oʻzaro taʼsir qilinmaydigan ogʻir komponentlardir. Bunday holda biz bu resurslarning baʼzilarini kechiktiriladigan view'lar yordamida keyinroq yuklashimiz mumkin.
 
-NOTE: Learn more about [deferred loading with @defer in the in-depth guide](/guide/templates/defer).
+NOTE: [Chuqur qoʻllanmada @defer bilan kechiktirilgan yuklash](/guide/templates/defer) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to use deferrable views to defer load a section of your component template.
+Bu mashgʻulotda komponent shabloningizning bir boʻlimini kechiktirib yuklash uchun kechiktiriladigan view'lardan qanday foydalanishni oʻrganasiz.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Add a `@defer` block around the comments component">
+<docs-step title="Izohlar komponenti atrofiga `@defer` bloki qoʻshing">
 
-In your app, the blog post page has a comment component after the post details.
+Ilovangizda blog posti sahifasida post tafsilotlaridan keyin izohlar komponenti bor.
 
-Wrap the comment component with a `@defer` block to defer load it.
+Izohlar komponentini kechiktirib yuklash uchun uni `@defer` bloki bilan oʻrang.
 
 ```angular-html
 @defer {
@@ -24,13 +24,13 @@ Wrap the comment component with a `@defer` block to defer load it.
 }
 ```
 
-The code above is an example of how to use a basic `@defer` block. By default `@defer` will load the `comments` component when the browser is idle.
+Yuqoridagi kod oddiy `@defer` blokidan qanday foydalanishga misol. Sukut boʻyicha `@defer` `comments` komponentini brauzer boʻsh (idle) boʻlganda yuklaydi.
 
 </docs-step>
 
-<docs-step title="Add a placeholder">
+<docs-step title="Toʻldiruvchi (placeholder) qoʻshing">
 
-Add a `@placeholder` block to the `@defer` block. The `@placeholder` block is where you put html that will show before the deferred loading starts. The content in `@placeholder` blocks is eagerly loaded.
+`@defer` blokiga `@placeholder` bloki qoʻshing. `@placeholder` bloki — kechiktirilgan yuklash boshlanishidan oldin koʻrsatiladigan html joylashtiriladigan joy. `@placeholder` bloklaridagi kontent darhol (eager) yuklanadi.
 
 ```angular-html {highlight:[3,4,5]}
 @defer {
@@ -42,9 +42,9 @@ Add a `@placeholder` block to the `@defer` block. The `@placeholder` block is wh
 
 </docs-step>
 
-<docs-step title="Add a loading block">
+<docs-step title="Yuklanish bloki qoʻshing">
 
-Add a `@loading` block to the `@defer` block. The `@loading` block is where you put html that will show _while_ the deferred content is actively being fetched, but hasn't finished yet. The content in `@loading` blocks is eagerly loaded.
+`@defer` blokiga `@loading` bloki qoʻshing. `@loading` bloki — kechiktirilgan kontent faol tarzda yuklab olinayotgan, lekin hali tugallanmagan _vaqtda_ koʻrsatiladigan html joylashtiriladigan joy. `@loading` bloklaridagi kontent darhol yuklanadi.
 
 ```angular-html {highlight:[5,6,7]}
 @defer {
@@ -58,9 +58,9 @@ Add a `@loading` block to the `@defer` block. The `@loading` block is where you 
 
 </docs-step>
 
-<docs-step title="Add a minimum duration">
+<docs-step title="Minimal davomiylik qoʻshing">
 
-Both `@placeholder` and `@loading` sections have optional parameters to prevent flickering from occurring when loading happens quickly. `@placeholder` has `minimum` and `@loading` has `minimum` and `after`. Add a `minimum` duration to the `@loading` block so it will be rendered for at least 2 seconds.
+`@placeholder` va `@loading` boʻlimlarining ikkalasida ham yuklash tez sodir boʻlganda miltillashning oldini olish uchun ixtiyoriy parametrlar mavjud. `@placeholder`'da `minimum`, `@loading`'da esa `minimum` va `after` bor. `@loading` blokiga kamida 2 soniya davomida render qilinishi uchun `minimum` davomiylikni qoʻshing.
 
 ```angular-html {highlight:[5]}
 @defer {
@@ -74,9 +74,9 @@ Both `@placeholder` and `@loading` sections have optional parameters to prevent 
 
 </docs-step>
 
-<docs-step title="Add a viewport trigger">
+<docs-step title="Viewport triggeri qoʻshing">
 
-Deferrable views have a number of trigger options. Add a viewport trigger so the content will defer load once it enters the viewport.
+Kechiktiriladigan view'larda bir qancha trigger variantlari mavjud. Kontent viewport'ga kirganda kechiktirib yuklanishi uchun viewport triggerini qoʻshing.
 
 ```angular-html {highlight:[1]}
 @defer (on viewport) {
@@ -90,9 +90,9 @@ Deferrable views have a number of trigger options. Add a viewport trigger so the
 
 </docs-step>
 
-<docs-step title="Add content">
+<docs-step title="Kontent qoʻshing">
 
-A viewport trigger is best used when you're deferring content that's far enough down the page that it needs to be scrolled to see. So let's add some content to our blog post. You can either write your own, or you can copy the content below and put it inside the `<article>` element.
+Viewport triggeridan koʻrish uchun sahifani aylantirish (scroll) kerak boʻladigan darajada pastda joylashgan kontentni kechiktirayotganingizda foydalanish eng maqsadga muvofiq. Shuning uchun blog postimizga biroz kontent qoʻshamiz. Oʻzingiz yozishingiz yoki quyidagi kontentni nusxalab, `<article>` elementi ichiga joylashtirishingiz mumkin.
 
 ```html {highlight:[1]}
 <article>
@@ -138,14 +138,14 @@ A viewport trigger is best used when you're deferring content that's far enough 
 </article>
 ```
 
-Once you've added this code, now scroll down to see the deferred content load once you scroll it into the viewport.
+Bu kodni qoʻshganingizdan soʻng, pastga aylantiring va kechiktirilgan kontent viewport'ga kirganda yuklanishini koʻring.
 
 </docs-step>
 
 </docs-workflow>
 
-In the activity, you've learned how to use deferrable views in your applications. Great work. 🙌
+Bu mashgʻulotda ilovalaringizda kechiktiriladigan view'lardan qanday foydalanishni oʻrgandingiz. Ajoyib ish. 🙌
 
-There's even more you can do with them, like different triggers, prefetching, and `@error` blocks.
+Ular bilan yana koʻproq ishlar qilish mumkin, masalan, turli triggerlar, oldindan yuklash (prefetching) va `@error` bloklari.
 
-If you would like to learn more, check out the [documentation for Deferrable views](/guide/templates/defer).
+Koʻproq bilmoqchi boʻlsangiz, [Kechiktiriladigan view'lar hujjatlariga](/guide/templates/defer) qarang.

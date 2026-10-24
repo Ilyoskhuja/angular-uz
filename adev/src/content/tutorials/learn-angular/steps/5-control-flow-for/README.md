@@ -1,16 +1,16 @@
-# Control Flow in Components - `@for`
+# Komponentlarda boshqaruv oqimi - `@for`
 
-Often when building web applications, you need to repeat some code a specific number of times - for example, given an array of names, you may want to display each name in a `<p>` tag.
+Veb-ilovalar yaratishda koʻpincha baʼzi kodni maʼlum sonda takrorlashingiz kerak boʻladi — masalan, ismlar massivi berilganda, har bir ismni `<p>` tegida koʻrsatmoqchi boʻlishingiz mumkin.
 
-NOTE: Learn more about [control flow in the essentials guide](/essentials/templates#control-flow-with-if-and-for).
+NOTE: [Asoslar qoʻllanmasida boshqaruv oqimi](/essentials/templates#control-flow-with-if-and-for) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to use `@for` to repeat elements in a template.
+Bu mashgʻulotda shablonda elementlarni takrorlash uchun `@for`'dan qanday foydalanishni oʻrganasiz.
 
 <hr/>
 
-The syntax that enables repeating elements in a template is `@for`.
+Shablonda elementlarni takrorlash imkonini beradigan sintaksis — `@for`.
 
-Here's an example of how to use the `@for` syntax in a component:
+Komponentda `@for` sintaksisidan qanday foydalanishga misol:
 
 ```angular-ts
 @Component({
@@ -26,15 +26,15 @@ export class App {
 }
 ```
 
-Two things to take note of:
+Eʼtibor berish kerak boʻlgan ikki narsa:
 
-- There is an `@` prefix for the `for` because it is a special syntax called [Angular template syntax](guide/templates)
-- For applications that still use `*ngFor`, please refer to the [Angular documentation for NgFor](guide/directives/structural-directives)
+- `for` oldida `@` prefiksi bor, chunki bu [Angular shablon sintaksisi](guide/templates) deb nomlanadigan maxsus sintaksis
+- Hali ham `*ngFor`'dan foydalanadigan ilovalar uchun [NgFor boʻyicha Angular hujjatlariga](guide/directives/structural-directives) murojaat qiling
 
 <docs-workflow>
 
-<docs-step title="Add the `users` property">
-In the `App` class, add a property called `users` that contains users and their names.
+<docs-step title="`users` xususiyatini qoʻshing">
+`App` klassiga foydalanuvchilar va ularning ismlarini oʻz ichiga olgan `users` nomli xususiyat qoʻshing.
 
 ```ts
 [
@@ -48,8 +48,8 @@ In the `App` class, add a property called `users` that contains users and their 
 
 </docs-step>
 
-<docs-step title="Update the template">
-Update the template to display each user name in a `p` element using the `@for` template syntax.
+<docs-step title="Shablonni yangilang">
+`@for` shablon sintaksisidan foydalanib, har bir foydalanuvchi ismini `p` elementida koʻrsatadigan qilib shablonni yangilang.
 
 ```angular-html
 @for (user of users; track user.id) {
@@ -57,10 +57,10 @@ Update the template to display each user name in a `p` element using the `@for` 
 }
 ```
 
-NOTE: the use of `track` is required, you may use the `id` or some other unique identifier.
+NOTE: `track`'dan foydalanish shart, `id` yoki boshqa biror unikal identifikatordan foydalanishingiz mumkin.
 
 </docs-step>
 
 </docs-workflow>
 
-This type of functionality is called control flow. Next, you'll learn to customize and communicate with components - by the way, you're doing a great job so far.
+Bu turdagi funksionallik boshqaruv oqimi deb ataladi. Keyingi qadamda komponentlarni sozlash va ular bilan muloqot qilishni oʻrganasiz — aytgancha, hozircha ajoyib ishlayapsiz.

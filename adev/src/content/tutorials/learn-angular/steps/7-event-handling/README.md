@@ -1,14 +1,14 @@
-# Event handling
+# Hodisalarga ishlov berish
 
-Event handling enables interactive features on web apps. It gives you the ability as a developer to respond to user actions like button presses, form submissions and more.
+Hodisalarga ishlov berish veb-ilovalarda interaktiv imkoniyatlarni taʼminlaydi. U sizga dasturchi sifatida tugma bosilishi, forma yuborilishi va boshqa foydalanuvchi harakatlariga javob berish imkonini beradi.
 
-NOTE: Learn more about [handling user interaction in the essentials guide](/essentials/templates#handling-user-interaction).
+NOTE: [Asoslar qoʻllanmasida foydalanuvchi bilan oʻzaro taʼsirga ishlov berish](/essentials/templates#handling-user-interaction) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to add an event handler.
+Bu mashgʻulotda hodisa ishlov beruvchisini qanday qoʻshishni oʻrganasiz.
 
 <hr />
 
-In Angular you bind to events with the parentheses syntax `()`. On a given element, wrap the event you want to bind to with parentheses and set an event handler. Consider this `button` example:
+Angular'da hodisalarga qavslar sintaksisi `()` yordamida bogʻlanasiz. Berilgan elementda bogʻlamoqchi boʻlgan hodisani qavslar ichiga oling va hodisa ishlov beruvchisini oʻrnating. Quyidagi `button` misolini koʻrib chiqing:
 
 ```angular-ts
 @Component({
@@ -22,14 +22,14 @@ export class App {
 }
 ```
 
-In this example, the `greet()` function will run every time the button is clicked. Take note that the `greet()` syntax includes the trailing parenthesis.
+Bu misolda tugma har safar bosilganda `greet()` funksiyasi ishga tushadi. `greet()` sintaksisida oxirida qavslar borligiga eʼtibor bering.
 
-Alright, your turn to give this a try:
+Xoʻsh, endi oʻzingiz sinab koʻring:
 
 <docs-workflow>
 
-<docs-step title="Add an event handler">
-In the `App` class, fill in the body of the existing `showSecretMessage()` method with the following code:
+<docs-step title="Hodisa ishlov beruvchisini qoʻshing">
+`App` klassida mavjud `showSecretMessage()` metodining tanasini quyidagi kod bilan toʻldiring:
 
 ```ts
 this.message = 'Way to go 🚀';
@@ -37,8 +37,8 @@ this.message = 'Way to go 🚀';
 
 </docs-step>
 
-<docs-step title="Bind to the template event">
-Update the template code in `app.ts` to bind to the `mouseover` event of the `section` element.
+<docs-step title="Shablondagi hodisaga bogʻlang">
+`app.ts`'dagi shablon kodini `section` elementining `mouseover` hodisasiga bogʻlanadigan qilib yangilang.
 
 <!-- prettier-ignore -->
 ```angular-html
@@ -49,4 +49,4 @@ Update the template code in `app.ts` to bind to the `mouseover` event of the `se
 
 </docs-workflow>
 
-And with a few steps in the code you've created your first event handler in Angular. Seems like you are getting pretty good at this, keep up the good work.
+Shunday qilib, koddagi bir necha qadam bilan Angular'da birinchi hodisa ishlov beruvchingizni yaratdingiz. Bu ishda ancha mahorat orttirayotganga oʻxshaysiz, shu zaylda davom eting.

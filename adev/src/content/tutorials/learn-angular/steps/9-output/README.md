@@ -1,16 +1,16 @@
-# Component output properties
+# Komponent output xususiyatlari
 
-When working with components it may be required to notify other components that something has happened. Perhaps a button has been clicked, an item has been added/removed from a list or some other important update has occurred. In this scenario components need to communicate with parent components.
+Komponentlar bilan ishlashda boshqa komponentlarga nimadir sodir boʻlgani haqida xabar berish kerak boʻlishi mumkin. Masalan, tugma bosilgan, roʻyxatga element qoʻshilgan/olib tashlangan yoki boshqa muhim yangilanish yuz bergan boʻlishi mumkin. Bunday vaziyatda komponentlar ota komponentlar bilan muloqot qilishi kerak.
 
-Angular uses the `output()` function to enable this type of behavior.
+Angular bunday xatti-harakatni taʼminlash uchun `output()` funksiyasidan foydalanadi.
 
-NOTE: Learn more about [custom events in the outputs guide](/guide/components/outputs).
+NOTE: [Outputlar qoʻllanmasida maxsus hodisalar](/guide/components/outputs) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to use the `output()` function to communicate with components.
+Bu mashgʻulotda komponentlar bilan muloqot qilish uchun `output()` funksiyasidan qanday foydalanishni oʻrganasiz.
 
 <hr />
 
-To create the communication path from child to parent components, use the `output` function to initialize a class property.
+Bola komponentdan ota komponentga muloqot yoʻlini yaratish uchun klass xususiyatini ishga tushirishda `output` funksiyasidan foydalaning.
 
 ```ts {header:"child.ts"}
 @Component({...})
@@ -19,7 +19,7 @@ class Child {
 }
 ```
 
-Now the component can generate events that can be listened to by the parent component. Trigger events by calling the `emit` method:
+Endi komponent ota komponent tinglashi mumkin boʻlgan hodisalarni hosil qila oladi. Hodisalarni `emit` metodini chaqirish orqali ishga tushiring:
 
 ```ts {header:"child.ts"}
 class Child {
@@ -32,18 +32,18 @@ class Child {
 }
 ```
 
-The emit function will generate an event with the same type as defined by the `output`.
+emit funksiyasi `output`'da aniqlangan tur bilan bir xil turdagi hodisa hosil qiladi.
 
-Alright, your turn to give this a try. Complete the code by following these tasks:
+Xoʻsh, endi oʻzingiz sinab koʻring. Quyidagi vazifalarni bajarib, kodni toʻldiring:
 
 <docs-workflow>
 
-<docs-step title="Add an `output()` property">
-Update `child.ts` by adding an output property called `addItemEvent`, be sure to set the output type to be `string`.
+<docs-step title="`output()` xususiyatini qoʻshing">
+`child.ts`'ni `addItemEvent` nomli output xususiyati qoʻshib yangilang, output turini `string` qilib belgilashni unutmang.
 </docs-step>
 
-<docs-step title="Complete `addItem` method">
-In `child.ts` update the `addItem` method; use the following code as the logic:
+<docs-step title="`addItem` metodini toʻldiring">
+`child.ts`'da `addItem` metodini yangilang; logika sifatida quyidagi koddan foydalaning:
 
 ```ts {header:"child.ts", highlight:[2]}
 addItem() {
@@ -53,19 +53,19 @@ addItem() {
 
 </docs-step>
 
-<docs-step title="Update the `App` template">
-In `app.ts` update the template to listen to the emitted event by adding the following code:
+<docs-step title="`App` shablonini yangilang">
+`app.ts`'da shablonni quyidagi kodni qoʻshib, chiqarilgan (emit qilingan) hodisani tinglaydigan qilib yangilang:
 
 ```angular-html
 <app-child (addItemEvent)="addItem($event)" />
 ```
 
-Now, the "Add Item" button adds a new item to the list every time the button is clicked.
+Endi "Add Item" tugmasi har safar bosilganda roʻyxatga yangi element qoʻshadi.
 
 </docs-step>
 
 </docs-workflow>
 
-Wow, at this point you've completed the component fundamentals - impressive 👏
+Zoʻr, shu bosqichda komponentlar asoslarini tugatdingiz — taʼsirli 👏
 
-Keep learning to unlock more of Angular's great features.
+Angular'ning yana koʻplab ajoyib imkoniyatlarini ochish uchun oʻrganishda davom eting.

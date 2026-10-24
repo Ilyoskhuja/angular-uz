@@ -1,22 +1,22 @@
-# Welcome to the Angular tutorial
+# Angular darsligiga xush kelibsiz
 
 <div class="docs-tutorial-mascot">
   <img class="docs-tutorial-mascot__angie" src="assets/images/angie/greeting.svg" aria-hidden="true">
-  <p class="docs-tutorial-mascot__bubble">Welcome! Let's learn the building blocks of Angular.</p>
+  <p class="docs-tutorial-mascot__bubble">Xush kelibsiz! Keling, Angular'ning qurilish bloklarini oʻrganamiz.</p>
 </div>
 
-This interactive tutorial will teach you the basic building blocks to start building great apps with Angular.
+Bu interaktiv darslik sizga Angular bilan ajoyib ilovalar yaratishni boshlash uchun asosiy qurilish bloklarini oʻrgatadi.
 
-## How to use this tutorial
+## Bu darslikdan qanday foydalanish {#how-to-use-this-tutorial}
 
-You'll need to have basic familiarity with HTML, CSS and JavaScript to understand Angular.
+Angular'ni tushunish uchun HTML, CSS va JavaScript bilan asosiy darajada tanish boʻlishingiz kerak.
 
-Each step represents a concept in Angular. You can do one, or all of them.
+Har bir qadam Angular'dagi bir tushunchani ifodalaydi. Ulardan birini yoki hammasini bajarishingiz mumkin.
 
-If you get stuck, click "Reveal answer" at the top.
+Agar qiynalib qolsangiz, yuqoridagi "Reveal answer" (Javobni koʻrsatish) tugmasini bosing.
 
-Alright, let's [get started](/tutorials/learn-angular/1-components-in-angular).
+Xoʻsh, keling, [boshlaymiz](/tutorials/learn-angular/1-components-in-angular).
 
-## Using AI for Development
+## Dasturlashda AI'dan foydalanish {#using-ai-for-development}
 
-In case you're following this tutorial in your preferred AI powered IDE, [check out Angular prompt rules and best practices](/ai/develop-with-ai).
+Agar bu darslikni oʻzingiz tanlagan AI'ga asoslangan IDE'da oʻtayotgan boʻlsangiz, [Angular uchun prompt qoidalari va eng yaxshi amaliyotlar bilan tanishing](/ai/develop-with-ai).

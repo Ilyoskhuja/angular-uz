@@ -1,21 +1,21 @@
-# Routing Overview
+# Marshrutlash haqida umumiy koʻrinish
 
-For most apps, there comes a point where the app requires more than a single page. When that time inevitably comes, routing becomes a big part of the performance story for users.
+Koʻpchilik ilovalar uchun ilova bitta sahifadan koʻproqni talab qiladigan payt keladi. Bu muqarrar payt kelganda, marshrutlash foydalanuvchilar uchun unumdorlik masalasining katta qismiga aylanadi.
 
-NOTE: Learn more about [routing in the in-depth guide](/guide/routing).
+NOTE: [Chuqur qoʻllanmada marshrutlash](/guide/routing) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to set up and configure your app to use Angular Router.
+Bu mashgʻulotda ilovangizni Angular Router'dan foydalanish uchun qanday oʻrnatish va sozlashni oʻrganasiz.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Create an app.routes.ts file">
+<docs-step title="app.routes.ts faylini yarating">
 
-Inside `app.routes.ts`, make the following changes:
+`app.routes.ts` ichida quyidagi oʻzgarishlarni kiriting:
 
-1. Import `Routes` from the `@angular/router` package.
-2. Export a constant called `routes` of type `Routes`, assign it `[]` as the value.
+1. `@angular/router` paketidan `Routes`'ni import qiling.
+2. `Routes` turidagi `routes` nomli konstantani eksport qiling va unga qiymat sifatida `[]` bering.
 
 ```ts
 import {Routes} from '@angular/router';
@@ -25,13 +25,13 @@ export const routes: Routes = [];
 
 </docs-step>
 
-<docs-step title="Add routing to provider">
+<docs-step title="Provider'ga marshrutlashni qoʻshing">
 
-In `app.config.ts`, configure the app to Angular Router with the following steps:
+`app.config.ts`'da quyidagi qadamlar bilan ilovani Angular Router'ga sozlang:
 
-1. Import the `provideRouter` function from `@angular/router`.
-1. Import `routes` from the `./app.routes.ts`.
-1. Call the `provideRouter` function with `routes` passed in as an argument in the `providers` array.
+1. `@angular/router`'dan `provideRouter` funksiyasini import qiling.
+1. `./app.routes.ts`'dan `routes`'ni import qiling.
+1. `providers` massivida `routes`'ni argument sifatida uzatib, `provideRouter` funksiyasini chaqiring.
 
 ```ts {highlight:[2,3,6]}
 import {ApplicationConfig} from '@angular/core';
@@ -45,11 +45,11 @@ export const appConfig: ApplicationConfig = {
 
 </docs-step>
 
-<docs-step title="Import `RouterOutlet` in the component">
+<docs-step title="Komponentga `RouterOutlet`'ni import qiling">
 
-Finally, to make sure your app is ready to use the Angular Router, you need to tell the app where you expect the router to display the desired content. Accomplish that by using the `RouterOutlet` directive from `@angular/router`.
+Nihoyat, ilovangiz Angular Router'dan foydalanishga tayyor boʻlishini taʼminlash uchun ilovaga router kerakli kontentni qayerda koʻrsatishini kutayotganingizni aytishingiz kerak. Bunga `@angular/router`'dagi `RouterOutlet` direktivasidan foydalanib erishing.
 
-Update the template for `App` by adding `<router-outlet />`
+`App` shablonini `<router-outlet />` qoʻshib yangilang
 
 ```angular-ts {highlight:[9]}
 @Component({
@@ -71,6 +71,6 @@ export class App {}
 
 </docs-workflow>
 
-Your app is now set up to use Angular Router. Nice work! 🙌
+Ilovangiz endi Angular Router'dan foydalanishga sozlandi. Ajoyib ish! 🙌
 
-Keep the momentum going to learn the next step of defining the routes for our app.
+Ilovamiz uchun marshrutlarni aniqlash boʻlgan keyingi qadamni oʻrganish uchun shu zaylda davom eting.

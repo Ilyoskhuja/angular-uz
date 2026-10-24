@@ -1,17 +1,17 @@
-# Updating the Component Class
+# Komponent klassini yangilash
 
-In Angular, the component's logic and behavior are defined in the component's TypeScript class.
+Angular'da komponentning logikasi va xatti-harakati komponentning TypeScript klassida aniqlanadi.
 
-NOTE: Learn more about [showing dynamic text in the essentials guide](/essentials/templates#showing-dynamic-text).
+NOTE: [Asoslar qoʻllanmasida dinamik matnni koʻrsatish](/essentials/templates#showing-dynamic-text) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to update the component class and how to use [interpolation](/guide/templates/binding#render-dynamic-text-with-text-interpolation).
+Bu mashgʻulotda komponent klassini qanday yangilashni va [interpolatsiyadan](/guide/templates/binding#render-dynamic-text-with-text-interpolation) qanday foydalanishni oʻrganasiz.
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Add a property called `city`">
-Update the component class by adding a property called `city` to the `App` class.
+<docs-step title="`city` nomli xususiyat qoʻshing">
+`App` klassiga `city` nomli xususiyat qoʻshib, komponent klassini yangilang.
 
 ```ts
 export class App {
@@ -19,33 +19,33 @@ export class App {
 }
 ```
 
-The `city` property is of type `string` but you can omit the type because of [type inference in TypeScript](https://www.typescriptlang.org/docs/handbook/type-inference.html). The `city` property can be used in the `App` class and can be referenced in the component template.
+`city` xususiyati `string` turiga ega, lekin [TypeScript'dagi tur xulosasi (type inference)](https://www.typescriptlang.org/docs/handbook/type-inference.html) tufayli turni koʻrsatmasligingiz ham mumkin. `city` xususiyatidan `App` klassida foydalanish va komponent shablonida unga murojaat qilish mumkin.
 
 <br>
 
-To use a class property in a template, you have to use the `{{ }}` syntax.
+Shablonda klass xususiyatidan foydalanish uchun `{{ }}` sintaksisidan foydalanishingiz kerak.
 </docs-step>
 
-<docs-step title="Update the component template">
-Update the `template` property to match the following HTML:
+<docs-step title="Komponent shablonini yangilang">
+`template` xususiyatini quyidagi HTML'ga mos keladigan qilib yangilang:
 
 ```ts
 template: `Hello {{ city }}`,
 ```
 
-This is an example of interpolation and is a part of Angular template syntax. It enables you to do much more than put dynamic text in a template. You can also use this syntax to call functions, write expressions and more.
+Bu interpolatsiyaga misol boʻlib, Angular shablon sintaksisining bir qismidir. U shablonga dinamik matn joylashtirishdan ham koʻproq ishlarni bajarish imkonini beradi. Bu sintaksisdan funksiyalarni chaqirish, ifodalar yozish va boshqa ishlar uchun ham foydalanishingiz mumkin.
 </docs-step>
 
-<docs-step title="More practice with interpolation">
-Try this - add another set of `{{ }}` with the contents being `1 + 1`:
+<docs-step title="Interpolatsiya bilan koʻproq amaliyot">
+Buni sinab koʻring — ichida `1 + 1` boʻlgan yana bir `{{ }}` juftligini qoʻshing:
 
 ```ts
 template: `Hello {{ city }}, {{ 1 + 1 }}`,
 ```
 
-Angular evaluates the contents of the `{{ }}` and renders the output in the template.
+Angular `{{ }}` ichidagi ifodani hisoblab, natijani shablonda render qiladi.
 </docs-step>
 
 </docs-workflow>
 
-This is just the beginning of what's possible with Angular templates, keep on learning to find out more.
+Bu Angular shablonlari bilan qilish mumkin boʻlgan ishlarning boshlanishi xolos; koʻproq bilish uchun oʻrganishda davom eting.
