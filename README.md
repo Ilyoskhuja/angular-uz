@@ -28,17 +28,18 @@ Maqsad — angular.dev saytidagi "Community translations" roʻyxatiga qoʻshilad
 
 | Boʻlim | Holat |
 |---|---|
-| Kirish → Angular nima? | ✅ tarjima qilingan |
-| Kirish → Oʻrnatish | ✅ tarjima qilingan |
-| Kirish → Asoslar → Umumiy koʻrinish | ✅ tarjima qilingan |
-| Asoslar (komponentlar, signallar, shablonlar, signal formalar, DI, keyingi qadamlar) | ✅ tarjima qilingan |
-| Chuqur qoʻllanmalar → Komponentlar (13 sahifa) | ✅ tarjima qilingan |
-| Chuqur qoʻllanmalar → Shablonlar (14 sahifa) | ✅ tarjima qilingan |
-| Chuqur qoʻllanmalar → Signallar (5 sahifa) | ✅ tarjima qilingan |
-| Chuqur qoʻllanmalar → Bogʻliqliklarni inyeksiya qilish (6/9 sahifa) | 🔶 qisman |
-| Bosh sahifa, navigatsiya, footer | ✅ tarjima qilingan |
-| Chuqur qoʻllanmalar → qolganlari (`guide/`) | ⏳ navbatda |
-| Darsliklar (`tutorials/`) | ⏳ navbatda |
+| Bosh sahifa, navigatsiya, footer | ✅ |
+| Kirish (Angular nima?, Oʻrnatish, Asoslar — 9 sahifa) | ✅ |
+| Chuqur qoʻllanmalar → Komponentlar (13 sahifa) | ✅ |
+| Chuqur qoʻllanmalar → Shablonlar (14 sahifa) | ✅ |
+| Chuqur qoʻllanmalar → Signallar (5 sahifa) | ✅ |
+| Chuqur qoʻllanmalar → Bogʻliqliklarni inyeksiya qilish (9 sahifa) | ✅ |
+| Chuqur qoʻllanmalar → Marshrutlash (18 sahifa) | ✅ |
+| Chuqur qoʻllanmalar → HTTP mijozi (6 sahifa) | ✅ |
+| Darslik → Angular'ni oʻrganing (25 qadam) | ✅ |
+| Chuqur qoʻllanmalar → Formalar, direktivalar, SSR, testlash va boshqalar | ⏳ navbatda |
+| Darsliklar → Birinchi ilova, Signal Forms, Deferrable views | ⏳ navbatda |
+| Maʼlumotnoma (API, CLI, xatolar) | ⏳ navbatda |
 
 ## Hissa qoʻshish
 
