@@ -1,16 +1,16 @@
-# Creating an injectable service
+# Inyeksiya qilinadigan servis yaratish
 
-Dependency injection (DI) in Angular is one of the framework's most powerful features. Consider dependency injection to be the ability for Angular to _provide_ resources you need for your application at runtime. A dependency could be a service or some other resources.
+Angular'da bogʻliqliklarni inyeksiya qilish (DI) — freymvorkning eng kuchli xususiyatlaridan biri. Bogʻliqliklarni inyeksiya qilishni Angular'ning ilovangiz uchun kerakli resurslarni ish vaqtida (runtime) _taqdim etish_ qobiliyati deb hisoblang. Bogʻliqlik servis yoki boshqa biror resurs boʻlishi mumkin.
 
-NOTE: Learn more about [dependency injection in the essentials guide](/essentials/dependency-injection).
+NOTE: [Asoslar qoʻllanmasida bogʻliqliklarni inyeksiya qilish](/essentials/dependency-injection) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to create an `injectable` service.
+Bu mashgʻulotda `injectable` (inyeksiya qilinadigan) servisni qanday yaratishni oʻrganasiz.
 
 <hr>
 
-One way to use a service is to act as a way to interact with data and APIs. To make a service reusable you should keep the logic in the service and share it throughout the application when it is needed.
+Servisdan foydalanish usullaridan biri — maʼlumotlar va API'lar bilan oʻzaro aloqa vositasi boʻlib xizmat qilish. Servisni qayta ishlatiladigan qilish uchun mantiqni servisda saqlashingiz va kerak boʻlganda uni ilova boʻylab ulashishingiz kerak.
 
-To make a class eligible to be injected by the DI system, use the `@Service` decorator. For example:
+Klassni DI tizimi tomonidan inyeksiya qilinishi mumkin boʻlgan qilish uchun `@Service` dekoratoridan foydalaning. Masalan:
 
 ```ts {highlight:[1]}
 @Service()
@@ -19,21 +19,21 @@ class UserService {
 }
 ```
 
-The `@Service` decorator marks the class as a service and notifies the DI system that `UserService` can be accessed anywhere in your application. By default, Angular provides the service across your entire application, so you don't need to write any extra configuration.
+`@Service` dekoratori klassni servis sifatida belgilaydi va DI tizimiga `UserService`'ga ilovangizning istalgan joyidan murojaat qilish mumkinligini bildiradi. Sukut boʻyicha Angular servisni butun ilovangiz boʻylab taqdim etadi, shuning uchun qoʻshimcha konfiguratsiya yozishingiz shart emas.
 
-NOTE: By default, `@Service` provides the class at the root injector. If you want to provide it manually, for example, to scope it to a specific route or component, set `autoProvided: false`. Learn more in the [guide on creating and using services](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator).
+NOTE: Sukut boʻyicha `@Service` klassni ildiz injector'da taqdim etadi. Agar uni qoʻlda taqdim etmoqchi boʻlsangiz, masalan, uni muayyan marshrut yoki komponent doirasi bilan cheklash uchun, `autoProvided: false` qiymatini oʻrnating. [Servislarni yaratish va ishlatish boʻyicha qoʻllanmada](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator) koʻproq bilib oling.
 
-Alright, you try:
+Xoʻsh, endi oʻzingiz sinab koʻring:
 
 <docs-workflow>
 
-<docs-step title="Add the `@Service` decorator">
-Update the code in `car.service.ts` by adding the `@Service()` decorator to the `CarService` class.
+<docs-step title="`@Service` dekoratorini qoʻshing">
+`car.service.ts` faylidagi kodni `CarService` klassiga `@Service()` dekoratorini qoʻshish orqali yangilang.
 
-TIP: Use the above example to find the correct syntax.
+TIP: Toʻgʻri sintaksisni topish uchun yuqoridagi misoldan foydalaning.
 
 </docs-step>
 
 </docs-workflow>
 
-Well, done 👍 that service is now `injectable` and can participate in the fun. Now that the service is `injectable`, let's try injecting it into a component 👉
+Barakalla 👍 endi bu servis `injectable` boʻldi va oʻyinga qoʻshilishi mumkin. Servis `injectable` boʻlgani uchun, keling, uni komponentga inyeksiya qilib koʻramiz 👉

@@ -1,18 +1,18 @@
-# Getting form control value
+# Forma boshqaruv elementi qiymatini olish
 
-Now that your forms are set up with Angular, the next step is to access the values from the form controls.
+Formalaringiz Angular bilan sozlanganidan soʻng, keyingi qadam — forma boshqaruv elementlaridan (form control) qiymatlarni olish.
 
-NOTE: Learn more about [adding a basic form control in the in-depth guide](/guide/forms/reactive-forms#adding-a-basic-form-control).
+NOTE: [Chuqur qoʻllanmada asosiy forma boshqaruv elementini qoʻshish](/guide/forms/reactive-forms#adding-a-basic-form-control) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to get the value from your form input.
+Bu mashgʻulotda forma inputingizdan qiymatni qanday olishni oʻrganasiz.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Show the value of the input field in the template">
+<docs-step title="Kiritish maydonining qiymatini shablonda koʻrsating">
 
-To display the input value in a template, you can use the interpolation syntax `{{}}` just like any other class property of the component:
+Input qiymatini shablonda koʻrsatish uchun komponentning boshqa har qanday klass xususiyati kabi `{{}}` interpolyatsiya sintaksisidan foydalanishingiz mumkin:
 
 ```angular-ts {highlight:[5]}
 @Component({
@@ -33,9 +33,9 @@ export class User {
 
 </docs-step>
 
-<docs-step title="Retrieve the value of an input field">
+<docs-step title="Kiritish maydonining qiymatini oling">
 
-When you need to reference the input field value in the component class, you can do so by accessing the class property with the `this` syntax.
+Komponent klassida kiritish maydoni qiymatiga murojaat qilish kerak boʻlganda, buni `this` sintaksisi orqali klass xususiyatiga murojaat qilish yoʻli bilan amalga oshirishingiz mumkin.
 
 ```angular-ts {highlight:[15]}
 ...
@@ -61,6 +61,6 @@ export class User {
 
 </docs-workflow>
 
-Great job learning how to display the input values in your template and access them programmatically.
+Input qiymatlarini shablonda koʻrsatish va ularga programmali tarzda murojaat qilishni oʻrganganingiz uchun ajoyib ish.
 
-Time to progress onto the next way of managing forms with Angular: reactive forms. If you'd like to learn more about template-driven forms, please refer to the [Angular forms documentation](guide/forms/template-driven-forms).
+Endi Angular bilan formalarni boshqarishning keyingi usuliga — reaktiv formalarga oʻtish vaqti keldi. Shablonga asoslangan formalar haqida koʻproq bilmoqchi boʻlsangiz, [Angular formalar hujjatlariga](guide/forms/template-driven-forms) qarang.

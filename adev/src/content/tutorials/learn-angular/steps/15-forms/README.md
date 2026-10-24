@@ -1,20 +1,20 @@
-# Forms Overview
+# Formalar haqida umumiy koʻrinish
 
-Forms are a big part of many apps because they enable your app to accept user input. Let's learn about how forms are handled in Angular.
+Formalar koʻp ilovalarning muhim qismidir, chunki ular ilovangizga foydalanuvchi kiritmalarini qabul qilish imkonini beradi. Keling, Angular'da formalar qanday boshqarilishini oʻrganamiz.
 
-In Angular, there are two types of forms: template-driven and reactive. You'll learn about both over the next few activities.
+Angular'da formalarning ikki turi bor: shablonga asoslangan (template-driven) va reaktiv (reactive). Keyingi bir necha mashgʻulotda ikkalasini ham oʻrganasiz.
 
-NOTE: Learn more about [forms in Angular in the in-depth guide](/guide/forms).
+NOTE: [Chuqur qoʻllanmada Angular'dagi formalar](/guide/forms) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to set up a form using a template-driven approach.
+Bu mashgʻulotda shablonga asoslangan yondashuv yordamida formani qanday sozlashni oʻrganasiz.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Create an input field">
+<docs-step title="Kiritish maydonini yarating">
 
-In `user.ts`, update the template by adding a text input with the `id` set to `framework`, type set to `text`.
+`user.ts` faylida shablonni `id` qiymati `framework`, turi `text` boʻlgan matn kiritish maydonini qoʻshish orqali yangilang.
 
 ```angular-html
 <label for="framework">
@@ -25,11 +25,11 @@ In `user.ts`, update the template by adding a text input with the `id` set to `f
 
 </docs-step>
 
-<docs-step title="Import `FormsModule`">
+<docs-step title="`FormsModule`'ni import qiling">
 
-For this form to use Angular features that enable data binding to forms, you'll need to import the `FormsModule`.
+Bu forma formalarga maʼlumotlarni bogʻlash imkonini beruvchi Angular xususiyatlaridan foydalanishi uchun `FormsModule`'ni import qilishingiz kerak boʻladi.
 
-Import the `FormsModule` from `@angular/forms` and add it to the `imports` array of the `User`.
+`@angular/forms`'dan `FormsModule`'ni import qiling va uni `User` komponentining `imports` massiviga qoʻshing.
 
 ```ts {highlight:[[2],[6]]}
 import {Component} from '@angular/core';
@@ -44,11 +44,11 @@ export class User {}
 
 </docs-step>
 
-<docs-step title="Add binding to the value of the input">
+<docs-step title="Input qiymatiga bogʻlash qoʻshing">
 
-The `FormsModule` has a directive called `ngModel` that binds the value of the input to a property in your class.
+`FormsModule`'da `ngModel` deb nomlangan direktiva bor, u input qiymatini klassingizdagi xususiyatga bogʻlaydi.
 
-Update the input to use the `ngModel` directive, specifically with the following syntax `[(ngModel)]="favoriteFramework"` to bind to the `favoriteFramework` property.
+Inputni `ngModel` direktivasidan foydalanishga yangilang, xususan `favoriteFramework` xususiyatiga bogʻlash uchun quyidagi sintaksisdan foydalaning: `[(ngModel)]="favoriteFramework"`.
 
 ```html {highlight:[3]}
 <label for="framework">
@@ -57,14 +57,14 @@ Update the input to use the `ngModel` directive, specifically with the following
 </label>
 ```
 
-After you've made changes, try entering a value in the input field. Notice how it updates on the screen (yes, very cool).
+Oʻzgarishlarni kiritganingizdan soʻng, kiritish maydoniga qiymat kiritib koʻring. Uning ekranda qanday yangilanishiga eʼtibor bering (ha, juda zoʻr).
 
-NOTE: The syntax `[()]` is known as "banana in a box" but it represents two-way binding: property binding and event binding. Learn more in the [Angular docs about two-way data binding](guide/templates/two-way-binding).
+NOTE: `[()]` sintaksisi "qutidagi banan" (banana in a box) deb ataladi, lekin u ikki tomonlama bogʻlashni ifodalaydi: xususiyat bogʻlash va hodisa bogʻlash. [Ikki tomonlama maʼlumot bogʻlash haqidagi Angular hujjatlarida](guide/templates/two-way-binding) koʻproq bilib oling.
 
 </docs-step>
 
 </docs-workflow>
 
-You've now taken an important first step towards building forms with Angular.
+Endi Angular bilan formalar yaratish yoʻlida muhim birinchi qadamni tashladingiz.
 
-Nice work. Let's keep the momentum going!
+Ajoyib ish. Shu zaylda davom etaylik!

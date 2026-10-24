@@ -1,18 +1,18 @@
-# Reactive Forms
+# Reaktiv formalar
 
-When you want to manage your forms programmatically instead of relying purely on the template, reactive forms are the answer.
+Formalaringizni faqat shablonga tayanish oʻrniga programmali tarzda boshqarmoqchi boʻlsangiz, reaktiv formalar — bunga javob.
 
-NOTE: Learn more about [reactive forms in the in-depth guide](/guide/forms/reactive-forms).
+NOTE: [Chuqur qoʻllanmada reaktiv formalar](/guide/forms/reactive-forms) haqida koʻproq bilib oling.
 
-In this activity, you'll learn how to set up reactive forms.
+Bu mashgʻulotda reaktiv formalarni qanday sozlashni oʻrganasiz.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Import `ReactiveForms` module">
+<docs-step title="`ReactiveForms` modulini import qiling">
 
-In `app.ts`, import `ReactiveFormsModule` from `@angular/forms` and add it to the `imports` array of the component.
+`app.ts` faylida `@angular/forms`'dan `ReactiveFormsModule`'ni import qiling va uni komponentning `imports` massiviga qoʻshing.
 
 ```angular-ts
 import { ReactiveFormsModule } from '@angular/forms';
@@ -36,11 +36,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 </docs-step>
 
-<docs-step title="Create the `FormGroup` object with FormControls">
+<docs-step title="FormControl'lar bilan `FormGroup` obyektini yarating">
 
-Reactive forms use the `FormControl` class to represent the form controls (e.g., inputs). Angular provides the `FormGroup` class to serve as a grouping of form controls into a helpful object that makes handling large forms more convenient for developers.
+Reaktiv formalar forma boshqaruv elementlarini (masalan, inputlarni) ifodalash uchun `FormControl` klassidan foydalanadi. Angular forma boshqaruv elementlarini foydali obyektga guruhlash uchun `FormGroup` klassini taqdim etadi, bu katta formalar bilan ishlashni dasturchilar uchun qulayroq qiladi.
 
-Add `FormControl` and `FormGroup` to the import from `@angular/forms` so that you can create a FormGroup for each form, with the properties `name` and `email` as FormControls.
+`@angular/forms`'dan importga `FormControl` va `FormGroup`'ni qoʻshing, shunda har bir forma uchun `name` va `email` xususiyatlari FormControl boʻlgan FormGroup yaratishingiz mumkin.
 
 ```ts
 import {ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
@@ -55,11 +55,11 @@ export class App {
 
 </docs-step>
 
-<docs-step title="Link the FormGroup and FormControls to the form">
+<docs-step title="FormGroup va FormControl'larni formaga bogʻlang">
 
-Each `FormGroup` should be attached to a form using the `[formGroup]` directive.
+Har bir `FormGroup` `[formGroup]` direktivasi yordamida formaga biriktirilishi kerak.
 
-In addition, each `FormControl` can be attached with the `formControlName` directive and assigned to the corresponding property. Update the template with the following form code:
+Bundan tashqari, har bir `FormControl` `formControlName` direktivasi bilan biriktirilib, tegishli xususiyatga tayinlanishi mumkin. Shablonni quyidagi forma kodi bilan yangilang:
 
 ```angular-html
 <form [formGroup]="profileForm">
@@ -77,9 +77,9 @@ In addition, each `FormControl` can be attached with the `formControlName` direc
 
 </docs-step>
 
-<docs-step title="Handle update to the form">
+<docs-step title="Forma yangilanishini qayta ishlang">
 
-When you want to access data from the `FormGroup`, it can be done by accessing the value of the `FormGroup`. Update the `template` to display the form values:
+`FormGroup`'dan maʼlumotlarga murojaat qilmoqchi boʻlsangiz, buni `FormGroup`'ning qiymatiga murojaat qilish orqali amalga oshirish mumkin. Forma qiymatlarini koʻrsatish uchun `template`'ni yangilang:
 
 ```angular-html
 ...
@@ -90,11 +90,11 @@ When you want to access data from the `FormGroup`, it can be done by accessing t
 
 </docs-step>
 
-<docs-step title="Access FormGroup values">
-Add a new method to the component class called `handleSubmit` that you'll later use to handle the form submission.
-This method will display values from the form, you can access the values from the FormGroup.
+<docs-step title="FormGroup qiymatlariga murojaat qiling">
+Komponent klassiga `handleSubmit` deb nomlangan yangi metod qoʻshing, uni keyinroq forma yuborilishini qayta ishlash uchun ishlatasiz.
+Bu metod formadagi qiymatlarni koʻrsatadi, qiymatlarga FormGroup orqali murojaat qilishingiz mumkin.
 
-In the component class, add the `handleSubmit()` method to handle the form submission.
+Komponent klassida forma yuborilishini qayta ishlash uchun `handleSubmit()` metodini qoʻshing.
 
 ```ts
 handleSubmit() {
@@ -106,9 +106,9 @@ handleSubmit() {
 
 </docs-step>
 
-<docs-step title="Add `ngSubmit` to the form">
-You have access to the form values, now it is time to handle the submission event and use the `handleSubmit` method.
-Angular has an event handler for this specific purpose called `ngSubmit`. Update the form element to call the `handleSubmit` method when the form is submitted.
+<docs-step title="Formaga `ngSubmit` qoʻshing">
+Forma qiymatlariga murojaat qila olasiz, endi yuborish hodisasini qayta ishlash va `handleSubmit` metodidan foydalanish vaqti keldi.
+Angular'da aynan shu maqsad uchun `ngSubmit` deb nomlangan hodisa ishlov beruvchisi mavjud. Forma yuborilganda `handleSubmit` metodini chaqirish uchun forma elementini yangilang.
 
 ```angular-html {highlight:[1]}
 <form [formGroup]="profileForm" (ngSubmit)="handleSubmit()"></form>
@@ -118,6 +118,6 @@ Angular has an event handler for this specific purpose called `ngSubmit`. Update
 
 </docs-workflow>
 
-And just like that, you know how to work with reactive forms in Angular.
+Va shu tarzda, endi Angular'da reaktiv formalar bilan qanday ishlashni bilasiz.
 
-Fantastic job with this activity. Keep going to learn about form validation.
+Bu mashgʻulotni ajoyib bajardingiz. Forma validatsiyasi haqida oʻrganish uchun davom eting.
