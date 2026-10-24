@@ -1,14 +1,14 @@
-# Field state management
+# Maydon holatini boshqarish
 
-Signal Forms' field state allows you to react to user interactions by providing reactive signals for validation status (such as `valid`, `invalid`, `errors`), interaction tracking (such as `touched`, `dirty`), and availability (such as `disabled`, `hidden`).
+Signal Forms'ning maydon holati validatsiya holati (`valid`, `invalid`, `errors` kabi), oʻzaro aloqani kuzatish (`touched`, `dirty` kabi) va mavjudlik (`disabled`, `hidden` kabi) uchun reaktiv signallarni taqdim etib, foydalanuvchi harakatlariga javob qaytarish imkonini beradi.
 
-## Understanding field state
+## Maydon holatini tushunish {#understanding-field-state}
 
-When you create a form with the [`form()`](api/forms/signals/form) function, it returns a **field tree** - an object structure that mirrors your form model. Each field in the tree is accessible via dot notation (like [`form.email`](api/forms/signals/FieldTree)).
+[`form()`](api/forms/signals/form) funksiyasi bilan forma yaratganingizda, u **maydonlar daraxtini** (field tree) qaytaradi — bu forma modelingizni aks ettiruvchi obyekt tuzilmasi. Daraxtdagi har bir maydonga nuqta belgisi orqali murojaat qilish mumkin ([`form.email`](api/forms/signals/FieldTree) kabi).
 
-### Accessing field state
+### Maydon holatiga murojaat qilish {#accessing-field-state}
 
-When you call any field in the field tree as a function (like [`form.email()`](api/forms/signals/FieldState)), it returns a `FieldState` object containing reactive signals that track the field's validation, interaction, and availability state. For example, the `invalid()` signal tells you whether the field has validation errors:
+Maydonlar daraxtidagi istalgan maydonni funksiya sifatida chaqirganingizda ([`form.email()`](api/forms/signals/FieldState) kabi), u maydonning validatsiya, oʻzaro aloqa va mavjudlik holatini kuzatuvchi reaktiv signallarni oʻz ichiga olgan `FieldState` obyektini qaytaradi. Masalan, `invalid()` signali maydonda validatsiya xatolari bor-yoʻqligini bildiradi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -43,42 +43,42 @@ export class Registration {
 }
 ```
 
-In this example, the template checks `registrationForm.email().invalid()` to determine whether to display an error message.
+Bu misolda shablon xato xabarini koʻrsatish kerakligini aniqlash uchun `registrationForm.email().invalid()` qiymatini tekshiradi.
 
-### Field state signals
+### Maydon holati signallari {#field-state-signals}
 
-The most commonly used signal is `value()`, a `WritableSignal` that provides access to the field's current value:
+Eng koʻp ishlatiladigan signal — `value()`, bu maydonning joriy qiymatiga murojaat qilish imkonini beruvchi `WritableSignal`:
 
 ```ts
 const emailValue = registrationForm.email().value();
 console.log(emailValue); // Current email string
 ```
 
-Beyond `value()`, field state includes signals for validation, interaction tracking, and availability control:
+`value()`'dan tashqari, maydon holati validatsiya, oʻzaro aloqani kuzatish va mavjudlikni boshqarish uchun signallarni oʻz ichiga oladi:
 
-| Category                                | Signal       | Description                                                                       |
-| --------------------------------------- | ------------ | --------------------------------------------------------------------------------- |
-| **[Validation](#validation-state)**     | `valid()`    | Field passes all validation rules and has no pending validators                   |
-|                                         | `invalid()`  | Field has validation errors                                                       |
-|                                         | `errors()`   | Array of validation error objects                                                 |
-|                                         | `pending()`  | Async validation in progress                                                      |
-| **[Interaction](#interaction-state)**   | `touched()`  | User has focused and blurred the field (if interactive)                           |
-|                                         | `dirty()`    | User has modified the field (if interactive), even if value matches initial state |
-| **[Availability](#availability-state)** | `disabled()` | Field is disabled and doesn't affect parent form state                            |
-|                                         | `hidden()`   | Indicates field should be hidden; visibility in template is controlled with `@if` |
-|                                         | `readonly()` | Field is readonly and doesn't affect parent form state                            |
+| Kategoriya                                | Signal       | Tavsif                                                                                                            |
+| ----------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
+| **[Validatsiya](#validation-state)**      | `valid()`    | Maydon barcha validatsiya qoidalaridan oʻtgan va kutilayotgan validatorlari yoʻq                                   |
+|                                           | `invalid()`  | Maydonda validatsiya xatolari bor                                                                                 |
+|                                           | `errors()`   | Validatsiya xatosi obyektlari massivi                                                                             |
+|                                           | `pending()`  | Asinxron validatsiya davom etmoqda                                                                                |
+| **[Oʻzaro aloqa](#interaction-state)**    | `touched()`  | Foydalanuvchi maydonga fokus berib, undan chiqqan (agar maydon interaktiv boʻlsa)                                 |
+|                                           | `dirty()`    | Foydalanuvchi maydonni oʻzgartirgan (agar maydon interaktiv boʻlsa), hatto qiymat boshlangʻich holatga mos kelsa ham |
+| **[Mavjudlik](#availability-state)**      | `disabled()` | Maydon oʻchirilgan va ota forma holatiga taʼsir qilmaydi                                                           |
+|                                           | `hidden()`   | Maydon yashirilishi kerakligini bildiradi; shablondagi koʻrinish `@if` bilan boshqariladi                         |
+|                                           | `readonly()` | Maydon faqat oʻqish uchun va ota forma holatiga taʼsir qilmaydi                                                   |
 
-These signals enable you to build responsive form user experiences that react to user behavior. The sections below explore each category in detail.
+Bu signallar foydalanuvchi xatti-harakatiga javob qaytaruvchi, sezgir forma tajribalarini yaratish imkonini beradi. Quyidagi boʻlimlar har bir kategoriyani batafsil koʻrib chiqadi.
 
-## Validation state
+## Validatsiya holati {#validation-state}
 
-Validation state signals tell you whether a field is valid and what errors it contains.
+Validatsiya holati signallari maydon valid yoki yoʻqligini va unda qanday xatolar borligini bildiradi.
 
-NOTE: This guide focuses on **using** validation state in your templates and logic (such as reading `valid()`, `invalid()`, `errors()` to display feedback). For information on **defining** validation rules and creating custom validators, see the [Validation guide](guide/forms/signals/validation).
+NOTE: Bu qoʻllanma shablonlaringiz va logikangizda validatsiya holatidan **foydalanishga** (masalan, fikr-mulohaza koʻrsatish uchun `valid()`, `invalid()`, `errors()` qiymatlarini oʻqish) qaratilgan. Validatsiya qoidalarini **aniqlash** va maxsus validatorlar yaratish haqida maʼlumot olish uchun [Validatsiya qoʻllanmasiga](guide/forms/signals/validation) qarang.
 
-### Checking validity
+### Validlikni tekshirish {#checking-validity}
 
-Use `valid()` and `invalid()` to check validation status:
+Validatsiya holatini tekshirish uchun `valid()` va `invalid()`'dan foydalaning:
 
 ```angular-ts
 @Component({
@@ -99,26 +99,26 @@ export class Login {
 }
 ```
 
-| Signal      | Returns `true` when                                             |
-| ----------- | --------------------------------------------------------------- |
-| `valid()`   | Field passes all validation rules and has no pending validators |
-| `invalid()` | Field has validation errors                                     |
+| Signal      | Qachon `true` qaytaradi                                                          |
+| ----------- | -------------------------------------------------------------------------------- |
+| `valid()`   | Maydon barcha validatsiya qoidalaridan oʻtgan va kutilayotgan validatorlari yoʻq  |
+| `invalid()` | Maydonda validatsiya xatolari bor                                                |
 
-When checking validity in code, use `invalid()` instead of `!valid()` if you want to distinguish between "has errors" and "validation pending." The reason for this is that both `valid()` and `invalid()` can be `false` simultaneously when async validation is pending because the field isn't valid yet since validation not complete and is also isn't invalid since no errors have been found yet.
+Kodda validlikni tekshirganda, "xatolari bor" va "validatsiya kutilmoqda" holatlarini farqlamoqchi boʻlsangiz, `!valid()` oʻrniga `invalid()`'dan foydalaning. Buning sababi shundaki, asinxron validatsiya kutilayotganda `valid()` ham, `invalid()` ham bir vaqtda `false` boʻlishi mumkin: validatsiya tugamagani uchun maydon hali valid emas, va hali hech qanday xato topilmagani uchun invalid ham emas.
 
-### Reading validation errors
+### Validatsiya xatolarini oʻqish {#reading-validation-errors}
 
-Access the array of validation errors with `errors()`, or an individual error with `getError()`. Each error object contains:
+Validatsiya xatolari massiviga `errors()` orqali, alohida xatoga esa `getError()` orqali murojaat qiling. Har bir xato obyekti quyidagilarni oʻz ichiga oladi:
 
-| Property    | Description                                                     |
-| ----------- | --------------------------------------------------------------- |
-| `kind`      | The validation rule that failed (such as "required" or "email") |
-| `message`   | Optional human-readable error message                           |
-| `fieldTree` | Reference to the `FieldTree` where the error occurred           |
+| Xususiyat   | Tavsif                                                                          |
+| ----------- | ------------------------------------------------------------------------------- |
+| `kind`      | Muvaffaqiyatsiz boʻlgan validatsiya qoidasi (masalan, "required" yoki "email")  |
+| `message`   | Ixtiyoriy, odam oʻqishi uchun moʻljallangan xato xabari                         |
+| `fieldTree` | Xato yuzaga kelgan `FieldTree`'ga havola                                        |
 
-NOTE: The `message` property is optional. Validators can provide custom error messages, but if not specified, you may need to map error `kind` values to your own messages.
+NOTE: `message` xususiyati ixtiyoriy. Validatorlar maxsus xato xabarlarini taqdim etishi mumkin, lekin agar ular koʻrsatilmagan boʻlsa, xato `kind` qiymatlarini oʻz xabarlaringizga moslashtirishingiz kerak boʻlishi mumkin.
 
-Here's an example of how to display errors in your template by an array of validation errors:
+Validatsiya xatolari massivi orqali shablonda xatolarni qanday koʻrsatish mumkinligiga misol:
 
 ```angular-ts
 @Component({
@@ -136,9 +136,9 @@ Here's an example of how to display errors in your template by an array of valid
 })
 ```
 
-This approach loops through all errors for a field, displaying each error message to the user.
+Bu yondashuv maydonning barcha xatolari boʻylab aylanib, har bir xato xabarini foydalanuvchiga koʻrsatadi.
 
-Here's an example of how to display an error in your template with `getError()`:
+`getError()` yordamida shablonda xatoni qanday koʻrsatish mumkinligiga misol:
 
 ```angular-ts
 @Component({
@@ -154,11 +154,11 @@ Here's an example of how to display an error in your template with `getError()`:
 })
 ```
 
-`getError()` accepts any string for an error's `kind`, and recognizes build-in validation error kinds (e.g., "required", "email", "minLength").
+`getError()` xato `kind`'i uchun istalgan satrni qabul qiladi va oʻrnatilgan validatsiya xatosi turlarini (masalan, "required", "email", "minLength") taniydi.
 
-### Pending validation
+### Kutilayotgan validatsiya {#pending-validation}
 
-The `pending()` signal indicates async validation is in progress:
+`pending()` signali asinxron validatsiya davom etayotganini bildiradi:
 
 ```angular-ts
 @Component({
@@ -176,19 +176,19 @@ The `pending()` signal indicates async validation is in progress:
 })
 ```
 
-This signal enables you to show loading states while async validation executes.
+Bu signal asinxron validatsiya bajarilayotganda yuklanish holatlarini koʻrsatish imkonini beradi.
 
-## Interaction state
+## Oʻzaro aloqa holati {#interaction-state}
 
-Interaction state tracks whether users have interacted with fields, enabling patterns like "show errors only after the user has touched a field."
+Oʻzaro aloqa holati foydalanuvchilar maydonlar bilan ishlagan-ishlamaganini kuzatadi va "xatolarni faqat foydalanuvchi maydonga tekkanidan keyin koʻrsatish" kabi namunalarni amalga oshirish imkonini beradi.
 
-### Touched state
+### Tegilgan holat {#touched-state}
 
-The `touched()` signal tracks whether a user has focused and then blurred a field, or whether the field has been marked as touched programmatically. Only interactive fields can become touched; hidden, disabled, and readonly fields don't become touched from user interactions or `markAsTouched()`.
+`touched()` signali foydalanuvchi maydonga fokus berib, keyin undan chiqqanini yoki maydon dasturiy ravishda tegilgan deb belgilanganini kuzatadi. Faqat interaktiv maydonlar tegilgan boʻlishi mumkin; yashirin, oʻchirilgan va faqat oʻqish uchun maydonlar foydalanuvchi harakatlari yoki `markAsTouched()` natijasida tegilgan boʻlmaydi.
 
-When you need a section-level action to reveal validation errors within that section, call `markAsTouched()` on the section field. The default value of `skipDescendants` is `false`, so the call marks the section field and each descendant field as touched.
+Boʻlim darajasidagi amal orqali shu boʻlim ichidagi validatsiya xatolarini koʻrsatish kerak boʻlsa, boʻlim maydonida `markAsTouched()`'ni chaqiring. `skipDescendants`'ning sukut boʻyicha qiymati `false`, shuning uchun bu chaqiruv boʻlim maydonini va uning har bir avlod maydonini tegilgan deb belgilaydi.
 
-For example, a checkout flow can validate the shipping section before allowing the user to continue to the next step:
+Masalan, buyurtmani rasmiylashtirish jarayoni foydalanuvchiga keyingi qadamga oʻtishga ruxsat berishdan oldin yetkazib berish boʻlimini tekshirishi mumkin:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -248,15 +248,15 @@ export class CheckoutShipping {
 }
 ```
 
-When `continueToPayment()` calls `markAsTouched()` on `checkoutForm.shipping()`, it uses the default `skipDescendants: false` behavior. Angular marks `shipping`, `shipping.name`, and `shipping.address` as touched, so the child `touched() && invalid()` error messages become visible before the whole form is submitted.
+`continueToPayment()` `checkoutForm.shipping()`'da `markAsTouched()`'ni chaqirganda, sukut boʻyicha `skipDescendants: false` xatti-harakati qoʻllaniladi. Angular `shipping`, `shipping.name` va `shipping.address`'ni tegilgan deb belgilaydi, shuning uchun ichki maydonlarning `touched() && invalid()` xato xabarlari butun forma yuborilishidan oldin koʻrinadigan boʻladi.
 
-NOTE: Pass `{skipDescendants: true}` only when the field receiving the call should become touched without changing the touched state of its descendants.
+NOTE: `{skipDescendants: true}`'ni faqat chaqiruvni qabul qilayotgan maydon oʻz avlodlarining tegilgan holatini oʻzgartirmasdan tegilgan boʻlishi kerak boʻlganda uzating.
 
-### Dirty state
+### Oʻzgartirilgan holat {#dirty-state}
 
-Forms often need to detect whether data has actually changed - for example, to warn users about unsaved changes or to enable a save button only when necessary. The `dirty()` signal tracks whether the user has modified the field.
+Formalar koʻpincha maʼlumotlar haqiqatan oʻzgargan-oʻzgarmaganini aniqlashi kerak boʻladi — masalan, foydalanuvchilarni saqlanmagan oʻzgarishlar haqida ogohlantirish yoki saqlash tugmasini faqat zarur boʻlganda yoqish uchun. `dirty()` signali foydalanuvchi maydonni oʻzgartirgan-oʻzgartirmaganini kuzatadi.
 
-The `dirty()` signal becomes `true` when the user modifies an interactive field's value, and remains `true` even if the value is changed back to match the initial value:
+`dirty()` signali foydalanuvchi interaktiv maydon qiymatini oʻzgartirganda `true` boʻladi va qiymat boshlangʻich qiymatga qaytarilsa ham `true` boʻlib qoladi:
 
 ```angular-ts
 @Component({
@@ -277,33 +277,33 @@ export class Profile {
 }
 ```
 
-Use `dirty()` for "unsaved changes" warnings or to enable save buttons only when data has changed.
+`dirty()`'dan "saqlanmagan oʻzgarishlar" ogohlantirishlari uchun yoki saqlash tugmalarini faqat maʼlumotlar oʻzgarganda yoqish uchun foydalaning.
 
-### Touched vs dirty
+### Tegilgan va oʻzgartirilgan holatlar farqi {#touched-vs-dirty}
 
-These signals track different kinds of interaction state:
+Bu signallar oʻzaro aloqa holatining turli jihatlarini kuzatadi:
 
-| Signal      | When it becomes true                                                                                                            |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `touched()` | User has focused and blurred an interactive field, or the field was marked as touched programmatically                          |
-| `dirty()`   | User has modified an interactive field (even if they never blurred it, and even if the current value matches the initial value) |
+| Signal      | Qachon true boʻladi                                                                                                                       |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `touched()` | Foydalanuvchi interaktiv maydonga fokus berib, undan chiqqan, yoki maydon dasturiy ravishda tegilgan deb belgilangan                      |
+| `dirty()`   | Foydalanuvchi interaktiv maydonni oʻzgartirgan (hatto undan hech qachon chiqmagan boʻlsa ham, va hatto joriy qiymat boshlangʻich qiymatga mos kelsa ham) |
 
-A field can be in different combinations:
+Maydon turli kombinatsiyalarda boʻlishi mumkin:
 
-| State                  | Scenario                                                  |
-| ---------------------- | --------------------------------------------------------- |
-| Touched but not dirty  | User focused and blurred the field but made no changes    |
-| Both touched and dirty | User focused the field, changed the value, and blurred it |
+| Holat                              | Stsenariy                                                                            |
+| ---------------------------------- | ------------------------------------------------------------------------------------ |
+| Tegilgan, lekin oʻzgartirilmagan   | Foydalanuvchi maydonga fokus berib, undan chiqqan, lekin hech narsani oʻzgartirmagan |
+| Tegilgan ham, oʻzgartirilgan ham   | Foydalanuvchi maydonga fokus bergan, qiymatni oʻzgartirgan va undan chiqqan          |
 
-NOTE: Hidden, disabled, and readonly fields are non-interactive - they don't become touched or dirty from user interactions.
+NOTE: Yashirin, oʻchirilgan va faqat oʻqish uchun maydonlar interaktiv emas — ular foydalanuvchi harakatlari natijasida tegilgan yoki oʻzgartirilgan boʻlmaydi.
 
-## Availability state
+## Mavjudlik holati {#availability-state}
 
-Availability state signals control whether fields are interactive, editable, or visible. Disabled, hidden, and readonly fields are non-interactive. They don't affect whether their parent form is valid, touched, or dirty.
+Mavjudlik holati signallari maydonlar interaktiv, tahrirlanadigan yoki koʻrinadigan boʻlishini boshqaradi. Oʻchirilgan, yashirin va faqat oʻqish uchun maydonlar interaktiv emas. Ular ota formaning valid, tegilgan yoki oʻzgartirilgan boʻlishiga taʼsir qilmaydi.
 
-### Disabled fields
+### Oʻchirilgan maydonlar {#disabled-fields}
 
-The `disabled()` signal indicates whether a field accepts user input. Disabled fields appear in the UI but users cannot interact with them.
+`disabled()` signali maydon foydalanuvchi kiritishini qabul qiladimi-yoʻqligini bildiradi. Oʻchirilgan maydonlar UI'da koʻrinadi, lekin foydalanuvchilar ular bilan ishlay olmaydi.
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -334,20 +334,20 @@ export class Order {
 }
 ```
 
-In this example, we use `valueOf(schemaPath.total)` to check the value of the `total` field to determine whether `couponCode` should be disabled.
+Bu misolda `couponCode` oʻchirilgan boʻlishi kerakligini aniqlash uchun `total` maydonining qiymatini tekshirishda `valueOf(schemaPath.total)`'dan foydalanamiz.
 
-NOTE: The schema callback parameter (`schemaPath` in these examples) is a `SchemaPathTree` object that provides paths to all fields in your form. You can name this parameter anything you like.
+NOTE: Sxema callback parametri (bu misollarda `schemaPath`) — formangizdagi barcha maydonlarga yoʻllarni taqdim etuvchi `SchemaPathTree` obyekti. Bu parametrni istalgancha nomlashingiz mumkin.
 
-When defining rules like `disabled()`, `hidden()`, or `readonly()`, the `when` function receives a `FieldContext` object that is typically destructured (such as `({valueOf})`). Two methods commonly used in validation rules are:
+`disabled()`, `hidden()` yoki `readonly()` kabi qoidalarni aniqlashda `when` funksiyasi odatda destrukturizatsiya qilinadigan (masalan, `({valueOf})`) `FieldContext` obyektini qabul qiladi. Validatsiya qoidalarida koʻp ishlatiladigan ikki metod:
 
-- `valueOf(schemaPath.otherField)` - Read the value of another field in the form
-- `value()` - A signal containing the value of the field the rule is applied to
+- `valueOf(schemaPath.otherField)` - Formadagi boshqa maydonning qiymatini oʻqish
+- `value()` - Qoida qoʻllanilayotgan maydonning qiymatini oʻz ichiga olgan signal
 
-Disabled fields don't contribute to the parent form's validation state. Even if a disabled field would be invalid, the parent form can still be valid. The `disabled()` state affects interactivity and validation, but does not change the field's value.
+Oʻchirilgan maydonlar ota formaning validatsiya holatiga hissa qoʻshmaydi. Oʻchirilgan maydon invalid boʻlsa ham, ota forma valid boʻlishi mumkin. `disabled()` holati interaktivlik va validatsiyaga taʼsir qiladi, lekin maydon qiymatini oʻzgartirmaydi.
 
-### Hidden fields
+### Yashirin maydonlar {#hidden-fields}
 
-The `hidden()` signal indicates whether a field is conditionally hidden. Use `hidden()` with `@if` to show or hide fields based on conditions:
+`hidden()` signali maydon shartli ravishda yashirilgan-yashirilmaganini bildiradi. Shartlarga qarab maydonlarni koʻrsatish yoki yashirish uchun `hidden()`'ni `@if` bilan birga ishlating:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -382,11 +382,11 @@ export class Profile {
 }
 ```
 
-Hidden fields don't participate in validation. If a required field is hidden, it won't prevent form submission. The `hidden()` state affects availability and validation, but does not change the field's value.
+Yashirin maydonlar validatsiyada ishtirok etmaydi. Agar majburiy maydon yashirilgan boʻlsa, u formani yuborishga toʻsqinlik qilmaydi. `hidden()` holati mavjudlik va validatsiyaga taʼsir qiladi, lekin maydon qiymatini oʻzgartirmaydi.
 
-### Readonly fields
+### Faqat oʻqish uchun maydonlar {#readonly-fields}
 
-The `readonly()` signal indicates whether a field is readonly. Readonly fields display their value but users cannot edit them:
+`readonly()` signali maydon faqat oʻqish uchun ekanligini bildiradi. Faqat oʻqish uchun maydonlar oʻz qiymatini koʻrsatadi, lekin foydalanuvchilar ularni tahrirlay olmaydi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -419,23 +419,23 @@ export class Account {
 }
 ```
 
-NOTE: The `[formField]` directive automatically binds the `readonly` attribute based on the field's `readonly()` state, so you don't need to manually add `[readonly]="field().readonly()"`.
+NOTE: `[formField]` direktivi maydonning `readonly()` holatiga asoslanib `readonly` atributini avtomatik bogʻlaydi, shuning uchun `[readonly]="field().readonly()"`'ni qoʻlda qoʻshishingiz shart emas.
 
-Like disabled and hidden fields, readonly fields are non-interactive and don't affect parent form state. The `readonly()` state affects editability and validation, but does not change the field's value.
+Oʻchirilgan va yashirin maydonlar kabi, faqat oʻqish uchun maydonlar ham interaktiv emas va ota forma holatiga taʼsir qilmaydi. `readonly()` holati tahrirlanish imkoniyati va validatsiyaga taʼsir qiladi, lekin maydon qiymatini oʻzgartirmaydi.
 
-### When to use each
+### Har birini qachon ishlatish kerak {#when-to-use-each}
 
-| State        | Use when                                                            | User can see it | User can interact | Contributes to validation |
-| ------------ | ------------------------------------------------------------------- | --------------- | ----------------- | ------------------------- |
-| `disabled()` | Field temporarily unavailable (such as based on other field values) | Yes             | No                | No                        |
-| `hidden()`   | Field not relevant in current context                               | No (with @if)   | No                | No                        |
-| `readonly()` | Value should be visible but not editable                            | Yes             | No                | No                        |
+| Holat        | Qachon ishlatiladi                                                          | Foydalanuvchi koʻra oladi | Foydalanuvchi ishlay oladi | Validatsiyaga hissa qoʻshadi |
+| ------------ | --------------------------------------------------------------------------- | ------------------------- | -------------------------- | ---------------------------- |
+| `disabled()` | Maydon vaqtincha mavjud emas (masalan, boshqa maydonlar qiymatiga qarab)    | Ha                        | Yoʻq                       | Yoʻq                         |
+| `hidden()`   | Maydon joriy kontekstda ahamiyatsiz                                         | Yoʻq (@if bilan)          | Yoʻq                       | Yoʻq                         |
+| `readonly()` | Qiymat koʻrinishi, lekin tahrirlanmasligi kerak                             | Ha                        | Yoʻq                       | Yoʻq                         |
 
-## Form-level state
+## Forma darajasidagi holat {#form-level-state}
 
-The root form is also a field in the field tree. When you call it as a function, it also returns a `FieldState` object that aggregates the state of all child fields.
+Ildiz forma ham maydonlar daraxtidagi maydon hisoblanadi. Uni funksiya sifatida chaqirganingizda, u ham barcha ichki maydonlar holatini jamlovchi `FieldState` obyektini qaytaradi.
 
-### Accessing form state
+### Forma holatiga murojaat qilish {#accessing-form-state}
 
 ```angular-ts
 @Component({
@@ -454,43 +454,43 @@ export class Login {
 }
 ```
 
-In this example, the form is valid only when all child fields are valid. This allows you to enable/disable submit buttons based on overall form validity.
+Bu misolda forma faqat barcha ichki maydonlar valid boʻlganda valid boʻladi. Bu formaning umumiy validligiga qarab yuborish tugmalarini yoqish/oʻchirish imkonini beradi.
 
-### Form-level signals
+### Forma darajasidagi signallar {#form-level-signals}
 
-Because the root form is a field, it has the same signals (such as `valid()`, `invalid()`, `touched()`, `dirty()`, etc.).
+Ildiz forma maydon boʻlgani uchun, u bir xil signallarga ega (masalan, `valid()`, `invalid()`, `touched()`, `dirty()` va h.k.).
 
-| Signal      | Form-level behavior                                            |
-| ----------- | -------------------------------------------------------------- |
-| `valid()`   | All interactive fields are valid and no validators are pending |
-| `invalid()` | At least one interactive field has validation errors           |
-| `pending()` | At least one interactive field has pending async validation    |
-| `touched()` | The form, or at least one interactive descendant, is touched   |
-| `dirty()`   | User has modified at least one interactive field               |
+| Signal      | Forma darajasidagi xatti-harakat                                        |
+| ----------- | ----------------------------------------------------------------------- |
+| `valid()`   | Barcha interaktiv maydonlar valid va kutilayotgan validatorlar yoʻq     |
+| `invalid()` | Kamida bir interaktiv maydonda validatsiya xatolari bor                 |
+| `pending()` | Kamida bir interaktiv maydonda kutilayotgan asinxron validatsiya bor    |
+| `touched()` | Forma yoki kamida bir interaktiv avlod maydoni tegilgan                 |
+| `dirty()`   | Foydalanuvchi kamida bir interaktiv maydonni oʻzgartirgan               |
 
-### When to use form-level vs field-level
+### Forma darajasi va maydon darajasini qachon ishlatish kerak {#when-to-use-form-level-vs-field-level}
 
-**Use form-level state for:**
+**Forma darajasidagi holatdan quyidagilar uchun foydalaning:**
 
-- Submit button enabled/disabled state
-- "Save" button state
-- Overall form validity checks
-- Unsaved changes warnings
+- Yuborish tugmasining yoqilgan/oʻchirilgan holati
+- "Saqlash" tugmasining holati
+- Formaning umumiy validligini tekshirish
+- Saqlanmagan oʻzgarishlar haqida ogohlantirishlar
 
-**Use field-level state for:**
+**Maydon darajasidagi holatdan quyidagilar uchun foydalaning:**
 
-- Individual field error messages
-- Field-specific styling
-- Per-field validation feedback
-- Conditional field availability
+- Alohida maydonlarning xato xabarlari
+- Maydonga xos stillar
+- Har bir maydon boʻyicha validatsiya fikr-mulohazasi
+- Maydonlarning shartli mavjudligi
 
-## State propagation
+## Holatning tarqalishi {#state-propagation}
 
-Field state propagates from child fields up through parent field groups to the root form.
+Maydon holati ichki maydonlardan ota maydon guruhlari orqali yuqoriga, ildiz formagacha tarqaladi.
 
-### How child state affects parent forms
+### Ichki maydon holati ota formalarga qanday taʼsir qiladi {#how-child-state-affects-parent-forms}
 
-When a child field becomes invalid, its parent field group becomes invalid, and so does the root form. When a child becomes touched or dirty, the parent field group and root form reflect that change. This aggregation allows you to check validity at any level - field or entire form.
+Ichki maydon invalid boʻlganda, uning ota maydon guruhi ham, ildiz forma ham invalid boʻladi. Ichki maydon tegilgan yoki oʻzgartirilgan boʻlganda, ota maydon guruhi va ildiz forma bu oʻzgarishni aks ettiradi. Bu jamlash validlikni istalgan darajada — alohida maydon yoki butun forma darajasida — tekshirish imkonini beradi.
 
 ```ts
 const userModel = signal({
@@ -512,9 +512,9 @@ userForm.profile.firstName().invalid() === true;
 // → userForm().invalid() === true
 ```
 
-### Hidden, disabled, and readonly fields
+### Yashirin, oʻchirilgan va faqat oʻqish uchun maydonlar {#hidden-disabled-and-readonly-fields}
 
-Hidden, disabled, and readonly fields are non-interactive and don't affect parent form state:
+Yashirin, oʻchirilgan va faqat oʻqish uchun maydonlar interaktiv emas va ota forma holatiga taʼsir qilmaydi:
 
 ```ts
 const orderModel = signal({
@@ -528,17 +528,17 @@ const orderForm = form(orderModel, (schemaPath) => {
 });
 ```
 
-In this example, when `shippingAddress` is hidden, it doesn't affect form validity. As a result, even if `shippingAddress` is empty and required, the form can be valid.
+Bu misolda `shippingAddress` yashirilgan boʻlsa, u forma validligiga taʼsir qilmaydi. Natijada, `shippingAddress` boʻsh va majburiy boʻlsa ham, forma valid boʻlishi mumkin.
 
-This behavior prevents hidden, disabled, or readonly fields from blocking form submission or affecting validation, touched, and dirty state.
+Bu xatti-harakat yashirin, oʻchirilgan yoki faqat oʻqish uchun maydonlarning formani yuborishga toʻsqinlik qilishi yoki validatsiya, tegilgan va oʻzgartirilgan holatlarga taʼsir qilishining oldini oladi.
 
-## Using state in templates
+## Shablonlarda holatdan foydalanish {#using-state-in-templates}
 
-Field state signals integrate seamlessly with Angular templates, enabling reactive form user experiences without manual event handling.
+Maydon holati signallari Angular shablonlari bilan uzviy integratsiyalashadi va hodisalarni qoʻlda qayta ishlamasdan reaktiv forma tajribalarini yaratish imkonini beradi.
 
-### Conditional error display
+### Xatolarni shartli koʻrsatish {#conditional-error-display}
 
-Show errors only after a user has interacted with a field:
+Xatolarni faqat foydalanuvchi maydon bilan ishlagandan keyin koʻrsating:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -567,11 +567,11 @@ export class Signup {
 }
 ```
 
-This pattern prevents showing errors before users have had a chance to interact with the field. Errors appear only after the user has focused and then left the field.
+Bu namuna foydalanuvchilar maydon bilan ishlash imkoniga ega boʻlishidan oldin xatolar koʻrsatilishining oldini oladi. Xatolar faqat foydalanuvchi maydonga fokus berib, keyin uni tark etgandan soʻng paydo boʻladi.
 
-### Conditional field availability
+### Maydonlarning shartli mavjudligi {#conditional-field-availability}
 
-Use the `hidden()` signal with `@if` to show or hide fields conditionally:
+Maydonlarni shartli ravishda koʻrsatish yoki yashirish uchun `hidden()` signalini `@if` bilan birga ishlating:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -608,11 +608,11 @@ export class Order {
 }
 ```
 
-Hidden fields don't participate in validation, allowing the form to be submitted even if the hidden field would otherwise be invalid.
+Yashirin maydonlar validatsiyada ishtirok etmaydi, bu yashirin maydon aks holda invalid boʻlsa ham formani yuborish imkonini beradi.
 
-### Tracking values for array fields
+### Massiv maydonlari uchun qiymatlarni kuzatish {#tracking-values-for-array-fields}
 
-In signal forms, a `@for` block over a set of fields should be tracked by field identity.
+Signal forms'da maydonlar toʻplami boʻylab `@for` bloki maydon identifikatori (identity) boʻyicha kuzatilishi kerak.
 
 ```angular-ts
 @Component({
@@ -629,17 +629,17 @@ export class App {
 }
 ```
 
-The forms system is already tracking the model values within the array and maintaining a stable identity of the fields it creates automatically.
+Formalar tizimi massiv ichidagi model qiymatlarini allaqachon kuzatib boradi va oʻzi avtomatik yaratgan maydonlarning barqaror identifikatorini saqlaydi.
 
-When an item changes, it may represent a new logical entity even if some of its properties look the same. Tracking by identity ensures the framework treats it as a distinct item rather than reusing existing UI elements. This prevents stateful elements, like form inputs, from being incorrectly shared and keeps bindings aligned with the correct part of the model.
+Element oʻzgarganda, baʼzi xususiyatlari bir xil koʻrinsa ham, u yangi mantiqiy obyektni ifodalashi mumkin. Identifikator boʻyicha kuzatish freymvork mavjud UI elementlarini qayta ishlatish oʻrniga uni alohida element sifatida koʻrib chiqishini taʼminlaydi. Bu forma input'lari kabi holatga ega elementlarning notoʻgʻri ulashilishining oldini oladi va bogʻlashlarni modelning toʻgʻri qismi bilan moslashtirib turadi.
 
-## Using field state in component logic
+## Komponent logikasida maydon holatidan foydalanish {#using-field-state-in-component-logic}
 
-Field state signals work with Angular's reactive primitives like `computed()` and `effect()` for advanced form logic.
+Maydon holati signallari murakkab forma logikasi uchun Angular'ning `computed()` va `effect()` kabi reaktiv primitivlari bilan ishlaydi.
 
-### Validation checks before submission
+### Yuborishdan oldin validatsiyani tekshirish {#validation-checks-before-submission}
 
-Check form validity in component methods:
+Komponent metodlarida forma validligini tekshiring:
 
 ```ts
 export class Registration {
@@ -670,11 +670,11 @@ export class Registration {
 }
 ```
 
-This ensures only valid, fully-validated data reaches your API.
+Bu API'ingizga faqat valid, toʻliq tekshirilgan maʼlumotlar yetib borishini taʼminlaydi.
 
-### Derived state with computed
+### computed bilan hosilaviy holat {#derived-state-with-computed}
 
-Create computed signals based on field state to automatically update when the underlying field state changes:
+Asosiy maydon holati oʻzgarganda avtomatik yangilanishi uchun maydon holatiga asoslangan computed signallar yarating:
 
 ```ts
 export class Password {
@@ -699,13 +699,13 @@ export class Password {
 }
 ```
 
-### Programmatic state changes
+### Holatni dasturiy oʻzgartirish {#programmatic-state-changes}
 
-While field state typically updates through user interactions (typing, focusing, blurring), you sometimes need to control it programmatically. Common scenarios include form submission and resetting forms.
+Maydon holati odatda foydalanuvchi harakatlari (yozish, fokus berish, fokusdan chiqish) orqali yangilansa-da, baʼzan uni dasturiy ravishda boshqarishingiz kerak boʻladi. Keng tarqalgan stsenariylarga formani yuborish va formalarni qayta tiklash kiradi.
 
-#### Form submission
+#### Formani yuborish {#form-submission}
 
-Signal Forms provides a `FormRoot` directive that simplifies form submission. It automatically prevents the default browser form submission behavior and sets the `novalidate` attribute on the `<form>` element.
+Signal Forms formani yuborishni soddalashtiruvchi `FormRoot` direktivini taqdim etadi. U brauzerning sukut boʻyicha forma yuborish xatti-harakatini avtomatik toʻxtatadi va `<form>` elementiga `novalidate` atributini oʻrnatadi.
 
 ```angular-ts
 import {FormField, FormRoot} from '@angular/forms/signals';
@@ -745,13 +745,13 @@ export class Registration {
 }
 ```
 
-When you use `FormRoot`, submitting the form automatically calls the `submit()` function, which marks all fields as touched (revealing validation errors) and executes your `action` callback if the form is valid.
+`FormRoot`'dan foydalanganingizda, formani yuborish avtomatik ravishda `submit()` funksiyasini chaqiradi; bu funksiya barcha maydonlarni tegilgan deb belgilaydi (validatsiya xatolarini koʻrsatadi) va forma valid boʻlsa, sizning `action` callback'ingizni bajaradi.
 
-You can also submit a form manually, without using the directive, by calling `submit(this.registrationForm)`. When explicitly calling the `submit` function like this, you can pass a `FormSubmitOptions` to override the default `submission` logic for the form: `submit(this.registrationForm, {action: () => /* ... */ })`.
+Formani direktivdan foydalanmasdan, `submit(this.registrationForm)`'ni chaqirib qoʻlda ham yuborishingiz mumkin. `submit` funksiyasini shu tarzda ochiq chaqirganda, formaning sukut boʻyicha `submission` logikasini bekor qilish uchun `FormSubmitOptions` uzatishingiz mumkin: `submit(this.registrationForm, {action: () => /* ... */ })`.
 
-#### Resetting forms after submission
+#### Yuborishdan keyin formalarni qayta tiklash {#resetting-forms-after-submission}
 
-After successfully submitting a form, you may want to return it to its initial state - clearing both user interaction history and field values. The `reset()` method clears the touched and dirty flags. You can also pass an optional value to `reset()` to update the model data:
+Formani muvaffaqiyatli yuborgandan keyin uni boshlangʻich holatiga qaytarish — foydalanuvchi oʻzaro aloqa tarixini ham, maydon qiymatlarini ham tozalash — kerak boʻlishi mumkin. `reset()` metodi tegilgan va oʻzgartirilgan belgilarini tozalaydi. Model maʼlumotlarini yangilash uchun `reset()`'ga ixtiyoriy qiymat ham uzatishingiz mumkin:
 
 ```ts
 export class Contact {
@@ -769,11 +769,11 @@ export class Contact {
 }
 ```
 
-This ensures the form is ready for new input without showing stale error messages or dirty state indicators.
+Bu forma eskirgan xato xabarlari yoki oʻzgartirilgan holat koʻrsatkichlarini koʻrsatmasdan yangi kiritish uchun tayyor boʻlishini taʼminlaydi.
 
-## Styling based on validation state
+## Validatsiya holatiga asoslangan stillar {#styling-based-on-validation-state}
 
-You can apply custom styles to your form by binding CSS classes based on the validation state:
+Validatsiya holatiga asoslanib CSS klasslarini bogʻlash orqali formangizga maxsus stillar qoʻllashingiz mumkin:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -809,17 +809,17 @@ export class StyleExample {
 }
 ```
 
-Checking both `touched()` and validation state ensures styles only appear after the user has interacted with the field.
+`touched()` ham, validatsiya holati ham tekshirilishi stillar faqat foydalanuvchi maydon bilan ishlagandan keyin paydo boʻlishini taʼminlaydi.
 
-## Focus a form control bound to a form field
+## Forma maydoniga bogʻlangan forma kontroliga fokus berish {#focus-a-form-control-bound-to-a-form-field}
 
-Angular Signal Forms provide a `focusBoundControl()` method on field state that lets you programmatically move [focus](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) to the form control associated with a given form field.
+Angular Signal Forms maydon holatida `focusBoundControl()` metodini taqdim etadi; u berilgan forma maydoni bilan bogʻlangan forma kontroliga dasturiy ravishda [fokus](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) oʻtkazish imkonini beradi.
 
-A common use case is improving accessibility on form submission: when a form is invalid, display error messages and automatically move focus to the first invalid field, guiding the user to correct it.
+Keng tarqalgan foydalanish holati — formani yuborishda foydalanish qulayligini (accessibility) yaxshilash: forma invalid boʻlganda xato xabarlarini koʻrsating va fokusni avtomatik ravishda birinchi invalid maydonga oʻtkazib, foydalanuvchini xatoni tuzatishga yoʻnaltiring.
 
-### Basic usage
+### Asosiy foydalanish {#basic-usage}
 
-Given a registration form:
+Roʻyxatdan oʻtish formasi berilgan:
 
 ```ts
 @Component({/* ... */})
@@ -833,23 +833,23 @@ export class Registration {
 }
 ```
 
-To move focus to the control bound to the `email` field:
+Fokusni `email` maydoniga bogʻlangan kontrolga oʻtkazish uchun:
 
 ```ts
 registrationForm.email().focusBoundControl();
 ```
 
-### Preventing scroll
+### Aylantirishning oldini olish {#preventing-scroll}
 
-If the target control is outside the viewport and you want to focus it without triggering a scroll, you can set the [preventScroll](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll) option to `true` when calling the `focusBoundControl()` method.
+Agar maqsadli kontrol koʻrish maydoni (viewport) tashqarisida boʻlsa va unga sahifani aylantirmasdan fokus bermoqchi boʻlsangiz, `focusBoundControl()` metodini chaqirganda [preventScroll](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll) parametrini `true` qilib oʻrnatishingiz mumkin.
 
 ```ts
 registrationForm.email().focusBoundControl({preventScroll: true});
 ```
 
-### Focusing the first invalid field on submission
+### Yuborishda birinchi invalid maydonga fokus berish {#focusing-the-first-invalid-field-on-submission}
 
-Use `errorSummary()` to locate the first invalid field and focus it when the user submits the form with errors:
+Foydalanuvchi formani xatolar bilan yuborganda birinchi invalid maydonni topish va unga fokus berish uchun `errorSummary()`'dan foydalaning:
 
 ```ts
 onSubmit() {
@@ -862,13 +862,13 @@ onSubmit() {
 }
 ```
 
-### Custom controls
+### Maxsus boshqaruv elementlari {#custom-controls}
 
-By default, calling `focusBoundControl()` on a custom control has no effect because a custom control can contain multiple native inputs. For example, a date picker can contain separate day, month, and year fields. As a result, Angular cannot determine which element should receive focus or what action to perform.
+Sukut boʻyicha, maxsus kontrolda `focusBoundControl()`'ni chaqirish hech qanday taʼsir koʻrsatmaydi, chunki maxsus kontrol bir nechta tabiiy (native) input'larni oʻz ichiga olishi mumkin. Masalan, sana tanlagich alohida kun, oy va yil maydonlarini oʻz ichiga olishi mumkin. Natijada Angular qaysi element fokus olishi yoki qanday amal bajarilishi kerakligini aniqlay olmaydi.
 
-To support programmatic focus in a custom control, implement a `focus()` method. When `focusBoundControl()` is called on the field state associated with a custom control, Angular calls the control's `focus()` method if one is present.
+Maxsus kontrolda dasturiy fokusni qoʻllab-quvvatlash uchun `focus()` metodini amalga oshiring. Maxsus kontrol bilan bogʻlangan maydon holatida `focusBoundControl()` chaqirilganda, Angular kontrolning `focus()` metodi mavjud boʻlsa, uni chaqiradi.
 
-Consider a custom password input:
+Maxsus parol input'ini koʻrib chiqamiz:
 
 ```html
 <div class="password-block">
@@ -890,13 +890,13 @@ export class PasswordInput implements FormValueControl<string> {
 }
 ```
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-This guide covered validation and availability status handling, interaction tracking and field state propagation. Related guides explore other aspects of Signal Forms:
+Bu qoʻllanma validatsiya va mavjudlik holatini qayta ishlash, oʻzaro aloqani kuzatish va maydon holatining tarqalishini yoritdi. Tegishli qoʻllanmalar Signal Forms'ning boshqa jihatlarini koʻrib chiqadi:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/models" title="Form models" />
-  <docs-pill href="guide/forms/signals/validation" title="Validation" />
-  <docs-pill href="guide/forms/signals/custom-controls" title="Custom controls" />
+  <docs-pill href="guide/forms/signals/models" title="Forma modellari" />
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya" />
+  <docs-pill href="guide/forms/signals/custom-controls" title="Maxsus boshqaruv elementlari" />
   <!-- <docs-pill href="guide/forms/signals/arrays" title="Working with Arrays" /> -->
 </docs-pill-row>

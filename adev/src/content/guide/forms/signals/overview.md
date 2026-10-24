@@ -1,39 +1,39 @@
-<docs-decorative-header title="Forms with Angular Signals" imgSrc="adev/src/assets/images/signals.svg"> <!-- markdownlint-disable-line -->
+<docs-decorative-header title="Angular signallari bilan formalar" imgSrc="adev/src/assets/images/signals.svg"> <!-- markdownlint-disable-line -->
 </docs-decorative-header>
 
-Signal Forms is a library that allows you to manage form state in Angular applications by building on the reactive foundation of signals. With automatic two-way binding, type-safe field access, and schema-based validation, Signal Forms help you create robust forms.
+Signal Forms — signallarning reaktiv asosiga qurilgan, Angular ilovalarida forma holatini boshqarish imkonini beruvchi kutubxona. Avtomatik ikki tomonlama bogʻlash, tiplar jihatidan xavfsiz maydonlarga murojaat va sxemaga asoslangan validatsiya bilan Signal Forms sizga ishonchli formalar yaratishga yordam beradi.
 
-TIP: For a quick introduction to Signal Forms, see the [Signal Forms essentials guide](essentials/signal-forms).
+TIP: Signal Forms bilan tez tanishish uchun [Signal Forms asoslari qoʻllanmasiga](essentials/signal-forms) qarang.
 
-## Why Signal Forms?
+## Nega Signal Forms? {#why-signal-forms}
 
-Building forms in web applications involves managing several interconnected concerns: tracking field values, validating user input, handling error states, and keeping the UI synchronized with your data model. Managing these concerns separately creates boilerplate code and complexity.
+Veb-ilovalarda formalar yaratish bir-biri bilan bogʻliq bir nechta vazifani boshqarishni oʻz ichiga oladi: maydon qiymatlarini kuzatish, foydalanuvchi kiritgan maʼlumotlarni tekshirish, xato holatlarini qayta ishlash va UI'ni maʼlumotlar modelingiz bilan sinxron holda saqlash. Bu vazifalarni alohida-alohida boshqarish shablon kod (boilerplate) va murakkablikni keltirib chiqaradi.
 
-Signal Forms address these challenges by:
+Signal Forms bu muammolarni quyidagicha hal qiladi:
 
-- **Synchronizing state automatically** - Automatically syncs the form data model with bound form fields
-- **Providing type safety** - Supports fully type safe schemas & bindings between your UI controls and data model
-- **Centralizing validation logic** - Define all validation rules in one place using a validation schema
+- **Holatni avtomatik sinxronlash** - Forma maʼlumotlar modelini bogʻlangan forma maydonlari bilan avtomatik sinxronlaydi
+- **Tiplar xavfsizligini taʼminlash** - UI kontrollaringiz va maʼlumotlar modeli oʻrtasida toʻliq tiplar jihatidan xavfsiz sxemalar va bogʻlashlarni qoʻllab-quvvatlaydi
+- **Validatsiya logikasini markazlashtirish** - Barcha validatsiya qoidalarini validatsiya sxemasi yordamida bir joyda aniqlang
 
-Signal Forms work best in new applications built with signals. If you're working with an existing application that uses reactive forms, reactive forms remain a solid choice.
+Signal Forms signallar bilan qurilgan yangi ilovalarda eng yaxshi ishlaydi. Agar reaktiv formalardan foydalanadigan mavjud ilova bilan ishlayotgan boʻlsangiz, reaktiv formalar ishonchli tanlov boʻlib qolaveradi.
 
-NOTE: If you're coming from template or reactive forms, you may be interested in the [comparison guide](guide/forms/signals/comparison).
+NOTE: Agar siz shablon formalari yoki reaktiv formalardan oʻtayotgan boʻlsangiz, [qiyoslash qoʻllanmasi](guide/forms/signals/comparison) sizni qiziqtirishi mumkin.
 
-## Prerequisites
+## Talablar {#prerequisites}
 
-Signal Forms require:
+Signal Forms uchun quyidagilar talab qilinadi:
 
-- Angular v21 or higher
+- Angular v21 yoki undan yuqori versiya
 
-## Setup
+## Oʻrnatish {#setup}
 
-Signal Forms are already included in the `@angular/forms` package. Import the necessary functions and directives from `@angular/forms/signals`:
+Signal Forms allaqachon `@angular/forms` paketiga kiritilgan. Kerakli funksiya va direktivalarni `@angular/forms/signals`'dan import qiling:
 
 ```ts
 import {form, FormField, required, email} from '@angular/forms/signals';
 ```
 
-The `FormField` directive must be imported into any component that binds form fields to HTML inputs:
+`FormField` direktivi forma maydonlarini HTML input'larga bogʻlaydigan har bir komponentga import qilinishi kerak:
 
 ```ts
 @Component({
@@ -42,16 +42,16 @@ The `FormField` directive must be imported into any component that binds form fi
 })
 ```
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-To learn more about how Signal Forms work, check out the following guides:
+Signal Forms qanday ishlashi haqida koʻproq bilish uchun quyidagi qoʻllanmalarga qarang:
 
 <docs-pill-row>
-  <docs-pill href="essentials/signal-forms" title="Signal forms essentials" />
-  <docs-pill href="guide/forms/signals/models" title="Form models" />
-  <docs-pill href="guide/forms/signals/model-design" title="Designing your form model" />
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
-  <docs-pill href="guide/forms/signals/validation" title="Validation" />
-  <docs-pill href="guide/forms/signals/custom-controls" title="Custom controls" />
-  <docs-pill href="guide/forms/signals/comparison" title="Comparison with other form systems" />
+  <docs-pill href="essentials/signal-forms" title="Signal forms asoslari" />
+  <docs-pill href="guide/forms/signals/models" title="Forma modellari" />
+  <docs-pill href="guide/forms/signals/model-design" title="Forma modelingizni loyihalash" />
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish" />
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya" />
+  <docs-pill href="guide/forms/signals/custom-controls" title="Maxsus kontrollar" />
+  <docs-pill href="guide/forms/signals/comparison" title="Boshqa forma tizimlari bilan qiyoslash" />
 </docs-pill-row>
