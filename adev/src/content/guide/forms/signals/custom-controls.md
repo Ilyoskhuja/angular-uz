@@ -1,20 +1,20 @@
-# Custom Controls
+# Maxsus boshqaruv elementlari
 
-NOTE: This guide assumes familiarity with [Signal Forms essentials](essentials/signal-forms).
+NOTE: Bu qoʻllanma siz [Signal Forms asoslari](essentials/signal-forms) bilan tanish ekanligingizni nazarda tutadi.
 
-The browser's built-in form controls (like input, select, textarea) handle common cases, but applications often need specialized inputs. A date picker with calendar UI, a rich text editor with formatting toolbar, or a tag selector with autocomplete all require custom implementations.
+Brauzerning oʻrnatilgan forma boshqaruv elementlari (input, select, textarea kabi) keng tarqalgan holatlarni qamrab oladi, lekin ilovalarga koʻpincha ixtisoslashgan input'lar kerak boʻladi. Kalendar UI'ga ega sana tanlagich, formatlash paneliga ega boy matn muharriri yoki avtomatik toʻldirishga ega teg tanlagich — bularning barchasi maxsus implementatsiyani talab qiladi.
 
-Signal Forms works with any component that implements specific interfaces. A **control interface** defines the properties and signals that allow your component to communicate with the form system. When your component implements one of these interfaces, the `[formField]` directive automatically connects your control to form state, validation, and data binding.
+Signal Forms maʼlum interfeyslarni implementatsiya qiluvchi istalgan komponent bilan ishlaydi. **Boshqaruv elementi interfeysi** (control interface) komponentingizning forma tizimi bilan muloqot qilishiga imkon beruvchi xususiyatlar va signallarni belgilaydi. Komponentingiz shu interfeyslardan birini implementatsiya qilsa, `[formField]` direktivi boshqaruv elementingizni forma holati, validatsiya va maʼlumotlarni bogʻlashga avtomatik ulaydi.
 
-HELPFUL: Custom Signal Form Controls [can be used](guide/forms/signals/migration#custom-controls) with Signal, Reactive and Template-Driven Forms without any extra compatibility code.
+HELPFUL: Maxsus Signal Form boshqaruv elementlari hech qanday qoʻshimcha moslik kodisiz Signal, Reactive va Template-Driven formalar bilan [ishlatilishi mumkin](guide/forms/signals/migration#custom-controls).
 
-## Creating a basic custom control
+## Asosiy maxsus boshqaruv elementini yaratish {#creating-a-basic-custom-control}
 
-Let's start with a minimal implementation and add features as needed.
+Minimal implementatsiyadan boshlab, kerak boʻlganda imkoniyatlar qoʻshib boramiz.
 
-### Minimal input control
+### Minimal input boshqaruv elementi {#minimal-input-control}
 
-A basic custom input only needs to implement the `FormValueControl` interface and define the required `value` model signal.
+Asosiy maxsus input faqat `FormValueControl` interfeysini implementatsiya qilishi va talab qilinadigan `value` model signalini belgilashi kerak.
 
 ```angular-ts
 import {Component, model} from '@angular/core';
@@ -39,12 +39,12 @@ export class BasicInput implements FormValueControl<string> {
 }
 ```
 
-### Minimal checkbox control
+### Minimal belgilash katakchasi (checkbox) boshqaruv elementi {#minimal-checkbox-control}
 
-A checkbox-style control needs two things:
+Checkbox uslubidagi boshqaruv elementi uchun ikki narsa kerak:
 
-1. Implement the `FormCheckboxControl` interface so the `FormField` directive will recognize it as a form control
-2. Provide a `checked` model signal
+1. `FormField` direktivi uni forma boshqaruv elementi sifatida tanishi uchun `FormCheckboxControl` interfeysini implementatsiya qilish
+2. `checked` model signalini taqdim etish
 
 ```angular-ts
 import {Component, model, ChangeDetectionStrategy} from '@angular/core';
@@ -68,9 +68,9 @@ export class BasicToggle implements FormCheckboxControl {
 }
 ```
 
-### Using your custom control
+### Maxsus boshqaruv elementingizdan foydalanish {#using-your-custom-control}
 
-Once you've created a control, you can use it anywhere you would use a built-in input by adding the `FormField` directive to it:
+Boshqaruv elementini yaratganingizdan soʻng, unga `FormField` direktivini qoʻshib, undan oʻrnatilgan input ishlatiladigan istalgan joyda foydalanishingiz mumkin:
 
 ```angular-ts
 import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
@@ -109,98 +109,98 @@ export class Registration {
 }
 ```
 
-NOTE: The schema callback parameter (`schemaPath` in these examples) is a `SchemaPathTree` object that provides paths to all fields in your form. You can name this parameter anything you like.
+NOTE: Sxema callback parametri (bu misollarda `schemaPath`) formangizdagi barcha maydonlarga yoʻllarni taqdim etuvchi `SchemaPathTree` obyektidir. Bu parametrni istalgancha nomlashingiz mumkin.
 
-The `[formField]` directive works identically for custom controls and built-in inputs. Signal Forms treats them the same - validation runs, state updates, and data binding works automatically.
+`[formField]` direktivi maxsus boshqaruv elementlari va oʻrnatilgan input'lar uchun bir xil ishlaydi. Signal Forms ularga bir xil munosabatda boʻladi — validatsiya bajariladi, holat yangilanadi va maʼlumotlarni bogʻlash avtomatik ishlaydi.
 
-## Understanding control interfaces
+## Boshqaruv elementi interfeyslarini tushunish {#understanding-control-interfaces}
 
-Now that you've seen custom controls in action, let's explore how they integrate with Signal Forms.
+Maxsus boshqaruv elementlarini amalda koʻrganingizdan soʻng, ularning Signal Forms bilan qanday integratsiyalashuvini koʻrib chiqamiz.
 
-### Control interfaces
+### Boshqaruv elementi interfeyslari {#control-interfaces}
 
-The `BasicInput` and `BasicToggle` components you created implement specific control interfaces that tell Signal Forms how to interact with them.
+Siz yaratgan `BasicInput` va `BasicToggle` komponentlari Signal Forms'ga ular bilan qanday ishlashni bildiruvchi maʼlum boshqaruv elementi interfeyslarini implementatsiya qiladi.
 
 #### FormValueControl
 
-`FormValueControl` is the interface for most input types - text inputs, number inputs, date pickers, select dropdowns, and any control that edits a single value. When your component implements this interface:
+`FormValueControl` — koʻpchilik input turlari uchun interfeys: matnli input'lar, sonli input'lar, sana tanlagichlar, tanlov roʻyxatlari (select) va bitta qiymatni tahrirlovchi istalgan boshqaruv elementi. Komponentingiz bu interfeysni implementatsiya qilganda:
 
-- **Required property**: Your component must provide a `value` model signal
-- **What the FormField directive does**: Binds the form field's value to your control's `value` signal
+- **Talab qilinadigan xususiyat**: Komponentingiz `value` model signalini taqdim etishi shart
+- **FormField direktivi nima qiladi**: Forma maydonining qiymatini boshqaruv elementingizning `value` signaliga bogʻlaydi
 
-IMPORTANT: Controls implementing `FormValueControl` must NOT have a `checked` property
+IMPORTANT: `FormValueControl`'ni implementatsiya qiluvchi boshqaruv elementlarida `checked` xususiyati boʻlmasligi SHART
 
 #### FormCheckboxControl
 
-`FormCheckboxControl` is the interface for checkbox-like controls - toggles, switches, and any control that represents a boolean on/off state. When your component implements this interface:
+`FormCheckboxControl` — checkbox'ga oʻxshash boshqaruv elementlari uchun interfeys: toggle'lar, switch'lar va boolean yoqilgan/oʻchirilgan holatini ifodalovchi istalgan boshqaruv elementi. Komponentingiz bu interfeysni implementatsiya qilganda:
 
-- **Required property**: Your component must provide a `checked` model signal
-- **What the FormField directive does**: Binds the form field's value to your control's `checked` signal
+- **Talab qilinadigan xususiyat**: Komponentingiz `checked` model signalini taqdim etishi shart
+- **FormField direktivi nima qiladi**: Forma maydonining qiymatini boshqaruv elementingizning `checked` signaliga bogʻlaydi
 
-IMPORTANT: Controls implementing `FormCheckboxControl` must NOT have a `value` property
+IMPORTANT: `FormCheckboxControl`'ni implementatsiya qiluvchi boshqaruv elementlarida `value` xususiyati boʻlmasligi SHART
 
-### Optional state properties
+### Ixtiyoriy holat xususiyatlari {#optional-state-properties}
 
-Both `FormValueControl` and `FormCheckboxControl` extend `FormUiControl` - a base interface that provides optional properties for integrating with form state.
+`FormValueControl` ham, `FormCheckboxControl` ham `FormUiControl`'ni kengaytiradi — bu forma holati bilan integratsiya qilish uchun ixtiyoriy xususiyatlarni taqdim etuvchi asosiy interfeys.
 
-All properties are optional. Implement only what your control needs.
+Barcha xususiyatlar ixtiyoriy. Faqat boshqaruv elementingizga kerak boʻlganlarini implementatsiya qiling.
 
-#### Interaction state
+#### Oʻzaro aloqa holati {#interaction-state}
 
-Track when users interact with your control:
+Foydalanuvchilar boshqaruv elementingiz bilan qachon oʻzaro aloqa qilganini kuzating:
 
-| Property  | Purpose                                          |
-| --------- | ------------------------------------------------ |
-| `touched` | Whether the user has interacted with the field   |
-| `dirty`   | Whether the value differs from its initial state |
+| Xususiyat | Vazifasi                                                  |
+| --------- | --------------------------------------------------------- |
+| `touched` | Foydalanuvchi maydon bilan oʻzaro aloqa qilgan-qilmagani  |
+| `dirty`   | Qiymat dastlabki holatidan farq qiladimi-yoʻqmi           |
 
-#### Validation state
+#### Validatsiya holati {#validation-state}
 
-Display validation feedback to users:
+Foydalanuvchilarga validatsiya natijalarini koʻrsating:
 
-| Property  | Purpose                                 |
-| --------- | --------------------------------------- |
-| `errors`  | Array of current validation errors      |
-| `invalid` | Whether the field has validation errors |
-| `pending` | Whether async validation is in progress |
+| Xususiyat | Vazifasi                                          |
+| --------- | ------------------------------------------------- |
+| `errors`  | Joriy validatsiya xatolari massivi                |
+| `invalid` | Maydonda validatsiya xatolari bormi-yoʻqmi        |
+| `pending` | Asinxron validatsiya davom etayotganmi-yoʻqmi     |
 
-#### Availability state
+#### Mavjudlik holati {#availability-state}
 
-Control whether users can interact with your field:
+Foydalanuvchilar maydoningiz bilan oʻzaro aloqa qila olishini boshqaring:
 
-| Property          | Purpose                                                  |
-| ----------------- | -------------------------------------------------------- |
-| `disabled`        | Whether the field is disabled                            |
-| `disabledReasons` | Reasons why the field is disabled                        |
-| `readonly`        | Whether the field is readonly (visible but not editable) |
-| `hidden`          | Whether the field is hidden from view                    |
+| Xususiyat         | Vazifasi                                                              |
+| ----------------- | --------------------------------------------------------------------- |
+| `disabled`        | Maydon oʻchirilganmi-yoʻqmi                                           |
+| `disabledReasons` | Maydonning oʻchirilganlik sabablari                                   |
+| `readonly`        | Maydon faqat oʻqish uchunmi-yoʻqmi (koʻrinadi, lekin tahrirlanmaydi)  |
+| `hidden`          | Maydon koʻrinishdan yashirilganmi-yoʻqmi                              |
 
-NOTE: `disabledReasons` is an array of `DisabledReason` objects. Each object has a `fieldTree` property (reference to the field tree) and an optional `message` property. Access the message via `reason.message`.
+NOTE: `disabledReasons` — `DisabledReason` obyektlari massivi. Har bir obyektda `fieldTree` xususiyati (maydonlar daraxtiga havola) va ixtiyoriy `message` xususiyati bor. Xabarga `reason.message` orqali murojaat qiling.
 
-#### Validation constraints
+#### Validatsiya cheklovlari {#validation-constraints}
 
-Receive validation constraint values from the form:
+Formadan validatsiya cheklovi qiymatlarini qabul qiling:
 
-| Property    | Purpose                                              |
-| ----------- | ---------------------------------------------------- |
-| `required`  | Whether the field is required                        |
-| `min`       | Minimum numeric value (`undefined` if no constraint) |
-| `max`       | Maximum numeric value (`undefined` if no constraint) |
-| `minLength` | Minimum string length (undefined if no constraint)   |
-| `maxLength` | Maximum string length (undefined if no constraint)   |
-| `pattern`   | Array of regular expression patterns to match        |
+| Xususiyat   | Vazifasi                                                   |
+| ----------- | ---------------------------------------------------------- |
+| `required`  | Maydon majburiymi-yoʻqmi                                   |
+| `min`       | Minimal sonli qiymat (cheklov boʻlmasa `undefined`)        |
+| `max`       | Maksimal sonli qiymat (cheklov boʻlmasa `undefined`)       |
+| `minLength` | Minimal satr uzunligi (cheklov boʻlmasa undefined)         |
+| `maxLength` | Maksimal satr uzunligi (cheklov boʻlmasa undefined)        |
+| `pattern`   | Moslik tekshiriladigan regulyar ifoda namunalari massivi   |
 
-#### Field metadata
+#### Maydon metamaʼlumotlari {#field-metadata}
 
-| Property | Purpose                                                            |
-| -------- | ------------------------------------------------------------------ |
-| `name`   | The field's name attribute (which is unique across forms and apps) |
+| Xususiyat | Vazifasi                                                                  |
+| --------- | ------------------------------------------------------------------------- |
+| `name`    | Maydonning name atributi (formalar va ilovalar boʻylab yagona boʻladi)    |
 
-The "[Adding state signals](#adding-state-signals)" section below shows how to implement these properties in your controls.
+Quyidagi "[Holat signallarini qoʻshish](#adding-state-signals)" boʻlimi bu xususiyatlarni boshqaruv elementlaringizda qanday implementatsiya qilishni koʻrsatadi.
 
-### How the FormField directive works
+### FormField direktivi qanday ishlaydi {#how-the-formfield-directive-works}
 
-The `[formField]` directive detects which interface your control implements and automatically binds the appropriate signals:
+`[formField]` direktivi boshqaruv elementingiz qaysi interfeysni implementatsiya qilganini aniqlaydi va tegishli signallarni avtomatik bogʻlaydi:
 
 ```angular-ts
 import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
@@ -230,20 +230,20 @@ export class MyForm {
 }
 ```
 
-TIP: For complete coverage of creating and managing form models, see the [Form Models guide](guide/forms/signals/models).
+TIP: Forma modellarini yaratish va boshqarish haqida toʻliq maʼlumot uchun [Forma modellari boʻyicha qoʻllanma](guide/forms/signals/models) bilan tanishing.
 
-When you bind `[formField]="userForm.username"`, the FormField directive:
+`[formField]="userForm.username"` deb bogʻlaganingizda, FormField direktivi:
 
-1. Detects your control implements `FormValueControl`
-2. Internally accesses `userForm.username().value()` and binds it to your control's `value` model signal
-3. Binds form state signals (`disabled()`, `errors()`, etc.) to your control's optional input signals
-4. Updates occur automatically through signal reactivity
+1. Boshqaruv elementingiz `FormValueControl`'ni implementatsiya qilganini aniqlaydi
+2. Ichki tarzda `userForm.username().value()`'ga murojaat qiladi va uni boshqaruv elementingizning `value` model signaliga bogʻlaydi
+3. Forma holati signallarini (`disabled()`, `errors()` va boshqalar) boshqaruv elementingizning ixtiyoriy input signallariga bogʻlaydi
+4. Yangilanishlar signal reaktivligi orqali avtomatik sodir boʻladi
 
-## Adding state signals
+## Holat signallarini qoʻshish {#adding-state-signals}
 
-The minimal controls shown above work, but they don't respond to form state. You can add optional input signals to make your controls react to disabled state, display validation errors, and track user interaction.
+Yuqorida koʻrsatilgan minimal boshqaruv elementlari ishlaydi, lekin forma holatiga javob bermaydi. Boshqaruv elementlaringiz oʻchirilgan holatga reaksiya qilishi, validatsiya xatolarini koʻrsatishi va foydalanuvchi oʻzaro aloqasini kuzatishi uchun ixtiyoriy input signallarni qoʻshishingiz mumkin.
 
-Here's a comprehensive example that implements common state properties:
+Keng tarqalgan holat xususiyatlarini implementatsiya qiluvchi keng qamrovli misol:
 
 ```angular-ts
 import {Component, model, input, output, ChangeDetectionStrategy} from '@angular/core';
@@ -307,7 +307,7 @@ export class StatefulInput implements FormValueControl<string> {
 }
 ```
 
-As a result, you can use the control with validation and state management:
+Natijada boshqaruv elementidan validatsiya va holatni boshqarish bilan birga foydalanishingiz mumkin:
 
 ```angular-ts
 import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
@@ -335,11 +335,11 @@ export class Login {
 }
 ```
 
-When the user types an invalid email, the FormField directive automatically updates `invalid()` and `errors()`. Your control can display the validation feedback.
+Foydalanuvchi notoʻgʻri email kiritganda, FormField direktivi `invalid()` va `errors()`'ni avtomatik yangilaydi. Boshqaruv elementingiz validatsiya natijalarini koʻrsatishi mumkin.
 
-### Working with `debounce('blur')`
+### `debounce('blur')` bilan ishlash {#working-with-debounceblur}
 
-The [`debounce('blur')`](api/forms/signals/debounce) rule delays updates from the UI to the form model until the field is blurred, instead of applying them on every keystroke. Built-in controls report a blur to the form automatically. A custom control only participates if it emits its `touch` output in response to the native [`blur` event](https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event):
+[`debounce('blur')`](api/forms/signals/debounce) qoidasi UI'dan forma modeliga yangilanishlarni har bir tugma bosilishida qoʻllash oʻrniga, maydon fokusni yoʻqotguncha (blur) kechiktiradi. Oʻrnatilgan boshqaruv elementlari blur haqida formaga avtomatik xabar beradi. Maxsus boshqaruv elementi esa bunda faqat tabiiy [`blur` hodisasiga](https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event) javoban oʻz `touch` output'ini chiqarsa ishtirok etadi:
 
 ```angular-ts
 import {Component, model, output} from '@angular/core';
@@ -362,7 +362,7 @@ export class CustomInput implements FormValueControl<string> {
 }
 ```
 
-With the `touch` output in place, `debounce('blur')` behaves the same for your control as it does for built-in inputs:
+`touch` output'i mavjud boʻlganda, `debounce('blur')` boshqaruv elementingiz uchun oʻrnatilgan input'lar bilan bir xil ishlaydi:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -383,16 +383,16 @@ export class App {
 }
 ```
 
-IMPORTANT: Emit `touch` on `blur` (when focus leaves the control), not on `focus`. Without the `touch` output the field never registers as blurred, so `debounce('blur')` has no effect on your control.
+IMPORTANT: `touch`'ni `focus`'da emas, `blur`'da (fokus boshqaruv elementidan chiqqanda) chiqaring. `touch` output'isiz maydon hech qachon blur qilingan deb qayd etilmaydi, shuning uchun `debounce('blur')` boshqaruv elementingizga taʼsir qilmaydi.
 
-## Value transformation
+## Qiymatni transformatsiya qilish {#value-transformation}
 
-Controls sometimes display values differently than the form model stores them - a date picker might display "January 15, 2024" while storing "2024-01-15", or a currency input might show "$1,234.56" while storing 1234.56.
+Boshqaruv elementlari baʼzan qiymatlarni forma modeli saqlaganidan farqli koʻrsatadi — sana tanlagich "2024-01-15"ni saqlab, "January 15, 2024" deb koʻrsatishi, yoki valyuta input'i 1234.56 ni saqlab, "$1,234.56" deb koʻrsatishi mumkin.
 
-Use `transformedValue()` (from `@angular/forms/signals`) to keep the raw value shown in the UI in sync with the model value. It takes the control's `value` model signal plus a `parse` and a `format` function, and returns a writable signal holding the raw value:
+UI'da koʻrsatiladigan xom qiymatni model qiymati bilan sinxron saqlash uchun `transformedValue()`'dan (`@angular/forms/signals`'dan) foydalaning. U boshqaruv elementining `value` model signalini hamda `parse` va `format` funksiyalarini qabul qiladi va xom qiymatni saqlovchi yoziladigan signalni qaytaradi:
 
-- `format` converts the model value into the raw value the template renders.
-- `parse` converts what the user typed back into a model value, and can report parse errors instead.
+- `format` model qiymatini shablon render qiladigan xom qiymatga aylantiradi.
+- `parse` foydalanuvchi kiritgan matnni model qiymatiga qaytaradi va uning oʻrniga tahlil (parse) xatolari haqida xabar berishi ham mumkin.
 
 ```angular-ts
 import {Component, model} from '@angular/core';
@@ -414,13 +414,13 @@ export class NumberInput implements FormValueControl<number | null> {
 }
 ```
 
-Writing to the returned signal (`rawValue.set(...)`) runs `parse` and writes the result into `value`. Whenever the model changes from elsewhere - a `reset()`, a schema rule, or another part of the app - `format` runs again and the raw value updates to match.
+Qaytarilgan signalga yozish (`rawValue.set(...)`) `parse`'ni ishga tushiradi va natijani `value`'ga yozadi. Model boshqa joydan oʻzgarganda — `reset()`, sxema qoidasi yoki ilovaning boshqa qismi orqali — `format` qayta ishga tushadi va xom qiymat unga mos ravishda yangilanadi.
 
-### Reporting parse errors
+### Tahlil xatolari haqida xabar berish {#reporting-parse-errors}
 
-Sometimes the raw value has no valid model representation - a half-typed date, or letters in a numeric field. The `NumberInput` above has this problem: `Number('abc')` is `NaN`, which `parse` happily writes into the model.
+Baʼzan xom qiymatning yaroqli model ifodasi boʻlmaydi — chala kiritilgan sana yoki sonli maydondagi harflar. Yuqoridagi `NumberInput`'da shu muammo bor: `Number('abc')` natijasi `NaN` boʻlib, `parse` uni bemalol modelga yozadi.
 
-Return `{error}` instead:
+Uning oʻrniga `{error}` qaytaring:
 
 ```ts
 export class NumberInput implements FormValueControl<number | null> {
@@ -439,9 +439,9 @@ export class NumberInput implements FormValueControl<number | null> {
 }
 ```
 
-Return both `value` and `error` when you want to update the model _and_ flag a problem.
+Modelni yangilash _va_ muammoni belgilash kerak boʻlganda `value`'ni ham, `error`'ni ham qaytaring.
 
-When the control is bound with `[formField]`, parse errors are automatically reported to the field, so they show up in the field's `errors()` signal alongside validation errors:
+Boshqaruv elementi `[formField]` bilan bogʻlanganda tahlil xatolari maydonga avtomatik yetkaziladi, shuning uchun ular validatsiya xatolari bilan birga maydonning `errors()` signalida koʻrinadi:
 
 ```angular-ts
 @Component({
@@ -461,23 +461,23 @@ export class Order {
 }
 ```
 
-A field with parse errors is invalid, which blocks submission the same way a failed validation rule does.
+Tahlil xatolari boʻlgan maydon invalid hisoblanadi, bu esa muvaffaqiyatsiz validatsiya qoidasi kabi yuborishni bloklaydi.
 
-HELPFUL: Signal Forms uses the same mechanism for native inputs. When the browser cannot parse a value (for example, a partially typed date in `<input type="date">`), it surfaces as a `parse` error on the field. See [Native HTML validation](guide/forms/signals/validation#native-html-validation) for details.
+HELPFUL: Signal Forms tabiiy input'lar uchun ham xuddi shu mexanizmdan foydalanadi. Brauzer qiymatni tahlil qila olmasa (masalan, `<input type="date">`'da qisman kiritilgan sana), bu maydonda `parse` xatosi sifatida namoyon boʻladi. Tafsilotlar uchun [Tabiiy HTML validatsiyasi](guide/forms/signals/validation#native-html-validation) boʻlimiga qarang.
 
-### Resetting
+### Qayta tiklash {#resetting}
 
-Calling `reset()` on the field clears any pending parse errors and re-formats the raw value from the model, so a control left in an unparseable state returns to a clean display value:
+Maydonda `reset()`'ni chaqirish kutilayotgan tahlil xatolarini tozalaydi va xom qiymatni modeldan qayta formatlaydi, shuning uchun tahlil qilib boʻlmaydigan holatda qolgan boshqaruv elementi toza koʻrsatiladigan qiymatga qaytadi:
 
 ```ts
 orderForm.amount().reset();
 ```
 
-## Validation integration
+## Validatsiya bilan integratsiya {#validation-integration}
 
-Controls display validation state but don't perform validation. Validation happens in the form schema - your control receives `invalid()` and `errors()` signals from the FormField directive and displays them (as shown in the StatefulInput example above).
+Boshqaruv elementlari validatsiya holatini koʻrsatadi, lekin validatsiyani bajarmaydi. Validatsiya forma sxemasida sodir boʻladi — boshqaruv elementingiz FormField direktividan `invalid()` va `errors()` signallarini qabul qiladi va ularni koʻrsatadi (yuqoridagi StatefulInput misolida koʻrsatilganidek).
 
-The FormField directive also passes validation constraint values like `required`, `min`, `max`, `minLength`, `maxLength`, and `pattern`. Your control can use these to enhance the UI:
+FormField direktivi shuningdek `required`, `min`, `max`, `minLength`, `maxLength` va `pattern` kabi validatsiya cheklovi qiymatlarini ham uzatadi. Boshqaruv elementingiz UI'ni yaxshilash uchun ulardan foydalanishi mumkin:
 
 ```ts
 export class NumberInput implements FormValueControl<number> {
@@ -490,9 +490,9 @@ export class NumberInput implements FormValueControl<number> {
 }
 ```
 
-When you add `min()` and `max()` validation rules to the schema, the FormField directive passes these values to your control. Use them to apply HTML5 attributes or show constraint hints in your template.
+Sxemaga `min()` va `max()` validatsiya qoidalarini qoʻshganingizda, FormField direktivi bu qiymatlarni boshqaruv elementingizga uzatadi. Ulardan HTML5 atributlarini qoʻllash yoki shablonda cheklov haqida koʻrsatmalar chiqarish uchun foydalaning.
 
-IMPORTANT: Don't implement validation logic in your control. Define validation rules in the form schema and let your control display the results:
+IMPORTANT: Validatsiya mantigʻini boshqaruv elementingizda implementatsiya qilmang. Validatsiya qoidalarini forma sxemasida belgilang va boshqaruv elementingiz natijalarni koʻrsatsin:
 
 ```ts {avoid}
 // Avoid: Validation in control
@@ -511,9 +511,9 @@ accountForm = form(this.accountModel, (schemaPath) => {
 });
 ```
 
-## Making controls reusable
+## Boshqaruv elementlarini qayta ishlatiladigan qilish {#making-controls-reusable}
 
-A custom control often carries implicit expectations about validation. An email input needs `required` and `email` rules in every form that uses it. Instead of relying on each consumer to redeclare those rules, package a companion schema alongside the control and export both from the same module:
+Maxsus boshqaruv elementi koʻpincha validatsiya haqida yashirin kutilmalarga ega boʻladi. Email input'i uni ishlatadigan har bir formada `required` va `email` qoidalarini talab qiladi. Har bir isteʼmolchi bu qoidalarni qayta eʼlon qilishiga tayanish oʻrniga, boshqaruv elementi bilan birga hamroh sxemani paketlang va ikkalasini bir xil modulda eksport qiling:
 
 ```ts {header: 'email-input.ts'}
 import {schema, required, email} from '@angular/forms/signals';
@@ -524,7 +524,7 @@ export const emailFieldSchema = schema<string>((path) => {
 });
 ```
 
-A consumer imports the companion schema and composes it into their form with `apply()`:
+Isteʼmolchi hamroh sxemani import qiladi va `apply()` yordamida uni oʻz formasiga kompozitsiya qiladi:
 
 ```ts {header: 'registration.ts'}
 import {form, apply} from '@angular/forms/signals';
@@ -535,21 +535,21 @@ registrationForm = form(this.registrationModel, (path) => {
 });
 ```
 
-`apply()` merges the companion schema's rules into the parent form at the specified path. The consumer can still add more rules to the same field because `apply()` composes with other rules rather than replacing them. See the [Schemas guide](guide/forms/signals/schemas) for complete coverage of `schema()`, `apply()`, and conditional composition with `applyWhen()`.
+`apply()` hamroh sxemaning qoidalarini belgilangan yoʻlda asosiy formaga birlashtiradi. Isteʼmolchi oʻsha maydonga yana qoidalar qoʻshishi mumkin, chunki `apply()` boshqa qoidalarni almashtirmaydi, balki ular bilan kompozitsiya qilinadi. `schema()`, `apply()` va `applyWhen()` bilan shartli kompozitsiya haqida toʻliq maʼlumot uchun [Sxemalar boʻyicha qoʻllanma](guide/forms/signals/schemas) bilan tanishing.
 
-### Design considerations
+### Dizayn boʻyicha mulohazalar {#design-considerations}
 
-The consumer's model must initialize every field with a defined value. In Signal Forms, `undefined` signifies the absence of a field and not an empty value. For a reusable email control, that means the consumer should use `''` as the initial value, and not leave the property undefined. See the [Form Models guide](guide/forms/signals/models) for details on choosing initial values.
+Isteʼmolchining modeli har bir maydonni aniqlangan qiymat bilan ishga tushirishi shart. Signal Forms'da `undefined` boʻsh qiymatni emas, maydonning yoʻqligini bildiradi. Qayta ishlatiladigan email boshqaruv elementi uchun bu isteʼmolchi xususiyatni undefined holda qoldirmasdan, dastlabki qiymat sifatida `''` ishlatishi kerakligini anglatadi. Dastlabki qiymatlarni tanlash boʻyicha tafsilotlar uchun [Forma modellari boʻyicha qoʻllanma](guide/forms/signals/models) bilan tanishing.
 
-In addition, controls should not register their own effects for state management. The form system manages field state through internal effects. This means that your control receives state updates through input signals. If a control needs to transform values, use `transformedValue()` as shown in the "[Value transformation](#value-transformation)" section rather than an `effect()`.
+Bundan tashqari, boshqaruv elementlari holatni boshqarish uchun oʻz effect'larini roʻyxatdan oʻtkazmasligi kerak. Forma tizimi maydon holatini ichki effect'lar orqali boshqaradi. Bu boshqaruv elementingiz holat yangilanishlarini input signallar orqali olishini anglatadi. Boshqaruv elementi qiymatlarni transformatsiya qilishi kerak boʻlsa, `effect()` oʻrniga "[Qiymatni transformatsiya qilish](#value-transformation)" boʻlimida koʻrsatilganidek `transformedValue()`'dan foydalaning.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-This guide covered building custom controls that integrate with Signal Forms. Related guides explore other aspects of Signal Forms:
+Bu qoʻllanma Signal Forms bilan integratsiyalashuvchi maxsus boshqaruv elementlarini yaratishni yoritdi. Tegishli qoʻllanmalar Signal Forms'ning boshqa jihatlarini koʻrib chiqadi:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/models" title="Form models" />
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
-  <docs-pill href="guide/forms/signals/validation" title="Validation" />
-  <!-- <docs-pill href="guide/forms/signals/arrays" title="Working with Arrays" /> -->
+  <docs-pill href="guide/forms/signals/models" title="Forma modellari" />
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish" />
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya" />
+  <!-- <docs-pill href="guide/forms/signals/arrays" title="Massivlar bilan ishlash" /> -->
 </docs-pill-row>

@@ -1,32 +1,32 @@
-# Cross-field logic
+# Maydonlararo mantiq
 
-**Cross-field logic** is necessary when any rule, validation, or behavior of one field depends on another field's value or state.
+**Maydonlararo mantiq** (cross-field logic) bir maydonning istalgan qoidasi, validatsiyasi yoki xatti-harakati boshqa maydonning qiymati yoki holatiga bogʻliq boʻlganda zarur boʻladi.
 
-Signal forms provide a **field context** to every rule function. The field context provides access to the current field's value and state, and lets you read other fields in the form using `valueOf()`, `stateOf()`, and `fieldTreeOf()`.
+Signal forms har bir qoida funksiyasiga **maydon konteksti** (field context) taqdim etadi. Maydon konteksti joriy maydonning qiymati va holatiga murojaat qilish imkonini beradi, shuningdek `valueOf()`, `stateOf()` va `fieldTreeOf()` yordamida formadagi boshqa maydonlarni oʻqish imkonini beradi.
 
-This guide covers the field context API in depth and shows common cross-field patterns. For single-field validation, see the [Validation guide](/guide/forms/signals/validation).
+Bu qoʻllanma maydon konteksti API'sini chuqur yoritadi va keng tarqalgan maydonlararo namunalarni koʻrsatadi. Bitta maydonni validatsiya qilish haqida [Validatsiya boʻyicha qoʻllanma](/guide/forms/signals/validation) bilan tanishing.
 
-## Understanding the field context
+## Maydon kontekstini tushunish {#understanding-the-field-context}
 
-Every rule function in signal forms receives a **field context** parameter, which is an object that describes the current field and provides access to the rest of the form.
+Signal forms'dagi har bir qoida funksiyasi **maydon konteksti** parametrini qabul qiladi — bu joriy maydonni tavsiflovchi va formaning qolgan qismiga murojaat qilish imkonini beruvchi obyekt.
 
-There are three properties you can access for the current field:
+Joriy maydon uchun murojaat qilishingiz mumkin boʻlgan uchta xususiyat mavjud:
 
-| Property    | Type                 | Description                                                          |
-| ----------- | -------------------- | -------------------------------------------------------------------- |
-| `value`     | `Signal<TValue>`     | The current field's value as a signal                                |
-| `state`     | `FieldState<TValue>` | The current field's state (such as validity, errors, touched, dirty) |
-| `fieldTree` | `FieldTree<TValue>`  | The current field's tree, for programmatic access to child fields    |
+| Xususiyat   | Turi                 | Tavsif                                                                     |
+| ----------- | -------------------- | -------------------------------------------------------------------------- |
+| `value`     | `Signal<TValue>`     | Joriy maydonning qiymati signal sifatida                                   |
+| `state`     | `FieldState<TValue>` | Joriy maydonning holati (validlik, xatolar, touched, dirty kabi)           |
+| `fieldTree` | `FieldTree<TValue>`  | Joriy maydonning daraxti, ichki maydonlarga dasturiy murojaat qilish uchun |
 
-For cross-field logic, the following three properties allow you to access other parts of the form:
+Maydonlararo mantiq uchun quyidagi uchta xususiyat formaning boshqa qismlariga murojaat qilish imkonini beradi:
 
-| Property        | Type                           | Description                                                                                                                        |
-| --------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `valueOf()`     | `(path) => PValue`             | Most common. Use when you need another field's raw value for comparisons or calculations.                                          |
-| `stateOf()`     | `(path) => FieldState<PValue>` | Use when your logic depends on another field's state, such as whether it's valid, touched, or dirty.                               |
-| `fieldTreeOf()` | `(path) => FieldTree<PModel>`  | Use when you need programmatic access to another field's tree, such as pushing errors to a specific child field with validateTree. |
+| Xususiyat       | Turi                           | Tavsif                                                                                                                                                       |
+| --------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `valueOf()`     | `(path) => PValue`             | Eng keng tarqalgani. Taqqoslash yoki hisoblash uchun boshqa maydonning xom qiymati kerak boʻlganda foydalaning.                                             |
+| `stateOf()`     | `(path) => FieldState<PValue>` | Mantigʻingiz boshqa maydonning holatiga, masalan, uning valid, touched yoki dirty ekanligiga bogʻliq boʻlganda foydalaning.                                 |
+| `fieldTreeOf()` | `(path) => FieldTree<PModel>`  | Boshqa maydonning daraxtiga dasturiy murojaat kerak boʻlganda, masalan, validateTree bilan muayyan ichki maydonga xatolarni yoʻnaltirishda foydalaning.     |
 
-Here is an example of using `value` and `valueOf()` to validate that the current field (end date) comes after the start date in the form:
+Joriy maydon (tugash sanasi) formadagi boshlanish sanasidan keyin kelishini tekshirish uchun `value` va `valueOf()`'dan foydalanish misoli:
 
 ```ts
 import {Component, signal} from '@angular/core';
@@ -54,13 +54,13 @@ export class EventForm {
 }
 ```
 
-NOTE: The `fieldContext` parameter is typically destructured to pull out only what the rule needs. The remaining examples in this guide use this pattern.
+NOTE: `fieldContext` parametri odatda qoidaga kerak boʻlgan narsalarnigina ajratib olish uchun destrukturizatsiya qilinadi. Bu qoʻllanmadagi qolgan misollar shu namunadan foydalanadi.
 
-## Cross-field validation patterns
+## Maydonlararo validatsiya namunalari {#cross-field-validation-patterns}
 
-The date range example from the previous section validates the end date against the start date. Because the rule reads `valueOf(schemaPath.startDate)`, it re-evaluates automatically whenever either date changes. In other words, a single validator is enough to keep the error state correct.
+Oldingi boʻlimdagi sana diapazoni misoli tugash sanasini boshlanish sanasiga nisbatan tekshiradi. Qoida `valueOf(schemaPath.startDate)`'ni oʻqigani uchun, u ikkala sanadan istalgani oʻzgarganda avtomatik qayta hisoblanadi. Boshqacha aytganda, xato holatini toʻgʻri saqlash uchun bitta validator kifoya.
 
-However, that single validator only places the error on the end date field. If you want both fields to show an error when the range is invalid, add a matching validation rule to each field:
+Biroq bu yagona validator xatoni faqat tugash sanasi maydoniga qoʻyadi. Diapazon notoʻgʻri boʻlganda ikkala maydon ham xato koʻrsatishini istasangiz, har bir maydonga mos validatsiya qoidasini qoʻshing:
 
 ```ts
 import {Component, signal} from '@angular/core';
@@ -97,13 +97,13 @@ export class EventForm {
 }
 ```
 
-Both rules make use of `valueOf()` to read the other field. Because each rule is reactive, changing either date re-evaluates both validations automatically.
+Ikkala qoida ham boshqa maydonni oʻqish uchun `valueOf()`'dan foydalanadi. Har bir qoida reaktiv boʻlgani uchun, istalgan sananing oʻzgarishi ikkala validatsiyani avtomatik qayta hisoblaydi.
 
-NOTE: When a rule involves multiple fields, you need to decide where the error belongs: on a specific field, on multiple fields, or on the parent. In general, place the error where the user would most likely go to fix the problem.
+NOTE: Qoida bir nechta maydonni qamrab olganda, xato qayerga tegishli boʻlishini hal qilishingiz kerak: muayyan maydonga, bir nechta maydonga yoki ota maydonga. Umuman olganda, xatoni foydalanuvchi muammoni tuzatish uchun eng ehtimol murojaat qiladigan joyga qoʻying.
 
-### Conditional requirements
+### Shartli talablar {#conditional-requirements}
 
-In some forms, certain fields are only required under certain conditions. For example, a registration form might require a company name only when the user selects a business account type:
+Baʼzi formalarda ayrim maydonlar faqat maʼlum shartlarda majburiy boʻladi. Masalan, roʻyxatdan oʻtish formasi kompaniya nomini faqat foydalanuvchi biznes hisob turini tanlaganda talab qilishi mumkin:
 
 ```ts
 import {Component, signal} from '@angular/core';
@@ -125,15 +125,15 @@ export class RegistrationForm {
 }
 ```
 
-The `when` option receives the same field context as any other rule function, so `valueOf` works the same way. When the user switches back to `'personal'`, the condition re-evaluates and the requirement — along with its error — clears automatically.
+`when` opsiyasi istalgan boshqa qoida funksiyasi bilan bir xil maydon kontekstini qabul qiladi, shuning uchun `valueOf` bir xil ishlaydi. Foydalanuvchi `'personal'`ga qaytganda shart qayta hisoblanadi va talab — oʻz xatosi bilan birga — avtomatik bekor boʻladi.
 
-Using `required()` with `when` instead of a manual `validate()` check also adds proper required metadata to the field, which enables accessibility features like marking the field as required for screen readers.
+Qoʻlda `validate()` tekshiruvi oʻrniga `required()`'ni `when` bilan ishlatish maydonga toʻgʻri required metamaʼlumotlarini ham qoʻshadi, bu esa ekran oʻquvchilari (screen reader) uchun maydonni majburiy deb belgilash kabi foydalanish qulayligi (accessibility) imkoniyatlarini yoqadi.
 
-### Validating based on another field's state
+### Boshqa maydonning holatiga asoslangan validatsiya {#validating-based-on-another-fields-state}
 
-The examples so far use `valueOf()` to read another field's value. Sometimes your logic depends on another field's _state_ instead — whether it's valid, touched, or dirty. Use `stateOf()` for this.
+Hozirgacha misollar boshqa maydonning qiymatini oʻqish uchun `valueOf()`'dan foydalandi. Baʼzan mantigʻingiz boshqa maydonning qiymatiga emas, _holatiga_ bogʻliq boʻladi — u valid, touched yoki dirty ekanligiga. Buning uchun `stateOf()`'dan foydalaning.
 
-For example, a confirm-password field should only check for a match once the user has interacted with the password field. If the user hasn't touched the password yet, flagging a mismatch on the confirmation is premature:
+Masalan, parolni tasdiqlash maydoni moslikni faqat foydalanuvchi parol maydoni bilan oʻzaro aloqa qilganidan soʻng tekshirishi kerak. Foydalanuvchi parolga hali tegmagan boʻlsa, tasdiqlashda nomuvofiqlikni belgilash erta hisoblanadi:
 
 ```ts
 import {Component, signal} from '@angular/core';
@@ -163,15 +163,15 @@ export class PasswordForm {
 }
 ```
 
-The `stateOf()` call returns the other field's [field state](api/forms/signals/FieldState), giving you access to signals like `invalid()`, `touched()`, and `dirty()`. Because these are signals, the rule re-evaluates whenever the password field's validity changes.
+`stateOf()` chaqiruvi boshqa maydonning [maydon holatini](api/forms/signals/FieldState) qaytaradi va sizga `invalid()`, `touched()` va `dirty()` kabi signallarga murojaat qilish imkonini beradi. Bular signal boʻlgani uchun, parol maydonining validligi oʻzgarganda qoida qayta hisoblanadi.
 
-CRITICAL: Be careful not to read state which depends on your field's validation, as that creates a circular loop. For example, a validator which checks whether the parent field is valid will create an infinite loop because the parent's validity depends on its children's validity (which includes your validator).
+CRITICAL: Maydoningiz validatsiyasiga bogʻliq boʻlgan holatni oʻqimaslikka ehtiyot boʻling, chunki bu yopiq sikl hosil qiladi. Masalan, ota maydon valid ekanligini tekshiruvchi validator cheksiz siklga olib keladi, chunki ota maydonning validligi uning ichki maydonlarining validligiga (shu jumladan sizning validatoringizga) bogʻliq.
 
-## Using validateTree
+## validateTree'dan foydalanish {#using-validatetree}
 
-The examples so far use `validate()` to check individual fields. Sometimes you need to validate a group of fields where the logic is inherently about multiple fields in a group, and direct errors to specific children within it. `validateTree` handles is ideal for these kinds of scenarios.
+Hozirgacha misollar alohida maydonlarni tekshirish uchun `validate()`'dan foydalandi. Baʼzan mantiq tabiatan guruhdagi bir nechta maydonga tegishli boʻlgan maydonlar guruhini validatsiya qilish va xatolarni uning ichidagi muayyan ichki maydonlarga yoʻnaltirish kerak boʻladi. `validateTree` ana shunday holatlar uchun juda mos.
 
-For example, in a Sudoku puzzle, each row must contain unique numbers. This is a group-level rule: you check the entire row, then flag the specific cells that violate it. This kind of validation can't be expressed cleanly with `validate` on individual fields, because each cell would need to know about every other cell.
+Masalan, Sudoku boshqotirmasida har bir qator takrorlanmas sonlardan iborat boʻlishi kerak. Bu guruh darajasidagi qoida: butun qatorni tekshirasiz, soʻngra uni buzgan muayyan kataklarni belgilaysiz. Bunday validatsiyani alohida maydonlarda `validate` bilan toza ifodalab boʻlmaydi, chunki har bir katak boshqa barcha kataklar haqida bilishi kerak boʻlardi.
 
 ```ts
 import {Component, signal} from '@angular/core';
@@ -217,25 +217,25 @@ export class SudokuRow {
 }
 ```
 
-The validator runs on the parent field (the row), reads all cell values, counts duplicates, and returns an error for each cell that contains a repeated number. The `fieldTree` property on each error tells Angular exactly which cell should show the error. Without `fieldTree`, the errors would apply to the row itself — not where the user needs to see them.
+Validator ota maydonda (qatorda) ishlaydi, barcha katak qiymatlarini oʻqiydi, takrorlanishlarni sanaydi va takrorlangan son boʻlgan har bir katak uchun xato qaytaradi. Har bir xatodagi `fieldTree` xususiyati Angular'ga xatoni aynan qaysi katak koʻrsatishi kerakligini bildiradi. `fieldTree`siz xatolar qatorning oʻziga tegishli boʻlardi — foydalanuvchi ularni koʻrishi kerak boʻlgan joyga emas.
 
-Because `validateTree` can return an array of errors, a single validator can flag multiple cells at once. Each error includes a `fieldTree` pointing to its target, so Angular routes the errors to the correct fields.
+`validateTree` xatolar massivini qaytara olgani uchun, bitta validator bir vaqtning oʻzida bir nechta katakni belgilashi mumkin. Har bir xato oʻz maqsadiga ishora qiluvchi `fieldTree`ni oʻz ichiga oladi, shuning uchun Angular xatolarni toʻgʻri maydonlarga yoʻnaltiradi.
 
-### When to use validateTree vs validate
+### validateTree va validate'dan qachon foydalanish {#when-to-use-validatetree-vs-validate}
 
-Prefer `validate()` with `valueOf()` when the error belongs on the field being validated — even if the rule reads from other fields. Reach for `validateTree` when:
+Xato tekshirilayotgan maydonga tegishli boʻlganda — qoida boshqa maydonlardan oʻqisa ham — `validate()`'ni `valueOf()` bilan afzal koʻring. `validateTree`'ga quyidagi hollarda murojaat qiling:
 
-- The validation logic is inherently about a group of fields, not any single field
-- The validator needs to return errors targeting different child fields
+- Validatsiya mantigʻi tabiatan biror bitta maydonga emas, maydonlar guruhiga tegishli boʻlsa
+- Validator turli ichki maydonlarga qaratilgan xatolarni qaytarishi kerak boʻlsa
 
-TIP: For an introduction to `validateTree` and its return type, see the [Validation guide](/guide/forms/signals/validation).
+TIP: `validateTree` va uning qaytarish turi bilan tanishish uchun [Validatsiya boʻyicha qoʻllanma](/guide/forms/signals/validation) bilan tanishing.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
-This guide covered the field context API and common cross-field patterns. To learn more about related Signal Forms guide, check out:
+Bu qoʻllanma maydon konteksti API'si va keng tarqalgan maydonlararo namunalarni yoritdi. Signal Forms'ning tegishli qoʻllanmalari haqida koʻproq bilish uchun quyidagilarni koʻrib chiqing:
 
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/validation" title="Validation" />
-  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
-  <docs-pill href="guide/forms/signals/custom-controls" title="Custom controls" />
+  <docs-pill href="guide/forms/signals/validation" title="Validatsiya" />
+  <docs-pill href="guide/forms/signals/field-state-management" title="Maydon holatini boshqarish" />
+  <docs-pill href="guide/forms/signals/custom-controls" title="Maxsus boshqaruv elementlari" />
 </docs-pill-row>
