@@ -13,13 +13,13 @@ Brauzerdagi oʻyin maydonchasida (playground) ishlaganda ilovani ishga tushirish
 
 <docs-workflow>
 
-<docs-step title="Standart ilovani yuklab oling">
+<docs-step title="Standart ilovani yuklab oling {#download-the-default-app}">
 Kod muharririning yuqori oʻng panelidagi "Download" belgisini bosishdan boshlang. Bu ushbu darslikning manba kodini oʻz ichiga olgan `.zip` faylini yuklab oladi. Uni lokal Terminal va IDE'ingizda oching, soʻng standart ilovani sinab koʻrishga oʻting.
 
 Darslikning istalgan qadamida bu belgini bosib, oʻsha qadamning manba kodini yuklab olishingiz va shu yerdan boshlashingiz mumkin.
 </docs-step>
 
-<docs-step title="Standart ilovani sinab koʻring">
+<docs-step title="Standart ilovani sinab koʻring {#test-the-default-app}">
 Bu qadamda, standart boshlangʻich ilovani yuklab olganingizdan soʻng, standart Angular ilovasini build qilasiz.
 Bu dasturlash muhitingizda darslikni davom ettirish uchun kerakli hamma narsa mavjudligini tasdiqlaydi.
 
@@ -45,7 +45,7 @@ IDE'ingizning **Terminal** panelida:
 1. Keyingi qadamlarni bajarayotganingizda `ng serve`'ni ishlab turgan holda qoldirishingiz mumkin.
    </docs-step>
 
-<docs-step title="Loyihadagi fayllarni koʻrib chiqing">
+<docs-step title="Loyihadagi fayllarni koʻrib chiqing {#review-the-files-in-the-project}">
 Bu qadamda standart Angular ilovasini tashkil etuvchi fayllar bilan tanishasiz.
 
 IDE'ingizning **Explorer** panelida:
@@ -79,7 +79,7 @@ IDE'ingizning **Explorer** panelida:
 Angular ilovasi loyihasini tashkil etuvchi fayllarni koʻrib chiqqach, keyingi qadamga oʻting.
 </docs-step>
 
-<docs-step title="`Hello World` yarating">
+<docs-step title="`Hello World` yarating {#create-hello-world}">
 Bu qadamda koʻrsatiladigan kontentni oʻzgartirish uchun Angular loyihasi fayllarini yangilaysiz.
 
 IDE'ingizda:

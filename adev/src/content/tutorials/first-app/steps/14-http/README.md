@@ -14,7 +14,7 @@ Ilovangiz JSON serverdagi maʼlumotlardan foydalanadi
 
 <docs-workflow>
 
-<docs-step title="JSON serverni sozlang">
+<docs-step title="JSON serverni sozlang {#configure-the-json-server}">
 JSON Server — soxta (mock) REST API'lar yaratish uchun ishlatiladigan ochiq kodli vosita. Siz undan hozirda housing servisida saqlanayotgan turar joy maʼlumotlarini taqdim etish uchun foydalanasiz.
 
 1. Quyidagi buyruq yordamida npm'dan `json-server`'ni oʻrnating.
@@ -147,7 +147,7 @@ JSON Server — soxta (mock) REST API'lar yaratish uchun ishlatiladigan ochiq ko
 Konfiguratsiyangiz bilan muammo boʻlsa, [rasmiy hujjatlarda](https://www.npmjs.com/package/json-server) koʻproq tafsilotlarni topishingiz mumkin.
 </docs-step>
 
-<docs-step title="Servisni lokal massiv oʻrniga veb-serverdan foydalanadigan qilib yangilang">
+<docs-step title="Servisni lokal massiv oʻrniga veb-serverdan foydalanadigan qilib yangilang {#update-service-to-use-web-server-instead-of-local-array}">
 Maʼlumot manbai sozlandi, keyingi qadam — veb-ilovangizni unga ulanib, maʼlumotlardan foydalanadigan qilib yangilash.
 
 1.  `src/app/housing.service.ts` faylida quyidagi oʻzgarishlarni kiriting:
@@ -180,7 +180,7 @@ Maʼlumot manbai sozlandi, keyingi qadam — veb-ilovangizni unga ulanib, maʼlu
 
 </docs-step>
 
-<docs-step title="Komponentlarni housing servisiga asinxron chaqiruvlardan foydalanadigan qilib yangilang">
+<docs-step title="Komponentlarni housing servisiga asinxron chaqiruvlardan foydalanadigan qilib yangilang {#update-the-components-to-use-asynchronous-calls-to-the-housing-service}">
 Server endi maʼlumotlarni HTTP soʻrovidan oʻqiyapti, lekin servisga tayanadigan komponentlarda endi xatolar bor, chunki ular servisning sinxron versiyasidan foydalanish uchun yozilgan edi.
 
 1.  `src/app/home/home.ts` faylida `constructor`'ni `getAllHousingLocations` metodining yangi asinxron versiyasidan foydalanadigan qilib yangilang. Holatimiz uchun signallardan foydalanmaganimiz sababli, Angular'ga sinxronlashni talab qiluvchi oʻzgarish yuz berganini bildirishingiz kerak. Buning uchun `this.changeDetectorRef.markForCheck()`'ni chaqiring.

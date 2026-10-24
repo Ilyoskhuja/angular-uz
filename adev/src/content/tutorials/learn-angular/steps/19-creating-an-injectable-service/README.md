@@ -27,7 +27,7 @@ Xoʻsh, endi oʻzingiz sinab koʻring:
 
 <docs-workflow>
 
-<docs-step title="`@Service` dekoratorini qoʻshing">
+<docs-step title="`@Service` dekoratorini qoʻshing {#add-the-service-decorator}">
 `car.service.ts` faylidagi kodni `CarService` klassiga `@Service()` dekoratorini qoʻshish orqali yangilang.
 
 TIP: Toʻgʻri sintaksisni topish uchun yuqoridagi misoldan foydalaning.

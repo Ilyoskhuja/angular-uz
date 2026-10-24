@@ -20,7 +20,7 @@ Endi pipe chiqishini sozlash vaqti:
 
 <docs-workflow>
 
-<docs-step title="`DecimalPipe` bilan sonni formatlang">
+<docs-step title="`DecimalPipe` bilan sonni formatlang {#format-a-number-with-decimalpipe}">
 
 `app.ts` faylida shablonni `decimal` pipe'i uchun parametr qoʻshish orqali yangilang.
 
@@ -34,7 +34,7 @@ NOTE: Bu qanday format? `DecimalPipe` parametri `digitsInfo` deb ataladi va u qu
 
 </docs-step>
 
-<docs-step title="`DatePipe` bilan sanani formatlang">
+<docs-step title="`DatePipe` bilan sanani formatlang {#format-a-date-with-datepipe}">
 
 Endi shablonni `date` pipe'idan foydalanish uchun yangilang.
 
@@ -48,7 +48,7 @@ Qiziqarli boʻlishi uchun `date` uchun turli parametrlarni sinab koʻring. Koʻp
 
 </docs-step>
 
-<docs-step title="`CurrencyPipe` bilan valyutani formatlang">
+<docs-step title="`CurrencyPipe` bilan valyutani formatlang {#format-a-currency-with-currencypipe}">
 
 Oxirgi vazifangiz uchun shablonni `currency` pipe'idan foydalanish uchun yangilang.
 

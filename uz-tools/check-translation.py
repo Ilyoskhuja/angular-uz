@@ -11,7 +11,8 @@ lose content:
   * link targets `](target)` and `href`/`path`/`imgSrc`/`src` attribute values
     must be the same multiset;
   * callout keywords (NOTE:, TIP:, ...) at line start must be preserved;
-  * `<docs-step title>` count must match.
+  * `<docs-step title>` count must match and translated step titles must carry `{#english-id}`;
+  * in-page anchors (`#id`) must resolve to a heading or step id in the document.
 
 Usage:
   python3 uz-tools/check-translation.py                 # all .md files changed vs main
@@ -115,8 +116,19 @@ def check(path: str) -> list:
     for d in diff_multiset(ec, uc):
         problems.append(f'callout keyword changed/removed: {d}')
 
-    if len(STEP_RE.findall(en)) != len(STEP_RE.findall(uz)):
+    es, us = STEP_RE.findall(en), STEP_RE.findall(uz)
+    if len(es) != len(us):
         problems.append('<docs-step title=...> count differs')
+    else:
+        for et, ut in zip(es, us):
+            if slug(et) != slug(ut):
+                problems.append(f'docs-step title "{ut}" generates id "{slug(ut)}", expected "{slug(et)}" — append {{#{slug(et)}}} inside the title attribute')
+
+    # In-page anchors (#id) must resolve to a heading or docs-step id in this document.
+    ids = {slug(h) for _, h in uh} | {slug(t) for t in us}
+    for m in re.finditer(r'(?:\]\(|href=")#([\w-]+)', '\n'.join(up)):
+        if m.group(1) not in ids:
+            problems.append(f'in-page anchor "#{m.group(1)}" has no matching heading/step id in this document')
 
     if uz.strip() == en.strip():
         problems.append('file is identical to the original (not translated)')

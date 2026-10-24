@@ -21,7 +21,7 @@ Bu darsda bitta turar joy (housing location) haqidagi maʼlumotlarni ifodalovchi
 
 <docs-workflow>
 
-<docs-step title="Yangi Angular interfeysini yarating">
+<docs-step title="Yangi Angular interfeysini yarating {#create-a-new-angular-interface}">
 Bu qadam ilovangizda yangi interfeys yaratadi.
 
 IDE'ingizning **Terminal** panelida:
@@ -41,7 +41,7 @@ IDE'ingizning **Terminal** panelida:
    Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
    </docs-step>
 
-<docs-step title="Yangi interfeysga xususiyatlar qoʻshing">
+<docs-step title="Yangi interfeysga xususiyatlar qoʻshing {#add-properties-to-the-new-interface}">
 Bu qadam interfeysga ilovangiz turar joyni ifodalash uchun zarur boʻlgan xususiyatlarni qoʻshadi.
 
 1.  IDE'ingizning **Terminal** panelida, agar hali ishlamayotgan boʻlsa, ilovani build qilish va `http://localhost:4200` manzilida ishga tushirish uchun `ng serve` buyrugʻini ishga tushiring.
@@ -55,7 +55,7 @@ Bu qadam interfeysga ilovangiz turar joyni ifodalash uchun zarur boʻlgan xususi
 Shu nuqtada siz turar joy haqidagi maʼlumotlarni — `id`, `name` va joylashuv maʼlumotlarini — ifodalovchi interfeysni belgiladingiz.
 </docs-step>
 
-<docs-step title="Ilovangiz uchun sinov uyini yarating">
+<docs-step title="Ilovangiz uchun sinov uyini yarating {#create-a-test-house-for-your-app}">
 Sizda interfeys bor, lekin siz undan hali foydalanmayapsiz.
 
 Bu qadamda interfeysning nusxasini yaratasiz va unga namunaviy maʼlumotlar tayinlaysiz.

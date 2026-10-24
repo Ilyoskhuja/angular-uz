@@ -18,7 +18,7 @@ Marshrut parametrlari marshrut URL'ining bir qismi sifatida dinamik maʼlumotlar
 
 <docs-workflow>
 
-<docs-step title="Dinamik navigatsiya uchun `routerLink`'dan foydalanish">
+<docs-step title="Dinamik navigatsiya uchun `routerLink`'dan foydalanish {#using-routerlink-for-dynamic-navigation}">
 10-darsda siz `src/app/routes.ts` fayliga marshrut parametri `id`'ni aniqlovchi maxsus segmentni oʻz ichiga olgan ikkinchi marshrutni qoʻshdingiz:
 
 ```
@@ -41,7 +41,7 @@ Bu holda `:id` dinamik boʻlib, kod marshrutni qanday soʻrashiga qarab oʻzgara
 
 </docs-step>
 
-<docs-step title="Marshrut parametrlarini oling">
+<docs-step title="Marshrut parametrlarini oling {#get-route-parameters}">
 Bu qadamda siz `Details`'da marshrut parametrini olasiz. Hozirda ilova `details works!` matnini koʻrsatadi. Keyin kodni marshrut parametrlari orqali uzatilgan `id` qiymatini koʻrsatadigan qilib yangilaysiz.
 
 1.  `src/app/details/details.ts` faylida shablonni yangilab, `Details`'da ishlatishingiz kerak boʻladigan funksiyalar, klasslar va servislarni import qiling:
@@ -73,7 +73,7 @@ Bu qadamda siz `Details`'da marshrut parametrini olasiz. Hozirda ilova `details 
 1.  Brauzerda turar joylardan birining "Learn More" havolasini bosing va sahifada koʻrsatilgan raqamli qiymat maʼlumotlardagi oʻsha joyning `id` xususiyatiga mos kelishini tasdiqlang.
     </docs-step>
 
-<docs-step title="`Details`'ni moslashtiring">
+<docs-step title="`Details`'ni moslashtiring {#customize-the-details}">
 Endi ilovada marshrutlash toʻgʻri ishlayotgan ekan, `Details` shablonini marshrut parametriga mos turar joyning muayyan maʼlumotlarini koʻrsatadigan qilib yangilash uchun qulay vaqt.
 
 Maʼlumotlarga kirish uchun `HousingService`'ga chaqiruv qoʻshasiz.
@@ -105,7 +105,7 @@ Maʼlumotlarga kirish uchun `HousingService`'ga chaqiruv qoʻshasiz.
 
 </docs-step>
 
-<docs-step title="`Home`'da navigatsiyani tekshiring">
+<docs-step title="`Home`'da navigatsiyani tekshiring {#check-navigation-in-the-home}">
 Oldingi darsda siz `App` shablonini `routerLink`'ni oʻz ichiga oladigan qilib yangiladingiz. Bu kodni qoʻshish ilovangizni logotip bosilganda `Home`'ga qaytish imkonini beradigan qilib yangiladi.
 
 1.  Kodingiz quyidagiga mos kelishini tasdiqlang:

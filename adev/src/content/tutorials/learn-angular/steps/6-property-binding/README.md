@@ -20,7 +20,7 @@ Bu misolda `src` atributining qiymati `imageURL` klass xususiyatiga bogʻlanadi.
 
 <docs-workflow>
 
-<docs-step title="`isEditable` nomli xususiyat qoʻshing" header="app.ts" language="ts">
+<docs-step title="`isEditable` nomli xususiyat qoʻshing {#add-a-property-called-iseditable}" header="app.ts" language="ts">
 `app.ts`'dagi kodni `App` klassiga boshlangʻich qiymati `true` boʻlgan `isEditable` nomli xususiyat qoʻshib yangilang.
 
 ```ts {highlight:[2]}
@@ -31,7 +31,7 @@ export class App {
 
 </docs-step>
 
-<docs-step title="`contentEditable`'ga bogʻlang" header="app.ts" language="ts">
+<docs-step title="`contentEditable`'ga bogʻlang {#bind-to-contenteditable}" header="app.ts" language="ts">
 Keyin <code aria-label="square brackets">[]</code> sintaksisidan foydalanib, `div`'ning `contentEditable` atributini `isEditable` xususiyatiga bogʻlang.
 
 ```angular-ts {highlight:[3]}

@@ -10,7 +10,7 @@ Bu darslik darsi Angular ilovangizga `HousingLocation` komponentini qanday qoʻs
 
 <docs-workflow>
 
-<docs-step title="`HousingLocation` komponentini yarating">
+<docs-step title="`HousingLocation` komponentini yarating {#create-the-housinglocation}">
 Bu qadamda ilovangiz uchun yangi komponent yaratasiz.
 
 IDE'ingizning **Terminal** panelida:
@@ -39,7 +39,7 @@ IDE'ingizning **Terminal** panelida:
 1. Keyingi qadamlarni bajarayotganingizda `ng serve`'ni ishlab turgan holda qoldiring.
    </docs-step>
 
-<docs-step title="Yangi komponentni ilovangiz joylashuviga qoʻshing">
+<docs-step title="Yangi komponentni ilovangiz joylashuviga qoʻshing {#add-the-new-component-to-your-apps-layout}">
 Bu qadamda yangi `HousingLocation` komponentini ilovangizning `Home` komponentiga qoʻshasiz, shunda u ilovangiz joylashuvida koʻrinadi.
 
 IDE'ingizning **Edit** panelida:
@@ -59,7 +59,7 @@ IDE'ingizning **Edit** panelida:
 
 </docs-step>
 
-<docs-step title="Komponent uchun stillarni qoʻshing">
+<docs-step title="Komponent uchun stillarni qoʻshing {#add-the-styles-for-the-component}">
 Bu qadamda ilova toʻgʻri render qilinishi uchun `HousingLocation` komponenti uchun oldindan yozilgan stillarni ilovangizga nusxalaysiz.
 
 1. `src/app/housing-location/housing-location.css` faylini oching va quyidagi stillarni faylga joylashtiring:

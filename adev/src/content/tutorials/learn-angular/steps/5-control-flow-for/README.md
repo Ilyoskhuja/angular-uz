@@ -33,7 +33,7 @@ Eʼtibor berish kerak boʻlgan ikki narsa:
 
 <docs-workflow>
 
-<docs-step title="`users` xususiyatini qoʻshing">
+<docs-step title="`users` xususiyatini qoʻshing {#add-the-users-property}">
 `App` klassiga foydalanuvchilar va ularning ismlarini oʻz ichiga olgan `users` nomli xususiyat qoʻshing.
 
 ```ts
@@ -48,7 +48,7 @@ Eʼtibor berish kerak boʻlgan ikki narsa:
 
 </docs-step>
 
-<docs-step title="Shablonni yangilang">
+<docs-step title="Shablonni yangilang {#update-the-template}">
 `@for` shablon sintaksisidan foydalanib, har bir foydalanuvchi ismini `p` elementida koʻrsatadigan qilib shablonni yangilang.
 
 ```angular-html

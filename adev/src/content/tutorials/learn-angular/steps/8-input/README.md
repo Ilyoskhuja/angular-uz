@@ -39,11 +39,11 @@ export class App {}
 
 <docs-workflow>
 
-<docs-step title="`input()` xususiyatini aniqlang">
+<docs-step title="`input()` xususiyatini aniqlang {#define-an-input-property}">
 `user.ts`'dagi kodni `User`'da `name` nomli `input` xususiyatini aniqlaydigan va `string` turini koʻrsatadigan qilib yangilang. Hozircha boshlangʻich qiymat oʻrnatmang va `input()`'ni argumentlarsiz chaqiring. Shablonni gap oxirida `name` xususiyatini chaqirib interpolatsiya qiladigan qilib yangilashni unutmang.
 </docs-step>
 
-<docs-step title="`input` xususiyatiga qiymat uzating">
+<docs-step title="`input` xususiyatiga qiymat uzating {#pass-a-value-to-the-input-property}">
 `app.ts`'dagi kodni `name` xususiyatini `"Simran"` qiymati bilan yuboradigan qilib yangilang.
 <br>
 

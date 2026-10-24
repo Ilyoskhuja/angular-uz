@@ -28,7 +28,7 @@ Xoʻsh, endi oʻzingiz sinab koʻring:
 
 <docs-workflow>
 
-<docs-step title="Hodisa ishlov beruvchisini qoʻshing">
+<docs-step title="Hodisa ishlov beruvchisini qoʻshing {#add-an-event-handler}">
 `App` klassida mavjud `showSecretMessage()` metodining tanasini quyidagi kod bilan toʻldiring:
 
 ```ts
@@ -37,7 +37,7 @@ this.message = 'Way to go 🚀';
 
 </docs-step>
 
-<docs-step title="Shablondagi hodisaga bogʻlang">
+<docs-step title="Shablondagi hodisaga bogʻlang {#bind-to-the-template-event}">
 `app.ts`'dagi shablon kodini `section` elementining `mouseover` hodisasiga bogʻlanadigan qilib yangilang.
 
 <!-- prettier-ignore -->

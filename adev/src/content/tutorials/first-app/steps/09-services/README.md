@@ -27,7 +27,7 @@ _Bogʻliqliklarni inyeksiya qilish_ — ilova komponentlarining bogʻliqliklarin
 
 <docs-workflow>
 
-<docs-step title="Ilovangiz uchun yangi servis yarating">
+<docs-step title="Ilovangiz uchun yangi servis yarating {#create-a-new-service-for-your-app}">
 Bu qadam ilovangiz uchun inyeksiya qilinadigan servis yaratadi.
 
 IDE'ingizning **Terminal** panelida:
@@ -44,7 +44,7 @@ IDE'ingizning **Terminal** panelida:
    Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
    </docs-step>
 
-<docs-step title="Yangi servisga statik maʼlumotlar qoʻshing">
+<docs-step title="Yangi servisga statik maʼlumotlar qoʻshing {#add-static-data-to-the-new-service}">
 Bu qadam yangi servisingizga namunaviy maʼlumotlar qoʻshadi.
 Keyingi darslardan birida statik maʼlumotlarni haqiqiy ilovadagidek maʼlumot olish uchun veb-interfeys bilan almashtirasiz.
 Hozircha ilovangizning yangi servisi shu paytgacha `Home`'da lokal yaratilgan maʼlumotlardan foydalanadi.
@@ -69,7 +69,7 @@ IDE'ingizning **Edit** panelida:
    Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
    </docs-step>
 
-<docs-step title="Yangi servisni `Home`'ga inyeksiya qiling">
+<docs-step title="Yangi servisni `Home`'ga inyeksiya qiling {#inject-the-new-service-into-home}">
 Bu qadam yangi servisni ilovangizning `Home`'iga inyeksiya qiladi, shunda u ilova maʼlumotlarini servisdan oʻqiy oladi.
 Keyingi darslardan birida statik maʼlumotlarni haqiqiy ilovadagidek maʼlumot olish uchun jonli maʼlumot manbai bilan almashtirasiz.
 

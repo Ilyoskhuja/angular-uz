@@ -19,7 +19,7 @@ Batafsilroq tushuntirish uchun [Qiymatlarni interpolyatsiya bilan koʻrsatish](g
 
 <docs-workflow>
 
-<docs-step title="`HousingLocation` shablonini interpolyatsiya qilingan qiymatlarni oʻz ichiga oladigan qilib yangilang">
+<docs-step title="`HousingLocation` shablonini interpolyatsiya qilingan qiymatlarni oʻz ichiga oladigan qilib yangilang {#update-housinglocation-template-to-include-interpolated-values}">
 Bu qadam `HousingLocation` shabloniga yangi HTML tuzilmasi va interpolyatsiya qilingan qiymatlarni qoʻshadi.
 
 Kod muharririda:
@@ -35,7 +35,7 @@ Bu yangilangan shablon kodida `housingLocation.photo`'ni `src` atributiga bogʻl
 
 </docs-step>
 
-<docs-step title="Oʻzgarishlar brauzerda render qilinishini tasdiqlang">
+<docs-step title="Oʻzgarishlar brauzerda render qilinishini tasdiqlang {#confirm-the-changes-render-in-the-browser}">
 1.  Barcha oʻzgarishlarni saqlang.
 1.  Brauzerni oching va ilova namunaviy rasm, shahar va shtat maʼlumotlarini render qilishini tasdiqlang.
     <img alt="browser frame of homes-app displaying logo, filter text input box, search button and the same housing location UI card" src="assets/images/tutorials/first-app/homes-app-lesson-07-step-2.png">

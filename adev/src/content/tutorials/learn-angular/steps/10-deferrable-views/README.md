@@ -12,7 +12,7 @@ Bu mashgʻulotda komponent shabloningizning bir boʻlimini kechiktirib yuklash u
 
 <docs-workflow>
 
-<docs-step title="Izohlar komponenti atrofiga `@defer` bloki qoʻshing">
+<docs-step title="Izohlar komponenti atrofiga `@defer` bloki qoʻshing {#add-a-defer-block-around-the-comments-component}">
 
 Ilovangizda blog posti sahifasida post tafsilotlaridan keyin izohlar komponenti bor.
 
@@ -28,7 +28,7 @@ Yuqoridagi kod oddiy `@defer` blokidan qanday foydalanishga misol. Sukut boʻyic
 
 </docs-step>
 
-<docs-step title="Toʻldiruvchi (placeholder) qoʻshing">
+<docs-step title="Toʻldiruvchi (placeholder) qoʻshing {#add-a-placeholder}">
 
 `@defer` blokiga `@placeholder` bloki qoʻshing. `@placeholder` bloki — kechiktirilgan yuklash boshlanishidan oldin koʻrsatiladigan html joylashtiriladigan joy. `@placeholder` bloklaridagi kontent darhol (eager) yuklanadi.
 
@@ -42,7 +42,7 @@ Yuqoridagi kod oddiy `@defer` blokidan qanday foydalanishga misol. Sukut boʻyic
 
 </docs-step>
 
-<docs-step title="Yuklanish bloki qoʻshing">
+<docs-step title="Yuklanish bloki qoʻshing {#add-a-loading-block}">
 
 `@defer` blokiga `@loading` bloki qoʻshing. `@loading` bloki — kechiktirilgan kontent faol tarzda yuklab olinayotgan, lekin hali tugallanmagan _vaqtda_ koʻrsatiladigan html joylashtiriladigan joy. `@loading` bloklaridagi kontent darhol yuklanadi.
 
@@ -58,7 +58,7 @@ Yuqoridagi kod oddiy `@defer` blokidan qanday foydalanishga misol. Sukut boʻyic
 
 </docs-step>
 
-<docs-step title="Minimal davomiylik qoʻshing">
+<docs-step title="Minimal davomiylik qoʻshing {#add-a-minimum-duration}">
 
 `@placeholder` va `@loading` boʻlimlarining ikkalasida ham yuklash tez sodir boʻlganda miltillashning oldini olish uchun ixtiyoriy parametrlar mavjud. `@placeholder`'da `minimum`, `@loading`'da esa `minimum` va `after` bor. `@loading` blokiga kamida 2 soniya davomida render qilinishi uchun `minimum` davomiylikni qoʻshing.
 
@@ -74,7 +74,7 @@ Yuqoridagi kod oddiy `@defer` blokidan qanday foydalanishga misol. Sukut boʻyic
 
 </docs-step>
 
-<docs-step title="Viewport triggeri qoʻshing">
+<docs-step title="Viewport triggeri qoʻshing {#add-a-viewport-trigger}">
 
 Kechiktiriladigan view'larda bir qancha trigger variantlari mavjud. Kontent viewport'ga kirganda kechiktirib yuklanishi uchun viewport triggerini qoʻshing.
 
@@ -90,7 +90,7 @@ Kechiktiriladigan view'larda bir qancha trigger variantlari mavjud. Kontent view
 
 </docs-step>
 
-<docs-step title="Kontent qoʻshing">
+<docs-step title="Kontent qoʻshing {#add-content}">
 
 Viewport triggeridan koʻrish uchun sahifani aylantirish (scroll) kerak boʻladigan darajada pastda joylashgan kontentni kechiktirayotganingizda foydalanish eng maqsadga muvofiq. Shuning uchun blog postimizga biroz kontent qoʻshamiz. Oʻzingiz yozishingiz yoki quyidagi kontentni nusxalab, `<article>` elementi ichiga joylashtirishingiz mumkin.
 

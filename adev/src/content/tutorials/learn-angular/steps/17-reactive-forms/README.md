@@ -10,7 +10,7 @@ Bu mashgʻulotda reaktiv formalarni qanday sozlashni oʻrganasiz.
 
 <docs-workflow>
 
-<docs-step title="`ReactiveForms` modulini import qiling">
+<docs-step title="`ReactiveForms` modulini import qiling {#import-reactiveforms-module}">
 
 `app.ts` faylida `@angular/forms`'dan `ReactiveFormsModule`'ni import qiling va uni komponentning `imports` massiviga qoʻshing.
 
@@ -36,7 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 </docs-step>
 
-<docs-step title="FormControl'lar bilan `FormGroup` obyektini yarating">
+<docs-step title="FormControl'lar bilan `FormGroup` obyektini yarating {#create-the-formgroup-object-with-formcontrols}">
 
 Reaktiv formalar forma boshqaruv elementlarini (masalan, inputlarni) ifodalash uchun `FormControl` klassidan foydalanadi. Angular forma boshqaruv elementlarini foydali obyektga guruhlash uchun `FormGroup` klassini taqdim etadi, bu katta formalar bilan ishlashni dasturchilar uchun qulayroq qiladi.
 
@@ -55,7 +55,7 @@ export class App {
 
 </docs-step>
 
-<docs-step title="FormGroup va FormControl'larni formaga bogʻlang">
+<docs-step title="FormGroup va FormControl'larni formaga bogʻlang {#link-the-formgroup-and-formcontrols-to-the-form}">
 
 Har bir `FormGroup` `[formGroup]` direktivasi yordamida formaga biriktirilishi kerak.
 
@@ -77,7 +77,7 @@ Bundan tashqari, har bir `FormControl` `formControlName` direktivasi bilan birik
 
 </docs-step>
 
-<docs-step title="Forma yangilanishini qayta ishlang">
+<docs-step title="Forma yangilanishini qayta ishlang {#handle-update-to-the-form}">
 
 `FormGroup`'dan maʼlumotlarga murojaat qilmoqchi boʻlsangiz, buni `FormGroup`'ning qiymatiga murojaat qilish orqali amalga oshirish mumkin. Forma qiymatlarini koʻrsatish uchun `template`'ni yangilang:
 
@@ -90,7 +90,7 @@ Bundan tashqari, har bir `FormControl` `formControlName` direktivasi bilan birik
 
 </docs-step>
 
-<docs-step title="FormGroup qiymatlariga murojaat qiling">
+<docs-step title="FormGroup qiymatlariga murojaat qiling {#access-formgroup-values}">
 Komponent klassiga `handleSubmit` deb nomlangan yangi metod qoʻshing, uni keyinroq forma yuborilishini qayta ishlash uchun ishlatasiz.
 Bu metod formadagi qiymatlarni koʻrsatadi, qiymatlarga FormGroup orqali murojaat qilishingiz mumkin.
 
@@ -106,7 +106,7 @@ handleSubmit() {
 
 </docs-step>
 
-<docs-step title="Formaga `ngSubmit` qoʻshing">
+<docs-step title="Formaga `ngSubmit` qoʻshing {#add-ngsubmit-to-the-form}">
 Forma qiymatlariga murojaat qila olasiz, endi yuborish hodisasini qayta ishlash va `handleSubmit` metodidan foydalanish vaqti keldi.
 Angular'da aynan shu maqsad uchun `ngSubmit` deb nomlangan hodisa ishlov beruvchisi mavjud. Forma yuborilganda `handleSubmit` metodini chaqirish uchun forma elementini yangilang.
 

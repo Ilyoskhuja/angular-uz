@@ -10,7 +10,7 @@ Bu mashgʻulotda ilovangizni Angular Router'dan foydalanish uchun qanday oʻrnat
 
 <docs-workflow>
 
-<docs-step title="app.routes.ts faylini yarating">
+<docs-step title="app.routes.ts faylini yarating {#create-an-approutests-file}">
 
 `app.routes.ts` ichida quyidagi oʻzgarishlarni kiriting:
 
@@ -25,7 +25,7 @@ export const routes: Routes = [];
 
 </docs-step>
 
-<docs-step title="Provider'ga marshrutlashni qoʻshing">
+<docs-step title="Provider'ga marshrutlashni qoʻshing {#add-routing-to-provider}">
 
 `app.config.ts`'da quyidagi qadamlar bilan ilovani Angular Router'ga sozlang:
 
@@ -45,7 +45,7 @@ export const appConfig: ApplicationConfig = {
 
 </docs-step>
 
-<docs-step title="Komponentga `RouterOutlet`'ni import qiling">
+<docs-step title="Komponentga `RouterOutlet`'ni import qiling {#import-routeroutlet-in-the-component}">
 
 Nihoyat, ilovangiz Angular Router'dan foydalanishga tayyor boʻlishini taʼminlash uchun ilovaga router kerakli kontentni qayerda koʻrsatishini kutayotganingizni aytishingiz kerak. Bunga `@angular/router`'dagi `RouterOutlet` direktivasidan foydalanib erishing.
 

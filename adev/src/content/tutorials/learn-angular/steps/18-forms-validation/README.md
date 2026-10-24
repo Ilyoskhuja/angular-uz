@@ -10,7 +10,7 @@ Bu mashgʻulotda reaktiv formalar yordamida formalarni qanday validatsiya qilish
 
 <docs-workflow>
 
-<docs-step title="Validators'ni import qiling">
+<docs-step title="Validators'ni import qiling {#import-validators}">
 
 Angular validatsiya vositalari toʻplamini taqdim etadi. Ulardan foydalanish uchun avval komponentni `@angular/forms`'dan `Validators`'ni import qilish uchun yangilang.
 
@@ -23,7 +23,7 @@ export class App {}
 
 </docs-step>
 
-<docs-step title="Formaga validatsiya qoʻshing">
+<docs-step title="Formaga validatsiya qoʻshing {#add-validation-to-form}">
 
 Har bir `FormControl`'ga uning qiymatlarini validatsiya qilish uchun ishlatmoqchi boʻlgan `Validators`'ni uzatish mumkin. Masalan, `profileForm`'dagi `name` maydonini majburiy qilmoqchi boʻlsangiz, `Validators.required`'dan foydalaning.
 Angular formamizdagi `email` maydoni uchun biz uning boʻsh qoldirilmasligini va toʻgʻri elektron pochta manzili tuzilmasiga mos kelishini taʼminlamoqchimiz. Bunga `Validators.required` va `Validators.email` validatorlarini massivda birlashtirish orqali erishishimiz mumkin.
@@ -38,7 +38,7 @@ profileForm = new FormGroup({
 
 </docs-step>
 
-<docs-step title="Shablonda forma validatsiyasini tekshiring">
+<docs-step title="Shablonda forma validatsiyasini tekshiring {#check-form-validation-in-template}">
 
 Forma yaroqli (valid) ekanligini aniqlash uchun `FormGroup` klassida `valid` xususiyati mavjud.
 Bu xususiyatdan atributlarni dinamik bogʻlash uchun foydalanishingiz mumkin. Yuborish `button`'ini forma yaroqliligiga qarab yoqiladigan qilib yangilang.

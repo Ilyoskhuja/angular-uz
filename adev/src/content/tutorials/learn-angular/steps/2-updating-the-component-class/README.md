@@ -10,7 +10,7 @@ Bu mashgʻulotda komponent klassini qanday yangilashni va [interpolatsiyadan](/g
 
 <docs-workflow>
 
-<docs-step title="`city` nomli xususiyat qoʻshing">
+<docs-step title="`city` nomli xususiyat qoʻshing {#add-a-property-called-city}">
 `App` klassiga `city` nomli xususiyat qoʻshib, komponent klassini yangilang.
 
 ```ts
@@ -26,7 +26,7 @@ export class App {
 Shablonda klass xususiyatidan foydalanish uchun `{{ }}` sintaksisidan foydalanishingiz kerak.
 </docs-step>
 
-<docs-step title="Komponent shablonini yangilang">
+<docs-step title="Komponent shablonini yangilang {#update-the-component-template}">
 `template` xususiyatini quyidagi HTML'ga mos keladigan qilib yangilang:
 
 ```ts
@@ -36,7 +36,7 @@ template: `Hello {{ city }}`,
 Bu interpolatsiyaga misol boʻlib, Angular shablon sintaksisining bir qismidir. U shablonga dinamik matn joylashtirishdan ham koʻproq ishlarni bajarish imkonini beradi. Bu sintaksisdan funksiyalarni chaqirish, ifodalar yozish va boshqa ishlar uchun ham foydalanishingiz mumkin.
 </docs-step>
 
-<docs-step title="Interpolatsiya bilan koʻproq amaliyot">
+<docs-step title="Interpolatsiya bilan koʻproq amaliyot {#more-practice-with-interpolation}">
 Buni sinab koʻring — ichida `1 + 1` boʻlgan yana bir `{{ }}` juftligini qoʻshing:
 
 ```ts

@@ -20,7 +20,7 @@ Bu darsda siz tafsilotlar sahifasiga oʻtish uchun ilovangizda marshrutlashni yo
 
 <docs-workflow>
 
-<docs-step title="Standart tafsilotlar komponentini yarating">
+<docs-step title="Standart tafsilotlar komponentini yarating {#create-a-default-details-component-}">
 1. Terminaldan `Details`'ni yaratish uchun quyidagi buyruqni kiriting:
 
     ```shell
@@ -31,7 +31,7 @@ Bu darsda siz tafsilotlar sahifasiga oʻtish uchun ilovangizda marshrutlashni yo
 
 </docs-step>
 
-<docs-step title="Ilovaga marshrutlashni qoʻshing">
+<docs-step title="Ilovaga marshrutlashni qoʻshing {#add-routing-to-the-application}">
 1.  `src/app` katalogida `routes.ts` nomli fayl yarating. Bu faylda ilovadagi marshrutlarni aniqlaymiz.
 
 2.  Ilovada marshrutlashni yoqish uchun `main.ts` faylida quyidagi yangilanishlarni kiriting:
@@ -58,7 +58,7 @@ Bu darsda siz tafsilotlar sahifasiga oʻtish uchun ilovangizda marshrutlashni yo
 
 </docs-step>
 
-<docs-step title="Yangi komponentga marshrut qoʻshing">
+<docs-step title="Yangi komponentga marshrut qoʻshing {#add-route-to-new-component}">
 Oldingi qadamda siz shablondagi `<app-home>` komponentiga havolani olib tashladingiz. Bu qadamda oʻsha komponentga yangi marshrut qoʻshasiz.
 
 1. Marshrut yaratish uchun `routes.ts` faylida quyidagi yangilanishlarni bajaring.

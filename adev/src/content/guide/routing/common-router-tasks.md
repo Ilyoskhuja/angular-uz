@@ -17,7 +17,7 @@ Marshrutdan maʼlumot olish uchun:
 
 <docs-workflow>
 
-<docs-step title="`withComponentInputBinding` ni qoʻshing">
+<docs-step title="`withComponentInputBinding` ni qoʻshing {#add-withcomponentinputbinding}">
 
 `provideRouter` metodiga `withComponentInputBinding` imkoniyatini qoʻshing.
 
@@ -27,7 +27,7 @@ providers: [provideRouter(appRoutes, withComponentInputBinding())];
 
 </docs-step>
 
-<docs-step title="Komponentga `input` qoʻshing">
+<docs-step title="Komponentga `input` qoʻshing {#add-an-input-to-the-component}">
 
 Komponentni parametr nomiga mos keladigan `input()` xususiyatiga ega boʻladigan tarzda yangilang.
 
@@ -37,7 +37,7 @@ hero = computed(() => this.service.getHero(this.id()));
 ```
 
 </docs-step>
-<docs-step title="Ixtiyoriy: Sukut boʻyicha qiymatdan foydalaning">
+<docs-step title="Ixtiyoriy: Sukut boʻyicha qiymatdan foydalaning {#optional-use-a-default-value}">
 `withComponentInputBinding` yoqilganda router joriy marshrutga asoslanib barcha input'larga qiymat tayinlaydi.
 Agar input kalitiga mos marshrut maʼlumoti boʻlmasa, masalan, ixtiyoriy soʻrov parametri yoʻq boʻlsa, router `undefined` tayinlaydi.
 Input marshrutga mos kelmasligi ehtimoli boʻlganda `input` turiga `undefined` ni kiritishingiz kerak.

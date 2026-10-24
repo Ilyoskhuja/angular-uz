@@ -14,7 +14,7 @@ Bu misolda ikkita komponent bor: `User` va `App`.
 
 <docs-workflow>
 
-<docs-step title="`User`'ga murojaat qoʻshing">
+<docs-step title="`User`'ga murojaat qoʻshing {#add-a-reference-to-user}">
 `App` shablonini `app-user` selektoridan foydalanadigan `User`'ga murojaat qoʻshib yangilang. `User`'ni `App`'ning imports massiviga qoʻshishni unutmang — bu uni `App` shablonida foydalanish uchun mavjud qiladi.
 
 ```angular-html
@@ -24,7 +24,7 @@ template: `<app-user />`, imports: [User]
 Endi komponent `Username: youngTech` xabarini koʻrsatadi. Shablon kodini koʻproq markup qoʻshish uchun yangilashingiz mumkin.
 </docs-step>
 
-<docs-step title="Koʻproq markup qoʻshing">
+<docs-step title="Koʻproq markup qoʻshing {#add-more-markup}">
 Shablonda istalgan HTML markup'dan foydalanishingiz mumkin boʻlgani uchun, `App` shablonini yana koʻproq HTML elementlar qoʻshib yangilab koʻring. Bu misolda `<app-user>` elementining otasi sifatida `<section>` elementi qoʻshiladi.
 
 ```angular-html

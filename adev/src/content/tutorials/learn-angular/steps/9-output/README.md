@@ -38,11 +38,11 @@ Xoʻsh, endi oʻzingiz sinab koʻring. Quyidagi vazifalarni bajarib, kodni toʻl
 
 <docs-workflow>
 
-<docs-step title="`output()` xususiyatini qoʻshing">
+<docs-step title="`output()` xususiyatini qoʻshing {#add-an-output-property}">
 `child.ts`'ni `addItemEvent` nomli output xususiyati qoʻshib yangilang, output turini `string` qilib belgilashni unutmang.
 </docs-step>
 
-<docs-step title="`addItem` metodini toʻldiring">
+<docs-step title="`addItem` metodini toʻldiring {#complete-additem-method}">
 `child.ts`'da `addItem` metodini yangilang; logika sifatida quyidagi koddan foydalaning:
 
 ```ts {header:"child.ts", highlight:[2]}
@@ -53,7 +53,7 @@ addItem() {
 
 </docs-step>
 
-<docs-step title="`App` shablonini yangilang">
+<docs-step title="`App` shablonini yangilang {#update-the-app-template}">
 `app.ts`'da shablonni quyidagi kodni qoʻshib, chiqarilgan (emit qilingan) hodisani tinglaydigan qilib yangilang:
 
 ```angular-html

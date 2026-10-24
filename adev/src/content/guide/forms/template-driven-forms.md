@@ -244,23 +244,23 @@ Boshqaruv elementi holatini tekshirib, unga javob berish orqali foydali xabar ta
 Kerak boʻlganda xato xabarini aniqlash va koʻrsatish uchun quyidagi qadamlarni bajaring.
 
 <docs-workflow>
-<docs-step title="Input'ga lokal murojaat qoʻshing">
+<docs-step title="Input'ga lokal murojaat qoʻshing {#add-a-local-reference-to-the-input}">
 `input` tegini shablon ichidan input katakchasining Angular boshqaruv elementiga murojaat qilish uchun ishlatishingiz mumkin boʻlgan shablon murojaat oʻzgaruvchisi bilan kengaytiring. Misolda oʻzgaruvchi `#name="ngModel"`.
 
 Shablon murojaat oʻzgaruvchisi (`#name`) `"ngModel"` qiymatiga oʻrnatiladi, chunki bu [`NgModel.exportAs`](api/core/Directive#exportAs) xususiyatining qiymati. Bu xususiyat Angular'ga murojaat oʻzgaruvchisini direktivaga qanday bogʻlashni aytadi.
 </docs-step>
 
-<docs-step title="Xato xabarini qoʻshing">
+<docs-step title="Xato xabarini qoʻshing {#add-the-error-message}">
 Mos xato xabarini oʻz ichiga olgan `<div>` qoʻshing.
 </docs-step>
 
-<docs-step title="Xato xabarini shartli qiling">
+<docs-step title="Xato xabarini shartli qiling {#make-the-error-message-conditional}">
 `name` boshqaruv elementining xususiyatlarini xabar `<div>` elementining `hidden` xususiyatiga bogʻlash orqali xato xabarini koʻrsating yoki yashiring.
 </docs-step>
 
 <docs-code header="actor-form.component.html (hidden-error-msg)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="hidden-error-msg"/>
 
-<docs-step title="name'ga shartli xato xabarini qoʻshing">
+<docs-step title="name'ga shartli xato xabarini qoʻshing {#add-a-conditional-error-message-to-name}">
 Quyidagi misoldagidek, `name` input katakchasiga shartli xato xabarini qoʻshing.
 
 <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="name-with-error-msg"/>
@@ -320,13 +320,13 @@ Bu hodisaga javob berish uchun quyidagi qadamlarni bajaring.
 
 <docs-workflow>
 
-<docs-step title="ngOnSubmit'ni tinglang">
+<docs-step title="ngOnSubmit'ni tinglang {#listen-to-ngonsubmit}">
 Formaning [`ngSubmit`](api/forms/NgForm#ngSubmit) hodisa xususiyatini aktyor formasi komponentining `onSubmit()` metodiga bogʻlang.
 
 <docs-code header="actor-form.component.html (ngSubmit)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngSubmit"/>
 </docs-step>
 
-<docs-step title="disabled xususiyatini bogʻlang">
+<docs-step title="disabled xususiyatini bogʻlang {#bind-the-disabled-property}">
 **Submit** tugmasini oʻz ichiga olgan formaga murojaat qilish va hodisa bogʻlashini yaratish uchun `#actorForm` shablon murojaat oʻzgaruvchisidan foydalaning.
 
 Formaning umumiy validligini bildiruvchi xususiyatini **Submit** tugmasining `disabled` xususiyatiga bogʻlaysiz.
@@ -334,11 +334,11 @@ Formaning umumiy validligini bildiruvchi xususiyatini **Submit** tugmasining `di
 <docs-code header="actor-form.component.html (submit-button)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="submit-button"/>
 </docs-step>
 
-<docs-step title="Ilovani ishga tushiring">
+<docs-step title="Ilovani ishga tushiring {#run-the-application}">
 Tugma yoqilganiga eʼtibor bering — garchi u hali foydali hech narsa qilmasa ham.
 </docs-step>
 
-<docs-step title="Name qiymatini oʻchiring">
+<docs-step title="Name qiymatini oʻchiring {#delete-the-name-value}">
 Bu "required" qoidasini buzadi, shuning uchun xato xabari koʻrsatiladi — va bu **Submit** tugmasini ham oʻchirib qoʻyishiga eʼtibor bering.
 
 Tugmaning yoqilganlik holatini formaning validligiga qoʻlda bogʻlashingiz shart emas edi.
@@ -351,7 +351,7 @@ Tugmaning yoqilganlik holatini formaning validligiga qoʻlda bogʻlashingiz shar
 Forma yuborilishiga javobni koʻrsatish uchun maʼlumot kiritish hududini yashirib, uning oʻrniga boshqa narsa koʻrsatishingiz mumkin.
 
 <docs-workflow>
-<docs-step title="Formani oʻrang">
+<docs-step title="Formani oʻrang {#wrap-the-form}">
 Butun formani `<div>` ichiga oʻrang va uning `hidden` xususiyatini `ActorFormComponent.submitted` xususiyatiga bogʻlang.
 
 <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="edit-div"/>
@@ -363,7 +363,7 @@ Asosiy forma boshidan koʻrinadi, chunki `ActorFormComponent`'dan olingan ushbu 
 **Submit** tugmasini bosganingizda `submitted` bayrogʻi true boʻladi va forma yoʻqoladi.
 </docs-step>
 
-<docs-step title="Yuborilgan holatni qoʻshing">
+<docs-step title="Yuborilgan holatni qoʻshing {#add-the-submitted-state}">
 Forma yuborilgan holatda boʻlganida boshqa narsa koʻrsatish uchun yangi `<div>` oʻrami ostiga quyidagi HTML'ni qoʻshing.
 
 <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="submitted"/>
@@ -373,7 +373,7 @@ Interpolyatsiya bogʻlashlari bilan faqat oʻqish uchun aktyorni koʻrsatuvchi b
 Muqobil koʻrinishda bosish hodisasi `submitted` bayrogʻini tozalaydigan ifodaga bogʻlangan _Edit_ tugmasi bor.
 </docs-step>
 
-<docs-step title="Edit tugmasini sinab koʻring">
+<docs-step title="Edit tugmasini sinab koʻring {#test-the-edit-button}">
 Koʻrinishni tahrirlanadigan formaga qaytarish uchun *Edit* tugmasini bosing.
 </docs-step>
 </docs-workflow>

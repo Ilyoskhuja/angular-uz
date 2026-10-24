@@ -15,7 +15,7 @@ IMPORTANT: Darslikning bu qadami uchun lokal muhitingizdan foydalanishni tavsiya
 
 <docs-workflow>
 
-<docs-step title="Home komponenti xususiyatlarini yangilang">
+<docs-step title="Home komponenti xususiyatlarini yangilang {#update-the-home-component-properties}">
 Bu qadamda siz `Home` klassini filtrlash uchun ishlatadigan yangi massiv xususiyatida maʼlumotlarni saqlaydigan qilib yangilaysiz.
 
 1. `src/app/home/home.ts` faylida klassga `filteredLocationList` nomli yangi xususiyat qoʻshing.
@@ -30,7 +30,7 @@ Bu qadamda siz `Home` klassini filtrlash uchun ishlatadigan yangi massiv xususiy
 
 </docs-step>
 
-<docs-step title="Home komponenti shablonini yangilang">
+<docs-step title="Home komponenti shablonini yangilang {#update-the-home-component-template}">
 `Home` allaqachon foydalanuvchi kiritgan maʼlumotni olish uchun ishlatadigan input maydonini oʻz ichiga oladi. Bu satr matni natijalarni filtrlash uchun ishlatiladi.
 
 1. `Home` shablonini `input` elementida `#filter` nomli shablon oʻzgaruvchisini oʻz ichiga oladigan qilib yangilang.
@@ -50,7 +50,7 @@ Bu qadamda siz `Home` klassini filtrlash uchun ishlatadigan yangi massiv xususiy
 
 </docs-step>
 
-<docs-step title="Hodisa ishlov beruvchi funksiyasini amalga oshiring">
+<docs-step title="Hodisa ishlov beruvchi funksiyasini amalga oshiring {#implement-the-event-handler-function}">
 Shablon `filterResults` funksiyasini `click` hodisasiga bogʻlaydigan qilib yangilandi. Keyingi vazifangiz — `Home` klassida `filterResults` funksiyasini amalga oshirish.
 
 1.  `Home` klassini `filterResults` funksiyasining implementatsiyasini oʻz ichiga oladigan qilib yangilang.

@@ -19,7 +19,7 @@ Batafsilroq tushuntirish uchun [Xususiyat bogʻlash](/guide/templates/binding#bi
 
 <docs-workflow>
 
-<docs-step title="`Home` shablonini yangilang">
+<docs-step title="`Home` shablonini yangilang {#update-the-home-template}">
 Bu qadam `<app-housing-location>` tegiga xususiyat bogʻlashni qoʻshadi.
 
 Kod muharririda:
@@ -34,7 +34,7 @@ Kod muharririda:
 
 </docs-step>
 
-<docs-step title="Kod hali ham ishlashini tasdiqlang">
+<docs-step title="Kod hali ham ishlashini tasdiqlang {#confirm-the-code-still-works}">
 1.  Oʻzgarishlaringizni saqlang va ilovada hech qanday xato yoʻqligini tasdiqlang.
 1.  Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
 </docs-step>

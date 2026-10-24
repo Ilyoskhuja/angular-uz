@@ -17,7 +17,7 @@ IMPORTANT: Darslikning bu qadami uchun lokal muhitingizdan foydalanishni tavsiya
 
 <docs-workflow>
 
-<docs-step title="Forma maʼlumotlarini yuborish uchun metod qoʻshing">
+<docs-step title="Forma maʼlumotlarini yuborish uchun metod qoʻshing {#add-a-method-to-send-form-data}">
 Bu qadam ilovangiz servisiga forma maʼlumotlarini qabul qilib, ularni maʼlumotlar manziliga yuboradigan metod qoʻshadi.
 Bu misolda metod formadagi maʼlumotlarni brauzer konsoli jurnaliga yozadi.
 
@@ -31,7 +31,7 @@ IDE'ingizning **Edit** panelida:
     Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
     </docs-step>
 
-<docs-step title="Tafsilotlar sahifasiga forma funksiyalarini qoʻshing">
+<docs-step title="Tafsilotlar sahifasiga forma funksiyalarini qoʻshing {#add-the-form-functions-to-the-details-page}">
 Bu qadam tafsilotlar sahifasiga forma bilan oʻzaro aloqalarni boshqaradigan kodni qoʻshadi.
 
 IDE'ingizning **Edit** panelida, `src/app/details/details.ts` faylida:
@@ -60,7 +60,7 @@ IDE'ingizning **Edit** panelida, `src/app/details/details.ts` faylida:
     Keyingi qadamga oʻtishdan oldin barcha xatolarni tuzating.
     </docs-step>
 
-<docs-step title="Tafsilotlar sahifasiga forma markup'ini qoʻshing">
+<docs-step title="Tafsilotlar sahifasiga forma markup'ini qoʻshing {#add-the-forms-markup-to-the-details-page}">
 Bu qadam tafsilotlar sahifasiga formani koʻrsatadigan markup'ni qoʻshadi.
 
 IDE'ingizning **Edit** panelida, `src/app/details/details.ts` faylida:
@@ -78,7 +78,7 @@ IDE'ingizning **Edit** panelida, `src/app/details/details.ts` faylida:
 
 </docs-step>
 
-<docs-step title="Ilovangizning yangi formasini sinab koʻring">
+<docs-step title="Ilovangizning yangi formasini sinab koʻring {#test-your-apps-new-form}">
 Bu qadam yangi formani sinab, forma maʼlumotlari ilovaga yuborilganda ular konsol jurnalida paydo boʻlishini tekshiradi.
 
 1. IDE'ingizning **Terminal** panelida, agar hali ishlamayotgan boʻlsa, `ng serve`'ni ishga tushiring.

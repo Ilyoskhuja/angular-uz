@@ -35,16 +35,16 @@ Eʼtibor berish kerak boʻlgan ikki narsa:
 
 <docs-workflow>
 
-<docs-step title="`isServerRunning` nomli xususiyat yarating">
+<docs-step title="`isServerRunning` nomli xususiyat yarating {#create-a-property-called-isserverrunning}">
 `App` klassiga `isServerRunning` nomli `boolean` xususiyat qoʻshing va boshlangʻich qiymatini `true` qilib belgilang.
 </docs-step>
 
-<docs-step title="Shablonda `@if`'dan foydalaning">
+<docs-step title="Shablonda `@if`'dan foydalaning {#use-if-in-the-template}">
 `isServerRunning` qiymati `true` boʻlsa, `Yes, the server is running` xabarini koʻrsatadigan qilib shablonni yangilang.
 
 </docs-step>
 
-<docs-step title="Shablonda `@else`'dan foydalaning">
+<docs-step title="Shablonda `@else`'dan foydalaning {#use-else-in-the-template}">
 Endi Angular else holatini aniqlash uchun `@else` sintaksisi bilan tabiiy (native) shablon sintaksisini qoʻllab-quvvatlaydi. Shablonni else holati sifatida `No, the server is not running` xabarini koʻrsatadigan qilib yangilang.
 
 Misol:

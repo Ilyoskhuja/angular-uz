@@ -12,7 +12,7 @@ Bu mashgʻulotda shablonga asoslangan yondashuv yordamida formani qanday sozlash
 
 <docs-workflow>
 
-<docs-step title="Kiritish maydonini yarating">
+<docs-step title="Kiritish maydonini yarating {#create-an-input-field}">
 
 `user.ts` faylida shablonni `id` qiymati `framework`, turi `text` boʻlgan matn kiritish maydonini qoʻshish orqali yangilang.
 
@@ -25,7 +25,7 @@ Bu mashgʻulotda shablonga asoslangan yondashuv yordamida formani qanday sozlash
 
 </docs-step>
 
-<docs-step title="`FormsModule`'ni import qiling">
+<docs-step title="`FormsModule`'ni import qiling {#import-formsmodule}">
 
 Bu forma formalarga maʼlumotlarni bogʻlash imkonini beruvchi Angular xususiyatlaridan foydalanishi uchun `FormsModule`'ni import qilishingiz kerak boʻladi.
 
@@ -44,7 +44,7 @@ export class User {}
 
 </docs-step>
 
-<docs-step title="Input qiymatiga bogʻlash qoʻshing">
+<docs-step title="Input qiymatiga bogʻlash qoʻshing {#add-binding-to-the-value-of-the-input}">
 
 `FormsModule`'da `ngModel` deb nomlangan direktiva bor, u input qiymatini klassingizdagi xususiyatga bogʻlaydi.
 

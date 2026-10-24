@@ -28,7 +28,7 @@ Angular'da komponentlar oʻz xususiyatlarini belgilovchi metamaʼlumotlarga ega.
 
 <docs-workflow>
 
-<docs-step title="`Home` komponentini yarating">
+<docs-step title="`Home` komponentini yarating {#create-the-home}">
 Bu qadamda ilovangiz uchun yangi komponent yaratasiz.
 
 IDE'ingizning **Terminal** panelida:
@@ -57,7 +57,7 @@ IDE'ingizning **Terminal** panelida:
 1. Keyingi qadamlarni bajarayotganingizda `ng serve`'ni ishlab turgan holda qoldiring.
    </docs-step>
 
-<docs-step title="Yangi komponentni ilovangiz joylashuviga qoʻshing">
+<docs-step title="Yangi komponentni ilovangiz joylashuviga qoʻshing {#add-the-new-component-to-your-apps-layout}">
 Bu qadamda yangi `Home` komponentini ilovangizning asosiy (root) komponenti `App`'ga qoʻshasiz, shunda u ilovangiz joylashuvida koʻrinadi.
 
 IDE'ingizning **Edit** panelida:
@@ -85,7 +85,7 @@ IDE'ingizning **Edit** panelida:
 
 </docs-step>
 
-<docs-step title="`Home` komponentiga imkoniyatlar qoʻshing">
+<docs-step title="`Home` komponentiga imkoniyatlar qoʻshing {#add-features-to-home}">
 
 Bu qadamda `Home` komponentiga imkoniyatlar qoʻshasiz.
 

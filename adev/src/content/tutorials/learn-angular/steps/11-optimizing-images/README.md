@@ -12,7 +12,7 @@ Bu mashgʻulotda rasmlaringiz samarali yuklanishini taʼminlash uchun `NgOptimiz
 
 <docs-workflow>
 
-<docs-step title="NgOptimizedImage direktivasini import qiling">
+<docs-step title="NgOptimizedImage direktivasini import qiling {#import-the-ngoptimizedimage-directive}">
 
 `NgOptimizedImage` direktivasidan foydalanish uchun avval uni `@angular/common` kutubxonasidan import qiling va komponentning `imports` massiviga qoʻshing.
 
@@ -27,7 +27,7 @@ import { NgOptimizedImage } from '@angular/common';
 
 </docs-step>
 
-<docs-step title="src atributini ngSrc'ga oʻzgartiring">
+<docs-step title="src atributini ngSrc'ga oʻzgartiring {#update-the-src-attribute-to-be-ngsrc}">
 
 `NgOptimizedImage` direktivasini yoqish uchun `src` atributini `ngSrc`'ga almashtiring. Bu statik rasm manbalariga (yaʼni `src`) ham, dinamik rasm manbalariga (yaʼni `[src]`) ham tegishli.
 
@@ -52,7 +52,7 @@ imports: [NgOptimizedImage],
 
 </docs-step>
 
-<docs-step title="width va height atributlarini qoʻshing">
+<docs-step title="width va height atributlarini qoʻshing {#add-width-and-height-attributes}">
 
 Yuqoridagi kod misolida har bir rasmda `width` va `height` atributlarining ikkalasi ham borligiga eʼtibor bering. [Layout shift](https://web.dev/articles/cls) yuz berishining oldini olish uchun `NgOptimizedImage` direktivasi har bir rasmda ikkala oʻlcham atributini talab qiladi.
 
@@ -69,7 +69,7 @@ NOTE: `fill` rasmi toʻgʻri render qilinishi uchun uning ota elementi `position
 
 </docs-step>
 
-<docs-step title="Muhim rasmlarga ustuvorlik bering">
+<docs-step title="Muhim rasmlarga ustuvorlik bering {#prioritize-important-images}">
 
 Yuklash unumdorligi uchun eng muhim optimallashtirishlardan biri — ["LCP element"](https://web.dev/articles/optimize-lcp) boʻlishi mumkin boʻlgan har qanday rasmga ustuvorlik berish; LCP element — sahifa yuklanganda ekrandagi eng katta grafik element. Yuklash vaqtlarini optimallashtirish uchun "hero image"ingizga yoki LCP element boʻlishi mumkin deb hisoblagan boshqa rasmlarga `priority` atributini qoʻshishni unutmang.
 
@@ -79,7 +79,7 @@ Yuklash unumdorligi uchun eng muhim optimallashtirishlardan biri — ["LCP eleme
 
 </docs-step>
 
-<docs-step title="Ixtiyoriy: rasm yuklovchisidan (image loader) foydalaning">
+<docs-step title="Ixtiyoriy: rasm yuklovchisidan (image loader) foydalaning {#optional-use-an-image-loader}">
 
 `NgOptimizedImage` [rasm yuklovchisini](guide/image-optimization#configuring-an-image-loader-for-ngoptimizedimage) koʻrsatish imkonini beradi; u direktivaga rasmlaringiz uchun URL'larni qanday formatlashni aytadi. Yuklovchidan foydalanish rasmlaringizni qisqa, nisbiy URL'lar bilan aniqlash imkonini beradi:
 

@@ -20,14 +20,14 @@ Koʻproq maʼlumotni [Input xususiyatlari bilan maʼlumot qabul qilish](guide/co
 
 <docs-workflow>
 
-<docs-step title="input() funksiyasini import qiling">
+<docs-step title="input() funksiyasini import qiling {#import-the-input-function}">
 Kod muharririda `@angular/core`'dan `input` yordamchi metodini va `../housinglocation`'dan `HousingLocationInfo` interfeysini `HousingLocation` komponentiga import qiling.
 
 <docs-code header="housing-location.ts faylida input va HousingLocationInfo'ni import qiling" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/housing-location/housing-location.ts" visibleLines="[1,2]"/>
 
 </docs-step>
 
-<docs-step title="Input xususiyatini qoʻshing">
+<docs-step title="Input xususiyatini qoʻshing {#add-the-input-property}">
 `housingLocation` nomli majburiy xususiyat qoʻshing va uni `HousingLocationInfo` turi bilan `input.required()` orqali boshlangʻich qiymat bilan taʼminlang.
 
   <docs-code header="housing-location.ts faylida input xususiyatini eʼlon qiling" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/housing-location/housing-location.ts" visibleLines="[10]"/>
@@ -36,7 +36,7 @@ Ota komponent qiymat berishi shart ekanini bildirish uchun `input` ustida `requi
 
 </docs-step>
 
-<docs-step title="Input'ga maʼlumot uzating">
+<docs-step title="Input'ga maʼlumot uzating {#pass-data-to-the-input}">
 `housingLocation` qiymatini `Home` komponentidan HousingLocation komponentining `housingLocation` xususiyatiga yuboring.
 
 <docs-code language="angular-ts" header="home.ts faylida HousingLocation uchun input xususiyatini eʼlon qiling" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/home/home.ts" visibleLines="[16]"/>

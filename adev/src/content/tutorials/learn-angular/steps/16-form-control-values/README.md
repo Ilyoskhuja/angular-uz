@@ -10,7 +10,7 @@ Bu mashgʻulotda forma inputingizdan qiymatni qanday olishni oʻrganasiz.
 
 <docs-workflow>
 
-<docs-step title="Kiritish maydonining qiymatini shablonda koʻrsating">
+<docs-step title="Kiritish maydonining qiymatini shablonda koʻrsating {#show-the-value-of-the-input-field-in-the-template}">
 
 Input qiymatini shablonda koʻrsatish uchun komponentning boshqa har qanday klass xususiyati kabi `{{}}` interpolyatsiya sintaksisidan foydalanishingiz mumkin:
 
@@ -33,7 +33,7 @@ export class User {
 
 </docs-step>
 
-<docs-step title="Kiritish maydonining qiymatini oling">
+<docs-step title="Kiritish maydonining qiymatini oling {#retrieve-the-value-of-an-input-field}">
 
 Komponent klassida kiritish maydoni qiymatiga murojaat qilish kerak boʻlganda, buni `this` sintaksisi orqali klass xususiyatiga murojaat qilish yoʻli bilan amalga oshirishingiz mumkin.
 

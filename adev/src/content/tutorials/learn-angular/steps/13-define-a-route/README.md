@@ -10,7 +10,7 @@ Bu mashgʻulotda ilovangizga marshrutlarni qanday qoʻshish va sozlashni oʻrgan
 
 <docs-workflow>
 
-<docs-step title="`app.routes.ts` faylida marshrutni aniqlang">
+<docs-step title="`app.routes.ts` faylida marshrutni aniqlang {#define-a-route-in-approutests}">
 
 Ilovangizda koʻrsatish uchun ikkita sahifa bor: (1) Bosh sahifa (Home Page) va (2) Foydalanuvchi sahifasi (User Page).
 
@@ -37,7 +37,7 @@ Yuqoridagi kod `Home` komponentini marshrut sifatida qanday qoʻshish mumkinligi
 
 </docs-step>
 
-<docs-step title="Marshrut taʼrifiga sarlavha qoʻshing">
+<docs-step title="Marshrut taʼrifiga sarlavha qoʻshing {#add-title-to-route-definition}">
 
 Marshrutlarni toʻgʻri aniqlashdan tashqari, Angular Router har bir marshrutga `title` xususiyatini qoʻshish orqali foydalanuvchilar navigatsiya qilayotganda sahifa sarlavhasini oʻrnatish imkonini ham beradi.
 

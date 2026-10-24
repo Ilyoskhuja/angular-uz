@@ -32,7 +32,7 @@ Xoʻsh, endi oʻzingiz sinab koʻrish navbati — `ReversePipe`'ni yaratasiz:
 
 <docs-workflow>
 
-<docs-step title="`ReversePipe`'ni yarating">
+<docs-step title="`ReversePipe`'ni yarating {#create-the-reversepipe}">
 
 `reverse.pipe.ts` faylida `ReversePipe` klassiga `@Pipe` dekoratorini qoʻshing va quyidagi konfiguratsiyani bering:
 
@@ -44,7 +44,7 @@ Xoʻsh, endi oʻzingiz sinab koʻrish navbati — `ReversePipe`'ni yaratasiz:
 
 </docs-step>
 
-<docs-step title="`transform` funksiyasini amalga oshiring">
+<docs-step title="`transform` funksiyasini amalga oshiring {#implement-the-transform-function}">
 
 Endi `ReversePipe` klassi pipe boʻldi. Teskari aylantirish mantiqini qoʻshish uchun `transform` funksiyasini yangilang:
 
@@ -64,7 +64,7 @@ export class ReversePipe implements PipeTransform {
 
 </docs-step>
 
-<docs-step title="Shablonda `ReversePipe`'dan foydalaning">
+<docs-step title="Shablonda `ReversePipe`'dan foydalaning {#use-the-reversepipe-in-the-template}">
 Pipe mantiqi amalga oshirilgach, oxirgi qadam — uni shablonda ishlatish. `app.ts` faylida pipe'ni shablonga kiriting va uni komponent importlariga qoʻshing:
 
 ```angular-ts {highlight:[3,4]}

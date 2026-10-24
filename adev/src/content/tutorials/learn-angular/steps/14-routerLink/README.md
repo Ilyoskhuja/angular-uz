@@ -10,7 +10,7 @@ Bu mashgʻulotda Angular Router'dan toʻliq foydalanish uchun `RouterLink` direk
 
 <docs-workflow>
 
-<docs-step title="`RouterLink` direktivasini import qiling">
+<docs-step title="`RouterLink` direktivasini import qiling {#import-routerlink-directive}">
 
 `app.ts` faylida `@angular/router`'dan mavjud import ifodasiga `RouterLink` direktivasi importini qoʻshing va uni komponent dekoratoringizning `imports` massiviga qoʻshing.
 
@@ -26,7 +26,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 
 </docs-step>
 
-<docs-step title="Shablonga `routerLink` qoʻshing">
+<docs-step title="Shablonga `routerLink` qoʻshing {#add-a-routerlink-to-template}">
 
 `RouterLink` direktivasidan foydalanish uchun `href` atributlarini `routerLink` bilan almashtiring. Shablonni shu oʻzgarish bilan yangilang.
 

@@ -42,7 +42,7 @@ Bu qadamlarni ushbu darslik uchun ishlatmoqchi boʻlgan kompyuteringizdagi buyru
 
 <docs-workflow>
 
-<docs-step title="Angular talab qiladigan `node.js` versiyasini aniqlang">
+<docs-step title="Angular talab qiladigan `node.js` versiyasini aniqlang {#identify-the-version-of-nodejs-that-angular-requires}">
 Angular Node'ning faol LTS yoki texnik xizmat koʻrsatiladigan (maintenance) LTS versiyasini talab qiladi. Keling, `node.js` versiyangizni tekshiramiz. Muayyan versiya talablari haqida maʼlumot olish uchun [package.json faylidagi](https://unpkg.com/browse/@angular/core@15.1.5/package.json) engines xususiyatiga qarang.
 
 **Terminal** oynasida:
@@ -51,17 +51,17 @@ Angular Node'ning faol LTS yoki texnik xizmat koʻrsatiladigan (maintenance) LTS
 1. Koʻrsatilgan versiya raqami talablarga javob berishini tasdiqlang.
    </docs-step>
 
-<docs-step title="Angular uchun `node.js`'ning toʻgʻri versiyasini oʻrnating">
+<docs-step title="Angular uchun `node.js`'ning toʻgʻri versiyasini oʻrnating {#install-the-correct-version-of-nodejs-for-angular}">
 Agar sizda `node.js` versiyasi oʻrnatilmagan boʻlsa, [nodejs.org'dagi oʻrnatish koʻrsatmalariga](https://nodejs.org/en/download/) amal qiling
 </docs-step>
 
-<docs-step title="Angular'ning soʻnggi versiyasini oʻrnating">
+<docs-step title="Angular'ning soʻnggi versiyasini oʻrnating {#install-the-latest-version-of-angular}">
 `node.js` va `npm` oʻrnatilgach, keyingi qadam — samarali Angular dasturlash uchun vositalar taqdim etuvchi [Angular CLI](tools/cli)'ni oʻrnatish.
 
 **Terminal** oynasida quyidagi buyruqni bajaring: `npm install -g @angular/cli`.
 </docs-step>
 
-<docs-step title="Integratsiyalashgan dasturlash muhitini (IDE) oʻrnating">
+<docs-step title="Integratsiyalashgan dasturlash muhitini (IDE) oʻrnating {#install-integrated-development-environment-ide}">
 Angular bilan ilova yaratish uchun oʻzingizga qulay istalgan vositadan foydalanishingiz mumkin. Biz quyidagilarni tavsiya qilamiz:
 
 1. [Visual Studio Code](https://code.visualstudio.com/)
@@ -69,7 +69,7 @@ Angular bilan ilova yaratish uchun oʻzingizga qulay istalgan vositadan foydalan
 3. [WebStorm](https://www.jetbrains.com/webstorm/)
    </docs-step>
 
-<docs-step title="Ixtiyoriy: AI yordamchili IDE'ingizni sozlang">
+<docs-step title="Ixtiyoriy: AI yordamchili IDE'ingizni sozlang {#optional-set-up-your-ai-powered-ide}">
 
 Agar bu darslikni oʻzingiz afzal koʻrgan AI yordamchili IDE'da oʻtayotgan boʻlsangiz, [Angular prompt qoidalari va eng yaxshi amaliyotlari bilan tanishing](/ai/develop-with-ai).
 

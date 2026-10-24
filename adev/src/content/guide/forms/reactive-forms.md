@@ -33,19 +33,19 @@ Misolda foydalanuvchi oʻz ismini input maydoniga kiritadi, bu input qiymati oli
 
 <docs-workflow>
 
-<docs-step title="Yangi komponent yarating va ReactiveFormsModule'ni import qiling">
+<docs-step title="Yangi komponent yarating va ReactiveFormsModule'ni import qiling {#generate-a-new-component-and-import-the-reactiveformsmodule}">
 Loyihangizda komponent yaratish uchun CLI'ning `ng generate component` buyrugʻidan foydalaning, `@angular/forms` paketidan `ReactiveFormsModule` ni import qiling va uni komponentingizning `imports` massiviga qoʻshing.
 
 <docs-code header="name-editor.component.ts (excerpt)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="imports" />
 </docs-step>
 
-<docs-step title="FormControl nusxasini eʼlon qiling">
+<docs-step title="FormControl nusxasini eʼlon qiling {#declare-a-formcontrol-instance}">
 Boshlangʻich qiymatini, bu holatda boʻsh satrni, oʻrnatish uchun `FormControl` konstruktoridan foydalaning. Bu boshqaruv elementlarini komponent klassingizda yaratish orqali siz forma input'ining holatini tinglash, yangilash va validatsiya qilish imkoniga darhol ega boʻlasiz.
 
 <docs-code header="name-editor.component.ts" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="create-control"/>
 </docs-step>
 
-<docs-step title="Boshqaruv elementini shablonda roʻyxatdan oʻtkazing">
+<docs-step title="Boshqaruv elementini shablonda roʻyxatdan oʻtkazing {#register-the-control-in-the-template}">
 Boshqaruv elementini komponent klassida yaratganingizdan soʻng, uni shablondagi forma boshqaruv elementi bilan bogʻlashingiz kerak. `FormControlDirective` tomonidan taqdim etiladigan va `ReactiveFormsModule` ga ham kiritilgan `formControl` bogʻlashidan foydalanib, shablonni forma boshqaruv elementi bilan yangilang.
 
 <docs-code header="name-editor.component.html" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" region="control-binding" />
@@ -53,7 +53,7 @@ Boshqaruv elementini komponent klassida yaratganingizdan soʻng, uni shablondagi
 Shablon bogʻlash sintaksisidan foydalanib, forma boshqaruv elementi endi shablondagi `name` input elementida roʻyxatdan oʻtkazildi. Forma boshqaruv elementi va DOM elementi bir-biri bilan muloqot qiladi: view modeldagi oʻzgarishlarni aks ettiradi, model esa view'dagi oʻzgarishlarni aks ettiradi.
 </docs-step>
 
-<docs-step title="Komponentni koʻrsating">
+<docs-step title="Komponentni koʻrsating {#display-the-component}">
 `name` xususiyatiga biriktirilgan `FormControl` `<app-name-editor>` komponenti shablonga qoʻshilganda koʻrsatiladi.
 
 <docs-code header="app.component.html (name editor)" path="adev/src/content/examples/reactive-forms/src/app/app.component.1.html" region="app-name-editor"/>
@@ -128,7 +128,7 @@ Bu komponentga forma guruhini qoʻshish uchun quyidagi qadamlarni bajaring.
 
 <docs-workflow>
 
-<docs-step title="FormGroup nusxasini yarating">
+<docs-step title="FormGroup nusxasini yarating {#create-a-formgroup-instance}">
 Komponent klassida `profileForm` nomli xususiyat yarating va bu xususiyatga yangi forma guruhi nusxasini oʻrnating. Forma guruhini ishga tushirish uchun konstruktorga nomlangan kalitlari oʻz boshqaruv elementlariga moslashtirilgan obyektni bering.
 
 Profil formasi uchun `firstName` va `lastName` nomli ikkita forma boshqaruv elementi nusxasini qoʻshing
@@ -138,7 +138,7 @@ Profil formasi uchun `firstName` va `lastName` nomli ikkita forma boshqaruv elem
 Alohida forma boshqaruv elementlari endi guruh ichida jamlangan. `FormGroup` nusxasi oʻz model qiymatini guruhdagi har bir boshqaruv elementi qiymatlaridan yigʻilgan obyekt sifatida taqdim etadi. Forma guruhi nusxasi forma boshqaruv elementi nusxasi bilan bir xil xususiyatlarga (masalan, `value` va `untouched`) va metodlarga (masalan, `setValue()`) ega.
 </docs-step>
 
-<docs-step title="FormGroup modelini va view'ni bogʻlang">
+<docs-step title="FormGroup modelini va view'ni bogʻlang {#associate-the-formgroup-model-and-view}">
 Forma guruhi oʻzining har bir boshqaruv elementining holati va oʻzgarishlarini kuzatib boradi, shuning uchun boshqaruv elementlaridan biri oʻzgarsa, ota boshqaruv elementi ham yangi holat yoki qiymat oʻzgarishini chiqaradi. Guruh modeli uning aʼzolaridan tashkil topadi. Modelni belgilaganingizdan soʻng, modelni view'da aks ettirish uchun shablonni yangilashingiz kerak.
 
 <docs-code header="profile-editor.component.html (template form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" region="formgroup"/>
@@ -146,7 +146,7 @@ Forma guruhi oʻzining har bir boshqaruv elementining holati va oʻzgarishlarini
 Forma guruhi boshqaruv elementlari guruhini oʻz ichiga olgani kabi, _profileForm_ `FormGroup` `FormGroup` direktivasi bilan `form` elementiga bogʻlanadi va model bilan input'larni oʻz ichiga olgan forma oʻrtasida muloqot qatlamini yaratadi. `FormControlName` direktivasi tomonidan taqdim etiladigan `formControlName` input'i har bir alohida input'ni `FormGroup` da belgilangan forma boshqaruv elementiga bogʻlaydi. Forma boshqaruv elementlari oʻzlariga tegishli elementlar bilan muloqot qiladi. Ular shuningdek, oʻzgarishlarni model qiymati uchun haqiqat manbai boʻlgan forma guruhi nusxasiga ham yetkazadi.
 </docs-step>
 
-<docs-step title="Forma maʼlumotlarini saqlang">
+<docs-step title="Forma maʼlumotlarini saqlang {#save-form-data}">
 `ProfileEditor` komponenti foydalanuvchidan kiritilgan maʼlumotlarni qabul qiladi, lekin haqiqiy stsenariyda siz forma qiymatini olib, uni komponentdan tashqarida keyingi qayta ishlash uchun taqdim etishni istaysiz. `FormGroup` direktivasi `form` elementi tomonidan chiqariladigan `submit` hodisasini tinglaydi va callback funksiyasiga bogʻlashingiz mumkin boʻlgan `ngSubmit` hodisasini chiqaradi. `form` tegiga `onSubmit()` callback metodi bilan `ngSubmit` hodisa tinglovchisini qoʻshing.
 
 <docs-code header="profile-editor.component.html (submit event)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" region="ng-submit"/>
@@ -190,7 +190,7 @@ Baʼzi maʼlumot turlari tabiiy ravishda bir guruhga tushadi.
 Ism va manzil bunday ichki guruhlarning odatiy misollari boʻlib, quyidagi misollarda ishlatiladi.
 
 <docs-workflow>
-<docs-step title="Ichki guruh yarating">
+<docs-step title="Ichki guruh yarating {#create-a-nested-group}">
 `profileForm` da ichki guruh yaratish uchun forma guruhi nusxasiga ichki `address` elementini qoʻshing.
 
 <docs-code header="profile-editor.component.ts (nested form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="nested-formgroup"/>
@@ -198,7 +198,7 @@ Ism va manzil bunday ichki guruhlarning odatiy misollari boʻlib, quyidagi misol
 Bu misolda `address group` joriy `firstName` va `lastName` boshqaruv elementlarini yangi `street`, `city`, `state` va `zip` boshqaruv elementlari bilan birlashtiradi. Forma guruhidagi `address` elementi forma guruhidagi umumiy `profileForm` elementining bolasi boʻlsa-da, qiymat va holat oʻzgarishlarida bir xil qoidalar amal qiladi. Ichki forma guruhidagi holat va qiymat oʻzgarishlari ota forma guruhiga tarqaladi va umumiy model bilan izchillikni saqlaydi.
 </docs-step>
 
-<docs-step title="Ichki formani shablonda guruhlang">
+<docs-step title="Ichki formani shablonda guruhlang {#group-the-nested-form-in-the-template}">
 Komponent klassida modelni yangilaganingizdan soʻng, forma guruhi nusxasi va uning input elementlarini ulash uchun shablonni yangilang. `street`, `city`, `state` va `zip` maydonlarini oʻz ichiga olgan `address` forma guruhini `ProfileEditor` shabloniga qoʻshing.
 
 <docs-code header="profile-editor.component.html (template nested form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" region="formgroupname"/>
@@ -249,20 +249,20 @@ Bu servisdan foydalanish uchun quyidagi qadamlarni bajaring.
 Quyidagi misollar forma boshqaruv elementi va forma guruhi nusxalarini yaratish uchun form builder servisidan foydalanishga `ProfileEditor` komponentini qanday refaktoring qilishni koʻrsatadi.
 
 <docs-workflow>
-<docs-step title="FormBuilder klassini import qiling">
+<docs-step title="FormBuilder klassini import qiling {#import-the-formbuilder-class}">
 `@angular/forms` paketidan `FormBuilder` klassini import qiling.
 
 <docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-builder-imports"/>
 
 </docs-step>
 
-<docs-step title="FormBuilder servisini inyeksiya qiling">
+<docs-step title="FormBuilder servisini inyeksiya qiling {#inject-the-formbuilder-service}">
 `FormBuilder` servisi reaktiv formalar modulidan inyeksiya qilinadigan provider hisoblanadi. Bu bogʻliqlikni komponentingizga inyeksiya qilish uchun `inject()` funksiyasidan foydalaning.
 
 <docs-code header="profile-editor.component.ts (property init)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="inject-form-builder"/>
 
 </docs-step>
-<docs-step title="Forma boshqaruv elementlarini yarating">
+<docs-step title="Forma boshqaruv elementlarini yarating {#generate-form-controls}">
 `FormBuilder` servisi uchta metodga ega: `control()`, `group()` va `array()`. Bular komponent klasslaringizda forma boshqaruv elementlari, forma guruhlari va forma massivlarini oʻz ichiga olgan nusxalarni yaratish uchun fabrika metodlaridir. `profileForm` boshqaruv elementlarini yaratish uchun `group` metodidan foydalaning.
 
 <docs-code header="profile-editor.component.ts (form builder)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-builder"/>
@@ -295,7 +295,7 @@ Eng keng tarqalgan validatsiya — maydonni majburiy qilish.
 Quyidagi misol `firstName` boshqaruv elementiga majburiylik validatsiyasini qanday qoʻshishni va validatsiya natijasini koʻrsatishni koʻrsatadi.
 
 <docs-workflow>
-<docs-step title="Validator funksiyasini import qiling">
+<docs-step title="Validator funksiyasini import qiling {#import-a-validator-function}">
 Reaktiv formalar keng tarqalgan holatlar uchun validator funksiyalari toʻplamini oʻz ichiga oladi. Bu funksiyalar validatsiya qilinadigan boshqaruv elementini qabul qiladi va validatsiya tekshiruvi asosida xato obyekti yoki null qiymatini qaytaradi.
 
 `@angular/forms` paketidan `Validators` klassini import qiling.
@@ -303,13 +303,13 @@ Reaktiv formalar keng tarqalgan holatlar uchun validator funksiyalari toʻplamin
 <docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="validator-imports"/>
 </docs-step>
 
-<docs-step title="Maydonni majburiy qiling">
+<docs-step title="Maydonni majburiy qiling {#make-a-field-required}">
 `ProfileEditor` komponentida `firstName` boshqaruv elementi uchun massivning ikkinchi elementi sifatida `Validators.required` statik metodini qoʻshing.
 
 <docs-code header="profile-editor.component.ts (required validator)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="required-validator"/>
 </docs-step>
 
-<docs-step title="Forma holatini koʻrsating">
+<docs-step title="Forma holatini koʻrsating {#display-form-status}">
 Forma boshqaruv elementiga majburiy maydon qoʻshganingizda uning boshlangʻich holati yaroqsiz (invalid) boʻladi. Bu yaroqsiz holat ota forma guruhi elementiga tarqaladi va uning holatini ham yaroqsiz qiladi. Forma guruhi nusxasining joriy holatiga uning `status` xususiyati orqali murojaat qiling.
 
 `profileForm` ning joriy holatini interpolyatsiya yordamida koʻrsating.
@@ -338,13 +338,13 @@ Dinamik formani belgilash uchun quyidagi qadamlarni bajaring.
 Quyidagi misol `ProfileEditor` da _taxalluslar_ (aliases) massivini qanday boshqarishni koʻrsatadi.
 
 <docs-workflow>
-<docs-step title="`FormArray` klassini import qiling">
+<docs-step title="`FormArray` klassini import qiling {#import-the-formarray-class}">
 Tip maʼlumoti uchun foydalanish maqsadida `@angular/forms` dan `FormArray` klassini import qiling. `FormBuilder` servisi `FormArray` nusxasini yaratishga tayyor.
 
 <docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-array-imports"/>
 </docs-step>
 
-<docs-step title="`FormArray` boshqaruv elementini belgilang">
+<docs-step title="`FormArray` boshqaruv elementini belgilang {#define-a-formarray-control}">
 Forma massivini massivda belgilash orqali noldan koʻpgacha istalgan sondagi boshqaruv elementlari bilan ishga tushirishingiz mumkin. Forma massivini belgilash uchun `profileForm` forma guruhi nusxasiga `aliases` xususiyatini qoʻshing.
 
 Massivni belgilash uchun `FormBuilder.array()` metodidan, massivni boshlangʻich boshqaruv elementi bilan toʻldirish uchun esa `FormBuilder.control()` metodidan foydalaning.
@@ -354,7 +354,7 @@ Massivni belgilash uchun `FormBuilder.array()` metodidan, massivni boshlangʻich
 Forma guruhi nusxasidagi aliases boshqaruv elementi endi dinamik tarzda koʻproq boshqaruv elementlari qoʻshilmaguncha bitta boshqaruv elementi bilan toʻldirilgan.
 </docs-step>
 
-<docs-step title="`FormArray` boshqaruv elementiga murojaat qiling">
+<docs-step title="`FormArray` boshqaruv elementiga murojaat qiling {#access-the-formarray-control}">
 Har bir nusxani olish uchun `profileForm.get()` metodini takrorlash oʻrniga getter forma massivi nusxasidagi taxalluslarga murojaat qilish imkonini beradi. Forma massivi nusxasi massivdagi noaniq sondagi boshqaruv elementlarini ifodalaydi. Boshqaruv elementiga getter orqali murojaat qilish qulay va bu yondashuvni qoʻshimcha boshqaruv elementlari uchun takrorlash oson. <br />
 
 Ota forma guruhidan taxalluslar forma massivi boshqaruv elementini olish uchun getter sintaksisidan foydalanib `aliases` klass xususiyatini yarating.
@@ -369,7 +369,7 @@ Shablonda har bir boshqaruv elementi alohida input maydoni sifatida koʻrsatilad
 
 </docs-step>
 
-<docs-step title="Forma massivini shablonda koʻrsating">
+<docs-step title="Forma massivini shablonda koʻrsating {#display-the-form-array-in-the-template}">
 
 Forma modelingizdagi taxalluslarni biriktirish uchun ularni shablonga qoʻshishingiz kerak. `FormGroupName` tomonidan taqdim etiladigan `formGroupName` input'iga oʻxshab, `formArrayName` `FormArrayName` yordamida forma massivi nusxasidan shablonga muloqotni bogʻlaydi.
 
@@ -427,7 +427,7 @@ export class FormArrayExampleComponent {
 }
 ```
 
-<docs-step title="Taxallus qoʻshing">
+<docs-step title="Taxallus qoʻshing {#add-an-alias}">
 
 Dastlab forma bitta `Alias` maydonini oʻz ichiga oladi. Yana bir maydon qoʻshish uchun **Add Alias** tugmasini bosing. Shuningdek, shablon pastidagi `Form Value` da koʻrsatilgan forma modeli xabar qilgan taxalluslar massivini ham tekshirishingiz mumkin. Har bir taxallus uchun forma boshqaruv elementi nusxasi oʻrniga qoʻshimcha maydonlarga ega boshqa forma guruhi nusxasini tuzishingiz mumkin. Har bir element uchun boshqaruv elementini belgilash jarayoni bir xil.
 </docs-step>

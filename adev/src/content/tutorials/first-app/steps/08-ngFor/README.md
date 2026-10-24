@@ -21,7 +21,7 @@ Batafsilroq tushuntirish uchun [boshqaruv oqimi](guide/templates/control-flow#re
 
 <docs-workflow>
 
-<docs-step title="`Home`'ga turar joy maʼlumotlarini qoʻshing">
+<docs-step title="`Home`'ga turar joy maʼlumotlarini qoʻshing {#add-housing-data-to-the-home}">
 
 `Home`'da faqat bitta turar joy mavjud. Bu qadamda siz `HousingLocation` yozuvlaridan iborat massiv qoʻshasiz.
 
@@ -33,7 +33,7 @@ Batafsilroq tushuntirish uchun [boshqaruv oqimi](guide/templates/control-flow#re
 
 </docs-step>
 
-<docs-step title="`Home` shablonini `@for` ishlatadigan qilib yangilang">
+<docs-step title="`Home` shablonini `@for` ishlatadigan qilib yangilang {#update-the-home-template-to-use-for}">
 Endi ilovada `@for` bloki yordamida yozuvlarni brauzerda koʻrsatish uchun foydalanishingiz mumkin boʻlgan maʼlumotlar toʻplami bor.
 
 1. Shablon kodidagi `<app-housing-location>` tegini quyidagicha yangilang:

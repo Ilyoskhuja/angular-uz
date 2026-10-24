@@ -19,6 +19,8 @@ Qoidalar build tizimi (adev markdown pipeline) talablaridan kelib chiqadi — ul
   Id asl inglizcha sarlavhadan hosil qilinadi: kichik harf, boʻshliq va `/` → `-`, harf/raqam/`-` dan boshqa belgilar oʻchiriladi
   (`` ## Control flow with `@if` and `@for` `` → `{#control-flow-with-if-and-for}`; `### 1. Create a form model with `signal()`` → `{#1-create-a-form-model-with-signal}`).
   Agar asl sarlavhada allaqachon `{#custom-id}` boʻlsa, oʻshani saqlang.
+  `<docs-step title="...">` sarlavhalari ham xuddi shunday: `<docs-step title="Loyiha yarating {#create-the-project}">`.
+  Sahifa ichidagi `[...](#id)` havolalar shu id'larga tayanadi — id oʻzgarsa build buziladi.
   `uz-tools/check-translation.py` buni avtomatik tekshiradi.
 - **API nomlari, fayl nomlari, buyruqlar**: `ng new`, `ChangeDetectionStrategy.OnPush`, `app.config.ts` — oʻzgarmaydi.
 - **Mahsulot nomlari**: Angular, Angular CLI, TypeScript, RxJS, Vite, esbuild, GitHub, Google — oʻzgarmaydi.

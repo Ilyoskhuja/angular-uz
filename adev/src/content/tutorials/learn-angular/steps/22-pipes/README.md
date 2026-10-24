@@ -27,7 +27,7 @@ Endi oʻzingiz sinab koʻrish navbati:
 
 <docs-workflow>
 
-<docs-step title="`LowerCase` pipe'ini import qiling">
+<docs-step title="`LowerCase` pipe'ini import qiling {#import-the-lowercase-pipe}">
 Avval `app.ts` faylini `@angular/common`'dan `LowerCasePipe` uchun fayl darajasidagi importni qoʻshish orqali yangilang.
 
 ```ts
@@ -36,7 +36,7 @@ import {LowerCasePipe} from '@angular/common';
 
 </docs-step>
 
-<docs-step title="Pipe'ni shablon importlariga qoʻshing">
+<docs-step title="Pipe'ni shablon importlariga qoʻshing {#add-the-pipe-to-the-template-imports}">
 Keyin `@Component()` dekoratorining `imports` qismini `LowerCasePipe`'ga havolani oʻz ichiga olishi uchun yangilang
 
 ```ts {highlight:[3]}
@@ -48,7 +48,7 @@ Keyin `@Component()` dekoratorining `imports` qismini `LowerCasePipe`'ga havolan
 
 </docs-step>
 
-<docs-step title="Pipe'ni shablonga qoʻshing">
+<docs-step title="Pipe'ni shablonga qoʻshing {#add-the-pipe-to-the-template}">
 Nihoyat, `app.ts` faylida shablonni `lowercase` pipe'ini oʻz ichiga olishi uchun yangilang:
 
 ```angular-html

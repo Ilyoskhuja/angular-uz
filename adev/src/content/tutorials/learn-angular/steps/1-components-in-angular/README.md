@@ -16,7 +16,7 @@ Bu Angular bilan ishlashni boshlash uchun ajoyib imkoniyat.
 
 <docs-workflow>
 
-<docs-step title="Komponent shablonini yangilang">
+<docs-step title="Komponent shablonini yangilang {#update-the-component-template}">
 `template` xususiyatini `Hello Universe` deb oʻqiladigan qilib yangilang
 
 ```ts
@@ -28,7 +28,7 @@ template: `
 HTML shablonini oʻzgartirganingizda, oldindan koʻrish (preview) oynasi sizning xabaringiz bilan yangilandi. Keling, yana bir qadam oldinga boramiz: matn rangini oʻzgartiring.
 </docs-step>
 
-<docs-step title="Komponent stillarini yangilang">
+<docs-step title="Komponent stillarini yangilang {#update-the-component-styles}">
 Stillar qiymatini yangilang va `color` xususiyatini `blue`'dan `#a144eb`'ga oʻzgartiring.
 
 ```ts
