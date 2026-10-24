@@ -91,32 +91,32 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
     label: 'In-depth Guides',
     children: [
       {
-        label: 'Signals',
+        label: 'Signallar',
         status: 'updated',
         children: [
           {
-            label: 'Overview',
+            label: 'Umumiy koʻrinish',
             path: 'guide/signals',
             contentPath: 'guide/signals/overview',
           },
           {
-            label: 'Dependent state with linkedSignal',
+            label: 'linkedSignal bilan bogʻliq holat',
             path: 'guide/signals/linked-signal',
             contentPath: 'guide/signals/linked-signal',
           },
           {
-            label: 'Async reactivity with resources',
+            label: 'Resurslar bilan asinxron reaktivlik',
             path: 'guide/signals/resource',
             contentPath: 'guide/signals/resource',
           },
           {
-            label: 'Debounced signals',
+            label: 'Debounce qilingan signallar',
             path: 'guide/signals/debounced',
             contentPath: 'guide/signals/debounced',
             status: 'new',
           },
           {
-            label: 'Side effects for non-reactives APIs',
+            label: 'Reaktiv boʻlmagan API\'lar uchun yon taʼsirlar',
             path: 'guide/signals/effect',
             contentPath: 'guide/signals/effect',
             status: 'new',
@@ -199,76 +199,76 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
         ],
       },
       {
-        label: 'Templates',
+        label: 'Shablonlar',
         children: [
           {
-            label: 'Overview',
+            label: 'Umumiy koʻrinish',
             path: 'guide/templates',
             contentPath: 'guide/templates/overview',
           },
           {
-            label: 'Binding dynamic text, properties and attributes',
+            label: 'Dinamik matn, xususiyat va atributlarni bogʻlash',
             path: 'guide/templates/binding',
             contentPath: 'guide/templates/binding',
           },
           {
-            label: 'Adding event listeners',
+            label: 'Hodisa tinglovchilarini qoʻshish',
             path: 'guide/templates/event-listeners',
             contentPath: 'guide/templates/event-listeners',
           },
           {
-            label: 'Two-way binding',
+            label: 'Ikki tomonlama bogʻlash',
             path: 'guide/templates/two-way-binding',
             contentPath: 'guide/templates/two-way-binding',
           },
           {
-            label: 'Control flow',
+            label: 'Boshqaruv oqimi',
             path: 'guide/templates/control-flow',
             contentPath: 'guide/templates/control-flow',
           },
           {
-            label: 'Pipes',
+            label: 'Pipe\'lar',
             path: 'guide/templates/pipes',
             contentPath: 'guide/templates/pipes',
           },
           {
-            label: 'Slotting child content with ng-content',
+            label: 'ng-content bilan ichki kontentni joylashtirish',
             path: 'guide/templates/ng-content',
             contentPath: 'guide/templates/ng-content',
           },
           {
-            label: 'Create template fragments with ng-template',
+            label: 'ng-template bilan shablon fragmentlari yaratish',
             path: 'guide/templates/ng-template',
             contentPath: 'guide/templates/ng-template',
           },
           {
-            label: 'Grouping elements with ng-container',
+            label: 'ng-container bilan elementlarni guruhlash',
             path: 'guide/templates/ng-container',
             contentPath: 'guide/templates/ng-container',
           },
           {
-            label: 'Variables in templates',
+            label: 'Shablonlardagi oʻzgaruvchilar',
             path: 'guide/templates/variables',
             contentPath: 'guide/templates/variables',
           },
           {
-            label: 'Deferred loading with @defer',
+            label: '@defer bilan kechiktirilgan yuklash',
             path: 'guide/templates/defer',
             contentPath: 'guide/templates/defer',
           },
           {
-            label: 'Error boundaries with @boundary',
+            label: '@boundary bilan xato chegaralari',
             path: 'guide/templates/error-boundaries',
             contentPath: 'guide/templates/error-boundaries',
             status: 'new',
           },
           {
-            label: 'Expression syntax',
+            label: 'Ifoda sintaksisi',
             path: 'guide/templates/expression-syntax',
             contentPath: 'guide/templates/expression-syntax',
           },
           {
-            label: 'Whitespace in templates',
+            label: 'Shablonlardagi boʻsh joylar',
             path: 'guide/templates/whitespace',
             contentPath: 'guide/templates/whitespace',
           },
@@ -305,52 +305,52 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
         ],
       },
       {
-        label: 'Dependency Injection',
+        label: 'Bogʻliqliklarni inyeksiya qilish',
         status: 'updated',
         children: [
           {
-            label: 'Overview',
+            label: 'Umumiy koʻrinish',
             path: 'guide/di',
             contentPath: 'guide/di/overview',
           },
           {
-            label: 'Creating and using services',
+            label: 'Servislar yaratish va ulardan foydalanish',
             path: 'guide/di/creating-and-using-services',
             contentPath: 'guide/di/creating-and-using-services',
           },
           {
-            label: 'Lazy loading services',
+            label: 'Servislarni kechiktirib yuklash',
             path: 'guide/di/lazy-loading-services',
             contentPath: 'guide/di/lazy-loading-services',
             status: 'new',
           },
           {
-            label: 'Defining dependency providers',
+            label: 'Bogʻliqlik provider\'larini aniqlash',
             path: 'guide/di/defining-dependency-providers',
             contentPath: 'guide/di/defining-dependency-providers',
           },
           {
-            label: 'Injection context',
+            label: 'Inyeksiya konteksti',
             path: 'guide/di/dependency-injection-context',
             contentPath: 'guide/di/dependency-injection-context',
           },
           {
-            label: 'Hierarchical injectors',
+            label: 'Ierarxik injector\'lar',
             path: 'guide/di/hierarchical-dependency-injection',
             contentPath: 'guide/di/hierarchical-dependency-injection',
           },
           {
-            label: 'Optimizing injection tokens',
+            label: 'Inyeksiya tokenlarini optimallashtirish',
             path: 'guide/di/lightweight-injection-tokens',
             contentPath: 'guide/di/lightweight-injection-tokens',
           },
           {
-            label: 'DI in action',
+            label: 'DI amalda',
             path: 'guide/di/di-in-action',
             contentPath: 'guide/di/di-in-action',
           },
           {
-            label: 'Debugging and troubleshooting DI',
+            label: 'DI\'ni tuzatish va muammolarni hal qilish',
             path: 'guide/di/debugging-and-troubleshooting-di',
             contentPath: 'guide/di/debugging-and-troubleshooting-di',
             status: 'new',
