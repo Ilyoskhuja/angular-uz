@@ -1,16 +1,16 @@
-# Variables in templates
+# Shablonlardagi oʻzgaruvchilar
 
-Angular has two types of variable declarations in templates: local template variables and template reference variables.
+Angular shablonlarida oʻzgaruvchi eʼlon qilishning ikki turi mavjud: lokal shablon oʻzgaruvchilari (local template variables) va shablon referens oʻzgaruvchilari (template reference variables).
 
-HELPFUL: In this guide, “template” does not mean the entire HTML template file. It refers only to a specific template construct or expression within the file.
+HELPFUL: Bu qoʻllanmada "shablon" deganda butun HTML shablon fayli nazarda tutilmaydi. Bu faqat fayl ichidagi maʼlum bir shablon konstruksiyasi yoki ifodani anglatadi.
 
-## Local template variables with `@let`
+## `@let` bilan lokal shablon oʻzgaruvchilari {#local-template-variables-with-let}
 
-Angular's `@let` syntax allows you to define a local variable and re-use it across a template, similar to the [JavaScript `let` syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let).
+Angular'ning `@let` sintaksisi [JavaScript'dagi `let` sintaksisiga](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) oʻxshab, lokal oʻzgaruvchi aniqlash va undan shablon boʻylab qayta foydalanish imkonini beradi.
 
-### Using `@let`
+### `@let`'dan foydalanish {#using-let}
 
-Use `@let` to declare a variable whose value is based on the result of a template expression. Angular automatically keeps the variable's value up-to-date with the given expression, similar to [bindings](/guide/templates/binding).
+Qiymati shablon ifodasining natijasiga asoslangan oʻzgaruvchini eʼlon qilish uchun `@let`'dan foydalaning. Angular [bogʻlashlar (bindings)](/guide/templates/binding) kabi oʻzgaruvchining qiymatini berilgan ifoda bilan avtomatik ravishda yangilangan holda saqlaydi.
 
 ```angular-html
 @let name = user.name;
@@ -24,11 +24,11 @@ Use `@let` to declare a variable whose value is based on the result of a templat
   'Ut enim ad minim veniam...';
 ```
 
-Each `@let` block can declare exactly one variable. You cannot declare multiple variables in the same block with a comma.
+Har bir `@let` bloki roppa-rosa bitta oʻzgaruvchi eʼlon qilishi mumkin. Bitta blokda vergul orqali bir nechta oʻzgaruvchi eʼlon qila olmaysiz.
 
-### Referencing the value of `@let`
+### `@let` qiymatiga murojaat qilish {#referencing-the-value-of-let}
 
-Once you've declared a variable with `@let`, you can reuse it in the same template:
+Oʻzgaruvchini `@let` bilan eʼlon qilganingizdan soʻng, undan oʻsha shablonda qayta foydalanishingiz mumkin:
 
 ```angular-html
 @let user = user$ | async;
@@ -47,9 +47,9 @@ Once you've declared a variable with `@let`, you can reuse it in the same templa
 }
 ```
 
-### Assignability
+### Qayta tayinlash imkoniyati {#assignability}
 
-A key difference between `@let` and JavaScript's `let` is that `@let` cannot be reassigned after declaration. However, Angular automatically keeps the variable's value up-to-date with the given expression.
+`@let` va JavaScript'dagi `let` oʻrtasidagi asosiy farq shundaki, `@let` eʼlon qilingandan soʻng qayta tayinlanishi mumkin emas. Biroq Angular oʻzgaruvchining qiymatini berilgan ifoda bilan avtomatik ravishda yangilangan holda saqlaydi.
 
 ```angular-html
 @let value = 1;
@@ -58,11 +58,11 @@ A key difference between `@let` and JavaScript's `let` is that `@let` cannot be 
 <button (click)="value = value + 1">Increment the value</button>
 ```
 
-### Variable scope
+### Oʻzgaruvchi koʻlami {#variable-scope}
 
-`@let` declarations are scoped to the current view and its descendants. Angular creates a new view at component boundaries and wherever a template might contain dynamic content, such as control flow blocks, `@defer` blocks, or structural directives.
+`@let` eʼlonlari joriy view va uning avlodlari koʻlami (scope) bilan cheklangan. Angular komponent chegaralarida va shablon dinamik kontentni oʻz ichiga olishi mumkin boʻlgan har bir joyda, masalan, boshqaruv oqimi bloklari, `@defer` bloklari yoki strukturaviy direktivalarda yangi view yaratadi.
 
-Since `@let` declarations are not hoisted, they **cannot** be accessed by parent views or siblings:
+`@let` eʼlonlari yuqoriga koʻtarilmagani (hoisted emas) uchun ularga ota view'lar yoki qoʻshni view'lardan murojaat qilish **mumkin emas**:
 
 ```angular-html
 @let topLevel = value;
@@ -92,50 +92,50 @@ Since `@let` declarations are not hoisted, they **cannot** be accessed by parent
 {{ nested }}
 ```
 
-### Full syntax
+### Toʻliq sintaksis {#full-syntax}
 
-The `@let` syntax is formally defined as:
+`@let` sintaksisi rasmiy ravishda quyidagicha aniqlanadi:
 
-- The `@let` keyword.
-- Followed by one or more whitespaces, not including new lines.
-- Followed by a valid JavaScript name and zero or more whitespaces.
-- Followed by the = symbol and zero or more whitespaces.
-- Followed by an Angular expression which can be multi-line.
-- Terminated by the `;` symbol.
+- `@let` kalit soʻzi.
+- Keyin bir yoki bir nechta boʻsh joy belgisi (yangi qator belgilaridan tashqari).
+- Keyin yaroqli JavaScript nomi va nol yoki undan koʻp boʻsh joy belgisi.
+- Keyin = belgisi va nol yoki undan koʻp boʻsh joy belgisi.
+- Keyin koʻp qatorli boʻlishi mumkin boʻlgan Angular ifodasi.
+- `;` belgisi bilan yakunlanadi.
 
-## Template reference variables
+## Shablon referens oʻzgaruvchilari {#template-reference-variables}
 
-Template reference variables give you a way to declare a variable that references a value from an element in your template.
+Shablon referens oʻzgaruvchilari shablondagi elementdan olingan qiymatga murojaat qiluvchi oʻzgaruvchini eʼlon qilish imkonini beradi.
 
-A template reference variable can refer to the following:
+Shablon referens oʻzgaruvchisi quyidagilarga murojaat qilishi mumkin:
 
-- a DOM element within a template (including [custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements))
-- an Angular component or directive
-- a [TemplateRef](/api/core/TemplateRef) from an [ng-template](/api/core/ng-template)
+- shablon ichidagi DOM elementi ([maxsus elementlar (custom elements)](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) ham kiradi)
+- Angular komponenti yoki direktivasi
+- [ng-template](/api/core/ng-template)'dan olingan [TemplateRef](/api/core/TemplateRef)
 
-You can use template reference variables to read information from one part of the template in another part of the same template.
+Shablon referens oʻzgaruvchilaridan shablonning bir qismidagi maʼlumotni oʻsha shablonning boshqa qismida oʻqish uchun foydalanishingiz mumkin.
 
-### Declaring a template reference variable
+### Shablon referens oʻzgaruvchisini eʼlon qilish {#declaring-a-template-reference-variable}
 
-You can declare a variable on an element in a template by adding an attribute that starts with the hash character (`#`) followed by the variable name.
+Shablondagi elementda oʻzgaruvchini eʼlon qilish uchun unga xesh belgisi (`#`) bilan boshlanib, undan keyin oʻzgaruvchi nomi keladigan atribut qoʻshing.
 
 ```angular-html
 <!-- Create a template reference variable named "taskInput", referring to the HTMLInputElement. -->
 <input #taskInput placeholder="Enter task name" />
 ```
 
-### Assigning values to template reference variables
+### Shablon referens oʻzgaruvchilariga qiymat tayinlash {#assigning-values-to-template-reference-variables}
 
-Angular assigns a value to template variables based on the element on which the variable is declared.
+Angular shablon oʻzgaruvchilariga qiymatni oʻzgaruvchi eʼlon qilingan elementga qarab tayinlaydi.
 
-If you declare the variable on a Angular component, the variable refers to the component instance.
+Agar oʻzgaruvchini Angular komponentida eʼlon qilsangiz, oʻzgaruvchi komponent nusxasiga (instance) murojaat qiladi.
 
 ```angular-html
 <!-- The `startDate` variable is assigned the instance of `MyDatepicker`. -->
 <my-datepicker #startDate />
 ```
 
-If you declare the variable on an `<ng-template>` element, the variable refers to a TemplateRef instance which represents the template. For more information, see [How Angular uses the asterisk, \*, syntax](/guide/directives/structural-directives#structural-directive-shorthand) in [Structural directives](/guide/directives/structural-directives).
+Agar oʻzgaruvchini `<ng-template>` elementida eʼlon qilsangiz, oʻzgaruvchi shablonni ifodalovchi TemplateRef nusxasiga murojaat qiladi. Koʻproq maʼlumot uchun [Strukturaviy direktivalar](/guide/directives/structural-directives) qoʻllanmasidagi [Angular yulduzcha (\*) sintaksisidan qanday foydalanadi](/guide/directives/structural-directives#structural-directive-shorthand) boʻlimiga qarang.
 
 ```angular-html
 <!-- The `myFragment` variable is assigned the `TemplateRef` instance corresponding to this template fragment. -->
@@ -144,16 +144,16 @@ If you declare the variable on an `<ng-template>` element, the variable refers t
 </ng-template>
 ```
 
-If you declare the variable on any other displayed element, the variable refers to the `HTMLElement` instance.
+Agar oʻzgaruvchini boshqa har qanday koʻrsatiladigan elementda eʼlon qilsangiz, oʻzgaruvchi `HTMLElement` nusxasiga murojaat qiladi.
 
 ```angular-html
 <!-- The "taskInput" variable refers to the HTMLInputElement instance. -->
 <input #taskInput placeholder="Enter task name" />
 ```
 
-#### Assigning a reference to an Angular directive
+#### Angular direktivasiga referens tayinlash {#assigning-a-reference-to-an-angular-directive}
 
-Angular directives may have an `exportAs` property that defines a name by which the directive can be referenced in a template:
+Angular direktivalari shablonda direktivaga murojaat qilish uchun ishlatiladigan nomni belgilovchi `exportAs` xususiyatiga ega boʻlishi mumkin:
 
 ```angular-ts
 @Directive({
@@ -165,20 +165,20 @@ export class DropZone {
 }
 ```
 
-When you declare a template variable on an element, you can assign that variable a directive instance by specifying this `exportAs` name:
+Elementda shablon oʻzgaruvchisini eʼlon qilganingizda, shu `exportAs` nomini koʻrsatib, oʻzgaruvchiga direktiva nusxasini tayinlashingiz mumkin:
 
 ```angular-html
 <!-- The `firstZone` variable refers to the `DropZone` directive instance. -->
 <section dropZone #firstZone="dropZone">...</section>
 ```
 
-You cannot refer to a directive that does not specify an `exportAs` name.
+`exportAs` nomini koʻrsatmagan direktivaga murojaat qila olmaysiz.
 
-### Using template reference variables with queries
+### Shablon referens oʻzgaruvchilaridan soʻrovlar bilan foydalanish {#using-template-reference-variables-with-queries}
 
-In addition to using template variables to read values from another part of the same template, you can also use this style of variable declaration to "mark" an element for [component and directive queries](/guide/components/queries).
+Shablon oʻzgaruvchilaridan oʻsha shablonning boshqa qismidagi qiymatlarni oʻqish uchun foydalanishdan tashqari, oʻzgaruvchi eʼlon qilishning bu usulidan [komponent va direktiva soʻrovlari](/guide/components/queries) uchun elementni "belgilash"da ham foydalanishingiz mumkin.
 
-When you want to query for a specific element in a template, you can declare a template variable on that element and then query for the element based on the variable name.
+Shablondagi maʼlum bir elementni soʻrov orqali olmoqchi boʻlsangiz, oʻsha elementda shablon oʻzgaruvchisini eʼlon qilib, soʻngra elementni oʻzgaruvchi nomi boʻyicha soʻrashingiz mumkin.
 
 ```angular-html
 <input #description value="Original description" />
@@ -195,21 +195,21 @@ export class AppComponent {
 }
 ```
 
-See [Referencing children with queries](/guide/components/queries) for more information on queries.
+Soʻrovlar haqida koʻproq maʼlumot uchun [Bola elementlarga soʻrovlar orqali murojaat qilish](/guide/components/queries) boʻlimiga qarang.
 
-### Template variable scope
+### Shablon oʻzgaruvchisi koʻlami {#template-variable-scope}
 
-Just like variables in JavaScript or TypeScript code, template variables are scoped to the template that declares them.
+JavaScript yoki TypeScript kodidagi oʻzgaruvchilar kabi, shablon oʻzgaruvchilari ham ularni eʼlon qilgan shablon koʻlami bilan cheklangan.
 
-Similarly, [control flow blocks](guide/templates/control-flow) like `@if` and `@for`, [structural directives](guide/directives/structural-directives), and `<ng-template>` declarations create a new nested template scope, much like JavaScript's control flow statements like `if` and `for` create new lexical scopes. You cannot access template variables within one of these nested templates from outside of its boundaries.
+Shunga oʻxshab, `@if` va `@for` kabi [boshqaruv oqimi bloklari](guide/templates/control-flow), [strukturaviy direktivalar](guide/directives/structural-directives) va `<ng-template>` eʼlonlari yangi ichki shablon koʻlamini yaratadi — JavaScript'dagi `if` va `for` kabi boshqaruv oqimi operatorlari yangi leksik koʻlam yaratgani kabi. Bu ichki shablonlardan biridagi shablon oʻzgaruvchilariga uning chegaralaridan tashqaridan murojaat qila olmaysiz.
 
-HELPFUL: Define a variable only once in the template so the runtime value remains predictable.
+HELPFUL: Runtime qiymati bashorat qilinadigan boʻlib qolishi uchun oʻzgaruvchini shablonda faqat bir marta aniqlang.
 
-#### Accessing in a nested template
+#### Ichki shablonda murojaat qilish {#accessing-in-a-nested-template}
 
-An inner template can access template variables that the outer template defines.
+Ichki shablon tashqi shablon aniqlagan shablon oʻzgaruvchilariga murojaat qila oladi.
 
-In the following example, changing the text in the `<input>` changes the value in the `<span>` because Angular immediately updates changes through the template variable, `ref1`.
+Quyidagi misolda `<input>`'dagi matnni oʻzgartirish `<span>`'dagi qiymatni oʻzgartiradi, chunki Angular oʻzgarishlarni `ref1` shablon oʻzgaruvchisi orqali darhol yangilaydi.
 
 ```angular-html
 <input #ref1 type="text" [(ngModel)]="firstExample" />
@@ -219,9 +219,9 @@ In the following example, changing the text in the `<input>` changes the value i
 }
 ```
 
-In this case, the `@if` block creates a new template scope, which includes the `ref1` variable from its parent scope.
+Bu holda `@if` bloki ota koʻlamdagi `ref1` oʻzgaruvchisini oʻz ichiga olgan yangi shablon koʻlamini yaratadi.
 
-However, accessing a template variable from a child scope in the parent template doesn't work:
+Biroq bola koʻlamdagi shablon oʻzgaruvchisiga ota shablondan murojaat qilish ishlamaydi:
 
 ```angular-html {avoid}
 @if (true) {
@@ -231,4 +231,4 @@ However, accessing a template variable from a child scope in the parent template
 <span>Value: {{ ref2?.value }}</span>
 ```
 
-Here, `ref2` is declared in the child scope created by `@if`, and is not accessible from the parent template.
+Bu yerda `ref2` `@if` yaratgan bola koʻlamda eʼlon qilingan va ota shablondan unga murojaat qilish mumkin emas.

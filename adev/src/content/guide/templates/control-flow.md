@@ -1,10 +1,10 @@
-# Control flow
+# Boshqaruv oqimi
 
-Angular templates support control flow blocks that let you conditionally show, hide, and repeat elements.
+Angular shablonlari elementlarni shartli koʻrsatish, yashirish va takrorlash imkonini beruvchi boshqaruv oqimi (control flow) bloklarini qoʻllab-quvvatlaydi.
 
-## Conditionally display content with `@if`, `@else if` and `@else`
+## `@if`, `@else if` va `@else` bilan kontentni shartli koʻrsatish {#conditionally-display-content-with-if-else-if-and-else}
 
-The `@if` block conditionally displays its content when its condition expression is truthy:
+`@if` bloki shart ifodasi rost (truthy) boʻlganda oʻz kontentini shartli koʻrsatadi:
 
 ```angular-html
 @if (a > b) {
@@ -12,7 +12,7 @@ The `@if` block conditionally displays its content when its condition expression
 }
 ```
 
-If you want to display alternative content, you can do so by providing any number of `@else if` blocks and a singular `@else` block.
+Agar muqobil kontentni koʻrsatmoqchi boʻlsangiz, buni istalgan sondagi `@else if` bloklari va yagona `@else` blokini berish orqali qilishingiz mumkin.
 
 ```angular-html
 @if (a > b) {
@@ -24,9 +24,9 @@ If you want to display alternative content, you can do so by providing any numbe
 }
 ```
 
-### Referencing the conditional expression's result
+### Shart ifodasining natijasiga murojaat qilish {#referencing-the-conditional-expressions-result}
 
-The `@if` conditional supports saving the result of the conditional expression into a variable for reuse inside of the block.
+`@if` sharti shart ifodasining natijasini blok ichida qayta foydalanish uchun oʻzgaruvchiga saqlashni qoʻllab-quvvatlaydi.
 
 ```angular-html
 @if (user.profile.settings.startDate; as startDate) {
@@ -34,13 +34,13 @@ The `@if` conditional supports saving the result of the conditional expression i
 }
 ```
 
-This can be useful for referencing longer expressions that would be easier to read and maintain within the template.
+Bu shablon ichida oʻqish va qoʻllab-quvvatlash osonroq boʻladigan uzunroq ifodalarga murojaat qilish uchun foydali boʻlishi mumkin.
 
-## Repeat content with the `@for` block
+## `@for` bloki bilan kontentni takrorlash {#repeat-content-with-the-for-block}
 
-The `@for` block loops through a collection and repeatedly renders the content of a block. The collection can be any JavaScript [iterable](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Iteration_protocols), but Angular has additional performance optimizations for `Array` values.
+`@for` bloki kolleksiya boʻylab aylanib, blok kontentini takroran render qiladi. Kolleksiya istalgan JavaScript [iterable](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Iteration_protocols) obyekti boʻlishi mumkin, lekin Angular `Array` qiymatlari uchun qoʻshimcha unumdorlik optimizatsiyalariga ega.
 
-A typical `@for` loop looks like:
+Odatiy `@for` sikli quyidagicha koʻrinadi:
 
 ```angular-html
 @for (item of items; track item.id) {
@@ -48,19 +48,19 @@ A typical `@for` loop looks like:
 }
 ```
 
-Angular's `@for` block does not support flow-modifying statements like JavaScript's `continue` or `break`.
+Angular'ning `@for` bloki JavaScript'dagi `continue` yoki `break` kabi oqimni oʻzgartiruvchi operatorlarni qoʻllab-quvvatlamaydi.
 
-### Why is `track` in `@for` blocks important?
+### `@for` bloklarida `track` nima uchun muhim? {#why-is-track-in-for-blocks-important}
 
-The `track` expression allows Angular to maintain a relationship between your data and the DOM nodes on the page. This allows Angular to optimize performance by executing the minimum necessary DOM operations when the data changes.
+`track` ifodasi Angular'ga maʼlumotlaringiz va sahifadagi DOM tugunlari oʻrtasidagi bogʻliqlikni saqlab turish imkonini beradi. Bu Angular'ga maʼlumotlar oʻzgarganda minimal zarur DOM operatsiyalarini bajarish orqali unumdorlikni optimallashtirish imkonini beradi.
 
-Using track effectively can significantly improve your application's rendering performance when looping over data collections.
+`track`'dan samarali foydalanish maʼlumotlar kolleksiyalari boʻylab aylanganda ilovangizning render qilish unumdorligini sezilarli darajada yaxshilashi mumkin.
 
-Select a property that uniquely identifies each item in the `track` expression. If your data model includes a uniquely identifying property, commonly `id` or `uuid`, use this value. If your data does not include a field like this, strongly consider adding one.
+`track` ifodasida har bir elementni yagona tarzda identifikatsiya qiluvchi xususiyatni tanlang. Agar maʼlumotlar modelingizda yagona identifikatsiya qiluvchi xususiyat, odatda `id` yoki `uuid`, boʻlsa, shu qiymatdan foydalaning. Agar maʼlumotlaringizda bunday maydon boʻlmasa, uni qoʻshishni jiddiy oʻylab koʻring.
 
-For static collections that never change, you can use `$index` to tell Angular to track each item by its index in the collection.
+Hech qachon oʻzgarmaydigan statik kolleksiyalar uchun Angular'ga har bir elementni kolleksiyadagi indeksi boʻyicha kuzatishni aytish uchun `$index`'dan foydalanishingiz mumkin.
 
-If no other option is available, you can use the item itself as a tracking key. This tells Angular to track the item by its reference identity using the triple-equals operator (`===`). Avoid this option whenever possible as it can lead to significantly slower rendering updates, as Angular has no way to map which data item corresponds to which DOM nodes.
+Agar boshqa variant boʻlmasa, elementning oʻzini kuzatish kaliti sifatida ishlatishingiz mumkin. Bu Angular'ga elementni uchlik tenglik operatori (`===`) orqali referens identikligi boʻyicha kuzatishni aytadi. Imkon qadar bu variantdan qoching, chunki u render yangilanishlarini sezilarli darajada sekinlashtirishi mumkin: Angular qaysi maʼlumot elementi qaysi DOM tugunlariga mos kelishini aniqlay olmaydi.
 
 ```angular-html
 @for (item of items; track item) {
@@ -68,22 +68,22 @@ If no other option is available, you can use the item itself as a tracking key. 
 }
 ```
 
-NOTE: Unlike `*ngFor`, the `@for` block prioritizes view reuse. If a tracked property changes but the object reference remains the same, Angular updates the view's bindings (including component inputs) rather than destroying and recreating the entire element.
+NOTE: `*ngFor`'dan farqli oʻlaroq, `@for` bloki view'ni qayta ishlatishga ustuvorlik beradi. Agar kuzatilayotgan xususiyat oʻzgarsa, lekin obyekt referensi oʻsha-oʻsha qolsa, Angular butun elementni yoʻq qilib qayta yaratish oʻrniga view'ning bogʻlashlarini (komponent input'lari ham kiradi) yangilaydi.
 
-### Contextual variables in `@for` blocks
+### `@for` bloklaridagi kontekst oʻzgaruvchilari {#contextual-variables-in-for-blocks}
 
-Inside `@for` blocks, several implicit variables are always available:
+`@for` bloklari ichida bir nechta yashirin (implicit) oʻzgaruvchilar doimo mavjud:
 
-| Variable | Meaning                                       |
+| Oʻzgaruvchi | Maʼnosi                                        |
 | -------- | --------------------------------------------- |
-| `$count` | Number of items in a collection iterated over |
-| `$index` | Index of the current row                      |
-| `$first` | Whether the current row is the first row      |
-| `$last`  | Whether the current row is the last row       |
-| `$even`  | Whether the current row index is even         |
-| `$odd`   | Whether the current row index is odd          |
+| `$count` | Aylanilayotgan kolleksiyadagi elementlar soni |
+| `$index` | Joriy qatorning indeksi                      |
+| `$first` | Joriy qator birinchi qator ekanligi      |
+| `$last`  | Joriy qator oxirgi qator ekanligi       |
+| `$even`  | Joriy qator indeksi juft ekanligi         |
+| `$odd`   | Joriy qator indeksi toq ekanligi          |
 
-These variables are always available with these names, but can be aliased via a `let` segment:
+Bu oʻzgaruvchilar doimo shu nomlar bilan mavjud, lekin ularga `let` segmenti orqali taxallus (alias) berish mumkin:
 
 ```angular-html
 @for (item of items; track item.id; let idx = $index, e = $even) {
@@ -91,11 +91,11 @@ These variables are always available with these names, but can be aliased via a 
 }
 ```
 
-The aliasing is useful when nesting `@for` blocks, letting you read variables from the outer `@for` block from an inner `@for` block.
+Taxallus berish `@for` bloklarini bir-birining ichiga joylashtirganda foydali: bu ichki `@for` blokidan tashqi `@for` blokining oʻzgaruvchilarini oʻqish imkonini beradi.
 
-### Providing a fallback for `@for` blocks with the `@empty` block
+### `@empty` bloki bilan `@for` bloklari uchun zaxira variant berish {#providing-a-fallback-for-for-blocks-with-the-empty-block}
 
-You can optionally include an `@empty` section immediately after the `@for` block content. The content of the `@empty` block displays when there are no items:
+Ixtiyoriy ravishda `@for` bloki kontentidan keyin darhol `@empty` boʻlimini qoʻshishingiz mumkin. `@empty` blokining kontenti elementlar boʻlmaganda koʻrsatiladi:
 
 ```angular-html
 @for (item of items; track item.name) {
@@ -105,9 +105,9 @@ You can optionally include an `@empty` section immediately after the `@for` bloc
 }
 ```
 
-## Conditionally display content with the `@switch` block
+## `@switch` bloki bilan kontentni shartli koʻrsatish {#conditionally-display-content-with-the-switch-block}
 
-While the `@if` block is great for most scenarios, the `@switch` block provides an alternate syntax to conditionally render data. Its syntax closely resembles JavaScript's `switch` statement.
+`@if` bloki koʻp holatlar uchun ajoyib boʻlsa-da, `@switch` bloki maʼlumotlarni shartli render qilish uchun muqobil sintaksisni taqdim etadi. Uning sintaksisi JavaScript'dagi `switch` operatoriga juda oʻxshaydi.
 
 ```angular-html
 @switch (userPermissions) {
@@ -124,23 +124,23 @@ While the `@if` block is great for most scenarios, the `@switch` block provides 
 }
 ```
 
-The value of the conditional expression is compared to the case expression using the triple-equals (`===`) operator.
+Shart ifodasining qiymati case ifodasi bilan uchlik tenglik (`===`) operatori orqali solishtiriladi.
 
-**`@switch` does not have a fallthrough**, so you do not need an equivalent to a `break` or `return` statement in the block.
+**`@switch`'da fallthrough yoʻq**, shuning uchun blokda `break` yoki `return` operatorining ekvivalenti kerak emas.
 
-You can specify multiple conditions for a single block by having consecutive `@case` statements.
+Ketma-ket `@case` operatorlarini yozish orqali bitta blok uchun bir nechta shart koʻrsatishingiz mumkin.
 
-You can optionally include a `@default` block. The content of the `@default` block displays if none of the preceding case expressions match the switch value.
+Ixtiyoriy ravishda `@default` blokini qoʻshishingiz mumkin. `@default` blokining kontenti oldingi case ifodalarining hech biri switch qiymatiga mos kelmaganda koʻrsatiladi.
 
-If no `@case` matches the expression and there is no `@default` block, nothing is shown.
+Agar hech bir `@case` ifodaga mos kelmasa va `@default` bloki boʻlmasa, hech narsa koʻrsatilmaydi.
 
-### Exhaustive type checking
+### Toʻliqlikni (exhaustive) tur tekshiruvi {#exhaustive-type-checking}
 
-`@switch` supports exhaustive type checking, allowing Angular to verify at compile time that all possible values of a union type are handled.
+`@switch` toʻliqlik tur tekshiruvini (exhaustive type checking) qoʻllab-quvvatlaydi, bu Angular'ga kompilyatsiya vaqtida union turning barcha mumkin boʻlgan qiymatlari qayta ishlanganini tekshirish imkonini beradi.
 
-By using `@default never;`, you explicitly declare that no remaining cases should exist. If the union type is later extended and a new case is not covered by an @case, Angular’s template type checker will report an error, helping you catch missing branches early.
+`@default never;` yozish orqali siz boshqa qolgan holatlar boʻlmasligi kerakligini aniq eʼlon qilasiz. Agar union tur keyinchalik kengaytirilsa va yangi holat @case bilan qoplanmasa, Angular'ning shablon tur tekshiruvchisi xato haqida xabar beradi va bu yetishmayotgan shoxlarni erta aniqlashga yordam beradi.
 
-NOTE: Exhaustiveness checking relies on TypeScript's type narrowing, which only works on variables. It will not work if the switch condition is a function call or a signal (for example, `@switch (state())`). To work around this, assign the signal to a `@let` variable, e.g.: `@let mySignal = this.mySignal()`.
+NOTE: Toʻliqlik tekshiruvi TypeScript'ning tur toraytirishiga (type narrowing) tayanadi, bu esa faqat oʻzgaruvchilar bilan ishlaydi. Agar switch sharti funksiya chaqiruvi yoki signal boʻlsa (masalan, `@switch (state())`), bu ishlamaydi. Buni chetlab oʻtish uchun signalni `@let` oʻzgaruvchisiga tayinlang, masalan: `@let mySignal = this.mySignal()`.
 
 ```angular-ts
 @Component({
@@ -164,7 +164,7 @@ export class AppComponent {
 }
 ```
 
-When the switched expression is nested within a union, you must explicitly specify the expression to check for exhaustiveness.
+Switch qilinayotgan ifoda union ichida joylashgan boʻlsa, toʻliqlikni tekshirish uchun ifodani aniq koʻrsatishingiz shart.
 
 <!-- prettier-ignore -->
 ```angular-ts

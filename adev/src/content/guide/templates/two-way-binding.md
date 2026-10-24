@@ -1,16 +1,16 @@
-# Two-way binding
+# Ikki tomonlama bogʻlash
 
-**Two way binding** is a shorthand to simultaneously bind a value into an element, while also giving that element the ability to propagate changes back through this binding.
+**Ikki tomonlama bogʻlash (two-way binding)** — bu qiymatni elementga bogʻlash bilan bir vaqtda oʻsha elementga oʻzgarishlarni shu bogʻlash orqali orqaga uzatish imkonini ham beruvchi qisqa yozuv.
 
-## Syntax
+## Sintaksis {#syntax}
 
-The syntax for two-way binding is a combination of square brackets and parentheses, `[()]`. It combines the syntax from property binding, `[]`, and the syntax from event binding, `()`. The Angular community informally refers to this syntax as "banana-in-a-box".
+Ikki tomonlama bogʻlash sintaksisi kvadrat qavslar va oddiy qavslarning birikmasidir: `[()]`. U xususiyat bogʻlash sintaksisi `[]` va hodisa bogʻlash sintaksisi `()`'ni birlashtiradi. Angular hamjamiyati bu sintaksisni norasmiy tarzda "banana-in-a-box" (qutidagi banan) deb ataydi.
 
-## Two-way binding with form controls
+## Forma elementlari bilan ikki tomonlama bogʻlash {#two-way-binding-with-form-controls}
 
-Developers commonly use two-way binding to keep component data in sync with a form control as a user interacts with the control. For example, when a user fills out a text input, it should update the state in the component.
+Dasturchilar odatda foydalanuvchi forma elementi (form control) bilan ishlayotganda komponent maʼlumotlarini u bilan sinxron saqlash uchun ikki tomonlama bogʻlashdan foydalanadilar. Masalan, foydalanuvchi matn maydonini toʻldirganda, bu komponentdagi holatni yangilashi kerak.
 
-The following example dynamically updates the `firstName` attribute on the page:
+Quyidagi misol sahifadagi `firstName` atributini dinamik ravishda yangilaydi:
 
 ```angular-ts
 import {Component} from '@angular/core';
@@ -30,21 +30,21 @@ export class App {
 }
 ```
 
-To use two-way binding with native form controls, you need to:
+Native forma elementlari bilan ikki tomonlama bogʻlashdan foydalanish uchun quyidagilarni bajarishingiz kerak:
 
-1. Import the `FormsModule` from `@angular/forms`
-1. Use the `ngModel` directive with the two-way binding syntax (e.g., `[(ngModel)]`)
-1. Assign it the state that you want it to update (e.g., `firstName`)
+1. `@angular/forms`'dan `FormsModule`'ni import qiling
+1. `ngModel` direktivasini ikki tomonlama bogʻlash sintaksisi bilan ishlating (masalan, `[(ngModel)]`)
+1. Unga yangilanishini istagan holatni tayinlang (masalan, `firstName`)
 
-Once that is set up, Angular will ensure that any updates in the text input will reflect correctly inside of the component state!
+Bu sozlangandan soʻng Angular matn maydonidagi har qanday yangilanish komponent holatida toʻgʻri aks etishini taʼminlaydi!
 
-Learn more about [`NgModel`](/api/forms/NgModel) in the official docs.
+[`NgModel`](/api/forms/NgModel) haqida rasmiy hujjatlardan koʻproq bilib oling.
 
-## Two-way binding between components
+## Komponentlar oʻrtasida ikki tomonlama bogʻlash {#two-way-binding-between-components}
 
-Leveraging two-way binding between a parent and child component requires more configuration compared to form elements.
+Ota va bola komponent oʻrtasida ikki tomonlama bogʻlashdan foydalanish forma elementlariga nisbatan koʻproq sozlashni talab qiladi.
 
-Here is an example where the `App` is responsible for setting the initial count state, but the logic for updating and rendering the UI for the counter primarily resides inside its child `Counter`.
+Quyida `App` boshlangʻich hisoblagich holatini oʻrnatish uchun masʼul boʻlgan, lekin hisoblagichni yangilash va UI'ni render qilish mantigʻi asosan uning bola komponenti `Counter` ichida joylashgan misol keltirilgan.
 
 ```angular-ts {header: 'app.ts'}
 import {Component} from '@angular/core';
@@ -85,13 +85,13 @@ export class Counter {
 }
 ```
 
-### Enabling two-way binding between components
+### Komponentlar oʻrtasida ikki tomonlama bogʻlashni yoqish {#enabling-two-way-binding-between-components}
 
-If we break down the example above to its core, each two-way binding for components requires the following:
+Yuqoridagi misolni asosiy qismlarga ajratsak, komponentlar uchun har bir ikki tomonlama bogʻlash quyidagilarni talab qiladi:
 
-The child component must contain a `model` property.
+Bola komponentda `model` xususiyati boʻlishi shart.
 
-Here is a simplified example:
+Quyida soddalashtirilgan misol keltirilgan:
 
 ```angular-ts {header: 'counter.ts'}
 import {Component, model} from '@angular/core';
@@ -108,12 +108,12 @@ export class Counter {
 }
 ```
 
-The parent component must:
+Ota komponent quyidagilarni bajarishi shart:
 
-1. Wrap the `model` property name in the two-way binding syntax.
-1. Assign a property or a signal to the `model` property.
+1. `model` xususiyati nomini ikki tomonlama bogʻlash sintaksisiga oʻrash.
+1. `model` xususiyatiga xususiyat yoki signal tayinlash.
 
-Here is a simplified example:
+Quyida soddalashtirilgan misol keltirilgan:
 
 ```angular-ts {header: 'app.ts'}
 import {Component} from '@angular/core';

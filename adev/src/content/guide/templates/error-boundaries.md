@@ -1,14 +1,14 @@
-# Error boundaries with `@boundary`
+# `@boundary` bilan xato chegaralari
 
-IMPORTANT: `@boundary` is in [developer preview](reference/releases#developer-preview).
+IMPORTANT: `@boundary` [developer preview](reference/releases#developer-preview) bosqichida.
 
-Angular templates support error boundaries to gracefully handle runtime errors that occur during rendering and change detection.
+Angular shablonlari render qilish va oʻzgarishlarni aniqlash davomida yuzaga keladigan runtime xatolarni muloyim tarzda qayta ishlash uchun xato chegaralarini (error boundaries) qoʻllab-quvvatlaydi.
 
-Error boundaries prevent a single component's failure from crashing the entire application and provide a way to display fallback UI to the user.
+Xato chegaralari bitta komponentdagi nosozlik butun ilovani ishdan chiqarishining oldini oladi va foydalanuvchiga zaxira (fallback) UI koʻrsatish imkonini beradi.
 
-## Catching errors with `@boundary` and `@error`
+## `@boundary` va `@error` bilan xatolarni ushlash {#catching-errors-with-boundary-and-error}
 
-The `@boundary` block wraps a section of your template. If any component or directive inside this boundary throws an error during initialization or change detection, the framework catches the error and renders the `@error` block instead.
+`@boundary` bloki shabloningizning bir qismini oʻrab oladi. Agar bu chegara ichidagi har qanday komponent yoki direktiva initsializatsiya yoki oʻzgarishlarni aniqlash davomida xato tashlasa, freymvork xatoni ushlab oladi va uning oʻrniga `@error` blokini render qiladi.
 
 ```angular-html
 @boundary {
@@ -18,9 +18,9 @@ The `@boundary` block wraps a section of your template. If any component or dire
 }
 ```
 
-## Accessing the error object
+## Xato obyektiga murojaat qilish {#accessing-the-error-object}
 
-You can access the caught error by accessing the implicit `$error` variable:
+Ushlangan xatoga yashirin (implicit) `$error` oʻzgaruvchisi orqali murojaat qilishingiz mumkin:
 
 ```angular-html
 @boundary {
@@ -30,9 +30,9 @@ You can access the caught error by accessing the implicit `$error` variable:
 }
 ```
 
-## Resetting the boundary
+## Chegarani qayta tiklash {#resetting-the-boundary}
 
-You can attempt to re-render the content of the `@boundary` by calling the implicit `$reset` function in the `@error` block. When called, it resets the boundary state and tries to render the original content again.
+`@error` blokida yashirin `$reset` funksiyasini chaqirib, `@boundary` kontentini qayta render qilishga urinib koʻrishingiz mumkin. Chaqirilganda u chegara holatini qayta tiklaydi va asl kontentni yana render qilishga harakat qiladi.
 
 ```angular-html
 @boundary {
@@ -43,9 +43,9 @@ You can attempt to re-render the content of the `@boundary` by calling the impli
 }
 ```
 
-## Conditional error handling with `when`
+## `when` bilan shartli xatolarni qayta ishlash {#conditional-error-handling-with-when}
 
-You can use `when` clauses to conditionally handle specific types of errors, allowing you to provide different fallback UIs. Angular evaluates this condition when it catches an error.
+Xatolarning maʼlum turlarini shartli qayta ishlash va turli zaxira UI'lar taqdim etish uchun `when` shartlaridan foydalanishingiz mumkin. Angular bu shartni xatoni ushlaganda hisoblaydi.
 
 ```angular-html
 @boundary {
@@ -58,11 +58,11 @@ You can use `when` clauses to conditionally handle specific types of errors, all
 }
 ```
 
-Order your `@error` blocks from most specific to least specific, as Angular evaluates the `when` clauses in order and uses the first one that evaluates to true. A final `@error` block without a `when` clause acts as a catch-all fallback.
+`@error` bloklaringizni eng aniqdan eng umumiyga tartiblang, chunki Angular `when` shartlarini tartib bilan hisoblaydi va true qiymat beradigan birinchisini ishlatadi. `when` shartisiz yakuniy `@error` bloki barcha qolgan xatolarni ushlovchi zaxira variant vazifasini bajaradi.
 
-## Global error handler integration
+## Global xato ishlov beruvchisi bilan integratsiya {#global-error-handler-integration}
 
-When a boundary catches an error, Angular can still notify the global `ErrorHandler`. You can implement the optional `onViewError` hook in your custom `ErrorHandler` to log these caught errors to your error tracking service.
+Chegara xatoni ushlaganda Angular global `ErrorHandler`'ni ham xabardor qilishi mumkin. Ushlangan bu xatolarni xato kuzatish servisingizga yozib qoʻyish uchun maxsus `ErrorHandler`'ingizda ixtiyoriy `onViewError` hook'ini amalga oshirishingiz mumkin.
 
 ```ts
 @Injectable()
@@ -79,13 +79,13 @@ export class MyErrorHandler implements ErrorHandler {
 }
 ```
 
-IMPORTANT: If an `@error` block itself throws an error, the error propagates to the next outer `@boundary` or Angular treats it as an unhandled application error.
+IMPORTANT: Agar `@error` blokining oʻzi xato tashlasa, xato keyingi tashqi `@boundary`'ga uzatiladi yoki Angular uni qayta ishlanmagan ilova xatosi sifatida koʻradi.
 
-## Content projection
+## Kontent proyeksiyasi {#content-projection}
 
-If your component uses [content projection](guide/components/content-projection), wrapping `<ng-content>` in a `@boundary` does not catch errors from projected content. That content belongs to the view that declares it, not the receiving component's view.
+Agar komponentingiz [kontent proyeksiyasidan](guide/components/content-projection) foydalansa, `<ng-content>`'ni `@boundary`'ga oʻrash proyeksiya qilingan kontentdagi xatolarni ushlamaydi. Bu kontent uni eʼlon qilgan view'ga tegishli, qabul qiluvchi komponentning view'iga emas.
 
-For example, a wrapper component with the following template does not catch errors from components projected into it:
+Masalan, quyidagi shablonga ega oʻram komponenti unga proyeksiya qilingan komponentlardagi xatolarni ushlamaydi:
 
 ```angular-html {avoid}
 @boundary {
@@ -95,7 +95,7 @@ For example, a wrapper component with the following template does not catch erro
 }
 ```
 
-To catch those errors, wrap the wrapper component and its projected content in a `@boundary` in the parent template:
+Bu xatolarni ushlash uchun ota shablonda oʻram komponentini va uning proyeksiya qilingan kontentini `@boundary`'ga oʻrang:
 
 ```angular-html {prefer}
 @boundary {
@@ -107,6 +107,6 @@ To catch those errors, wrap the wrapper component and its projected content in a
 }
 ```
 
-## Dynamic views and programmatic error handling
+## Dinamik view'lar va dasturiy xatolarni qayta ishlash {#dynamic-views-and-programmatic-error-handling}
 
-Error handling isn't limited to template syntax. If you are creating components or embedded views dynamically, you can use the `onError` option to handle errors. See the [Handling rendering errors](guide/components/programmatic-rendering#handling-rendering-errors) section in the programmatic rendering guide for more information.
+Xatolarni qayta ishlash shablon sintaksisi bilan cheklanmagan. Agar komponentlar yoki oʻrnatilgan view'larni (embedded views) dinamik ravishda yaratayotgan boʻlsangiz, xatolarni qayta ishlash uchun `onError` opsiyasidan foydalanishingiz mumkin. Koʻproq maʼlumot uchun dasturiy render qilish qoʻllanmasidagi [Render qilish xatolarini qayta ishlash](guide/components/programmatic-rendering#handling-rendering-errors) boʻlimiga qarang.

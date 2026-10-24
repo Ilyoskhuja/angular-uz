@@ -1,148 +1,148 @@
-# Expression Syntax
+# Ifoda sintaksisi
 
-Angular expressions are based on JavaScript, but differ in some key ways. This guide walks through the similarities and differences between Angular expressions and standard JavaScript.
+Angular ifodalari (expressions) JavaScript'ga asoslangan, lekin baʼzi muhim jihatlarda farq qiladi. Bu qoʻllanma Angular ifodalari va standart JavaScript oʻrtasidagi oʻxshashlik va farqlarni koʻrib chiqadi.
 
-## Value literals
+## Qiymat literallari {#value-literals}
 
-Angular supports a subset of [literal values](https://developer.mozilla.org/en-US/docs/Glossary/Literal) from JavaScript.
+Angular JavaScript'dagi [literal qiymatlar](https://developer.mozilla.org/en-US/docs/Glossary/Literal)ning bir qismini qoʻllab-quvvatlaydi.
 
-### Supported value literals
+### Qoʻllab-quvvatlanadigan qiymat literallari {#supported-value-literals}
 
-| Literal type           | Example values                  |
+| Literal turi           | Misol qiymatlar                  |
 | ---------------------- | ------------------------------- |
-| String                 | `'Hello'`, `"World"`            |
+| String (satr)          | `'Hello'`, `"World"`            |
 | Boolean                | `true`, `false`                 |
-| Number                 | `123`, `3.14`                   |
-| Object                 | `{name: 'Alice'}`               |
-| Array                  | `['Onion', 'Cheese', 'Garlic']` |
+| Number (son)           | `123`, `3.14`                   |
+| Object (obyekt)        | `{name: 'Alice'}`               |
+| Array (massiv)         | `['Onion', 'Cheese', 'Garlic']` |
 | null                   | `null`                          |
 | RegExp                 | `/\d+/`                         |
-| Template string        | `` `Hello ${name}` ``           |
-| Tagged template string | `` tag`Hello ${name}` ``        |
+| Shablon satri          | `` `Hello ${name}` ``           |
+| Teglangan shablon satri | `` tag`Hello ${name}` ``        |
 
-### Unsupported value literals
+### Qoʻllab-quvvatlanmaydigan qiymat literallari {#unsupported-value-literals}
 
-| Literal type | Example values |
+| Literal turi | Misol qiymatlar |
 | ------------ | -------------- |
 | BigInt       | `1n`           |
 
-## Globals
+## Global obyektlar {#globals}
 
-Angular expressions support the following [globals](https://developer.mozilla.org/en-US/docs/Glossary/Global_object):
+Angular ifodalari quyidagi [global obyektlarni](https://developer.mozilla.org/en-US/docs/Glossary/Global_object) qoʻllab-quvvatlaydi:
 
 - [undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined)
 - [$any](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#any)
 
-No other JavaScript globals are supported. Common JavaScript globals include `Number`, `Boolean`, `NaN`, `Infinity`, `parseInt`, and more.
+Boshqa JavaScript global obyektlari qoʻllab-quvvatlanmaydi. Keng tarqalgan JavaScript global obyektlariga `Number`, `Boolean`, `NaN`, `Infinity`, `parseInt` va boshqalar kiradi.
 
-## Local variables
+## Lokal oʻzgaruvchilar {#local-variables}
 
-Angular automatically makes special local variables available for use in expressions in specific contexts. These special variables always start with the dollar sign character (`$`).
+Angular maʼlum kontekstlarda ifodalarda foydalanish uchun maxsus lokal oʻzgaruvchilarni avtomatik ravishda taqdim etadi. Bu maxsus oʻzgaruvchilar doimo dollar belgisi (`$`) bilan boshlanadi.
 
-For example, `@for` blocks make several local variables corresponding to information about the loop, such as `$index`.
+Masalan, `@for` bloklari `$index` kabi sikl haqidagi maʼlumotlarga mos keluvchi bir nechta lokal oʻzgaruvchilarni yaratadi.
 
-## What operators are supported?
+## Qaysi operatorlar qoʻllab-quvvatlanadi? {#what-operators-are-supported}
 
-### Supported operators
+### Qoʻllab-quvvatlanadigan operatorlar {#supported-operators}
 
-Angular supports the following operators from standard JavaScript.
+Angular standart JavaScript'dagi quyidagi operatorlarni qoʻllab-quvvatlaydi.
 
-| Operator                      | Example(s)                                     |
+| Operator                      | Misol(lar)                                     |
 | ----------------------------- | ---------------------------------------------- |
-| Add / Concatenate             | `1 + 2`                                        |
-| Subtract                      | `52 - 3`                                       |
-| Multiply                      | `41 * 6`                                       |
-| Divide                        | `20 / 4`                                       |
-| Remainder (Modulo)            | `17 % 5`                                       |
-| Exponentiation                | `10 ** 3`                                      |
-| Parenthesis                   | `9 * (8 + 4)`                                  |
-| Conditional (Ternary)         | `a > b ? true : false`                         |
-| And (Logical)                 | `&&`                                           |
-| Or (Logical)                  | `\|\|`                                         |
-| Not (Logical)                 | `!`                                            |
+| Qoʻshish / Birlashtirish      | `1 + 2`                                        |
+| Ayirish                       | `52 - 3`                                       |
+| Koʻpaytirish                  | `41 * 6`                                       |
+| Boʻlish                       | `20 / 4`                                       |
+| Qoldiq (Modul)                | `17 % 5`                                       |
+| Darajaga koʻtarish            | `10 ** 3`                                      |
+| Qavslar                       | `9 * (8 + 4)`                                  |
+| Shartli (Ternar)              | `a > b ? true : false`                         |
+| Va (Mantiqiy)                 | `&&`                                           |
+| Yoki (Mantiqiy)               | `\|\|`                                         |
+| Inkor (Mantiqiy)              | `!`                                            |
 | Nullish Coalescing            | `possiblyNullValue ?? 'default'`               |
-| Comparison Operators          | `<`, `<=`, `>`, `>=`, `==`, `===`, `!==`, `!=` |
-| Unary Negation                | `-x`                                           |
-| Unary Plus                    | `+y`                                           |
-| Property Accessor             | `person['name']`                               |
+| Solishtirish operatorlari     | `<`, `<=`, `>`, `>=`, `==`, `===`, `!==`, `!=` |
+| Unar manfiy                   | `-x`                                           |
+| Unar musbat                   | `+y`                                           |
+| Xususiyatga murojaat          | `person['name']`                               |
 | typeof                        | `typeof 42`                                    |
 | void                          | `void 1`                                       |
 | in                            | `'model' in car`                               |
 | instanceof                    | `car instanceof Automobile`                    |
-| Assignment                    | `a = b`                                        |
-| Increment                     | `a++`, `++a`                                   |
-| Decrement                     | `a--`, `--a`                                   |
-| Addition Assignment           | `a += b`                                       |
-| Subtraction Assignment        | `a -= b`                                       |
-| Multiplication Assignment     | `a *= b`                                       |
-| Division Assignment           | `a /= b`                                       |
-| Remainder Assignment          | `a %= b`                                       |
-| Exponentiation Assignment     | `a **= b`                                      |
-| Logical AND Assignment        | `a &&= b`                                      |
-| Logical OR Assignment         | `a \|\|= b`                                    |
-| Nullish Coalescing Assignment | `a ??= b`                                      |
-| Spread in object literals     | `{...obj, foo: 'bar'}`                         |
-| Spread in array literals      | `[...arr, 1, 2, 3]`                            |
-| Rest in function calls        | `fn(...args)`                                  |
-| Arrow function                | `items.filter((i) => i.active)`                |
+| Tayinlash                     | `a = b`                                        |
+| Inkrement                     | `a++`, `++a`                                   |
+| Dekrement                     | `a--`, `--a`                                   |
+| Qoʻshib tayinlash             | `a += b`                                       |
+| Ayirib tayinlash              | `a -= b`                                       |
+| Koʻpaytirib tayinlash         | `a *= b`                                       |
+| Boʻlib tayinlash              | `a /= b`                                       |
+| Qoldiq bilan tayinlash        | `a %= b`                                       |
+| Darajaga koʻtarib tayinlash   | `a **= b`                                      |
+| Mantiqiy VA bilan tayinlash   | `a &&= b`                                      |
+| Mantiqiy YOKI bilan tayinlash | `a \|\|= b`                                    |
+| Nullish Coalescing bilan tayinlash | `a ??= b`                                 |
+| Obyekt literallarida spread   | `{...obj, foo: 'bar'}`                         |
+| Massiv literallarida spread   | `[...arr, 1, 2, 3]`                            |
+| Funksiya chaqiruvlarida rest  | `fn(...args)`                                  |
+| Strelka funksiyasi (arrow function) | `items.filter((i) => i.active)`          |
 
-NOTE: Assignment and increment/decrement operators are only valid in [event listener statements](#event-listener-statements). Using them in a binding or interpolation is a compile error, unless they are inside an arrow function.
+NOTE: Tayinlash va inkrement/dekrement operatorlari faqat [hodisa tinglovchisi operatorlarida](#event-listener-statements) yaroqli. Ularni bogʻlash yoki interpolyatsiyada ishlatish kompilyatsiya xatosidir, agar ular strelka funksiyasi ichida boʻlmasa.
 
-Arrow functions must have an expression body. Pipes cannot be used inside an arrow function, but you can pass an arrow function as an argument to a pipe.
+Strelka funksiyalari ifoda tanasiga ega boʻlishi shart. Strelka funksiyasi ichida pipe'lardan foydalanish mumkin emas, lekin strelka funksiyasini pipe'ga argument sifatida uzatishingiz mumkin.
 
-Angular expressions additionally also support the following non-standard operators:
+Angular ifodalari bundan tashqari quyidagi nostandart operatorlarni ham qoʻllab-quvvatlaydi:
 
-| Operator                        | Example(s)                     |
+| Operator                        | Misol(lar)                     |
 | ------------------------------- | ------------------------------ |
 | [Pipe](/guide/templates/pipes)  | `{{ total \| currency }}`      |
-| Optional chaining\*             | `someObj.someProp?.nestedProp` |
-| Non-null assertion (TypeScript) | `someObj!.someProp`            |
+| Ixtiyoriy zanjir (optional chaining)\* | `someObj.someProp?.nestedProp` |
+| Null boʻlmaslik tasdigʻi (TypeScript) | `someObj!.someProp`       |
 
-### Safe navigation migration
+### Xavfsiz navigatsiya migratsiyasi {#safe-navigation-migration}
 
-Prior to Angular 22, the optional chaining operator (`?.`) returned `null` when the left-hand side is `null` or `undefined`, whereas standard JavaScript's `?.` returns `undefined`.
-Since Angular 22, the optional chaining operator behavior in Angular expressions is aligned with the standard JavaScript behavior.
+Angular 22'dan oldin ixtiyoriy zanjir operatori (`?.`) chap tomon `null` yoki `undefined` boʻlganda `null` qaytarar edi, standart JavaScript'dagi `?.` esa `undefined` qaytaradi.
+Angular 22'dan boshlab Angular ifodalaridagi ixtiyoriy zanjir operatorining xatti-harakati standart JavaScript xatti-harakatiga moslashtirildi.
 
-During the migration to v22, the `ng update` schematics adds a `$safeNavigationMigration` function to existing expressions to preserve the previous behavior.
+v22'ga migratsiya davomida `ng update` sxematikalari oldingi xatti-harakatni saqlab qolish uchun mavjud ifodalarga `$safeNavigationMigration` funksiyasini qoʻshadi.
 
 ```html
 {{ $safeNavigationMigration(foo?.bar) }}
 ```
 
-`$safeNavigationMigration` is a **temporary migration aid only**. It instructs the compiler to compile the wrapped safe-navigation expression using the legacy null-returning semantics rather than the standard JavaScript `?.` semantics. It is not a real function and cannot be called from TypeScript.
+`$safeNavigationMigration` — bu **faqat vaqtinchalik migratsiya yordamchisi**. U kompilyatorga oʻralgan xavfsiz navigatsiya ifodasini standart JavaScript `?.` semantikasi oʻrniga eski, `null` qaytaruvchi semantika bilan kompilyatsiya qilishni buyuradi. Bu haqiqiy funksiya emas va uni TypeScript'dan chaqirish mumkin emas.
 
-NOTE: Prefer migrating expressions to no longer rely on `null` vs `undefined` distinctions so that `$safeNavigationMigration` can be removed. This function may be removed in a future version of Angular.
+NOTE: `$safeNavigationMigration`'ni olib tashlash mumkin boʻlishi uchun ifodalarni `null` va `undefined` farqiga tayanmaydigan holga migratsiya qilishni afzal koʻring. Bu funksiya Angular'ning kelajakdagi versiyasida olib tashlanishi mumkin.
 
-### Unsupported operators
+### Qoʻllab-quvvatlanmaydigan operatorlar {#unsupported-operators}
 
-| Operator              | Example(s)                        |
+| Operator              | Misol(lar)                        |
 | --------------------- | --------------------------------- |
-| All bitwise operators | `&`, `&=`, `~`, `\|=`, `^=`, etc. |
-| Object destructuring  | `const { name } = person`         |
-| Array destructuring   | `const [firstItem] = items`       |
-| Comma operator        | `x = (x++, x)`                    |
+| Barcha bitli operatorlar | `&`, `&=`, `~`, `\|=`, `^=` va h.k. |
+| Obyekt destrukturizatsiyasi | `const { name } = person`    |
+| Massiv destrukturizatsiyasi | `const [firstItem] = items`  |
+| Vergul operatori      | `x = (x++, x)`                    |
 | new                   | `new Car()`                       |
 
-## Lexical context for expressions
+## Ifodalar uchun leksik kontekst {#lexical-context-for-expressions}
 
-Angular expressions are evaluated within the context of the component class as well as any relevant [template variables](/guide/templates/variables), locals, and globals.
+Angular ifodalari komponent klassi kontekstida, shuningdek tegishli [shablon oʻzgaruvchilari](/guide/templates/variables), lokal va global obyektlar kontekstida hisoblanadi.
 
-When referring to component class members, `this` is always implied. However, if a template declares a [template variables](guide/templates/variables) with the same name as a member, the variable shadows that member. You can unambiguously reference such a class member by explicitly using `this.`. This can be useful when creating an `@let` declaration that shadows a class member, e.g. for signal narrowing purposes.
+Komponent klassi aʼzolariga murojaat qilganda `this` doimo nazarda tutiladi. Biroq, agar shablon aʼzo bilan bir xil nomli [shablon oʻzgaruvchisini](guide/templates/variables) eʼlon qilsa, oʻzgaruvchi oʻsha aʼzoni yashiradi (shadowing). Bunday klass aʼzosiga `this.`'ni aniq yozish orqali bir maʼnoli murojaat qilishingiz mumkin. Bu klass aʼzosini yashiradigan `@let` eʼlonini yaratishda, masalan, signalni toraytirish maqsadida, foydali boʻlishi mumkin.
 
-## Declarations
+## Eʼlonlar {#declarations}
 
-Generally speaking, declarations are not supported in Angular expressions. This includes, but is not limited to:
+Umuman olganda, Angular ifodalarida eʼlonlar qoʻllab-quvvatlanmaydi. Bunga quyidagilar kiradi, lekin ular bilan cheklanmaydi:
 
-| Declarations                      | Example(s)                                  |
+| Eʼlonlar                          | Misol(lar)                                  |
 | --------------------------------- | ------------------------------------------- |
-| Variables                         | `let label = 'abc'`, `const item = 'apple'` |
-| Functions                         | `function myCustomFunction() { }`           |
-| Arrow functions with block bodies | `() => { }`                                 |
-| Classes                           | `class Rectangle { }`                       |
+| Oʻzgaruvchilar                    | `let label = 'abc'`, `const item = 'apple'` |
+| Funksiyalar                       | `function myCustomFunction() { }`           |
+| Blok tanali strelka funksiyalari  | `() => { }`                                 |
+| Klasslar                          | `class Rectangle { }`                       |
 
-## Event listener statements
+## Hodisa tinglovchisi operatorlari {#event-listener-statements}
 
-Event handlers are **statements** rather than expressions. While they support all of the same syntax as Angular expressions, there are two key differences:
+Hodisa ishlov beruvchilari ifodalar emas, balki **operatorlar (statements)**dir. Ular Angular ifodalari bilan bir xil sintaksisning barchasini qoʻllab-quvvatlasa-da, ikkita asosiy farq mavjud:
 
-1. Statements **do support** assignment operators (but not destructuring assignments)
-1. Statements **do not support** pipes
+1. Operatorlar tayinlash operatorlarini **qoʻllab-quvvatlaydi** (lekin destrukturizatsiya orqali tayinlashni emas)
+1. Operatorlar pipe'larni **qoʻllab-quvvatlamaydi**
