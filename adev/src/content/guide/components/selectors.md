@@ -1,10 +1,10 @@
-# Component selectors
+# Komponent selektorlari
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: Bu qoʻllanma siz [Asoslar qoʻllanmasini](essentials) allaqachon oʻqib chiqqan deb hisoblaydi. Agar Angular'da yangi boʻlsangiz, avval oʻshani oʻqing.
 
-Every component defines
-a [CSS selector](https://developer.mozilla.org/docs/Web/CSS/CSS_selectors) that determines how
-the component is used:
+Har bir komponent uning qanday ishlatilishini belgilaydigan
+[CSS selektorini](https://developer.mozilla.org/docs/Web/CSS/CSS_selectors)
+aniqlaydi:
 
 ```angular-ts {highlight: [2]}
 @Component({
@@ -14,7 +14,7 @@ the component is used:
 export class ProfilePhoto { }
 ```
 
-You use a component by creating a matching HTML element in the templates of _other_ components:
+Komponentdan _boshqa_ komponentlarning shablonlarida mos keluvchi HTML element yaratish orqali foydalanasiz:
 
 ```angular-ts {highlight: [3]}
 @Component({
@@ -26,42 +26,42 @@ You use a component by creating a matching HTML element in the templates of _oth
 export class UserProfile { }
 ```
 
-**Angular matches selectors statically at compile-time**. Changing the DOM at run-time, either via
-Angular bindings or with DOM APIs, does not affect the components rendered.
+**Angular selektorlarni kompilyatsiya vaqtida statik tarzda moslashtiradi**. Ish vaqtida DOM'ni Angular bogʻlashlari yoki
+DOM API'lari orqali oʻzgartirish render qilinadigan komponentlarga taʼsir qilmaydi.
 
-**An element can match exactly one component selector.** If multiple component selectors match a
-single element, Angular reports an error.
+**Bir element faqat bitta komponent selektoriga mos kelishi mumkin.** Agar bir nechta komponent selektori bitta
+elementga mos kelsa, Angular xato haqida xabar beradi.
 
-**Component selectors are case-sensitive.**
+**Komponent selektorlari katta-kichik harflarga sezgir.**
 
-## Types of selectors
+## Selektor turlari {#types-of-selectors}
 
-Angular supports a limited subset
-of [basic CSS selector types](https://developer.mozilla.org/docs/Web/CSS/CSS_Selectors) in
-component selectors:
+Angular komponent selektorlarida
+[asosiy CSS selektor turlarining](https://developer.mozilla.org/docs/Web/CSS/CSS_Selectors)
+cheklangan bir qismini qoʻllab-quvvatlaydi:
 
-| **Selector type**  | **Description**                                                                                                 | **Examples**                  |
-| ------------------ | --------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| Type selector      | Matches elements based on their HTML tag name, or node name.                                                    | `profile-photo`               |
-| Attribute selector | Matches elements based on the presence of an HTML attribute and, optionally, an exact value for that attribute. | `[dropzone]` `[type="reset"]` |
-| Class selector     | Matches elements based on the presence of a CSS class.                                                          | `.menu-item`                  |
+| **Selektor turi**  | **Tavsif**                                                                                                       | **Misollar**                  |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| Tur selektori      | Elementlarni HTML teg nomi yoki tugun (node) nomi boʻyicha moslashtiradi.                                        | `profile-photo`               |
+| Atribut selektori  | Elementlarni HTML atributining mavjudligi va, ixtiyoriy ravishda, oʻsha atributning aniq qiymati boʻyicha moslashtiradi. | `[dropzone]` `[type="reset"]` |
+| Klass selektori    | Elementlarni CSS klassining mavjudligi boʻyicha moslashtiradi.                                                   | `.menu-item`                  |
 
-For attribute values, Angular supports matching an exact attribute value with the equals (`=`)
-operator. Angular does not support other attribute value operators.
+Atribut qiymatlari uchun Angular tenglik (`=`) operatori bilan aniq atribut qiymatini moslashtirishni
+qoʻllab-quvvatlaydi. Angular boshqa atribut qiymati operatorlarini qoʻllab-quvvatlamaydi.
 
-Angular component selectors do not support combinators, including
-the [descendant combinator](https://developer.mozilla.org/docs/Web/CSS/Descendant_combinator)
-or [child combinator](https://developer.mozilla.org/docs/Web/CSS/Child_combinator).
+Angular komponent selektorlari kombinatorlarni, jumladan
+[avlod kombinatorini](https://developer.mozilla.org/docs/Web/CSS/Descendant_combinator)
+yoki [bola kombinatorini](https://developer.mozilla.org/docs/Web/CSS/Child_combinator) qoʻllab-quvvatlamaydi.
 
-Angular component selectors do not support
-specifying [namespaces](https://developer.mozilla.org/docs/Web/SVG/Namespaces_Crash_Course).
+Angular komponent selektorlari
+[nomlar fazosini (namespace)](https://developer.mozilla.org/docs/Web/SVG/Namespaces_Crash_Course) koʻrsatishni qoʻllab-quvvatlamaydi.
 
-### The `:not` pseudo-class
+### `:not` psevdo-klassi {#the-not-pseudo-class}
 
-Angular supports [the `:not` pseudo-class](https://developer.mozilla.org/docs/Web/CSS/:not).
-You can append this pseudo-class to any other selector to narrow which elements a component's
-selector matches. For example, you could define a `[dropzone]` attribute selector and prevent
-matching `textarea` elements:
+Angular [`:not` psevdo-klassini](https://developer.mozilla.org/docs/Web/CSS/:not) qoʻllab-quvvatlaydi.
+Komponent selektori qaysi elementlarga mos kelishini cheklash uchun bu psevdo-klassni istalgan boshqa
+selektorga qoʻshishingiz mumkin. Masalan, `[dropzone]` atribut selektorini aniqlab, uning `textarea`
+elementlariga mos kelishining oldini olishingiz mumkin:
 
 ```angular-ts {highlight: [2]}
 @Component({
@@ -71,12 +71,12 @@ matching `textarea` elements:
 export class DropZone { }
 ```
 
-Angular does not support any other pseudo-classes or pseudo-elements in component selectors.
+Angular komponent selektorlarida boshqa hech qanday psevdo-klass yoki psevdo-elementni qoʻllab-quvvatlamaydi.
 
-### Combining selectors
+### Selektorlarni birlashtirish {#combining-selectors}
 
-You can combine multiple selectors by concatenating them. For example, you can match `<button>`
-elements that specify `type="reset"`:
+Bir nechta selektorni ketma-ket yozish orqali birlashtirishingiz mumkin. Masalan, `type="reset"` koʻrsatilgan
+`<button>` elementlarini moslashtirishingiz mumkin:
 
 ```angular-ts {highlight: [2]}
 @Component({
@@ -86,7 +86,7 @@ elements that specify `type="reset"`:
 export class ResetButton { }
 ```
 
-You can also define multiple selectors with a comma-separated list:
+Shuningdek, vergul bilan ajratilgan roʻyxat orqali bir nechta selektorni aniqlashingiz mumkin:
 
 ```angular-ts {highlight: [2]}
 @Component({
@@ -96,35 +96,35 @@ You can also define multiple selectors with a comma-separated list:
 export class DropZone { }
 ```
 
-Angular creates a component for each element that matches _any_ of the selectors in the list.
+Angular roʻyxatdagi selektorlarning _istalgan biriga_ mos keladigan har bir element uchun komponent yaratadi.
 
-## Choosing a selector
+## Selektor tanlash {#choosing-a-selector}
 
-The vast majority of components should use a custom element name as their selector. All custom
-element names should include a hyphen as described
-by [the HTML specification](https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name).
-By default, Angular reports an error if it encounters a custom tag name that does not match any
-available components, preventing bugs due to mistyped component names.
+Komponentlarning aksariyati selektor sifatida maxsus element nomidan (custom element name) foydalanishi kerak. Barcha maxsus
+element nomlari [HTML spetsifikatsiyasida](https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name)
+tavsiflanganidek, defis belgisini oʻz ichiga olishi kerak.
+Sukut boʻyicha Angular mavjud komponentlarning hech biriga mos kelmaydigan maxsus teg nomiga duch kelsa, xato haqida
+xabar beradi va shu orqali komponent nomlarini notoʻgʻri yozish tufayli kelib chiqadigan xatolarning oldini oladi.
 
-See [Advanced component configuration](guide/components/advanced-configuration) for details on
-using [native custom elements](https://developer.mozilla.org/docs/Web/Web_Components) in
-Angular templates.
+Angular shablonlarida [tabiiy (native) maxsus elementlardan](https://developer.mozilla.org/docs/Web/Web_Components) foydalanish
+haqida batafsil maʼlumot uchun [Komponentlarning kengaytirilgan konfiguratsiyasi](guide/components/advanced-configuration)
+boʻlimiga qarang.
 
-### Selector prefixes
+### Selektor prefikslari {#selector-prefixes}
 
-The Angular team recommends using a short, consistent prefix for all the custom components
-defined inside your project. For example, if you were to build YouTube with Angular, you might
-prefix your components with `yt-`, with components like `yt-menu`, `yt-player`, etc. Namespacing
-your selectors like this makes it immediately clear where a particular component comes from. By
-default, the Angular CLI uses `app-`.
+Angular jamoasi loyihangiz ichida aniqlangan barcha maxsus komponentlar uchun qisqa va bir xil prefiksdan
+foydalanishni tavsiya qiladi. Masalan, agar YouTube'ni Angular bilan yaratmoqchi boʻlsangiz, komponentlaringizga
+`yt-` prefiksini qoʻyib, `yt-menu`, `yt-player` va shu kabi komponentlar yaratishingiz mumkin. Selektorlaringizni shu tarzda
+nomlar fazosiga ajratish muayyan komponent qayerdan kelganini darhol tushunarli qiladi. Sukut
+boʻyicha Angular CLI `app-` prefiksidan foydalanadi.
 
-IMPORTANT: Angular uses the `ng` selector prefix for its own framework APIs. Never use `ng` as a selector prefix for your own custom components.
+IMPORTANT: Angular oʻzining freymvork API'lari uchun `ng` selektor prefiksidan foydalanadi. Oʻzingizning maxsus komponentlaringiz uchun hech qachon `ng` ni selektor prefiksi sifatida ishlatmang.
 
-### When to use an attribute selector
+### Atribut selektorini qachon ishlatish kerak {#when-to-use-an-attribute-selector}
 
-You should consider an attribute selector when you want to create a component on a standard native
-element. For example, if you want to create a custom button component, you can take advantage of the
-standard `<button>` element by using an attribute selector:
+Standart tabiiy element ustida komponent yaratmoqchi boʻlsangiz, atribut selektoridan foydalanishni
+koʻrib chiqishingiz kerak. Masalan, maxsus tugma komponenti yaratmoqchi boʻlsangiz, atribut selektoridan foydalanib
+standart `<button>` elementining afzalliklaridan foydalanishingiz mumkin:
 
 ```angular-ts {highlight: [2]}
 @Component({
@@ -134,13 +134,13 @@ standard `<button>` element by using an attribute selector:
 export class YouTubeUploadButton { }
 ```
 
-This approach allows consumers of the component to directly use all the element's standard APIs
-without extra work. This is especially valuable for ARIA attributes such as `aria-label`.
+Bu yondashuv komponentdan foydalanuvchilarga qoʻshimcha ish qilmasdan elementning barcha standart API'laridan
+toʻgʻridan-toʻgʻri foydalanish imkonini beradi. Bu `aria-label` kabi ARIA atributlari uchun ayniqsa qimmatli.
 
-Angular does not report errors when it encounters custom attributes that don't match an available
-component. When using components with attribute selectors, consumers may forget to import the
-component or its NgModule, resulting in the component not rendering.
-See [Importing and using components](guide/components#imports-in-the-component-decorator) for more information.
+Angular mavjud komponentga mos kelmaydigan maxsus atributlarga duch kelganda xato haqida xabar bermaydi.
+Atribut selektorli komponentlardan foydalanilganda, ulardan foydalanuvchilar komponentni yoki uning NgModule'ini
+import qilishni unutib qoʻyishi mumkin, natijada komponent render qilinmaydi.
+Qoʻshimcha maʼlumot uchun [Komponentlarni import qilish va ishlatish](guide/components#imports-in-the-component-decorator) boʻlimiga qarang.
 
-Components that define attribute selectors should use lowercase, dash-case attributes. You can
-follow the same prefixing recommendation described above.
+Atribut selektorlarini aniqlaydigan komponentlar kichik harfli, defis bilan ajratilgan (dash-case) atributlardan foydalanishi kerak.
+Yuqorida tavsiflangan prefiks qoʻyish tavsiyasiga ham amal qilishingiz mumkin.

@@ -1,8 +1,8 @@
-# Styling components
+# Komponentlarga stillar berish
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: Bu qoʻllanma siz [Asoslar qoʻllanmasini](essentials) allaqachon oʻqib chiqqan deb hisoblaydi. Agar Angular'da yangi boʻlsangiz, avval oʻshani oʻqing.
 
-Components can optionally include CSS styles that apply to that component's DOM:
+Komponentlar ixtiyoriy ravishda oʻsha komponentning DOM'iga qoʻllaniladigan CSS stillarini oʻz ichiga olishi mumkin:
 
 ```angular-ts {highlight:[4]}
 @Component({
@@ -17,7 +17,7 @@ Components can optionally include CSS styles that apply to that component's DOM:
 export class ProfilePhoto {}
 ```
 
-You can also choose to write your styles in separate files:
+Shuningdek, stillaringizni alohida fayllarda yozishni ham tanlashingiz mumkin:
 
 ```angular-ts {highlight:[4]}
 @Component({
@@ -28,20 +28,20 @@ You can also choose to write your styles in separate files:
 export class ProfilePhoto {}
 ```
 
-When Angular compiles your component, these styles are emitted with your component's JavaScript
-output. This means that component styles participate in the JavaScript module system. When you
-render an Angular component, the framework automatically includes its associated styles, even when
-lazy-loading a component.
+Angular komponentingizni kompilyatsiya qilganda, bu stillar komponentingizning JavaScript chiqishi bilan birga
+chiqariladi. Bu komponent stillari JavaScript modul tizimida ishtirok etishini anglatadi. Angular komponentini
+render qilganingizda, freymvork unga tegishli stillarni avtomatik ravishda qoʻshadi, hatto komponent
+lazy loading orqali yuklanganda ham.
 
-Angular works with any tool that outputs CSS,
-including [Sass](https://sass-lang.com), [Less](https://lesscss.org),
-and [Stylus](https://stylus-lang.com).
+Angular CSS chiqaradigan har qanday vosita bilan ishlaydi,
+jumladan [Sass](https://sass-lang.com), [Less](https://lesscss.org)
+va [Stylus](https://stylus-lang.com) bilan.
 
-## Style scoping
+## Stillar qamrovi {#style-scoping}
 
-Every component has a **view encapsulation** setting that determines how the framework scopes a
-component's styles. There are four view encapsulation modes: `Emulated`, `ShadowDom`, `ExperimentalIsolatedShadowDom`, and `None`.
-You can specify the mode in the `@Component` decorator:
+Har bir komponentda freymvork komponent stillarining qamrovini qanday belgilashini aniqlaydigan **view inkapsulyatsiyasi**
+sozlamasi mavjud. View inkapsulyatsiyasining toʻrtta rejimi bor: `Emulated`, `ShadowDom`, `ExperimentalIsolatedShadowDom` va `None`.
+Rejimni `@Component` dekoratorida koʻrsatishingiz mumkin:
 
 ```angular-ts {highlight:[3]}
 @Component({
@@ -53,108 +53,108 @@ export class ProfilePhoto { }
 
 ### ViewEncapsulation.Emulated
 
-By default, Angular uses emulated encapsulation so that a component's styles only apply to elements
-defined in that component's template. In this mode, the framework generates a unique HTML attribute
-for each component instance, adds that attribute to elements in the component's template, and
-inserts that attribute into the CSS selectors defined in your component's styles.
+Sukut boʻyicha Angular emulyatsiya qilingan inkapsulyatsiyadan foydalanadi, shunda komponent stillari faqat oʻsha
+komponent shablonida aniqlangan elementlarga qoʻllaniladi. Bu rejimda freymvork har bir komponent nusxasi uchun
+noyob HTML atributi yaratadi, bu atributni komponent shablonidagi elementlarga qoʻshadi va
+komponent stillarida aniqlangan CSS selektorlariga shu atributni kiritadi.
 
-This mode ensures that a component's styles do not leak out and affect other components. However,
-global styles defined outside of a component may still affect elements inside a component with
-emulated encapsulation.
+Bu rejim komponent stillarining tashqariga chiqib ketmasligini va boshqa komponentlarga taʼsir qilmasligini taʼminlaydi. Biroq,
+komponentdan tashqarida aniqlangan global stillar emulyatsiya qilingan inkapsulyatsiyali komponent ichidagi
+elementlarga hali ham taʼsir qilishi mumkin.
 
-In emulated mode, Angular supports
-the [`:host`](https://developer.mozilla.org/docs/Web/CSS/:host) pseudo-class.
-While the [`:host-context()`](https://developer.mozilla.org/docs/Web/CSS/:host-context) pseudo-class
-is deprecated in modern browsers, Angular's compiler provides full support for it. Both pseudo-classes
-can be used without relying on native
-[Shadow DOM](https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM).
-During compilation, the framework transforms these pseudo classes into attributes so it doesn't
-comply with these native pseudo classes' rules at runtime (e.g. browser compatibility, specificity). Angular's
-emulated encapsulation mode does not support any other pseudo classes related to Shadow DOM, such
-as `::shadow` or `::part`.
+Emulyatsiya rejimida Angular
+[`:host`](https://developer.mozilla.org/docs/Web/CSS/:host) psevdo-klassini qoʻllab-quvvatlaydi.
+[`:host-context()`](https://developer.mozilla.org/docs/Web/CSS/:host-context) psevdo-klassi zamonaviy brauzerlarda
+eskirgan (deprecated) boʻlsa-da, Angular kompilyatori uni toʻliq qoʻllab-quvvatlaydi. Ikkala psevdo-klassdan ham
+tabiiy (native) [Shadow DOM](https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM)'ga
+tayanmasdan foydalanish mumkin.
+Kompilyatsiya vaqtida freymvork bu psevdo-klasslarni atributlarga aylantiradi, shuning uchun ish vaqtida u bu tabiiy
+psevdo-klasslarning qoidalariga (masalan, brauzer mosligi, spetsifiklik) boʻysunmaydi. Angular'ning
+emulyatsiya qilingan inkapsulyatsiya rejimi Shadow DOM bilan bogʻliq boshqa psevdo-klasslarni, masalan
+`::shadow` yoki `::part` ni qoʻllab-quvvatlamaydi.
 
 #### `::ng-deep`
 
-Angular's emulated encapsulation mode supports a custom pseudo class, `::ng-deep`.
-**The Angular team strongly discourages new use of `::ng-deep`**. These APIs remain
-exclusively for backwards compatibility.
+Angular'ning emulyatsiya qilingan inkapsulyatsiya rejimi maxsus psevdo-klass — `::ng-deep` ni qoʻllab-quvvatlaydi.
+**Angular jamoasi `::ng-deep` dan yangi foydalanishni qatʼiy tavsiya etmaydi**. Bu API'lar faqat
+orqaga moslik uchun saqlanib qolgan.
 
-When a selector contains `::ng-deep`, Angular stops applying view-encapsulation boundaries after that point in the selector. Any part of the selector that follows `::ng-deep` can match elements outside the component’s template.
+Selektorda `::ng-deep` boʻlsa, Angular selektorning shu nuqtasidan keyin view inkapsulyatsiyasi chegaralarini qoʻllashni toʻxtatadi. Selektorning `::ng-deep` dan keyin keladigan har qanday qismi komponent shablonidan tashqaridagi elementlarga mos kelishi mumkin.
 
-For example:
+Masalan:
 
-- a CSS rule selector like `p a`, using the emulated encapsulation, will match `<a>` elements that are descendants of a `<p>` element,
-  both being within the component's own template.
+- `p a` kabi CSS qoida selektori emulyatsiya qilingan inkapsulyatsiyada `<p>` elementining avlodi boʻlgan `<a>` elementlariga mos keladi,
+  bunda ikkalasi ham komponentning oʻz shablonida boʻlishi kerak.
 
-- A selector like `::ng-deep p a` will match `<a>` elements anywhere in the application, descendants of a `<p>` element anywhere in the application.
+- `::ng-deep p a` kabi selektor ilovaning istalgan joyidagi `<a>` elementlariga — ilovaning istalgan joyidagi `<p>` elementining avlodlariga mos keladi.
 
-  That effectively makes it behave like a global style.
+  Bu amalda uni global stil kabi ishlashga majbur qiladi.
 
-- In `p ::ng-deep a`, Angular requires the `<p>` element to come from the component's own template, but the `<a>` element may be anywhere in the application.
+- `p ::ng-deep a` da Angular `<p>` elementining komponentning oʻz shablonidan boʻlishini talab qiladi, lekin `<a>` elementi ilovaning istalgan joyida boʻlishi mumkin.
 
-  So, in effect, the `<a>` element may be in the component's template, or in any of its projected or child content.
+  Demak, amalda `<a>` elementi komponent shablonida yoki uning proyeksiya qilingan yoxud bola kontentining istalgan joyida boʻlishi mumkin.
 
-- With `:host ::ng-deep p a`, both the `<a>` and `<p>` elements must be descendants of the component's host element.
+- `:host ::ng-deep p a` bilan `<a>` ham, `<p>` elementlari ham komponentning host elementining avlodlari boʻlishi shart.
 
-  They can come from the component's template or the views of its child components, but not elsewhere in the app.
+  Ular komponent shablonidan yoki uning bola komponentlarining view'laridan kelishi mumkin, lekin ilovaning boshqa joyidan emas.
 
 ### ViewEncapsulation.ShadowDom
 
-This mode scopes styles within a component by
-using [the web standard Shadow DOM API](https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM).
-When enabling this mode, Angular attaches a shadow root to the component's host element and renders
-the component's template and styles into the corresponding shadow tree.
+Bu rejim komponent ichidagi stillar qamrovini
+[veb standarti boʻlgan Shadow DOM API](https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM) yordamida belgilaydi.
+Bu rejim yoqilganda Angular komponentning host elementiga shadow root biriktiradi va komponent shabloni
+hamda stillarini tegishli shadow daraxtiga render qiladi.
 
-Styles inside the shadow tree cannot affect elements outside of that shadow tree.
+Shadow daraxti ichidagi stillar oʻsha shadow daraxtidan tashqaridagi elementlarga taʼsir qila olmaydi.
 
-Enabling `ShadowDom` encapsulation, however, impacts more than style scoping. Rendering the
-component in a shadow tree affects event propagation, interaction
-with [the `<slot>` API](https://developer.mozilla.org/docs/Web/Web_Components/Using_templates_and_slots),
-and how browser developer tools show elements. Always understand the full implications of using
-Shadow DOM in your application before enabling this option.
+Biroq `ShadowDom` inkapsulyatsiyasini yoqish stillar qamrovidan koʻra koʻproq narsaga taʼsir qiladi. Komponentni
+shadow daraxtida render qilish hodisalarning tarqalishiga,
+[`<slot>` API](https://developer.mozilla.org/docs/Web/Web_Components/Using_templates_and_slots) bilan oʻzaro taʼsirga
+va brauzer dasturchi vositalarining elementlarni qanday koʻrsatishiga taʼsir qiladi. Bu opsiyani yoqishdan oldin ilovangizda
+Shadow DOM'dan foydalanishning toʻliq oqibatlarini doimo tushunib oling.
 
 ### ViewEncapsulation.ExperimentalIsolatedShadowDom
 
-Behaves as above, except this mode strictly guarantees that _only_ that component's styles apply to elements in the
-component's template. Global styles cannot affect elements in a shadow tree and styles inside the
-shadow tree cannot affect elements outside of that shadow tree.
+Yuqoridagidek ishlaydi, faqat bu rejim komponent shablonidagi elementlarga _faqat_ oʻsha komponentning stillari
+qoʻllanilishini qatʼiy kafolatlaydi. Global stillar shadow daraxtidagi elementlarga taʼsir qila olmaydi va shadow
+daraxti ichidagi stillar oʻsha shadow daraxtidan tashqaridagi elementlarga taʼsir qila olmaydi.
 
 ### ViewEncapsulation.None
 
-This mode disables all style encapsulation for the component. Any styles associated with the
-component behave as global styles.
+Bu rejim komponent uchun stillar inkapsulyatsiyasini butunlay oʻchiradi. Komponent bilan bogʻliq har qanday stillar
+global stillar kabi ishlaydi.
 
-NOTE: In `Emulated` and `ShadowDom` modes, Angular doesn't 100% guarantee that your component's styles will always override styles coming from outside it.
-It is assumed that these styles have the same specificity as your component's styles in case of collision.
+NOTE: `Emulated` va `ShadowDom` rejimlarida Angular komponentingiz stillarining tashqaridan kelgan stillarni har doim bekor qilishini 100% kafolatlamaydi.
+Toʻqnashuv yuz berganda bu stillar komponentingiz stillari bilan bir xil spetsifiklikka ega deb hisoblanadi.
 
-## Defining styles in templates
+## Shablonlarda stillarni aniqlash {#defining-styles-in-templates}
 
-You can use the `<style>` element in a component's template to define additional styles. The
-component's view encapsulation mode applies to styles defined this way.
+Qoʻshimcha stillarni aniqlash uchun komponent shablonida `<style>` elementidan foydalanishingiz mumkin.
+Bu tarzda aniqlangan stillarga komponentning view inkapsulyatsiyasi rejimi qoʻllaniladi.
 
-Angular does not support bindings inside of style elements.
+Angular style elementlari ichida bogʻlashlarni qoʻllab-quvvatlamaydi.
 
-## Referencing external style files
+## Tashqi stil fayllariga murojaat qilish {#referencing-external-style-files}
 
-Component templates can
-use [the `<link>` element](https://developer.mozilla.org/docs/Web/HTML/Element/link) to
-reference CSS files. Additionally, your CSS may
-use [the `@import`at-rule](https://developer.mozilla.org/docs/Web/CSS/@import) to reference
-CSS files. Angular treats these references as _external_ styles. External styles are not affected by
-emulated view encapsulation.
+Komponent shablonlari CSS fayllariga murojaat qilish uchun
+[`<link>` elementidan](https://developer.mozilla.org/docs/Web/HTML/Element/link)
+foydalanishi mumkin. Bundan tashqari, CSS'ingiz CSS fayllariga murojaat qilish uchun
+[`@import` at-qoidasidan](https://developer.mozilla.org/docs/Web/CSS/@import)
+foydalanishi mumkin. Angular bu murojaatlarni _tashqi_ stillar sifatida koʻradi. Tashqi stillarga
+emulyatsiya qilingan view inkapsulyatsiyasi taʼsir qilmaydi.
 
-## Namespacing CSS custom properties
+## CSS maxsus xususiyatlarini nomlar fazosiga ajratish {#namespacing-css-custom-properties}
 
-Angular can add a prefix to the CSS custom properties (also called CSS variables) that your
-component styles declare and read. Custom properties inherit down the DOM tree, so when something
-outside your application defines a custom property such as `--primary-color` on an ancestor
-element, your components read that value. This matters when your application shares a page with another
-application or with markup you do not control. Angular does not namespace custom properties until
-you ask it to, and an application that owns its page does not need namespacing.
+Angular komponent stillaringiz eʼlon qiladigan va oʻqiydigan CSS maxsus xususiyatlariga (CSS oʻzgaruvchilari deb ham ataladi)
+prefiks qoʻshishi mumkin. Maxsus xususiyatlar DOM daraxti boʻylab pastga meros boʻlib oʻtadi, shuning uchun ilovangizdan
+tashqaridagi biror narsa ajdod elementda `--primary-color` kabi maxsus xususiyatni aniqlasa,
+komponentlaringiz oʻsha qiymatni oʻqiydi. Bu ilovangiz sahifani boshqa ilova yoki siz nazorat qilmaydigan
+markup bilan boʻlishganda muhim. Angular siz soʻramaguningizcha maxsus xususiyatlarni nomlar fazosiga ajratmaydi
+va oʻz sahifasiga egalik qiladigan ilovaga nomlar fazosiga ajratish kerak emas.
 
-To scope the custom properties in your component styles to your application, add
-[`provideCssVarNamespacing`](api/platform-browser/provideCssVarNamespacing) to your application's
-providers. It uses the application's [`APP_ID`](api/core/APP_ID) as the namespace:
+Komponent stillaringizdagi maxsus xususiyatlar qamrovini ilovangiz bilan cheklash uchun ilovangizning
+provider'lariga [`provideCssVarNamespacing`](api/platform-browser/provideCssVarNamespacing) ni qoʻshing.
+U nomlar fazosi sifatida ilovaning [`APP_ID`](api/core/APP_ID) qiymatidan foydalanadi:
 
 ```ts {header: "app.config.ts"}
 import {APP_ID, ApplicationConfig} from '@angular/core';
@@ -165,55 +165,55 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Angular prefixes the custom properties in your component styles with that namespace followed by an
-underscore, so `--primary-color` becomes `--my-app_primary-color`. The prefix applies to
-declarations, `var()` references, `@property` rules, and style bindings such as
-`[style.--primary-color]`, including the style bindings a component declares in its `host` object.
+Angular komponent stillaringizdagi maxsus xususiyatlarga oʻsha nomlar fazosi va undan keyin pastki chiziqdan iborat
+prefiks qoʻyadi, shunda `--primary-color` `--my-app_primary-color` ga aylanadi. Prefiks eʼlonlarga,
+`var()` murojaatlariga, `@property` qoidalariga va `[style.--primary-color]` kabi stil bogʻlashlariga,
+jumladan komponent oʻzining `host` obyektida eʼlon qiladigan stil bogʻlashlariga qoʻllaniladi.
 
-`APP_ID` is `ng` unless you set it, so give each application on the page its own `APP_ID`.
-Otherwise, the applications share a prefix and collide again. To use a namespace that differs from
-the application id, pass it to `provideCssVarNamespacing`. Angular appends the underscore itself:
-`provideCssVarNamespacing('my-app_')` produces `--my-app__primary-color`.
+Siz oʻrnatmaguningizcha `APP_ID` qiymati `ng` boʻladi, shuning uchun sahifadagi har bir ilovaga oʻz `APP_ID` sini bering.
+Aks holda ilovalar bir xil prefiksga ega boʻlib, yana toʻqnashadi. Ilova id'sidan farq qiladigan nomlar fazosidan
+foydalanish uchun uni `provideCssVarNamespacing` ga uzating. Angular pastki chiziqni oʻzi qoʻshadi:
+`provideCssVarNamespacing('my-app_')` natijasida `--my-app__primary-color` hosil boʻladi.
 
-Angular namespaces the styles it compiles into a component: the `styles` and `styleUrl` of the
-component, the styles you [write in a `<style>` element](#defining-styles-in-templates) in its
-template, stylesheets its template references with a relative `<link rel="stylesheet">`, and
-the styles of a component that uses `ViewEncapsulation.None`. Angular does not namespace a stylesheet the browser
-loads at runtime, such as a global stylesheet your build configuration lists or an
-[external style](#referencing-external-style-files) that your build does not inline.
+Angular komponentga kompilyatsiya qiladigan stillarni nomlar fazosiga ajratadi: komponentning `styles` va `styleUrl`'i,
+shablonidagi [`<style>` elementida yozgan](#defining-styles-in-templates) stillaringiz,
+shabloni nisbiy `<link rel="stylesheet">` orqali murojaat qiladigan stil jadvallari va
+`ViewEncapsulation.None` dan foydalanadigan komponentning stillari. Angular brauzer ish vaqtida yuklaydigan stil jadvalini,
+masalan build konfiguratsiyangizda roʻyxatga olingan global stil jadvalini yoki build'ingiz inline qilmaydigan
+[tashqi stilni](#referencing-external-style-files) nomlar fazosiga ajratmaydi.
 
-Namespacing applies to every component Angular compiles, including the components of the libraries
-you install. When a library's styles read a custom property that a global stylesheet defines, such
-as the properties of a theme, the reference no longer matches, the browser uses the `var()`
-fallback if there is one or otherwise
-[the property's inherited or initial value](https://www.w3.org/TR/css-variables-1/#invalid-variables),
-and nothing reports an error. Before you enable namespacing in an
-existing application, review the custom properties that cross between your global stylesheets and
-your components.
+Nomlar fazosiga ajratish Angular kompilyatsiya qiladigan har bir komponentga, jumladan siz oʻrnatgan kutubxonalarning
+komponentlariga ham qoʻllaniladi. Kutubxona stillari global stil jadvali aniqlagan maxsus xususiyatni, masalan
+mavzu (theme) xususiyatlarini oʻqiganda, murojaat endi mos kelmaydi, brauzer `var()` ning zaxira variantidan (fallback),
+agar u mavjud boʻlsa, aks holda
+[xususiyatning meros qilib olingan yoki boshlangʻich qiymatidan](https://www.w3.org/TR/css-variables-1/#invalid-variables)
+foydalanadi va hech narsa xato haqida xabar bermaydi. Mavjud ilovada nomlar fazosiga ajratishni yoqishdan oldin
+global stil jadvallaringiz va komponentlaringiz oʻrtasida kesishadigan maxsus xususiyatlarni
+koʻrib chiqing.
 
-IMPORTANT: Angular rewrites custom property names only in the styles and bindings it compiles.
-Everywhere else keeps the name you write, and nothing reports the mismatch.
+IMPORTANT: Angular maxsus xususiyat nomlarini faqat oʻzi kompilyatsiya qiladigan stillar va bogʻlashlarda qayta yozadi.
+Boshqa hamma joyda siz yozgan nom saqlanib qoladi va hech narsa nomuvofiqlik haqida xabar bermaydi.
 
-Angular does not rewrite the name in:
+Angular quyidagilarda nomni qayta yozmaydi:
 
-- Static style attributes, such as `style="--primary-color: red"`, including the `style` entry of a
-  component's `host` object.
-- Object and string style bindings, such as `[style]="{'--primary-color': color}"`,
-  `[style]="'--primary-color: red'"` and `ngStyle`, including the `[style]` entry of a component's
-  `host` object.
-- Custom property names inside a binding's value, such as
+- `style="--primary-color: red"` kabi statik style atributlari, jumladan komponentning `host` obyektidagi
+  `style` yozuvi.
+- `[style]="{'--primary-color': color}"`, `[style]="'--primary-color: red'"` va `ngStyle` kabi obyekt va
+  satr koʻrinishidagi stil bogʻlashlari, jumladan komponentning `host` obyektidagi `[style]`
+  yozuvi.
+- Bogʻlash qiymati ichidagi maxsus xususiyat nomlari, masalan
   `[style.border-color]="'var(--primary-color)'"`.
-- Calls to `Renderer2.setStyle`.
+- `Renderer2.setStyle` chaqiruvlari.
 
-Each of these produces a property that your namespaced styles no longer read. Namespace those
-names yourself, as described in
-[Using namespaced properties in TypeScript](#using-namespaced-properties-in-typescript).
+Bularning har biri nomlar fazosiga ajratilgan stillaringiz endi oʻqimaydigan xususiyatni hosil qiladi. Bu nomlarni
+[Nomlar fazosiga ajratilgan xususiyatlardan TypeScript'da foydalanish](#using-namespaced-properties-in-typescript)
+boʻlimida tavsiflanganidek, oʻzingiz nomlar fazosiga ajrating.
 
-### Opting out of namespacing
+### Nomlar fazosiga ajratishdan voz kechish {#opting-out-of-namespacing}
 
-To declare or read a custom property that Angular does not namespace, such as one defined in a
-global stylesheet, prefix its name with `--global--`. Angular removes `--global` and leaves the
-remaining `--` and the rest of the name unchanged:
+Angular nomlar fazosiga ajratmaydigan maxsus xususiyatni, masalan global stil jadvalida aniqlanganini, eʼlon qilish
+yoki oʻqish uchun uning nomi oldiga `--global--` prefiksini qoʻying. Angular `--global` ni olib tashlaydi va
+qolgan `--` hamda nomning qolgan qismini oʻzgarishsiz qoldiradi:
 
 ```css
 :host {
@@ -223,17 +223,17 @@ remaining `--` and the rest of the name unchanged:
 }
 ```
 
-Write two hyphens after `global`. A single hyphen, as in `--global-brand-color`, does not opt out,
-and Angular namespaces that name like any other. Avoid names that start with `--global-` followed
-by anything but a second hyphen; a future major version is planned to reject them at build time.
-Angular removes `--global` in every application, including applications that never configure a
-namespace.
+`global` dan keyin ikkita defis yozing. `--global-brand-color` dagi kabi bitta defis voz kechishni anglatmaydi
+va Angular bu nomni boshqa har qanday nom kabi nomlar fazosiga ajratadi. `--global-` dan keyin ikkinchi defisdan boshqa
+narsa keladigan nomlardan saqlaning; kelajakdagi major versiyada ularni build vaqtida rad etish rejalashtirilgan.
+Angular `--global` ni har bir ilovada, jumladan hech qachon nomlar fazosini sozlamagan ilovalarda ham
+olib tashlaydi.
 
-### Using namespaced properties in TypeScript
+### Nomlar fazosiga ajratilgan xususiyatlardan TypeScript'da foydalanish {#using-namespaced-properties-in-typescript}
 
-Prefer a style binding such as `[style.--primary-color]`, which Angular namespaces for you. When
-you go through a DOM API instead, pass the name you wrote in your styles to
-[`CssVarNamespacer`](api/platform-browser/CssVarNamespacer), including the leading `--`:
+Angular siz uchun nomlar fazosiga ajratadigan `[style.--primary-color]` kabi stil bogʻlashini afzal koʻring. Buning oʻrniga
+DOM API orqali ishlaganingizda, stillaringizda yozgan nomni, boshidagi `--` bilan birga,
+[`CssVarNamespacer`](api/platform-browser/CssVarNamespacer) ga uzating:
 
 ```angular-ts {header: "profile-photo.ts"}
 import {Component, ElementRef, inject} from '@angular/core';
@@ -258,6 +258,6 @@ export class ProfilePhoto {
 }
 ```
 
-Use the plain name for a property you declared with `--global--`, since Angular never namespaces
-those. For everything else, `namespace` returns the name unchanged when an application configures
-no namespace, so a library can call it for the custom properties its own styles declare.
+`--global--` bilan eʼlon qilgan xususiyat uchun oddiy nomdan foydalaning, chunki Angular ularni hech qachon nomlar
+fazosiga ajratmaydi. Qolgan hamma narsa uchun ilova nomlar fazosini sozlamagan boʻlsa, `namespace` nomni oʻzgarishsiz
+qaytaradi, shuning uchun kutubxona oʻz stillari eʼlon qiladigan maxsus xususiyatlar uchun uni chaqirishi mumkin.

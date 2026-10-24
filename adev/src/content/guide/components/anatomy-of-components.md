@@ -1,15 +1,15 @@
-<docs-decorative-header title="Anatomy of a component" imgSrc="adev/src/assets/images/components.svg"> <!-- markdownlint-disable-line -->
+<docs-decorative-header title="Komponent anatomiyasi" imgSrc="adev/src/assets/images/components.svg"> <!-- markdownlint-disable-line -->
 </docs-decorative-header>
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: Bu qoʻllanma siz [Asoslar qoʻllanmasini](essentials) allaqachon oʻqib chiqqan deb hisoblaydi. Agar Angular'da yangi boʻlsangiz, avval oʻshani oʻqing.
 
-Every component must have:
+Har bir komponentda quyidagilar boʻlishi shart:
 
-- A TypeScript class with _behaviors_ such as handling user input and fetching data from a server
-- An HTML template that controls what renders into the DOM
-- A [CSS selector](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors) that defines how the component is used in HTML
+- Foydalanuvchi kiritmasiga ishlov berish va serverdan maʼlumot olish kabi _xatti-harakatlarga_ (behaviors) ega TypeScript klassi
+- DOM'ga nima render qilinishini boshqaradigan HTML shablon
+- Komponent HTML'da qanday ishlatilishini belgilaydigan [CSS selektori](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors)
 
-You provide Angular-specific information for a component by adding a `@Component` [decorator](https://www.typescriptlang.org/docs/handbook/decorators.html) on top of the TypeScript class:
+Komponent uchun Angular'ga xos maʼlumotlarni TypeScript klassi ustiga `@Component` [dekoratorini](https://www.typescriptlang.org/docs/handbook/decorators.html) qoʻshish orqali berasiz:
 
 ```angular-ts {highlight: [1, 2, 3, 4]}
 @Component({
@@ -19,11 +19,11 @@ You provide Angular-specific information for a component by adding a `@Component
 export class ProfilePhoto {}
 ```
 
-For full details on writing Angular templates, including data binding, event handling, and control flow, see the [Templates guide](guide/templates).
+Angular shablonlarini yozish, jumladan maʼlumotlarni bogʻlash, hodisalarga ishlov berish va boshqaruv oqimi haqida toʻliq maʼlumot uchun [Shablonlar qoʻllanmasiga](guide/templates) qarang.
 
-The object passed to the `@Component` decorator is called the component's **metadata**. This includes the `selector`, `template`, and other properties described throughout this guide.
+`@Component` dekoratoriga uzatiladigan obyekt komponentning **metamaʼlumotlari** (metadata) deb ataladi. Bunga `selector`, `template` va ushbu qoʻllanma davomida tavsiflangan boshqa xususiyatlar kiradi.
 
-Components can optionally include a list of CSS styles that apply to that component's DOM:
+Komponentlar ixtiyoriy ravishda oʻsha komponentning DOM'iga qoʻllaniladigan CSS stillari roʻyxatini oʻz ichiga olishi mumkin:
 
 ```angular-ts {highlight: [4]}
 @Component({
@@ -38,9 +38,9 @@ Components can optionally include a list of CSS styles that apply to that compon
 export class ProfilePhoto {}
 ```
 
-By default, a component's styles only affect elements defined in that component's template. See [Styling Components](guide/components/styling) for details on Angular's approach to styling.
+Sukut boʻyicha komponent stillari faqat oʻsha komponent shablonida aniqlangan elementlarga taʼsir qiladi. Angular'ning stillar berishga yondashuvi haqida batafsil maʼlumot uchun [Komponentlarga stillar berish](guide/components/styling) boʻlimiga qarang.
 
-You can alternatively choose to write your template and styles in separate files:
+Shuningdek, shablon va stillaringizni alohida fayllarda yozishni ham tanlashingiz mumkin:
 
 ```ts {highlight: [3,4]}
 @Component({
@@ -51,16 +51,16 @@ You can alternatively choose to write your template and styles in separate files
 export class ProfilePhoto {}
 ```
 
-This can help separate the concerns of _presentation_ from _behavior_ in your project. You can choose one approach for your entire project, or you can decide which to use for each component.
+Bu loyihangizda _koʻrinish_ (presentation) va _xatti-harakat_ (behavior) masalalarini bir-biridan ajratishga yordam beradi. Butun loyihangiz uchun bitta yondashuvni tanlashingiz yoki har bir komponent uchun qaysi birini ishlatishni alohida hal qilishingiz mumkin.
 
-Both `templateUrl` and `styleUrl` are relative to the directory in which the component resides.
+`templateUrl` ham, `styleUrl` ham komponent joylashgan katalogga nisbatan koʻrsatiladi.
 
-## Using components
+## Komponentlardan foydalanish {#using-components}
 
-### Imports in the `@Component` decorator
+### `@Component` dekoratoridagi importlar {#imports-in-the-component-decorator}
 
-To use a component, [directive](guide/directives), or [pipe](guide/templates/pipes), you must add
-it to the `imports` array in the `@Component` decorator:
+Komponent, [direktiva](guide/directives) yoki [pipe](guide/templates/pipes)'dan foydalanish uchun uni
+`@Component` dekoratoridagi `imports` massiviga qoʻshishingiz kerak:
 
 ```ts
 import {ProfilePhoto} from './profile-photo';
@@ -74,13 +74,13 @@ import {ProfilePhoto} from './profile-photo';
 export class UserProfile {}
 ```
 
-By default, Angular components are _standalone_, meaning that you can directly add them to the `imports` array of other components. Components created with an earlier version of Angular may instead specify `standalone: false` in their `@Component` decorator. For these components, you instead import the `NgModule` in which the component is defined. See the full [`NgModule` guide](guide/ngmodules/overview) for details.
+Sukut boʻyicha Angular komponentlari _standalone_ (mustaqil) boʻladi, yaʼni ularni toʻgʻridan-toʻgʻri boshqa komponentlarning `imports` massiviga qoʻshishingiz mumkin. Angular'ning oldingi versiyasida yaratilgan komponentlar esa `@Component` dekoratorida `standalone: false` ni koʻrsatgan boʻlishi mumkin. Bunday komponentlar uchun ularning oʻrniga komponent aniqlangan `NgModule`'ni import qilasiz. Batafsil maʼlumot uchun toʻliq [`NgModule` qoʻllanmasiga](guide/ngmodules/overview) qarang.
 
-IMPORTANT: In Angular versions before 19.0.0, the `standalone` option defaults to `false`.
+IMPORTANT: Angular'ning 19.0.0 dan oldingi versiyalarida `standalone` opsiyasi sukut boʻyicha `false` qiymatiga ega.
 
-### Showing components in a template
+### Komponentlarni shablonda koʻrsatish {#showing-components-in-a-template}
 
-Every component defines a [CSS selector](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors):
+Har bir komponent [CSS selektorini](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors) aniqlaydi:
 
 ```angular-ts {highlight: [2]}
 @Component({
@@ -90,9 +90,9 @@ Every component defines a [CSS selector](https://developer.mozilla.org/docs/Lear
 export class ProfilePhoto { }
 ```
 
-See [Component Selectors](guide/components/selectors) for details about which types of selectors Angular supports and guidance on choosing a selector.
+Angular qaysi turdagi selektorlarni qoʻllab-quvvatlashi va selektor tanlash boʻyicha tavsiyalar haqida batafsil maʼlumot uchun [Komponent selektorlari](guide/components/selectors) boʻlimiga qarang.
 
-You show a component by creating a matching HTML element in the template of _other_ components:
+Komponentni _boshqa_ komponentlarning shablonida mos keluvchi HTML element yaratish orqali koʻrsatasiz:
 
 ```angular-ts {highlight: [8]}
 @Component({
@@ -107,12 +107,12 @@ export class ProfilePhoto {}
 export class UserProfile {}
 ```
 
-Angular creates an instance of the component for every matching HTML element it encounters. The DOM element that matches a component's selector is referred to as that component's **host element**. The contents of a component's template are rendered inside its host element.
+Angular duch kelgan har bir mos keluvchi HTML element uchun komponentning nusxasini (instance) yaratadi. Komponent selektoriga mos keladigan DOM elementi oʻsha komponentning **host elementi** deb ataladi. Komponent shablonining mazmuni uning host elementi ichida render qilinadi.
 
-The DOM rendered by a component, corresponding to that component's template, is called that
-component's **view**.
+Komponent tomonidan render qilingan, oʻsha komponent shabloniga mos keladigan DOM
+komponentning **view**'i deb ataladi.
 
-In composing components in this way, **you can think of your Angular application as a tree of components**.
+Komponentlarni shu tarzda birlashtirganda, **Angular ilovangizni komponentlar daraxti deb tasavvur qilishingiz mumkin**.
 
 ```mermaid
 flowchart TD
@@ -125,4 +125,4 @@ flowchart TD
     E[UserBio]
 ```
 
-This tree structure is important to understanding several other Angular concepts, including [dependency injection](guide/di) and [child queries](guide/components/queries).
+Bu daraxt tuzilmasi Angular'ning boshqa bir qancha tushunchalarini, jumladan [bogʻliqliklarni inyeksiya qilish](guide/di) va [bola soʻrovlarini](guide/components/queries) tushunish uchun muhim.
