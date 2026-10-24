@@ -1,14 +1,14 @@
-# Directive composition API
+# Direktivalar kompozitsiyasi API'si
 
-Angular directives offer a great way to encapsulate reusable behaviors. Directives can apply attributes, CSS classes, and event listeners to an element.
+Angular direktivalari qayta ishlatiladigan xatti-harakatlarni inkapsulyatsiya qilishning ajoyib usulini taqdim etadi. Direktivalar elementga atributlar, CSS klasslari va hodisa tinglovchilarini qoʻllashi mumkin.
 
-The _directive composition API_ lets you apply directives to a component's host element from _within_ the component TypeScript class.
+_Direktivalar kompozitsiyasi API'si_ (directive composition API) direktivalarni komponentning host elementiga komponent TypeScript klassining _ichidan_ qoʻllash imkonini beradi.
 
-## Adding directives to a component
+## Komponentga direktivalar qoʻshish {#adding-directives-to-a-component}
 
-You apply directives to a component by adding a `hostDirectives` property to a component's decorator. Such directives are called _host directives_.
+Komponentga direktivalarni komponent dekoratoriga `hostDirectives` xususiyatini qoʻshish orqali qoʻllaysiz. Bunday direktivalar _host direktivalar_ deb ataladi.
 
-In this example, the `MenuBehavior` directive is applied to the host element of `AdminMenu`. This works similarly to applying the `MenuBehavior` to the `<admin-menu>` element in a template.
+Bu misolda `MenuBehavior` direktivasi `AdminMenu`'ning host elementiga qoʻllanadi. Bu shablonda `<admin-menu>` elementiga `MenuBehavior`'ni qoʻllashga oʻxshash ishlaydi.
 
 ```ts
 @Component({
@@ -19,18 +19,18 @@ In this example, the `MenuBehavior` directive is applied to the host element of 
 export class AdminMenu {}
 ```
 
-When the framework renders a component, Angular also creates an instance of each host directive. The directives' host bindings apply to the component's host element. By default, host directive inputs and outputs are not exposed as part of the component's public API. See [Including inputs and outputs](#including-inputs-and-outputs) below for more information.
+Freymvork komponentni render qilganda Angular har bir host direktivaning nusxasini ham yaratadi. Direktivalarning host bogʻlashlari komponentning host elementiga qoʻllanadi. Sukut boʻyicha host direktivaning input va output'lari komponentning ommaviy API'si qismi sifatida ochilmaydi. Koʻproq maʼlumot uchun quyidagi [Input va output'larni qoʻshish](#including-inputs-and-outputs) boʻlimiga qarang.
 
-Host directives come with the following constraints:
+Host direktivalar quyidagi cheklovlarga ega:
 
-- **Angular applies host directives statically at compile time.** You cannot dynamically add
-  directives at runtime.
-- **Directives used in `hostDirectives` may not specify `standalone: false`.**
-- **Angular ignores the `selector` of directives applied in the `hostDirectives` property.**
+- **Angular host direktivalarni kompilyatsiya vaqtida statik tarzda qoʻllaydi.** Ish vaqtida direktivalarni
+  dinamik tarzda qoʻsha olmaysiz.
+- **`hostDirectives`'da ishlatiladigan direktivalar `standalone: false` koʻrsata olmaydi.**
+- **Angular `hostDirectives` xususiyatida qoʻllangan direktivalarning `selector`'ini eʼtiborga olmaydi.**
 
-## Including inputs and outputs
+## Input va output'larni qoʻshish {#including-inputs-and-outputs}
 
-When you apply `hostDirectives` to your component, the inputs and outputs from the host directives are not included in your component's API by default. You can explicitly include inputs and outputs in your component's API by expanding the entry in `hostDirectives`:
+Komponentingizga `hostDirectives` qoʻllaganingizda host direktivalarning input va output'lari sukut boʻyicha komponentingiz API'siga kiritilmaydi. `hostDirectives`'dagi yozuvni kengaytirish orqali input va output'larni komponentingiz API'siga aniq kiritishingiz mumkin:
 
 ```ts
 @Component({
@@ -47,13 +47,13 @@ When you apply `hostDirectives` to your component, the inputs and outputs from t
 export class AdminMenu {}
 ```
 
-By explicitly specifying the inputs and outputs, consumers of the component with `hostDirectives` can bind them in a template:
+Input va output'larni aniq koʻrsatish orqali `hostDirectives`'ga ega komponentdan foydalanuvchilar ularni shablonda bogʻlashi mumkin:
 
 ```angular-html
 <admin-menu menuId="top-menu" (menuClosed)="logMenuClosed()"></admin-menu>
 ```
 
-Furthermore, you can alias inputs and outputs from a host directive to customize the API of your component:
+Bundan tashqari, komponentingiz API'sini moslashtirish uchun host direktivaning input va output'lariga taxallus (alias) berishingiz mumkin:
 
 ```ts
 @Component({
@@ -74,13 +74,13 @@ export class AdminMenu {}
 <admin-menu id="top-menu" (closed)="logMenuClosed()"></admin-menu>
 ```
 
-## Adding directives to another directive
+## Boshqa direktivaga direktivalar qoʻshish {#adding-directives-to-another-directive}
 
-You can also add `hostDirectives` to other directives, in addition to components. This enables the transitive aggregation of multiple behaviors.
+`hostDirectives`'ni komponentlardan tashqari boshqa direktivalarga ham qoʻshishingiz mumkin. Bu bir nechta xatti-harakatni tranzitiv tarzda birlashtirish imkonini beradi.
 
-The following example defines two directives, `Menu` and `Tooltip`, then composes their behavior in `MenuWithTooltip`. Finally, it applies `MenuWithTooltip` to `SpecializedMenuWithTooltip`.
+Quyidagi misol ikkita direktivani — `Menu` va `Tooltip`'ni aniqlaydi, soʻngra ularning xatti-harakatini `MenuWithTooltip`'da birlashtiradi. Oxirida u `MenuWithTooltip`'ni `SpecializedMenuWithTooltip`'ga qoʻllaydi.
 
-When `SpecializedMenuWithTooltip` is used in a template, it creates instances of all of `Menu`, `Tooltip`, and `MenuWithTooltip`. Each of these directives' host bindings apply to the host element of `SpecializedMenuWithTooltip`.
+`SpecializedMenuWithTooltip` shablonda ishlatilganda u `Menu`, `Tooltip` va `MenuWithTooltip`'ning barchasining nusxalarini yaratadi. Bu direktivalarning har birining host bogʻlashlari `SpecializedMenuWithTooltip`'ning host elementiga qoʻllanadi.
 
 ```ts
 @Directive({/* ... */})
@@ -102,13 +102,13 @@ export class MenuWithTooltip {}
 export class SpecializedMenuWithTooltip {}
 ```
 
-## Host directive semantics
+## Host direktivalar semantikasi {#host-directive-semantics}
 
-### Directive execution order
+### Direktivalarning bajarilish tartibi {#directive-execution-order}
 
-Host directives go through the same lifecycle as components and directives used directly in a template. However, host directives always execute their constructor, lifecycle hooks, and bindings _before_ the component or directive on which they are applied.
+Host direktivalar shablonda bevosita ishlatiladigan komponentlar va direktivalar bilan bir xil hayot siklidan oʻtadi. Biroq host direktivalar oʻz konstruktorini, hayot sikli hook'larini va bogʻlashlarini doimo ular qoʻllangan komponent yoki direktivadan _oldin_ bajaradi.
 
-The following example shows minimal use of a host directive:
+Quyidagi misol host direktivaning minimal ishlatilishini koʻrsatadi:
 
 ```ts
 @Component({
@@ -119,18 +119,18 @@ The following example shows minimal use of a host directive:
 export class AdminMenu {}
 ```
 
-The order of execution here is:
+Bu yerda bajarilish tartibi quyidagicha:
 
-1. `MenuBehavior` instantiated
-2. `AdminMenu` instantiated
-3. `MenuBehavior` receives inputs (`ngOnInit`)
-4. `AdminMenu` receives inputs (`ngOnInit`)
-5. `MenuBehavior` applies host bindings
-6. `AdminMenu` applies host bindings
+1. `MenuBehavior` nusxasi yaratiladi
+2. `AdminMenu` nusxasi yaratiladi
+3. `MenuBehavior` input'larni qabul qiladi (`ngOnInit`)
+4. `AdminMenu` input'larni qabul qiladi (`ngOnInit`)
+5. `MenuBehavior` host bogʻlashlarini qoʻllaydi
+6. `AdminMenu` host bogʻlashlarini qoʻllaydi
 
-This order of operations means that components with `hostDirectives` can override any host bindings specified by a host directive.
+Bu amallar tartibi `hostDirectives`'ga ega komponentlar host direktiva koʻrsatgan har qanday host bogʻlashlarini qayta belgilashi mumkinligini anglatadi.
 
-This order of operations extends to nested chains of host directives, as shown in the following example.
+Bu amallar tartibi quyidagi misolda koʻrsatilganidek, host direktivalarning ichma-ich zanjirlariga ham tegishli.
 
 ```ts
 @Directive({...})
@@ -147,35 +147,35 @@ export class CustomTooltip { }
 export class EvenMoreCustomTooltip { }
 ```
 
-In the example above, the order of execution is:
+Yuqoridagi misolda bajarilish tartibi quyidagicha:
 
-1. `Tooltip` instantiated
-2. `CustomTooltip` instantiated
-3. `EvenMoreCustomTooltip` instantiated
-4. `Tooltip` receives inputs (`ngOnInit`)
-5. `CustomTooltip` receives inputs (`ngOnInit`)
-6. `EvenMoreCustomTooltip` receives inputs (`ngOnInit`)
-7. `Tooltip` applies host bindings
-8. `CustomTooltip` applies host bindings
-9. `EvenMoreCustomTooltip` applies host bindings
+1. `Tooltip` nusxasi yaratiladi
+2. `CustomTooltip` nusxasi yaratiladi
+3. `EvenMoreCustomTooltip` nusxasi yaratiladi
+4. `Tooltip` input'larni qabul qiladi (`ngOnInit`)
+5. `CustomTooltip` input'larni qabul qiladi (`ngOnInit`)
+6. `EvenMoreCustomTooltip` input'larni qabul qiladi (`ngOnInit`)
+7. `Tooltip` host bogʻlashlarini qoʻllaydi
+8. `CustomTooltip` host bogʻlashlarini qoʻllaydi
+9. `EvenMoreCustomTooltip` host bogʻlashlarini qoʻllaydi
 
-### Dependency injection
+### Bogʻliqliklarni inyeksiya qilish {#dependency-injection}
 
-A component or directive that specifies `hostDirectives` can inject the instances of those host directives and vice versa.
+`hostDirectives` koʻrsatuvchi komponent yoki direktiva oʻsha host direktivalarning nusxalarini inyeksiya qilishi mumkin va aksincha.
 
-When applying host directives to a component, both the component and host directives can define providers.
+Host direktivalarni komponentga qoʻllaganda komponent ham, host direktivalar ham provider'lar aniqlashi mumkin.
 
-If a component or directive with `hostDirectives` and those host directives both provide the same injection token, the providers defined by class with `hostDirectives` take precedence over providers defined by the host directives.
+Agar `hostDirectives`'ga ega komponent yoki direktiva va oʻsha host direktivalar bir xil inyeksiya tokenini taqdim etsa, `hostDirectives`'ga ega klass aniqlagan provider'lar host direktivalar aniqlagan provider'lardan ustun keladi.
 
-### Host directive de-duplication
+### Host direktivalar takrorini bartaraf etish {#host-directive-de-duplication}
 
-When the same directive appears more than once in the resolved host directive tree, it is automatically de-duplicated rather than throwing an error. Two deterministic rules are used to decide which match survives.
+Bir xil direktiva hal qilingan host direktivalar daraxtida bir necha marta uchrasa, xato chiqarilmaydi, balki takrorlar avtomatik bartaraf etiladi. Qaysi moslik saqlanib qolishini hal qilish uchun ikkita deterministik qoida ishlatiladi.
 
-#### Template match takes precedence
+#### Shablon mosligi ustun keladi {#template-match-takes-precedence}
 
-If a directive matches an element once through a **template selector** and also appears as a **host directive**, Angular keeps only the template match and discards all host directive matches.
+Agar direktiva elementga bir marta **shablon selektori** orqali mos kelsa va shu bilan birga **host direktiva** sifatida ham uchrasa, Angular faqat shablon mosligini saqlab, barcha host direktiva mosliklarini bekor qiladi.
 
-The mental model is that a host directive match represents `Partial<YourDirective>`, a partial application where only the inputs and outputs explicitly listed in `hostDirectives` are exposed, while a template match represents the full directive with its complete public API.
+Buni shunday tasavvur qilish mumkin: host direktiva mosligi `Partial<YourDirective>`'ni, yaʼni faqat `hostDirectives`'da aniq koʻrsatilgan input va output'lar ochiladigan qismiy qoʻllashni ifodalaydi, shablon mosligi esa toʻliq ommaviy API'ga ega toʻliq direktivani ifodalaydi.
 
 @Directive({selector: '[hoverable]'})
 export class Hoverable {}
@@ -194,11 +194,11 @@ export class Button {}
 <app-button hoverable></app-button>
 ```
 
-#### Multiple host directive matches are merged
+#### Bir nechta host direktiva mosliklari birlashtiriladi {#multiple-host-directive-matches-are-merged}
 
-If the same directive appears **more than once as a host directive**, for example, when two directives both declare a common dependency in their `hostDirectives`, Angular merges all instances into a single directive instance. The input and output mappings from all instances are combined.
+Agar bir xil direktiva **host direktiva sifatida bir necha marta** uchrasa, masalan, ikkita direktiva oʻz `hostDirectives`'ida umumiy bogʻliqlikni eʼlon qilganda, Angular barcha nusxalarni bitta direktiva nusxasiga birlashtiradi. Barcha nusxalarning input va output mosliklari (mapping) birlashtiriladi.
 
-This resolves the classic [diamond problem](https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem) in host directive composition:
+Bu host direktivalar kompozitsiyasidagi klassik [romb muammosini](https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem) (diamond problem) hal qiladi:
 
 ```ts
 // A shared behavior that both triggers need
@@ -234,13 +234,13 @@ export class DropdownTrigger {
 <button popoverTrigger dropdownTrigger>Actions</button>
 ```
 
-HELPFUL: Because Angular produces only one instance of the shared directive, both `PopoverTrigger` and `DropdownTrigger` receive the same `TriggerRef` instance when they inject it.
+HELPFUL: Angular umumiy direktivaning faqat bitta nusxasini yaratgani uchun `PopoverTrigger` ham, `DropdownTrigger` ham `TriggerRef`'ni inyeksiya qilganda bir xil nusxani oladi.
 
-#### Conflicting aliases
+#### Ziddiyatli taxalluslar {#conflicting-aliases}
 
-When Angular merges duplicate host directive matches it also merges their input and output mappings.
+Angular takroriy host direktiva mosliklarini birlashtirganda ularning input va output mosliklarini ham birlashtiradi.
 
-If two instances of the same host directive expose the **same input or output under different aliases**, Angular throws an error at compile time ([NG8024](errors/NG8024)).
+Agar bir xil host direktivaning ikkita nusxasi **bir xil input yoki output'ni turli taxalluslar ostida** ochsa, Angular kompilyatsiya vaqtida xato chiqaradi ([NG8024](errors/NG8024)).
 
 ```ts
 @Directive({
@@ -263,11 +263,11 @@ export class DropdownTrigger {}
 <button popoverTrigger dropdownTrigger></button>
 ```
 
-To resolve this, ensure that both paths expose the shared input or output under the same alias, or do not expose it at all.
+Buni hal qilish uchun ikkala yoʻl ham umumiy input yoki output'ni bir xil taxallus ostida ochishini taʼminlang yoki uni umuman ochmang.
 
-## What's next
+## Keyingi qadamlar {#whats-next}
 
 <docs-pill-row>
-  <docs-pill href="guide/directives/structural-directives" title="Structural directives"/>
-  <docs-pill href="guide/components/host-elements" title="Component host elements"/>
+  <docs-pill href="guide/directives/structural-directives" title="Strukturaviy direktivalar"/>
+  <docs-pill href="guide/components/host-elements" title="Komponent host elementlari"/>
 </docs-pill-row>

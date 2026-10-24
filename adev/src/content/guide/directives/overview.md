@@ -1,26 +1,26 @@
-<docs-decorative-header title="Directives" imgSrc="adev/src/assets/images/directives.svg"> <!-- markdownlint-disable-line -->
-Directives add behavior to elements and components in your Angular applications.
+<docs-decorative-header title="Direktivalar" imgSrc="adev/src/assets/images/directives.svg"> <!-- markdownlint-disable-line -->
+Direktivalar Angular ilovalaringizdagi elementlar va komponentlarga xatti-harakat qoʻshadi.
 </docs-decorative-header>
 
-A directive can change how an element looks, how it behaves, or how it fits into the DOM. Angular ships with several built-in directives, and you can write your own.
+Direktiva elementning koʻrinishini, xatti-harakatini yoki DOM'da qanday joylashishini oʻzgartirishi mumkin. Angular bir nechta oʻrnatilgan direktivalar bilan birga keladi, shuningdek, siz oʻzingiznikini ham yozishingiz mumkin.
 
-## When to use a directive
+## Direktivadan qachon foydalanish kerak {#when-to-use-a-directive}
 
-Directives are most effective when they encapsulate **reusable** behavior that you want to apply to an existing element or component.
+Direktivalar mavjud element yoki komponentga qoʻllamoqchi boʻlgan **qayta ishlatiladigan** xatti-harakatni inkapsulyatsiya qilganda eng samarali boʻladi.
 
-Common examples include:
+Keng tarqalgan misollar:
 
-- Applying the same appearance or behavior across many elements, such as autofocus or a tooltip.
-- Reading from or writing to the host element's DOM, attributes, or classes.
-- Adding behavior to a component you don't own without changing its source.
+- Koʻplab elementlarga bir xil koʻrinish yoki xatti-harakatni qoʻllash, masalan, autofocus yoki tooltip.
+- Host elementning DOM'idan, atributlaridan yoki klasslaridan oʻqish yoki ularga yozish.
+- Sizga tegishli boʻlmagan komponentga uning manba kodini oʻzgartirmasdan xatti-harakat qoʻshish.
 
-If you need to render your own markup or manage a piece of UI with its own template, reach for a [component](guide/components), a specialized directive with its own template.
+Agar oʻz markup'ingizni render qilishingiz yoki UI'ning oʻz shabloniga ega boʻlgan qismini boshqarishingiz kerak boʻlsa, [komponentga](guide/components) — oʻz shabloniga ega boʻlgan maxsus direktivaga murojaat qiling.
 
-## A quick example
+## Qisqa misol {#a-quick-example}
 
-Suppose you want elements to highlight when the user hovers over them with a mouse, changing their background color to yellow. Rather than repeat the same event-handling logic on every element, you can package that behavior in a directive and apply it wherever you need it.
+Faraz qiling, foydalanuvchi sichqonchani elementlar ustiga olib borganda ular ajralib turishini, yaʼni fon rangi sariqqa oʻzgarishini istaysiz. Har bir elementda bir xil hodisaga ishlov berish logikasini takrorlash oʻrniga, bu xatti-harakatni direktivaga joylashtirib, kerak boʻlgan har qanday joyda qoʻllashingiz mumkin.
 
-The following `appHighlight` directive sets the host element's background color when the mouse enters and clears it when the mouse leaves:
+Quyidagi `appHighlight` direktivasi sichqoncha element ustiga kelganda host elementning fon rangini oʻrnatadi va sichqoncha ketganda uni tozalaydi:
 
 ```ts
 import {Directive, signal} from '@angular/core';
@@ -38,32 +38,32 @@ export class HighlightDirective {
 }
 ```
 
-The `host` metadata listens for mouse events to update the `isHovered` signal, and binds the host element's `background-color` style to the signal's value.
+`host` metamaʼlumotlari `isHovered` signalini yangilash uchun sichqoncha hodisalarini tinglaydi va host elementning `background-color` stilini signal qiymatiga bogʻlaydi.
 
-Apply the directive by adding its selector as an attribute on an element:
+Direktivani qoʻllash uchun uning selektorini elementga atribut sifatida qoʻshing:
 
 ```angular-html
 <p appHighlight>Highlight me!</p>
 ```
 
-Every element that carries the `appHighlight` attribute gains the same hover behavior, with the logic defined in one place.
+`appHighlight` atributiga ega boʻlgan har bir element bir xil hover xatti-harakatiga ega boʻladi, logika esa bir joyda aniqlanadi.
 
-## Types of directives
+## Direktiva turlari {#types-of-directives}
 
-Angular has three primary types of directives:
+Angular'da direktivalarning uchta asosiy turi mavjud:
 
-| Directive type                                                  | Details                                                                           |
-| :-------------------------------------------------------------- | :-------------------------------------------------------------------------------- |
-| [Components](guide/components)                                  | Define reusable UI with their own template.                                       |
-| [Attribute directives](guide/directives/attribute-directives)   | Change the appearance or behavior of an element, component, or another directive. |
-| [Structural directives](guide/directives/structural-directives) | Change the DOM layout by adding and removing DOM elements.                        |
+| Direktiva turi                                                     | Tafsilotlar                                                                             |
+| :----------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
+| [Komponentlar](guide/components)                                   | Oʻz shabloniga ega qayta ishlatiladigan UI'ni aniqlaydi.                               |
+| [Atribut direktivalari](guide/directives/attribute-directives)     | Element, komponent yoki boshqa direktivaning koʻrinishi yoki xatti-harakatini oʻzgartiradi. |
+| [Strukturaviy direktivalar](guide/directives/structural-directives) | DOM elementlarini qoʻshish va olib tashlash orqali DOM tuzilmasini oʻzgartiradi.       |
 
-## What's next
+## Keyingi qadamlar {#whats-next}
 
-Learn more about each type of directive in the following guides.
+Direktivalarning har bir turi haqida quyidagi qoʻllanmalarda koʻproq bilib oling.
 
 <docs-pill-row>
-  <docs-pill href="guide/directives/attribute-directives" title="Attribute directives"/>
-  <docs-pill href="guide/directives/structural-directives" title="Structural directives"/>
-  <docs-pill href="guide/directives/directive-composition-api" title="Directive composition API"/>
+  <docs-pill href="guide/directives/attribute-directives" title="Atribut direktivalari"/>
+  <docs-pill href="guide/directives/structural-directives" title="Strukturaviy direktivalar"/>
+  <docs-pill href="guide/directives/directive-composition-api" title="Direktivalar kompozitsiyasi API'si"/>
 </docs-pill-row>

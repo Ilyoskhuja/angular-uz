@@ -1,20 +1,20 @@
-# Attribute directives
+# Atribut direktivalari
 
-Attribute directives change the appearance or behavior of DOM elements and Angular components.
+Atribut direktivalari DOM elementlari va Angular komponentlarining koʻrinishi yoki xatti-harakatini oʻzgartiradi.
 
-## Use template bindings for one-off behavior
+## Bir martalik xatti-harakat uchun shablon bogʻlashlaridan foydalaning {#use-template-bindings-for-one-off-behavior}
 
-Angular's template syntax already covers changing a single element's classes, styles, properties, and events:
+Angular'ning shablon sintaksisi bitta elementning klasslari, stillari, xususiyatlari va hodisalarini oʻzgartirishni allaqachon qamrab oladi:
 
-- [Class and style bindings](guide/templates/binding#css-class-and-style-property-bindings) add and remove CSS classes and inline styles.
-- [Property and attribute bindings](guide/templates/binding) set DOM properties and HTML attributes.
-- [Event listeners](guide/templates/event-listeners) respond to user interaction.
+- [Klass va stil bogʻlashlari](guide/templates/binding#css-class-and-style-property-bindings) CSS klasslari va inline stillarni qoʻshadi va olib tashlaydi.
+- [Xususiyat va atribut bogʻlashlari](guide/templates/binding) DOM xususiyatlari va HTML atributlarini oʻrnatadi.
+- [Hodisa tinglovchilari](guide/templates/event-listeners) foydalanuvchi bilan oʻzaro aloqaga javob beradi.
 
-Attribute directives are useful when you want to package this kind of behavior into a reusable unit that you can apply to any element or component.
+Atribut direktivalari bunday xatti-harakatni istalgan element yoki komponentga qoʻllash mumkin boʻlgan qayta ishlatiladigan birlikka joylashtirmoqchi boʻlganingizda foydalidir.
 
-## Building an attribute directive
+## Atribut direktivasini yaratish {#building-an-attribute-directive}
 
-A custom attribute directive is a JavaScript class with the `@Directive()` decorator. The decorator's `selector` defines the attribute that applies the directive. The square brackets make this an attribute selector, so the directive matches elements that carry the attribute. By convention, use a prefix such as `app` to avoid naming collisions:
+Maxsus atribut direktivasi — bu `@Directive()` dekoratoriga ega JavaScript klassi. Dekoratorning `selector` xususiyati direktivani qoʻllaydigan atributni aniqlaydi. Kvadrat qavslar buni atribut selektoriga aylantiradi, shuning uchun direktiva shu atributga ega elementlarga mos keladi. Nomlar toʻqnashuvining oldini olish uchun odatda `app` kabi prefiks ishlatiladi:
 
 ```ts
 import {Directive} from '@angular/core';
@@ -25,78 +25,78 @@ import {Directive} from '@angular/core';
 export class HighlightDirective {}
 ```
 
-HELPFUL: The CLI command [`ng generate directive`](tools/cli/schematics) scaffolds a directive along with its test file.
+HELPFUL: [`ng generate directive`](tools/cli/schematics) CLI buyrugʻi direktivani uning test fayli bilan birga yaratib beradi.
 
-A directive can change its host declaratively through host bindings or imperatively through a reference to the host element. This example [injects](guide/di) [`ElementRef`](api/core/ElementRef) and accesses the element through its `nativeElement` property to set the background to yellow:
+Direktiva oʻz host elementini host bogʻlashlari orqali deklarativ tarzda yoki host elementga havola orqali imperativ tarzda oʻzgartirishi mumkin. Bu misol [`ElementRef`](api/core/ElementRef)'ni [inyeksiya qiladi](guide/di) va fonni sariq rangga oʻrnatish uchun elementga uning `nativeElement` xususiyati orqali murojaat qiladi:
 
 <docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.1.ts"/>
 
-IMPORTANT: Directives _do not_ support namespaces.
+IMPORTANT: Direktivalar nomlar fazosini (namespace) _qoʻllab-quvvatlamaydi_.
 
 ```angular-html {avoid}
 <p app:Highlight>This is invalid</p>
 ```
 
-## Applying an attribute directive
+## Atribut direktivasini qoʻllash {#applying-an-attribute-directive}
 
-To apply the directive, add its selector as an attribute on an element:
+Direktivani qoʻllash uchun uning selektorini elementga atribut sifatida qoʻshing:
 
 <docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.1.html" region="applied"/>
 
-Angular creates an instance of `HighlightDirective` for that `<p>` element, injects a reference to the element, and sets its background to yellow.
+Angular oʻsha `<p>` elementi uchun `HighlightDirective` nusxasini yaratadi, elementga havolani inyeksiya qiladi va uning fonini sariq rangga oʻrnatadi.
 
-## Handling user events
+## Foydalanuvchi hodisalariga ishlov berish {#handling-user-events}
 
-To respond to user interaction, bind host element events to handler methods through the `host` property of the `@Directive()` decorator. The following directive highlights the host element while the pointer is over it and clears the highlight when the pointer leaves:
+Foydalanuvchi bilan oʻzaro aloqaga javob berish uchun host element hodisalarini `@Directive()` dekoratorining `host` xususiyati orqali ishlov beruvchi metodlarga bogʻlang. Quyidagi direktiva kursor host element ustida turganda uni ajratib koʻrsatadi va kursor ketganda ajratishni tozalaydi:
 
 <docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.2.ts"/>
 
-The `host` property maps the `mouseenter` and `mouseleave` events to the `onMouseEnter()` and `onMouseLeave()` methods, which delegate to a `highlight()` helper that sets the background color on the host element. For more on host event bindings, see [binding to the host element](guide/components/host-elements#binding-to-the-host-element).
+`host` xususiyati `mouseenter` va `mouseleave` hodisalarini `onMouseEnter()` va `onMouseLeave()` metodlariga moslaydi, ular esa host elementda fon rangini oʻrnatuvchi `highlight()` yordamchi metodiga murojaat qiladi. Host hodisa bogʻlashlari haqida koʻproq bilish uchun [host elementga bogʻlash](guide/components/host-elements#binding-to-the-host-element) boʻlimiga qarang.
 
-## Accepting input values
+## Input qiymatlarini qabul qilish {#accepting-input-values}
 
-Like components, directives accept inputs through the [`input()`](guide/components/inputs) function. Give an input the same name as the selector so that a single binding both applies the directive and passes a value to it:
+Komponentlar kabi direktivalar ham input'larni [`input()`](guide/components/inputs) funksiyasi orqali qabul qiladi. Input'ga selektor bilan bir xil nom bering, shunda bitta bogʻlash direktivani ham qoʻllaydi, ham unga qiymat uzatadi:
 
 <docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.3.ts" region="input"/>
 
-Read the input by calling it as a signal, and fall back to a default when no color is set:
+Input'ni signal sifatida chaqirib oʻqing va rang oʻrnatilmagan boʻlsa, sukut boʻyicha qiymatga qayting:
 
 <docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.3.ts" region="mouse-enter"/>
 
-In the template, bind the value to the selector. Because the input shares the selector's name, `[appHighlight]` both applies the directive and sets its value. Here the bound `color` is a property on the component:
+Shablonda qiymatni selektorga bogʻlang. Input selektor bilan bir xil nomga ega boʻlgani uchun `[appHighlight]` direktivani ham qoʻllaydi, ham uning qiymatini oʻrnatadi. Bu yerda bogʻlangan `color` — komponentdagi xususiyat:
 
 <docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="color"/>
 
 <docs-code header="app.component.ts" path="adev/src/content/examples/attribute-directives/src/app/app.component.ts" region="class"/>
 
-A directive can declare more than one input. The following directive adds a `defaultColor` input, then falls back through `appHighlight`, `defaultColor`, and finally `red`:
+Direktiva bir nechta input eʼlon qilishi mumkin. Quyidagi direktiva `defaultColor` input'ini qoʻshadi, soʻngra navbat bilan `appHighlight`, `defaultColor` va oxirida `red` qiymatlariga qaytadi:
 
 <docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.ts"/>
 
-Bind both inputs on the same element. Because `defaultColor` takes a static string rather than a dynamic expression, it doesn't need square brackets:
+Ikkala input'ni ham bir xil elementga bogʻlang. `defaultColor` dinamik ifoda emas, balki statik satr qabul qilgani uchun unga kvadrat qavslar kerak emas:
 
 <docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="defaultColor"/>
 
-## Deactivating Angular processing with `NgNonBindable`
+## `NgNonBindable` bilan Angular ishlovini oʻchirish {#deactivating-angular-processing-with-ngnonbindable}
 
-To prevent expression evaluation in the browser, add `ngNonBindable` to the host element.
-`ngNonBindable` deactivates interpolation, directives, and binding in templates.
+Brauzerda ifodaning hisoblanishining oldini olish uchun host elementga `ngNonBindable` qoʻshing.
+`ngNonBindable` shablonlarda interpolyatsiya, direktivalar va bogʻlashni oʻchiradi.
 
-In the following example, the expression `{{ 1 + 1 }}` renders just as it does in your code editor, and does not display `2`.
+Quyidagi misolda `{{ 1 + 1 }}` ifodasi kod muharriringizda qanday koʻrinsa, xuddi shunday render qilinadi va `2` koʻrsatilmaydi.
 
 <docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="ngNonBindable"/>
 
-Applying `ngNonBindable` to an element stops binding for that element's child elements.
-However, `ngNonBindable` still lets directives work on the element where you apply `ngNonBindable`.
-In the following example, the `appHighlight` directive is still active but Angular does not evaluate the expression `{{ 1 + 1 }}`.
+Elementga `ngNonBindable` qoʻllash oʻsha elementning bola elementlari uchun bogʻlashni toʻxtatadi.
+Biroq `ngNonBindable` siz uni qoʻllagan elementning oʻzida direktivalar ishlashiga ruxsat beradi.
+Quyidagi misolda `appHighlight` direktivasi hali ham faol, lekin Angular `{{ 1 + 1 }}` ifodasini hisoblamaydi.
 
 <docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="ngNonBindable-with-directive"/>
 
-If you apply `ngNonBindable` to a parent element, Angular disables interpolation and binding of any sort, such as property binding or event binding, for the element's children.
+Agar `ngNonBindable`'ni ota elementga qoʻllasangiz, Angular oʻsha elementning bolalari uchun interpolyatsiya va har qanday turdagi bogʻlashni, masalan, xususiyat bogʻlash yoki hodisa bogʻlashni oʻchiradi.
 
-## What's next
+## Keyingi qadamlar {#whats-next}
 
 <docs-pill-row>
-  <docs-pill href="guide/directives/structural-directives" title="Structural directives"/>
-  <docs-pill href="guide/directives/directive-composition-api" title="Directive composition API"/>
+  <docs-pill href="guide/directives/structural-directives" title="Strukturaviy direktivalar"/>
+  <docs-pill href="guide/directives/directive-composition-api" title="Direktivalar kompozitsiyasi API'si"/>
 </docs-pill-row>
