@@ -1,12 +1,12 @@
-# Define routes
+# Marshrutlarni aniqlash
 
-Routes serve as the fundamental building blocks for navigation within an Angular app.
+Marshrutlar (routes) Angular ilovasida navigatsiyaning asosiy qurilish bloklari hisoblanadi.
 
-## What are routes?
+## Marshrutlar nima? {#what-are-routes}
 
-In Angular, a **route** is an object that defines which component should render for a specific URL path or pattern, as well as additional configuration options about what happens when a user navigates to that URL.
+Angular'da **marshrut** — bu maʼlum bir URL yoʻli yoki namunasi (pattern) uchun qaysi komponent render qilinishini, shuningdek foydalanuvchi oʻsha URL'ga oʻtganda nima sodir boʻlishi haqidagi qoʻshimcha konfiguratsiya variantlarini belgilaydigan obyekt.
 
-Here is a basic example of a route:
+Marshrutning oddiy misoli:
 
 ```ts
 import {AdminPage} from './app-admin';
@@ -17,13 +17,13 @@ const adminPage = {
 };
 ```
 
-For this route, when a user visits the `/admin` path, the app will display the `AdminPage` component.
+Bu marshrut uchun foydalanuvchi `/admin` yoʻliga kirganda ilova `AdminPage` komponentini koʻrsatadi.
 
-### Managing routes in your application
+### Ilovangizda marshrutlarni boshqarish {#managing-routes-in-your-application}
 
-Most projects define routes in a separate file that contains `routes` in the filename.
+Koʻpchilik loyihalar marshrutlarni fayl nomida `routes` soʻzi boʻlgan alohida faylda aniqlaydi.
 
-A collection of routes looks like this:
+Marshrutlar toʻplami quyidagicha koʻrinadi:
 
 ```ts
 import {Routes} from '@angular/router';
@@ -42,13 +42,13 @@ export const routes: Routes = [
 ];
 ```
 
-TIP: If you generated a project with Angular CLI, your routes are defined in `src/app/app.routes.ts`.
+TIP: Agar loyihani Angular CLI bilan yaratgan boʻlsangiz, marshrutlaringiz `src/app/app.routes.ts` faylida aniqlangan.
 
-### Adding the router to your application
+### Ilovangizga router qoʻshish {#adding-the-router-to-your-application}
 
-When bootstrapping an Angular application without the Angular CLI, you can pass a configuration object that includes a `providers` array.
+Angular ilovasini Angular CLI'siz ishga tushirganda (bootstrap) `providers` massivini oʻz ichiga olgan konfiguratsiya obyektini uzatishingiz mumkin.
 
-Inside of the `providers` array, you can add the Angular router to your application by adding a `provideRouter` function call with your routes.
+`providers` massivi ichida marshrutlaringiz bilan `provideRouter` funksiyasi chaqiruvini qoʻshib, ilovangizga Angular router'ini qoʻshishingiz mumkin.
 
 ```ts
 import {ApplicationConfig} from '@angular/core';
@@ -64,28 +64,28 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## Route URL Paths
+## Marshrut URL yoʻllari {#route-url-paths}
 
-### Static URL Paths
+### Statik URL yoʻllari {#static-url-paths}
 
-Static URL Paths refer to routes with predefined paths that don't change based on dynamic parameters. These are routes that match a `path` string exactly and have a fixed outcome.
+Statik URL yoʻllari — dinamik parametrlarga qarab oʻzgarmaydigan, oldindan belgilangan yoʻlli marshrutlar. Bular `path` satriga aynan mos keladigan va qatʼiy natijaga ega marshrutlardir.
 
-Examples of this include:
+Bunga misollar:
 
 - "/admin"
 - "/blog"
 - "/settings/account"
 
-### Define URL Paths with Route Parameters
+### URL yoʻllarini marshrut parametrlari bilan aniqlash {#define-url-paths-with-route-parameters}
 
-Parameterized URLs allow you to define dynamic paths that allow multiple URLs to the same component while dynamically displaying data based on parameters in the URL.
+Parametrlangan URL'lar bir nechta URL'ni bitta komponentga yoʻnaltirib, URL'dagi parametrlarga qarab maʼlumotlarni dinamik koʻrsatish imkonini beruvchi dinamik yoʻllarni aniqlashga imkon beradi.
 
-You can define this type of pattern by adding parameters to your route’s `path` string and prefixing each parameter with the colon (`:`) character.
+Bunday namunani marshrutingizning `path` satriga parametrlar qoʻshib va har bir parametr oldiga ikki nuqta (`:`) belgisini qoʻyib aniqlashingiz mumkin.
 
-IMPORTANT: Parameters are distinct from information in the URL's [query string](https://en.wikipedia.org/wiki/Query_string).
-Learn more about [query parameters in Angular in this guide](/guide/routing/read-route-state#query-parameters).
+IMPORTANT: Parametrlar URL'ning [soʻrov satridagi (query string)](https://en.wikipedia.org/wiki/Query_string) maʼlumotlardan farq qiladi.
+[Angular'dagi soʻrov parametrlari haqida ushbu qoʻllanmada](/guide/routing/read-route-state#query-parameters) koʻproq bilib oling.
 
-The following example displays a user profile component based on the user id passed in through the URL.
+Quyidagi misol URL orqali uzatilgan foydalanuvchi id'siga asoslanib foydalanuvchi profili komponentini koʻrsatadi.
 
 ```ts
 import {Routes} from '@angular/router';
@@ -94,16 +94,16 @@ import {UserProfile} from './user-profile/user-profile';
 const routes: Routes = [{path: 'user/:id', component: UserProfile}];
 ```
 
-In this example, URLs such as `/user/leeroy` and `/user/jenkins` render the `UserProfile` component. This component can then read the `id` parameter and use it to perform additional work, such as fetching data. See [reading route state guide](/guide/routing/read-route-state) for details on reading route parameters.
+Bu misolda `/user/leeroy` va `/user/jenkins` kabi URL'lar `UserProfile` komponentini render qiladi. Keyin bu komponent `id` parametrini oʻqib, undan maʼlumotlarni olish kabi qoʻshimcha ishlarni bajarish uchun foydalanishi mumkin. Marshrut parametrlarini oʻqish tafsilotlari uchun [marshrut holatini oʻqish qoʻllanmasiga](/guide/routing/read-route-state) qarang.
 
-Valid route parameter names must start with a letter (a-z, A-Z) and can only contain:
+Toʻgʻri marshrut parametri nomlari harf (a-z, A-Z) bilan boshlanishi va faqat quyidagilarni oʻz ichiga olishi mumkin:
 
-- Letters (a-z, A-Z)
-- Numbers (0-9)
-- Underscore (\_)
-- Hyphen (-)
+- Harflar (a-z, A-Z)
+- Raqamlar (0-9)
+- Pastki chiziq (\_)
+- Defis (-)
 
-You can also define paths with multiple parameters:
+Shuningdek, bir nechta parametrli yoʻllarni ham aniqlashingiz mumkin:
 
 ```ts
 import {Routes} from '@angular/router';
@@ -116,15 +116,15 @@ const routes: Routes = [
 ];
 ```
 
-With this new path, users can visit `/user/leeroy/youtube` and `/user/leeroy/bluesky` and see respective social media feeds based on the parameter for the user leeroy.
+Bu yangi yoʻl bilan foydalanuvchilar `/user/leeroy/youtube` va `/user/leeroy/bluesky` manzillariga kirib, leeroy foydalanuvchisi uchun parametrga mos ijtimoiy tarmoq lentalarini koʻrishi mumkin.
 
-See [Reading route state](/guide/routing/read-route-state) for details on reading route parameters.
+Marshrut parametrlarini oʻqish tafsilotlari uchun [Marshrut holatini oʻqish](/guide/routing/read-route-state) boʻlimiga qarang.
 
-### Wildcards
+### Wildcard'lar {#wildcards}
 
-When you need to catch all routes for a specific path, the solution is a wildcard route which is defined with the double asterisk (`**`).
+Maʼlum bir yoʻl uchun barcha marshrutlarni ushlab olish kerak boʻlganda, yechim — ikki yulduzcha (`**`) bilan aniqlanadigan wildcard marshrut.
 
-A common example is defining a Page Not Found component.
+Keng tarqalgan misol — "Sahifa topilmadi" (Page Not Found) komponentini aniqlash.
 
 ```ts
 import {Home} from './home/home';
@@ -138,15 +138,15 @@ const routes: Routes = [
 ];
 ```
 
-In this routes array, the app displays the `NotFound` component when the user visits any path outside of `home` and `user/:id`.
+Bu marshrutlar massivida foydalanuvchi `home` va `user/:id` dan tashqari istalgan yoʻlga kirganda ilova `NotFound` komponentini koʻrsatadi.
 
-TIP: Wildcard routes are typically placed at the end of a routes array.
+TIP: Wildcard marshrutlar odatda marshrutlar massivining oxiriga joylashtiriladi.
 
-## How Angular matches URLs
+## Angular URL'larni qanday moslashtiradi {#how-angular-matches-urls}
 
-When you define routes, the order is important because Angular uses a first-match wins strategy. This means that once Angular matches a URL with a route `path`, it stops checking any further routes. As a result, always put more specific routes before less specific routes.
+Marshrutlarni aniqlashda tartib muhim, chunki Angular "birinchi moslik gʻolib" strategiyasidan foydalanadi. Bu Angular URL'ni marshrut `path`'iga moslashtirgach, keyingi marshrutlarni tekshirishni toʻxtatishini anglatadi. Shu sababli aniqroq marshrutlarni doimo kamroq aniq marshrutlardan oldin joylashtiring.
 
-The following example shows routes defined from most-specific to least specific:
+Quyidagi misolda marshrutlar eng aniqdan eng kam aniqgacha tartibda aniqlangan:
 
 ```ts
 const routes: Routes = [
@@ -158,17 +158,17 @@ const routes: Routes = [
 ];
 ```
 
-If a user visits `/users/new`, Angular router would go through the following steps:
+Agar foydalanuvchi `/users/new` manziliga kirsa, Angular router quyidagi qadamlarni bosib oʻtadi:
 
-1. Checks `''` - doesn't match
-1. Checks `users/new` - matches! Stops here
-1. Never reaches `users/:id` even though it could match
-1. Never reaches `users`
-1. Never reaches `**`
+1. `''` ni tekshiradi — mos kelmaydi
+1. `users/new` ni tekshiradi — mos keldi! Shu yerda toʻxtaydi
+1. `users/:id` mos kelishi mumkin boʻlsa ham, unga hech qachon yetib bormaydi
+1. `users` ga hech qachon yetib bormaydi
+1. `**` ga hech qachon yetib bormaydi
 
-## Redirects
+## Qayta yoʻnaltirishlar {#redirects}
 
-You can define a route that redirects to another route instead of rendering a component:
+Komponentni render qilish oʻrniga boshqa marshrutga qayta yoʻnaltiradigan (redirect) marshrutni aniqlashingiz mumkin:
 
 ```ts
 import {Blog} from './home/blog';
@@ -185,11 +185,11 @@ const routes: Routes = [
 ];
 ```
 
-If you modify or remove a route, some users may still click on out-of-date links or bookmarks to that route. You can add a redirect to direct those users to an appropriate alternative route instead of a "not found" page.
+Agar marshrutni oʻzgartirsangiz yoki olib tashlasangiz, baʼzi foydalanuvchilar hali ham oʻsha marshrutga eskirgan havolalar yoki xatchoʻplar orqali kirishi mumkin. Bunday foydalanuvchilarni "topilmadi" sahifasi oʻrniga mos muqobil marshrutga yoʻnaltirish uchun qayta yoʻnaltirish qoʻshishingiz mumkin.
 
-## Page titles
+## Sahifa sarlavhalari {#page-titles}
 
-You can associate a **title** with each route. Angular automatically updates the [page title](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title) when a route activates. Always define appropriate page titles for your application, as these titles are necessary to create an accessible experience.
+Har bir marshrutga **sarlavha** (title) biriktirishingiz mumkin. Marshrut faollashganda Angular [sahifa sarlavhasini](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title) avtomatik yangilaydi. Ilovangiz uchun doimo mos sahifa sarlavhalarini aniqlang, chunki bu sarlavhalar qulay (accessible) tajriba yaratish uchun zarur.
 
 ```ts
 import {Routes} from '@angular/router';
@@ -211,7 +211,7 @@ const routes: Routes = [
 ];
 ```
 
-The page `title` property can be set dynamically to a resolver function using [`ResolveFn`](/api/router/ResolveFn).
+Sahifaning `title` xususiyatini [`ResolveFn`](/api/router/ResolveFn) yordamida resolver funksiyasiga dinamik ravishda oʻrnatish mumkin.
 
 ```ts
 const titleResolver: ResolveFn<string> = (route) => route.queryParams['id'];
@@ -225,13 +225,13 @@ const routes: Routes = [
 ];
 ```
 
-Route titles can also be set via a service extending the [`TitleStrategy`](/api/router/TitleStrategy) abstract class. By default, Angular uses the [`DefaultTitleStrategy`](/api/router/DefaultTitleStrategy).
+Marshrut sarlavhalarini [`TitleStrategy`](/api/router/TitleStrategy) abstrakt klassini kengaytiruvchi servis orqali ham oʻrnatish mumkin. Sukut boʻyicha Angular [`DefaultTitleStrategy`](/api/router/DefaultTitleStrategy)'dan foydalanadi.
 
-### Using TitleStrategy for page titles
+### Sahifa sarlavhalari uchun TitleStrategy'dan foydalanish {#using-titlestrategy-for-page-titles}
 
-For advanced scenarios where you need centralized control over how the document title is composed, implement a `TitleStrategy`.
+Hujjat sarlavhasi qanday tuzilishini markazlashgan holda boshqarish kerak boʻlgan murakkab holatlar uchun `TitleStrategy`'ni implementatsiya qiling.
 
-`TitleStrategy` is a token you can provide to override the default title strategy used by Angular. You can supply a custom `TitleStrategy` to implement conventions such as adding an application suffix, formatting titles from breadcrumbs, or generating titles dynamically from route data.
+`TitleStrategy` — Angular ishlatadigan sukut boʻyicha sarlavha strategiyasini qayta belgilash uchun taqdim etishingiz (provide) mumkin boʻlgan token. Ilova suffiksini qoʻshish, sarlavhalarni breadcrumb'lardan shakllantirish yoki marshrut maʼlumotlaridan dinamik ravishda sarlavha yaratish kabi qoidalarni amalga oshirish uchun maxsus `TitleStrategy` taqdim etishingiz mumkin.
 
 ```ts
 import {inject, Injectable} from '@angular/core';
@@ -251,7 +251,7 @@ export class AppTitleStrategy extends TitleStrategy {
 }
 ```
 
-To use the custom strategy, provide it with the `TitleStrategy` token at the application level:
+Maxsus strategiyadan foydalanish uchun uni ilova darajasida `TitleStrategy` tokeni bilan taqdim eting:
 
 ```ts
 import {provideRouter, TitleStrategy} from '@angular/router';
@@ -262,11 +262,11 @@ export const appConfig = {
 };
 ```
 
-## Route-level providers for dependency injection
+## Bogʻliqliklarni inyeksiya qilish uchun marshrut darajasidagi provider'lar {#route-level-providers-for-dependency-injection}
 
-Each route has a `providers` property that lets you provide dependencies to that route's content via [dependency injection](/guide/di).
+Har bir marshrut [bogʻliqliklarni inyeksiya qilish](/guide/di) orqali oʻsha marshrut kontentiga bogʻliqliklarni taqdim etish imkonini beruvchi `providers` xususiyatiga ega.
 
-Common scenarios where this can be helpful include applications that have different services based on whether the user is an admin or not.
+Bu foydali boʻladigan keng tarqalgan holatlarga foydalanuvchi administrator yoki yoʻqligiga qarab turli servislarga ega ilovalar kiradi.
 
 ```ts
 export const ROUTES: Route[] = [
@@ -283,19 +283,19 @@ export const ROUTES: Route[] = [
 ];
 ```
 
-In this code sample, the `admin` path contains a protected data property of `ADMIN_API_KEY` that is only available to children within its section. As a result, no other paths will be able to access the data provided via `ADMIN_API_KEY`.
+Bu kod namunasida `admin` yoʻli faqat oʻz boʻlimidagi bolalarga mavjud boʻlgan `ADMIN_API_KEY` himoyalangan maʼlumot xususiyatini oʻz ichiga oladi. Natijada boshqa hech bir yoʻl `ADMIN_API_KEY` orqali taqdim etilgan maʼlumotlarga kira olmaydi.
 
-See the [Dependency injection guide](/guide/di) for more information about providers and injection in Angular.
+Angular'da provider'lar va inyeksiya haqida koʻproq maʼlumot olish uchun [Bogʻliqliklarni inyeksiya qilish qoʻllanmasiga](/guide/di) qarang.
 
-## Associating data with routes
+## Marshrutlarga maʼlumot biriktirish {#associating-data-with-routes}
 
-Route data enables you to attach additional information to routes. You are able to configure how components behave based on this data.
+Marshrut maʼlumotlari (route data) marshrutlarga qoʻshimcha axborot biriktirish imkonini beradi. Komponentlarning bu maʼlumotlarga qarab qanday ishlashini sozlashingiz mumkin.
 
-There are two ways to work with route data: static data that remains constant, and dynamic data that can change based on runtime conditions.
+Marshrut maʼlumotlari bilan ishlashning ikki usuli bor: oʻzgarmas qoladigan statik maʼlumotlar va ish vaqtidagi shartlarga qarab oʻzgarishi mumkin boʻlgan dinamik maʼlumotlar.
 
-### Static data
+### Statik maʼlumotlar {#static-data}
 
-You can associate arbitrary static data with a route via the `data` property in order to centralize things like route-specific metadata (e.g., analytics tracking, permissions, etc.):
+Marshrutga xos metamaʼlumotlarni (masalan, analitika kuzatuvi, ruxsatlar va h.k.) markazlashtirish uchun `data` xususiyati orqali marshrutga istalgan statik maʼlumotlarni biriktirishingiz mumkin:
 
 ```ts
 import {Routes} from '@angular/router';
@@ -317,24 +317,24 @@ const routes: Routes = [
 ];
 ```
 
-In this code sample, the home and about page are configured with specific `analyticsId` which would then be used in their respective components for page tracking analytics.
+Bu kod namunasida bosh sahifa va "about" sahifasi maʼlum `analyticsId` bilan sozlangan boʻlib, u keyinchalik tegishli komponentlarda sahifa kuzatuvi analitikasi uchun ishlatiladi.
 
-You can read this static data by injecting the `ActivatedRoute`. See [Reading route state](/guide/routing/read-route-state) for details.
+Bu statik maʼlumotlarni `ActivatedRoute`'ni inyeksiya qilib oʻqishingiz mumkin. Tafsilotlar uchun [Marshrut holatini oʻqish](/guide/routing/read-route-state) boʻlimiga qarang.
 
-### Dynamic data with resources and resolvers
+### Resurslar va resolver'lar bilan dinamik maʼlumotlar {#dynamic-data-with-resources-and-resolvers}
 
-When you need to fetch data for a route, Angular Router supports reactive route resources as well as data resolvers:
+Marshrut uchun maʼlumot olish kerak boʻlganda Angular Router reaktiv marshrut resurslarini ham, maʼlumot resolver'larini ham qoʻllab-quvvatlaydi:
 
-- [Data fetching with resources](/guide/routing/data-fetching-with-resources): Fetch data reactively using Angular Signals `Resource` APIs.
-- [Route data resolvers](/guide/routing/data-resolvers): Fetch data before route activation using resolver functions.
+- [Resurslar bilan maʼlumot olish](/guide/routing/data-fetching-with-resources): Angular Signals `Resource` API'lari yordamida maʼlumotlarni reaktiv tarzda oling.
+- [Marshrut maʼlumot resolver'lari](/guide/routing/data-resolvers): Resolver funksiyalari yordamida marshrut faollashishidan oldin maʼlumotlarni oling.
 
-## Nested Routes
+## Ichki marshrutlar {#nested-routes}
 
-Nested routes, also known as child routes, are a common technique for managing more complex navigation routes where a component has a sub-view that changes based on the URL.
+Ichki (nested) marshrutlar, bola marshrutlar deb ham ataladi, komponentning URL'ga qarab oʻzgaradigan ichki koʻrinishi (sub-view) boʻlgan murakkabroq navigatsiya marshrutlarini boshqarishning keng tarqalgan usulidir.
 
-<img alt="Diagram to illustrate nested routes" src="assets/images/guide/router/nested-routing-diagram.svg">
+<img alt="Ichki marshrutlarni tushuntiruvchi diagramma" src="assets/images/guide/router/nested-routing-diagram.svg">
 
-You can add child routes to any route definition with the `children` property:
+Istalgan marshrut taʼrifiga `children` xususiyati bilan bola marshrutlar qoʻshishingiz mumkin:
 
 ```ts
 const routes: Routes = [
@@ -355,11 +355,11 @@ const routes: Routes = [
 ];
 ```
 
-The above example defines a route for a product page that allows a user to change whether the product info or reviews are displayed based on the url.
+Yuqoridagi misol mahsulot sahifasi uchun marshrutni aniqlaydi, bu foydalanuvchiga URL'ga qarab mahsulot haqidagi maʼlumot yoki sharhlar koʻrsatilishini oʻzgartirish imkonini beradi.
 
-The `children` property accepts an array of `Route` objects.
+`children` xususiyati `Route` obyektlari massivini qabul qiladi.
 
-To display child routes, the parent component (`Product` in the example above) includes its own `<router-outlet>`.
+Bola marshrutlarni koʻrsatish uchun ota komponent (yuqoridagi misolda `Product`) oʻzining `<router-outlet>`'ini oʻz ichiga oladi.
 
 ```angular-html
 <!-- Product -->
@@ -369,11 +369,11 @@ To display child routes, the parent component (`Product` in the example above) i
 </article>
 ```
 
-After adding child routes to the configuration and adding a `<router-outlet>` to the component, navigation between URLs that match the child routes updates only the nested outlet.
+Konfiguratsiyaga bola marshrutlarni qoʻshib va komponentga `<router-outlet>` qoʻshgandan soʻng, bola marshrutlarga mos URL'lar oʻrtasidagi navigatsiya faqat ichki outlet'ni yangilaydi.
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
 <docs-pill-row>
-  <docs-pill href="/guide/routing/loading-strategies" title="Route Loading Strategies"/>
-  <docs-pill href="/guide/routing/show-routes-with-outlets" title="Display the contents of your routes with Outlets"/>
+  <docs-pill href="/guide/routing/loading-strategies" title="Marshrutlarni yuklash strategiyalari"/>
+  <docs-pill href="/guide/routing/show-routes-with-outlets" title="Marshrutlaringiz kontentini Outlet'lar bilan koʻrsatish"/>
 </docs-pill-row>
