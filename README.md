@@ -36,9 +36,12 @@ Maqsad — angular.dev saytidagi "Community translations" roʻyxatiga qoʻshilad
 | Chuqur qoʻllanmalar → Bogʻliqliklarni inyeksiya qilish (9 sahifa) | ✅ |
 | Chuqur qoʻllanmalar → Marshrutlash (18 sahifa) | ✅ |
 | Chuqur qoʻllanmalar → HTTP mijozi (6 sahifa) | ✅ |
+| Chuqur qoʻllanmalar → Formalar (22 sahifa) | ✅ |
+| Chuqur qoʻllanmalar → Direktivalar (4 sahifa) | ✅ |
 | Darslik → Angular'ni oʻrganing (25 qadam) | ✅ |
-| Chuqur qoʻllanmalar → Formalar, direktivalar, SSR, testlash va boshqalar | ⏳ navbatda |
-| Darsliklar → Birinchi ilova, Signal Forms, Deferrable views | ⏳ navbatda |
+| Darslik → Birinchi Angular ilovangiz (15 qadam) | ✅ |
+| Chuqur qoʻllanmalar → SSR, testlash, animatsiyalar, i18n, unumdorlik va boshqalar | ⏳ navbatda |
+| Darsliklar → Signal Forms, Deferrable views | ⏳ navbatda |
 | Maʼlumotnoma (API, CLI, xatolar) | ⏳ navbatda |
 
 ## Hissa qoʻshish
