@@ -1,10 +1,10 @@
-# Adding event listeners
+# Hodisa tinglovchilarini qoʻshish
 
-Angular supports defining event listeners on an element in your template by specifying the event name inside parentheses along with a statement that runs every time the event occurs.
+Angular shablondagi elementda hodisa tinglovchilarini (event listener) aniqlashni qoʻllab-quvvatlaydi: bunda hodisa nomi qavs ichida, hodisa har safar yuz berganda bajariladigan ifoda bilan birga koʻrsatiladi.
 
-## Listening to native events
+## Native hodisalarni tinglash {#listening-to-native-events}
 
-When you want to add event listeners to an HTML element, you wrap the event with parentheses, `()`, which allows you to specify a listener statement.
+HTML elementiga hodisa tinglovchilarini qoʻshmoqchi boʻlsangiz, hodisani qavslar `()` ichiga olasiz; bu tinglovchi ifodasini koʻrsatish imkonini beradi.
 
 ```angular-ts
 @Component({
@@ -20,13 +20,13 @@ export class App{
 }
 ```
 
-In this example, Angular calls `updateField` every time the `<input>` element emits a `keyup` event.
+Bu misolda `<input>` elementi har safar `keyup` hodisasini yuborganda Angular `updateField`'ni chaqiradi.
 
-You can add listeners for any native events, such as: `click`, `keydown`, `mouseover`, etc. To learn more, check out the [all available events on elements on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element#events).
+Har qanday native hodisalar uchun tinglovchi qoʻshishingiz mumkin, masalan: `click`, `keydown`, `mouseover` va boshqalar. Koʻproq bilish uchun [MDN'dagi elementlarda mavjud barcha hodisalar](https://developer.mozilla.org/en-US/docs/Web/API/Element#events) roʻyxatiga qarang.
 
-## Accessing the event argument
+## Hodisa argumentiga murojaat qilish {#accessing-the-event-argument}
 
-In every template event listener, Angular provides a variable named `$event` that contains a reference to the event object.
+Har bir shablon hodisa tinglovchisida Angular hodisa obyektiga havolani oʻz ichiga olgan `$event` nomli oʻzgaruvchini taqdim etadi.
 
 ```angular-ts
 @Component({
@@ -42,9 +42,9 @@ export class App {
 }
 ```
 
-## Using key modifiers
+## Tugma modifikatorlaridan foydalanish {#using-key-modifiers}
 
-When you want to capture specific keyboard events for a specific key, you might write some code like the following:
+Maʼlum bir tugma uchun maʼlum klaviatura hodisalarini ushlamoqchi boʻlsangiz, quyidagiga oʻxshash kod yozishingiz mumkin:
 
 ```angular-ts
 @Component({
@@ -62,7 +62,7 @@ export class App {
 }
 ```
 
-However, since this is a common scenario, Angular lets you filter the events by specifying a specific key using the period (`.`) character. By doing so, code can be simplified to:
+Biroq bu keng tarqalgan holat boʻlgani uchun Angular nuqta (`.`) belgisi orqali maʼlum tugmani koʻrsatib, hodisalarni filtrlash imkonini beradi. Shu yoʻl bilan kodni quyidagicha soddalashtirish mumkin:
 
 ```angular-ts
 @Component({
@@ -78,29 +78,29 @@ export class App{
 }
 ```
 
-You can also add additional key modifiers:
+Qoʻshimcha tugma modifikatorlarini ham qoʻshishingiz mumkin:
 
 ```angular-html
 <!-- Matches shift and enter -->
 <input type="text" (keyup.shift.enter)="updateField($event)" />
 ```
 
-Angular supports the modifiers `alt`, `control`, `meta`, and `shift`.
+Angular `alt`, `control`, `meta` va `shift` modifikatorlarini qoʻllab-quvvatlaydi.
 
-You can specify the key or code that you would like to bind to keyboard events. The key and code fields are a native part of the browser keyboard event object. By default, event binding assumes you want to use the [Key values for keyboard events](https://developer.mozilla.org/docs/Web/API/UI_Events/Keyboard_event_key_values).
+Klaviatura hodisalariga bogʻlamoqchi boʻlgan tugmani (key) yoki kodni (code) koʻrsatishingiz mumkin. Key va code maydonlari brauzerning klaviatura hodisasi obyektining native qismidir. Sukut boʻyicha hodisa bogʻlashi siz [klaviatura hodisalari uchun Key qiymatlaridan](https://developer.mozilla.org/docs/Web/API/UI_Events/Keyboard_event_key_values) foydalanmoqchi deb hisoblaydi.
 
-Angular also allows you to specify [Code values for keyboard events](https://developer.mozilla.org/docs/Web/API/UI_Events/Keyboard_event_code_values) by providing a built-in `code` suffix.
+Angular shuningdek oʻrnatilgan `code` suffiksi orqali [klaviatura hodisalari uchun Code qiymatlarini](https://developer.mozilla.org/docs/Web/API/UI_Events/Keyboard_event_code_values) koʻrsatish imkonini ham beradi.
 
 ```angular-html
 <!-- Matches alt and left shift -->
 <input type="text" (keydown.code.alt.shiftleft)="updateField($event)" />
 ```
 
-This can be useful for handling keyboard events consistently across different operating systems. For example, when using the Alt key on macOS devices, the `key` property reports the key based on the character already modified by the Alt key. This means that a combination like Alt + S reports a `key` value of `'ß'`. The `code` property, however, corresponds to the physical or virtual button pressed rather than the character produced.
+Bu turli operatsion tizimlarda klaviatura hodisalariga bir xil tarzda ishlov berish uchun foydali boʻlishi mumkin. Masalan, macOS qurilmalarida Alt tugmasi ishlatilganda `key` xususiyati tugmani Alt tugmasi tomonidan allaqachon oʻzgartirilgan belgi asosida qaytaradi. Bu Alt + S kabi kombinatsiya `key` qiymati sifatida `'ß'` qaytarishini anglatadi. `code` xususiyati esa hosil boʻlgan belgiga emas, balki bosilgan jismoniy yoki virtual tugmaga mos keladi.
 
-## Listening on global targets
+## Global maqsadlarda tinglash {#listening-on-global-targets}
 
-Global target names can be used to prefix an event. The 3 supported global targets are `window`, `document` and `body`.
+Hodisaga prefiks sifatida global maqsad (target) nomlaridan foydalanish mumkin. Qoʻllab-quvvatlanadigan 3 ta global maqsad: `window`, `document` va `body`.
 
 ```angular-ts
 @Component({
@@ -114,9 +114,9 @@ Global target names can be used to prefix an event. The 3 supported global targe
 export class MyView {}
 ```
 
-## Preventing event default behavior
+## Hodisaning sukut boʻyicha xatti-harakatini oldini olish {#preventing-event-default-behavior}
 
-If your event handler should replace the native browser behavior, you can use the event object's [`preventDefault` method](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault):
+Agar hodisa ishlov beruvchingiz brauzerning native xatti-harakatini almashtirishi kerak boʻlsa, hodisa obyektining [`preventDefault` metodidan](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault) foydalanishingiz mumkin:
 
 ```angular-ts
 @Component({
@@ -133,15 +133,15 @@ export class App{
 }
 ```
 
-If the event handler statement evaluates to `false`, Angular automatically calls `preventDefault()`, similar to [native event handler attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes#event_handler_attributes). _Always prefer explicitly calling `preventDefault`_, as this approach makes the code's intent obvious.
+Agar hodisa ishlov beruvchisi ifodasining qiymati `false` boʻlsa, Angular [native hodisa ishlov beruvchi atributlariga](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes#event_handler_attributes) oʻxshab `preventDefault()`'ni avtomatik chaqiradi. _Doimo `preventDefault`'ni aniq chaqirishni afzal koʻring_, chunki bu yondashuv kodning maqsadini ravshan qiladi.
 
-## Extend event handling
+## Hodisalarga ishlov berishni kengaytirish {#extend-event-handling}
 
-Angular’s event system is extensible via custom event plugins registered with the `EVENT_MANAGER_PLUGINS` injection token.
+Angular'ning hodisa tizimi `EVENT_MANAGER_PLUGINS` inyeksiya tokeni bilan roʻyxatdan oʻtkazilgan maxsus hodisa plaginlari orqali kengaytirilishi mumkin.
 
-### Implementing Event Plugin
+### Hodisa plaginini amalga oshirish {#implementing-event-plugin}
 
-To create a custom event plugin, extend the `EventManagerPlugin` class and implement the required methods.
+Maxsus hodisa plaginini yaratish uchun `EventManagerPlugin` klassini kengaytiring va talab qilinadigan metodlarni amalga oshiring.
 
 ```ts
 import {Injectable} from '@angular/core';
@@ -184,7 +184,7 @@ export class DebounceEventPlugin extends EventManagerPlugin {
 }
 ```
 
-Register your custom plugin using the `EVENT_MANAGER_PLUGINS` token in your application's providers:
+Maxsus plaginingizni ilovangiz provider'larida `EVENT_MANAGER_PLUGINS` tokeni yordamida roʻyxatdan oʻtkazing:
 
 ```ts
 import {bootstrapApplication, EVENT_MANAGER_PLUGINS} from '@angular/platform-browser';
@@ -202,7 +202,7 @@ bootstrapApplication(App, {
 });
 ```
 
-Once registered, you can use your custom event syntax in templates, as well as with the `host` property:
+Roʻyxatdan oʻtkazilgandan soʻng maxsus hodisa sintaksisingizni shablonlarda, shuningdek `host` xususiyati bilan ham ishlatishingiz mumkin:
 
 ```angular-ts
 @Component({

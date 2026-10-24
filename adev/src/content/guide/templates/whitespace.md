@@ -1,10 +1,10 @@
-# Whitespace in templates
+# Shablonlardagi boʻshliqlar
 
-By default, Angular templates do not preserve whitespace that the framework considers unnecessary. This commonly occurs in two situations: whitespace between elements, and collapsible whitespace inside of text.
+Sukut boʻyicha Angular shablonlari freymvork keraksiz deb hisoblagan boʻshliqlarni (whitespace) saqlamaydi. Bu odatda ikki holatda yuz beradi: elementlar orasidagi boʻshliqlar va matn ichidagi qisqartiriladigan boʻshliqlar.
 
-## Whitespace between elements
+## Elementlar orasidagi boʻshliqlar {#whitespace-between-elements}
 
-Most developers prefer to format their templates with newlines and indentation to make the template readable:
+Koʻpchilik dasturchilar shablon oʻqilishi oson boʻlishi uchun uni yangi qatorlar va chekinishlar (indentation) bilan formatlashni afzal koʻradi:
 
 ```html
 <section>
@@ -16,7 +16,7 @@ Most developers prefer to format their templates with newlines and indentation t
 </section>
 ```
 
-This template contains whitespace between all of the elements. The following snippet shows the same HTML with each whitespace character replaced with the hash (`#`) character to highlight how much whitespace is present:
+Bu shablon barcha elementlar orasida boʻshliqlarni oʻz ichiga oladi. Quyidagi fragment xuddi shu HTML'ni koʻrsatadi, lekin boʻshliqning qanchalik koʻp ekanini taʼkidlash uchun har bir boʻshliq belgisi panjara (`#`) belgisi bilan almashtirilgan:
 
 <!-- prettier-ignore -->
 ```html
@@ -24,11 +24,11 @@ This template contains whitespace between all of the elements. The following sni
 <section>###<h3>User profile</h3>###<label>#####User name#####<input>###</label>#</section>
 ```
 
-Preserving the whitespace as written in the template would result in many unnecessary [text nodes](https://developer.mozilla.org/en-US/docs/Web/API/Text) and increase page rendering overhead. By ignoring this whitespace between elements, Angular performs less work when rendering the template on the page, improving overall performance.
+Boʻshliqlarni shablonda yozilganidek saqlash koʻplab keraksiz [matn tugunlariga (text node)](https://developer.mozilla.org/en-US/docs/Web/API/Text) olib keladi va sahifani render qilish yukini oshiradi. Elementlar orasidagi bu boʻshliqlarni eʼtiborsiz qoldirish orqali Angular shablonni sahifada render qilishda kamroq ish bajaradi va umumiy unumdorlikni yaxshilaydi.
 
-## Collapsible whitespace inside text
+## Matn ichidagi qisqartiriladigan boʻshliqlar {#collapsible-whitespace-inside-text}
 
-When your web browser renders HTML on a page, it collapses multiple consecutive whitespace characters to a single character:
+Veb-brauzeringiz HTML'ni sahifada render qilganda ketma-ket kelgan bir nechta boʻshliq belgisini bitta belgiga qisqartiradi:
 
 <!-- prettier-ignore -->
 ```html
@@ -36,20 +36,20 @@ When your web browser renders HTML on a page, it collapses multiple consecutive 
 <p>Hello         world</p>
 ```
 
-In this example, the browser displays only a single space between "Hello" and "world".
+Bu misolda brauzer "Hello" va "world" oʻrtasida faqat bitta boʻshliq koʻrsatadi.
 
 ```angular-html
 <!-- What shows up in the browser -->
 <p>Hello world</p>
 ```
 
-See [How whitespace is handled by HTML, CSS, and in the DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace) for more context on how this works.
+Bu qanday ishlashi haqida koʻproq kontekst uchun [HTML, CSS va DOM'da boʻshliqlar qanday qayta ishlanadi](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace) maqolasiga qarang.
 
-Angular avoids sending these unnecessary whitespace characters to the browser in the first place by collapsing them to a single character when it compiles the template.
+Angular shablonni kompilyatsiya qilishda bunday boʻshliqlarni bitta belgiga qisqartirib, bu keraksiz boʻshliq belgilarini brauzerga umuman yubormaslikka harakat qiladi.
 
-## Preserving whitespace
+## Boʻshliqlarni saqlash {#preserving-whitespace}
 
-You can tell Angular to preserve whitespace in a template by specifying `preserveWhitespaces: true` in the `@Component` decorator for a template.
+Shablon uchun `@Component` dekoratorida `preserveWhitespaces: true` koʻrsatib, Angular'ga shablondagi boʻshliqlarni saqlashni buyurishingiz mumkin.
 
 ```angular-ts
 @Component({
@@ -61,6 +61,6 @@ You can tell Angular to preserve whitespace in a template by specifying `preserv
 })
 ```
 
-Avoid setting this option unless absolutely necessary. Preserving whitespace can cause Angular to produce significantly more nodes while rendering, slowing down your application.
+Mutlaqo zarur boʻlmasa, bu parametrni oʻrnatishdan qoching. Boʻshliqlarni saqlash Angular render qilishda sezilarli darajada koʻproq tugun hosil qilishiga va ilovangiz sekinlashishiga olib kelishi mumkin.
 
-You can additionally use a special HTML entity unique to Angular, `&ngsp;`. This entity produces a single space character that's preserved in the compiled output.
+Bundan tashqari, Angular'ga xos maxsus HTML entity'si `&ngsp;`'dan foydalanishingiz mumkin. Bu entity kompilyatsiya qilingan natijada saqlanib qoladigan bitta boʻshliq belgisini hosil qiladi.

@@ -1,10 +1,10 @@
-# Binding dynamic text, properties and attributes
+# Dinamik matn, xususiyat va atributlarni bogʻlash
 
-In Angular, a **binding** creates a dynamic connection between a component's template and its data. This connection ensures that changes to the component's data automatically update the rendered template.
+Angular'da **bogʻlash (binding)** komponent shabloni va uning maʼlumotlari oʻrtasida dinamik aloqa yaratadi. Bu aloqa komponent maʼlumotlaridagi oʻzgarishlar render qilingan shablonni avtomatik yangilashini taʼminlaydi.
 
-## Render dynamic text with text interpolation
+## Matn interpolyatsiyasi bilan dinamik matnni render qilish {#render-dynamic-text-with-text-interpolation}
 
-You can bind dynamic text in templates with double curly braces, which tells Angular that it is responsible for the expression inside and ensuring it is updated correctly. This is called **text interpolation**.
+Shablonlarda dinamik matnni ikkita jingalak qavs bilan bogʻlashingiz mumkin; bu Angular'ga ichidagi ifoda uchun u javobgar ekanini va uning toʻgʻri yangilanishini taʼminlashi kerakligini bildiradi. Bu **matn interpolyatsiyasi** deb ataladi.
 
 ```angular-ts
 @Component({
@@ -18,14 +18,14 @@ export class App {
 }
 ```
 
-In this example, when the snippet is rendered to the page, Angular will replace `{{ theme }}` with `dark`.
+Bu misolda, fragment sahifaga render qilinganda Angular `{{ theme }}`'ni `dark` bilan almashtiradi.
 
 ```angular-html
 <!-- Rendered Output -->
 <p>Your color preference is dark.</p>
 ```
 
-Bindings that change over time should read values from [signals](/guide/signals). Angular tracks the signals read in the template, and updates the rendered page when those signal values change.
+Vaqt oʻtishi bilan oʻzgaradigan bogʻlashlar qiymatlarni [signallardan](/guide/signals) oʻqishi kerak. Angular shablonda oʻqilgan signallarni kuzatib boradi va bu signallarning qiymatlari oʻzgarganda render qilingan sahifani yangilaydi.
 
 ```angular-ts
 @Component({
@@ -43,57 +43,57 @@ export class App {
 }
 ```
 
-For more details, see the [Signals guide](/guide/signals).
+Batafsil maʼlumot uchun [Signallar qoʻllanmasiga](/guide/signals) qarang.
 
-Continuing the theme example, if a user clicks on a button that updates the `theme` signal to `'light'` after the page loads, the page updates accordingly to:
+Mavzu (theme) misolini davom ettirsak, agar foydalanuvchi sahifa yuklangandan keyin `theme` signalini `'light'` qiymatiga yangilovchi tugmani bossa, sahifa shunga mos ravishda quyidagicha yangilanadi:
 
 ```angular-html
 <!-- Rendered Output -->
 <p>Your color preference is light.</p>
 ```
 
-You can use text interpolation anywhere you would normally write text in HTML.
+Matn interpolyatsiyasidan HTML'da odatda matn yozadigan har qanday joyda foydalanishingiz mumkin.
 
-All expression values are converted to a string. Objects and arrays are converted using the value’s `toString` method.
+Barcha ifoda qiymatlari satrga (string) aylantiriladi. Obyektlar va massivlar qiymatning `toString` metodi yordamida aylantiriladi.
 
-## Binding dynamic properties and attributes
+## Dinamik xususiyat va atributlarni bogʻlash {#binding-dynamic-properties-and-attributes}
 
-Angular supports binding dynamic values into object properties and HTML attributes with square brackets.
+Angular dinamik qiymatlarni obyekt xususiyatlari va HTML atributlariga kvadrat qavslar bilan bogʻlashni qoʻllab-quvvatlaydi.
 
-You can bind to properties on an HTML element's DOM instance, a [component](/guide/components) instance, or a [directive](/guide/directives) instance.
+HTML elementining DOM nusxasidagi, [komponent](/guide/components) nusxasidagi yoki [direktiva](/guide/directives) nusxasidagi xususiyatlarga bogʻlashingiz mumkin.
 
-### Native element properties
+### Native element xususiyatlari {#native-element-properties}
 
-Every HTML element has a corresponding DOM representation. For example, each `<button>` HTML element corresponds to an instance of `HTMLButtonElement` in the DOM. In Angular, you use property bindings to set values directly to the DOM representation of the element.
+Har bir HTML elementi oʻziga mos DOM koʻrinishiga ega. Masalan, har bir `<button>` HTML elementi DOM'da `HTMLButtonElement` nusxasiga mos keladi. Angular'da xususiyat bogʻlashlaridan (property binding) qiymatlarni toʻgʻridan-toʻgʻri elementning DOM koʻrinishiga oʻrnatish uchun foydalanasiz.
 
 ```angular-html
 <!-- Bind the `disabled` property on the button element's DOM object -->
 <button [disabled]="isFormValid()">Save</button>
 ```
 
-In this example, every time `isFormValid` changes, Angular automatically sets the `disabled` property of the `HTMLButtonElement` instance.
+Bu misolda `isFormValid` har safar oʻzgarganda Angular `HTMLButtonElement` nusxasining `disabled` xususiyatini avtomatik oʻrnatadi.
 
-### Component and directive properties
+### Komponent va direktiva xususiyatlari {#component-and-directive-properties}
 
-When an element is an Angular component, you can use property bindings to set component input properties using the same square bracket syntax.
+Element Angular komponenti boʻlsa, xuddi shu kvadrat qavs sintaksisi bilan xususiyat bogʻlashlaridan komponentning input xususiyatlarini oʻrnatish uchun foydalanishingiz mumkin.
 
 ```angular-html
 <!-- Bind the `value` property on the `MyListbox` component instance. -->
 <my-listbox [value]="mySelection()" />
 ```
 
-In this example, every time `mySelection` changes, Angular automatically sets the `value` property of the `MyListbox` instance.
+Bu misolda `mySelection` har safar oʻzgarganda Angular `MyListbox` nusxasining `value` xususiyatini avtomatik oʻrnatadi.
 
-You can bind to directive properties as well.
+Direktiva xususiyatlariga ham bogʻlashingiz mumkin.
 
 ```angular-html
 <!-- Bind to the `ngSrc` property of the `NgOptimizedImage` directive  -->
 <img [ngSrc]="profilePhotoUrl()" alt="The current user's profile photo" />
 ```
 
-### Attributes
+### Atributlar {#attributes}
 
-When you need to set HTML attributes that do not have corresponding DOM properties, such as SVG attributes, you can bind attributes to elements in your template with the `attr.` prefix.
+SVG atributlari kabi mos DOM xususiyatiga ega boʻlmagan HTML atributlarini oʻrnatish kerak boʻlganda, shablondagi elementlarga atributlarni `attr.` prefiksi bilan bogʻlashingiz mumkin.
 
 <!-- prettier-ignore -->
 ```angular-html
@@ -101,26 +101,26 @@ When you need to set HTML attributes that do not have corresponding DOM properti
 <ul [attr.role]="listRole()">
 ```
 
-In this example, every time `listRole` changes, Angular automatically sets the `role` attribute of the `<ul>` element by calling `setAttribute`.
+Bu misolda `listRole` har safar oʻzgarganda Angular `setAttribute`'ni chaqirib, `<ul>` elementining `role` atributini avtomatik oʻrnatadi.
 
-If the value of an attribute binding is `null`, Angular removes the attribute by calling `removeAttribute`.
+Agar atribut bogʻlashining qiymati `null` boʻlsa, Angular `removeAttribute`'ni chaqirib, atributni olib tashlaydi.
 
-### Text interpolation in properties and attributes
+### Xususiyat va atributlarda matn interpolyatsiyasi {#text-interpolation-in-properties-and-attributes}
 
-You can also use text interpolation syntax in properties and attributes by using the double curly brace syntax instead of square braces around the property or attribute name. When using this syntax, Angular treats the assignment as a property binding.
+Xususiyat yoki atribut nomi atrofida kvadrat qavslar oʻrniga ikkita jingalak qavs sintaksisidan foydalanib, xususiyat va atributlarda ham matn interpolyatsiyasi sintaksisini ishlatishingiz mumkin. Bu sintaksis ishlatilganda Angular tayinlashni xususiyat bogʻlashi sifatida qabul qiladi.
 
 ```angular-html
 <!-- Binds a value to the `alt` property of the image element's DOM object. -->
 <img src="profile-photo.jpg" alt="Profile photo of {{ firstName() }}" />
 ```
 
-## CSS class and style property bindings
+## CSS klass va stil xususiyatlarini bogʻlash {#css-class-and-style-property-bindings}
 
-Angular supports additional features for binding CSS classes and CSS style properties to elements.
+Angular elementlarga CSS klasslari va CSS stil xususiyatlarini bogʻlash uchun qoʻshimcha imkoniyatlarni qoʻllab-quvvatlaydi.
 
-### CSS classes
+### CSS klasslari {#css-classes}
 
-You can create a CSS class binding to conditionally add or remove a CSS class on an element based on whether the bound value is [truthy or falsy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy).
+Bogʻlangan qiymat [truthy yoki falsy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) boʻlishiga qarab elementga CSS klassini shartli qoʻshish yoki olib tashlash uchun CSS klass bogʻlashini yaratishingiz mumkin.
 
 <!-- prettier-ignore -->
 ```angular-html
@@ -128,13 +128,13 @@ You can create a CSS class binding to conditionally add or remove a CSS class on
 <ul [class.expanded]="isExpanded()">
 ```
 
-You can also bind directly to the `class` property. Angular accepts three types of value:
+Shuningdek, toʻgʻridan-toʻgʻri `class` xususiyatiga ham bogʻlashingiz mumkin. Angular uch turdagi qiymatni qabul qiladi:
 
-| Description of `class` value                                                                                                                                      | TypeScript type       |
+| `class` qiymatining tavsifi                                                                                                                                       | TypeScript turi       |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| A string containing one or more CSS classes separated by spaces                                                                                                   | `string`              |
-| An array of CSS class strings                                                                                                                                     | `string[]`            |
-| An object where each property name is a CSS class name and each corresponding value determines whether that class is applied to the element, based on truthiness. | `Record<string, any>` |
+| Boʻshliq bilan ajratilgan bir yoki bir nechta CSS klassini oʻz ichiga olgan satr                                                                                  | `string`              |
+| CSS klass satrlaridan tashkil topgan massiv                                                                                                                       | `string[]`            |
+| Har bir xususiyat nomi CSS klass nomi boʻlgan va har bir mos qiymat truthy boʻlishiga qarab shu klassning elementga qoʻllanishini belgilaydigan obyekt.           | `Record<string, any>` |
 
 ```angular-ts
 @Component({
@@ -155,7 +155,7 @@ export class UserProfile {
 }
 ```
 
-The above example renders the following DOM:
+Yuqoridagi misol quyidagi DOM'ni render qiladi:
 
 <!-- prettier-ignore -->
 ```angular-html
@@ -164,9 +164,9 @@ The above example renders the following DOM:
 <button class="highlighted"> ... </button>
 ```
 
-Angular ignores any string values that are not valid CSS class names.
+Angular yaroqli CSS klass nomi boʻlmagan har qanday satr qiymatlarini eʼtiborsiz qoldiradi.
 
-When using static CSS classes, directly binding `class`, and binding specific classes, Angular intelligently combines all of the classes in the rendered result.
+Statik CSS klasslari, toʻgʻridan-toʻgʻri `class` bogʻlashi va alohida klasslarni bogʻlash birga ishlatilganda Angular render natijasida barcha klasslarni aqlli tarzda birlashtiradi.
 
 ```angular-ts
 @Component({
@@ -179,24 +179,24 @@ export class Listbox {
 }
 ```
 
-In the example above, Angular renders the `ul` element with all three CSS classes.
+Yuqoridagi misolda Angular `ul` elementini uchala CSS klassi bilan render qiladi.
 
 <!-- prettier-ignore -->
 ```angular-html
 <ul class="list box expanded">
 ```
 
-Angular does not guarantee any specific order of CSS classes on rendered elements.
+Angular render qilingan elementlardagi CSS klasslarining aniq tartibini kafolatlamaydi.
 
-When binding `class` to an array or an object, Angular compares the previous value to the current value with the triple-equals operator (`===`). You must create a new object or array instance when you modify these values in order for Angular to apply any updates.
+`class`'ni massiv yoki obyektga bogʻlaganda Angular oldingi qiymatni joriy qiymat bilan uchlik tenglik operatori (`===`) orqali solishtiradi. Angular yangilanishlarni qoʻllashi uchun bu qiymatlarni oʻzgartirganda yangi obyekt yoki massiv nusxasini yaratishingiz shart.
 
-If an element has multiple bindings for the same CSS class, Angular resolves collisions by following its style precedence order.
+Agar elementda bir xil CSS klassi uchun bir nechta bogʻlash boʻlsa, Angular toʻqnashuvlarni oʻzining stil ustuvorligi tartibiga koʻra hal qiladi.
 
-NOTE: Class bindings do not support space-separated class names in a single key. They also don't support mutations on objects as the reference of the binding remains the same. If you need one or the other, use the [ngClass](/api/common/NgClass) directive.
+NOTE: Klass bogʻlashlari bitta kalitda boʻshliq bilan ajratilgan klass nomlarini qoʻllab-quvvatlamaydi. Shuningdek, bogʻlashning havolasi (reference) oʻzgarmay qolgani uchun ular obyektlardagi mutatsiyalarni ham qoʻllab-quvvatlamaydi. Agar sizga bulardan biri kerak boʻlsa, [ngClass](/api/common/NgClass) direktivasidan foydalaning.
 
-### CSS style properties
+### CSS stil xususiyatlari {#css-style-properties}
 
-You can also bind to CSS style properties directly on an element.
+Shuningdek, elementdagi CSS stil xususiyatlariga toʻgʻridan-toʻgʻri bogʻlashingiz mumkin.
 
 <!-- prettier-ignore -->
 ```angular-html
@@ -204,7 +204,7 @@ You can also bind to CSS style properties directly on an element.
 <section [style.display]="isExpanded() ? 'block' : 'none'">
 ```
 
-You can further specify units for CSS properties that accept units.
+Oʻlchov birligini qabul qiladigan CSS xususiyatlari uchun birlikni ham qoʻshimcha koʻrsatishingiz mumkin.
 
 <!-- prettier-ignore -->
 ```angular-html
@@ -212,12 +212,12 @@ You can further specify units for CSS properties that accept units.
 <section [style.height.px]="sectionHeightInPixels()">
 ```
 
-You can also set multiple style values in one binding. Angular accepts the following types of value:
+Bir bogʻlashda bir nechta stil qiymatini ham oʻrnatishingiz mumkin. Angular quyidagi turdagi qiymatlarni qabul qiladi:
 
-| Description of `style` value                                                                                              | TypeScript type       |
+| `style` qiymatining tavsifi                                                                                               | TypeScript turi       |
 | ------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| A string containing zero or more CSS declarations, such as `"display: flex; margin: 8px"`.                                | `string`              |
-| An object where each property name is a CSS property name and each corresponding value is the value of that CSS property. | `Record<string, any>` |
+| Nol yoki undan koʻp CSS eʼlonini oʻz ichiga olgan satr, masalan `"display: flex; margin: 8px"`.                            | `string`              |
+| Har bir xususiyat nomi CSS xususiyati nomi boʻlgan va har bir mos qiymat shu CSS xususiyatining qiymati boʻlgan obyekt.    | `Record<string, any>` |
 
 ```angular-ts
 @Component({
@@ -236,7 +236,7 @@ export class UserProfile {
 }
 ```
 
-The above example renders the following DOM.
+Yuqoridagi misol quyidagi DOM'ni render qiladi.
 
 <!-- prettier-ignore -->
 ```angular-html
@@ -244,13 +244,13 @@ The above example renders the following DOM.
 <section style="border: 1px solid black; font-weight: bold"> ... </section>
 ```
 
-When binding `style` to an object, Angular compares the previous value to the current value with the triple-equals operator (`===`). You must create a new object instance when you modify these values in order for Angular to apply any updates.
+`style`'ni obyektga bogʻlaganda Angular oldingi qiymatni joriy qiymat bilan uchlik tenglik operatori (`===`) orqali solishtiradi. Angular yangilanishlarni qoʻllashi uchun bu qiymatlarni oʻzgartirganda yangi obyekt nusxasini yaratishingiz shart.
 
-If an element has multiple bindings for the same style property, Angular resolves collisions by following its style precedence order.
+Agar elementda bir xil stil xususiyati uchun bir nechta bogʻlash boʻlsa, Angular toʻqnashuvlarni oʻzining stil ustuvorligi tartibiga koʻra hal qiladi.
 
-## ARIA attributes
+## ARIA atributlari {#aria-attributes}
 
-Angular supports binding string values to ARIA attributes.
+Angular satr qiymatlarini ARIA atributlariga bogʻlashni qoʻllab-quvvatlaydi.
 
 ```angular-html
 <button type="button" [aria-label]="actionLabel()">
@@ -258,6 +258,6 @@ Angular supports binding string values to ARIA attributes.
 </button>
 ```
 
-Angular writes the string value to the element’s `aria-label` attribute and removes it when the bound value is `null`.
+Angular satr qiymatini elementning `aria-label` atributiga yozadi va bogʻlangan qiymat `null` boʻlganda uni olib tashlaydi.
 
-Some ARIA features expose DOM properties or directive inputs that accept structured values (such as element references). Use standard property bindings for those cases. See the [accessibility guide](/best-practices/a11y#aria-attributes-and-properties) for examples and additional guidance.
+Baʼzi ARIA imkoniyatlari strukturali qiymatlarni (masalan, element havolalarini) qabul qiladigan DOM xususiyatlari yoki direktiva input'larini taqdim etadi. Bunday holatlar uchun standart xususiyat bogʻlashlaridan foydalaning. Misollar va qoʻshimcha koʻrsatmalar uchun [accessibility qoʻllanmasiga](/best-practices/a11y#aria-attributes-and-properties) qarang.
