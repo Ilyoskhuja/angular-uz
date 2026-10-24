@@ -1,10 +1,10 @@
-# Read route state
+# Marshrut holatini oʻqish
 
-Angular Router allows you to read and use information associated with a route to create responsive and context-aware components.
+Angular Router sizga moslashuvchan va kontekstni hisobga oluvchi komponentlar yaratish uchun marshrut (route) bilan bogʻliq maʼlumotlarni oʻqish va ulardan foydalanish imkonini beradi.
 
-## Get information about the current route with ActivatedRoute
+## ActivatedRoute yordamida joriy marshrut haqida maʼlumot olish {#get-information-about-the-current-route-with-activatedroute}
 
-`ActivatedRoute` is a service from `@angular/router` that provides all the information associated with the current route.
+`ActivatedRoute` — `@angular/router` paketidagi servis boʻlib, joriy marshrut bilan bogʻliq barcha maʼlumotlarni taqdim etadi.
 
 ```angular-ts
 import {Component, inject} from '@angular/core';
@@ -22,25 +22,25 @@ export class Product {
 }
 ```
 
-The `ActivatedRoute` can provide different information about the route. Some common properties include:
+`ActivatedRoute` marshrut haqida turli maʼlumotlarni taqdim eta oladi. Keng tarqalgan xususiyatlardan baʼzilari:
 
-| Property      | Details                                                                                                                           |
-| :------------ | :-------------------------------------------------------------------------------------------------------------------------------- |
-| `url`         | An `Observable` of the route paths, represented as an array of `UrlSegment` objects for each part of the route path.              |
-| `data`        | An `Observable` that contains the `data` object provided for the route. Also contains any resolved values from the resolve guard. |
-| `params`      | An `Observable` that contains the required and optional parameters specific to the route.                                         |
-| `queryParams` | An `Observable` that contains the query parameters available to all routes.                                                       |
-| `resources`   | An optional record of `Resource` instances defined on the route (when `withRouterResources` is enabled).                          |
+| Xususiyat     | Tafsilotlar                                                                                                                                  |
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------- |
+| `url`         | Marshrut yoʻllarining `Observable`'i; marshrut yoʻlining har bir qismi uchun `UrlSegment` obyektlari massivi koʻrinishida ifodalanadi.        |
+| `data`        | Marshrut uchun berilgan `data` obyektini oʻz ichiga olgan `Observable`. Shuningdek, resolve guard'dan olingan (resolved) qiymatlarni ham saqlaydi. |
+| `params`      | Marshrutga xos majburiy va ixtiyoriy parametrlarni oʻz ichiga olgan `Observable`.                                                             |
+| `queryParams` | Barcha marshrutlar uchun mavjud boʻlgan soʻrov parametrlarini (query parameters) oʻz ichiga olgan `Observable`.                               |
+| `resources`   | Marshrutda aniqlangan `Resource` nusxalarining ixtiyoriy yozuvi (`withRouterResources` yoqilgan boʻlsa).                                      |
 
-Check out the [`ActivatedRoute` API docs](/api/router/ActivatedRoute) for a complete list of what you can access with in the route.
+Marshrut ichida nimalarga murojaat qila olishingizning toʻliq roʻyxati uchun [`ActivatedRoute` API hujjatlariga](/api/router/ActivatedRoute) qarang.
 
-## Understanding route snapshots
+## Marshrut snapshot'larini tushunish {#understanding-route-snapshots}
 
-Page navigations are events over time, and you can access the router state at a given time by retrieving a route snapshot.
+Sahifa navigatsiyalari vaqt davomida yuz beradigan hodisalardir va siz marshrut snapshot'ini olish orqali router holatiga maʼlum bir vaqtda murojaat qilishingiz mumkin.
 
-Route snapshots contain essential information about the route, including its parameters, data, and child routes. In addition, snapshots are static and will not reflect future changes.
+Marshrut snapshot'lari marshrut haqidagi asosiy maʼlumotlarni, jumladan uning parametrlari, maʼlumotlari va bola marshrutlarini oʻz ichiga oladi. Bundan tashqari, snapshot'lar statik boʻlib, kelajakdagi oʻzgarishlarni aks ettirmaydi.
 
-Here’s an example of how you’d access a route snapshot:
+Marshrut snapshot'iga qanday murojaat qilishingizga misol:
 
 ```angular-ts
 import {Component, inject} from '@angular/core';
@@ -70,17 +70,17 @@ export class UserProfile {
 }
 ```
 
-Check out the [`ActivatedRoute` API docs](/api/router/ActivatedRoute) and [`ActivatedRouteSnapshot` API docs](/api/router/ActivatedRouteSnapshot) for a complete list of all properties you can access.
+Murojaat qilishingiz mumkin boʻlgan barcha xususiyatlarning toʻliq roʻyxati uchun [`ActivatedRoute` API hujjatlari](/api/router/ActivatedRoute) va [`ActivatedRouteSnapshot` API hujjatlariga](/api/router/ActivatedRouteSnapshot) qarang.
 
-## Reading parameters on a route
+## Marshrutdagi parametrlarni oʻqish {#reading-parameters-on-a-route}
 
-There are two types of parameters that developers can utilize from a route: route and query parameters.
+Dasturchilar marshrutdan foydalanishi mumkin boʻlgan parametrlarning ikki turi mavjud: marshrut parametrlari va soʻrov parametrlari.
 
-### Route Parameters
+### Marshrut parametrlari {#route-parameters}
 
-Route parameters allow you to pass data to a component through the URL. This is useful when you want to display specific content based on an identifier in the URL, like a user ID or a product ID.
+Marshrut parametrlari komponentga URL orqali maʼlumot uzatish imkonini beradi. Bu URL'dagi identifikator, masalan, foydalanuvchi ID'si yoki mahsulot ID'si asosida muayyan kontentni koʻrsatmoqchi boʻlganingizda foydalidir.
 
-You can [define route parameters](/guide/routing/define-routes#define-url-paths-with-route-parameters) by prefixing the parameter name with a colon (`:`).
+Parametr nomi oldiga ikki nuqta (`:`) qoʻyish orqali [marshrut parametrlarini aniqlashingiz](/guide/routing/define-routes#define-url-paths-with-route-parameters) mumkin.
 
 ```angular-ts
 import {Routes} from '@angular/router';
@@ -89,7 +89,7 @@ import {Product} from './product';
 const routes: Routes = [{path: 'product/:id', component: Product}];
 ```
 
-You can access parameters by subscribing to `route.params`.
+Parametrlarga `route.params`'ga obuna boʻlish orqali murojaat qilishingiz mumkin.
 
 ```angular-ts
 import {Component, inject, signal} from '@angular/core';
@@ -112,9 +112,9 @@ export class ProductDetail {
 }
 ```
 
-### Query Parameters
+### Soʻrov parametrlari {#query-parameters}
 
-[Query parameters](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) provide a flexible way to pass optional data through URLs without affecting the route structure. Unlike route parameters, query parameters can persist across navigation events and are perfect for handling filtering, sorting, pagination, and other stateful UI elements.
+[Soʻrov parametrlari](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) marshrut tuzilmasiga taʼsir qilmasdan URL orqali ixtiyoriy maʼlumotlarni uzatishning moslashuvchan usulini taqdim etadi. Marshrut parametrlaridan farqli oʻlaroq, soʻrov parametrlari navigatsiya hodisalari davomida saqlanib qolishi mumkin va filtrlash, saralash, sahifalash (pagination) va boshqa holatga ega UI elementlarini boshqarish uchun juda mos keladi.
 
 ```angular-ts
 // Single parameter structure
@@ -134,9 +134,9 @@ router.navigate(['/products'], {
 });
 ```
 
-You can access query parameters with `route.queryParams`.
+Soʻrov parametrlariga `route.queryParams` orqali murojaat qilishingiz mumkin.
 
-Here is an example of a `ProductList` that updates the query parameters that affect how it displays a list of products:
+Quyida mahsulotlar roʻyxatini qanday koʻrsatishiga taʼsir qiluvchi soʻrov parametrlarini yangilaydigan `ProductList` misoli keltirilgan:
 
 ```angular-ts
 import {Component, inject} from '@angular/core';
@@ -178,15 +178,15 @@ export class ProductList {
 }
 ```
 
-In this example, users can use a select element to sort the product list by name or price. The associated change handler updates the URL’s query parameters, which in turn triggers a change event that can read the updated query parameters and update the product list.
+Bu misolda foydalanuvchilar mahsulotlar roʻyxatini nomi yoki narxi boʻyicha saralash uchun select elementidan foydalanishi mumkin. Tegishli change ishlov beruvchisi URL'ning soʻrov parametrlarini yangilaydi, bu esa oʻz navbatida yangilangan soʻrov parametrlarini oʻqib, mahsulotlar roʻyxatini yangilay oladigan oʻzgarish hodisasini ishga tushiradi.
 
-For more information, check out the [official docs on QueryParamsHandling](/api/router/QueryParamsHandling).
+Koʻproq maʼlumot uchun [QueryParamsHandling boʻyicha rasmiy hujjatlarga](/api/router/QueryParamsHandling) qarang.
 
-### Matrix Parameters
+### Matritsa parametrlari {#matrix-parameters}
 
-Matrix parameters are optional parameters that belong to a specific URL segment, rather than applying to the entire route. Unlike query parameters which appear after a `?` and apply globally, matrix parameters use semicolons (`;`) and are scoped to individual path segments.
+Matritsa parametrlari (matrix parameters) — butun marshrutga emas, balki URL'ning muayyan segmentiga tegishli boʻlgan ixtiyoriy parametrlar. `?` belgisidan keyin keladigan va global qoʻllaniladigan soʻrov parametrlaridan farqli oʻlaroq, matritsa parametrlari nuqtali vergul (`;`) ishlatadi va alohida yoʻl segmentlari doirasida amal qiladi.
 
-Matrix parameters are useful when you need to pass auxiliary data to a specific route segment without affecting the route definition or matching behavior. Like query parameters, they don't need to be defined in your route configuration.
+Matritsa parametrlari marshrut taʼrifiga yoki moslashtirish xatti-harakatiga taʼsir qilmasdan muayyan marshrut segmentiga yordamchi maʼlumot uzatish kerak boʻlganda foydalidir. Soʻrov parametrlari kabi, ularni marshrut konfiguratsiyasida aniqlash shart emas.
 
 ```ts
 // URL format: /path;key=value
@@ -197,7 +197,7 @@ this.router.navigate(['/awesome-products', {view: 'grid', filter: 'new'}]);
 // Results in URL: /awesome-products;view=grid;filter=new
 ```
 
-**Using ActivatedRoute**
+**ActivatedRoute'dan foydalanish**
 
 ```ts
 import {Component, inject} from '@angular/core';
@@ -217,11 +217,11 @@ export class AwesomeProducts {
 }
 ```
 
-NOTE: As an alternative to using `ActivatedRoute`, matrix parameters are also bound to component inputs when using the `withComponentInputBinding`.
+NOTE: `ActivatedRoute`'dan foydalanishga muqobil sifatida, `withComponentInputBinding` ishlatilganda matritsa parametrlari komponent input'lariga ham bogʻlanadi.
 
-## Detect active current route with RouterLinkActive
+## RouterLinkActive yordamida faol joriy marshrutni aniqlash {#detect-active-current-route-with-routerlinkactive}
 
-You can use the `RouterLinkActive` directive to dynamically style navigation elements based on the current active route. This is common in navigation elements to inform users what the active route is.
+Joriy faol marshrutga qarab navigatsiya elementlariga dinamik stil berish uchun `RouterLinkActive` direktivasidan foydalanishingiz mumkin. Bu navigatsiya elementlarida foydalanuvchilarga qaysi marshrut faol ekanini bildirish uchun keng qoʻllaniladi.
 
 ```angular-html
 <nav>
@@ -245,9 +245,9 @@ You can use the `RouterLinkActive` directive to dynamically style navigation ele
 </nav>
 ```
 
-In this example, Angular Router will apply the `active-button` class to the correct anchor link and `ariaCurrentWhenActive` to `page` when the URL matches the corresponding `routerLink`.
+Bu misolda URL tegishli `routerLink`'ga mos kelganda Angular Router toʻgʻri anchor havolasiga `active-button` klassini qoʻllaydi va `ariaCurrentWhenActive`'ni `page` qiymatiga oʻrnatadi.
 
-If you need to add multiple classes onto the element, you can use either a space-separated string or an array:
+Elementga bir nechta klass qoʻshishingiz kerak boʻlsa, boʻshliq bilan ajratilgan satrdan yoki massivdan foydalanishingiz mumkin:
 
 ```angular-html
 <!-- Space-separated string syntax -->
@@ -257,22 +257,22 @@ If you need to add multiple classes onto the element, you can use either a space
 <a routerLink="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
 ```
 
-Setting `routerLinkActive` alone does not set `aria-current`. Set the `ariaCurrentWhenActive` input, as in the example above, so that visually impaired users (which may not perceive the different styling being applied) can also identify the active link.
+Faqat `routerLinkActive`'ni oʻrnatish `aria-current`'ni oʻrnatmaydi. Yuqoridagi misoldagi kabi `ariaCurrentWhenActive` input'ini oʻrnating, shunda koʻrish qobiliyati cheklangan foydalanuvchilar (qoʻllanilayotgan stil farqini sezmasligi mumkin) ham faol havolani aniqlay oladi.
 
-### Route matching strategy
+### Marshrutni moslashtirish strategiyasi {#route-matching-strategy}
 
-By default, `RouterLinkActive` considers any ancestors in the route a match.
+Sukut boʻyicha `RouterLinkActive` marshrutdagi har qanday ajdod (ancestor) marshrutni mos deb hisoblaydi.
 
 ```angular-html
 <a [routerLink]="['/user/jane']" routerLinkActive="active-link"> User </a>
 <a [routerLink]="['/user/jane/role/admin']" routerLinkActive="active-link"> Role </a>
 ```
 
-When the user visits `/user/jane/role/admin`, both links would have the `active-link` class.
+Foydalanuvchi `/user/jane/role/admin` manziliga kirganda ikkala havola ham `active-link` klassiga ega boʻladi.
 
-### Only apply RouterLinkActive on exact route matches
+### RouterLinkActive'ni faqat aniq mos kelgan marshrutlarga qoʻllash {#only-apply-routerlinkactive-on-exact-route-matches}
 
-If you only want to apply the class on an exact match, you need to provide the `routerLinkActiveOptions` directive with a configuration object that contains the value `exact: true`.
+Klassni faqat aniq moslikda qoʻllamoqchi boʻlsangiz, `routerLinkActiveOptions` direktivasiga `exact: true` qiymatini oʻz ichiga olgan konfiguratsiya obyektini berishingiz kerak.
 
 ```angular-html
 <a
@@ -291,7 +291,7 @@ If you only want to apply the class on an exact match, you need to provide the `
 </a>
 ```
 
-If you want to be more precise in how a route is matched, it’s worth noting that `exact: true` is actually syntactic sugar for the full set of matching options:
+Marshrutning qanday moslashtirilishini yanada aniqroq boshqarmoqchi boʻlsangiz, shuni taʼkidlash joizki, `exact: true` aslida moslashtirish variantlarining toʻliq toʻplami uchun sintaktik qisqartma (syntactic sugar) hisoblanadi:
 
 ```angular-ts
 // `exact: true` is equivalent to
@@ -311,11 +311,11 @@ If you want to be more precise in how a route is matched, it’s worth noting th
 }
 ```
 
-For more information, check out the official docs for [isActiveMatchOptions](/api/router/IsActiveMatchOptions).
+Koʻproq maʼlumot uchun [isActiveMatchOptions](/api/router/IsActiveMatchOptions) boʻyicha rasmiy hujjatlarga qarang.
 
-### Apply RouterLinkActive to an ancestor
+### RouterLinkActive'ni ajdod elementga qoʻllash {#apply-routerlinkactive-to-an-ancestor}
 
-The RouterLinkActive directive can also be applied to an ancestor element in order to allow developers to style the elements as desired.
+RouterLinkActive direktivasini dasturchilar elementlarga oʻzlari istagandek stil bera olishi uchun ajdod elementga ham qoʻllash mumkin.
 
 ```angular-html
 <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
@@ -324,11 +324,11 @@ The RouterLinkActive directive can also be applied to an ancestor element in ord
 </div>
 ```
 
-For more information, check out the [API docs for RouterLinkActive](/api/router/RouterLinkActive).
+Koʻproq maʼlumot uchun [RouterLinkActive API hujjatlariga](/api/router/RouterLinkActive) qarang.
 
-## Check if a URL is active
+## URL faol ekanini tekshirish {#check-if-a-url-is-active}
 
-The `isActive` function returns a computed signal that tracks whether a given URL is currently active in the router. The signal automatically updates as the router state changes.
+`isActive` funksiyasi berilgan URL hozirda router'da faol ekanini kuzatuvchi computed signal qaytaradi. Router holati oʻzgarganda signal avtomatik yangilanadi.
 
 ```angular-ts
 import {Component, inject} from '@angular/core';

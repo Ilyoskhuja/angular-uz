@@ -1,22 +1,22 @@
-# Testing routing and navigation
+# Marshrutlash va navigatsiyani testlash
 
-Testing routing and navigation is essential to ensure your application behaves correctly when users navigate between different routes. This guide covers various strategies for testing routing functionality in Angular applications.
+Marshrutlash va navigatsiyani testlash foydalanuvchilar turli marshrutlar oʻrtasida harakatlanganda ilovangiz toʻgʻri ishlashini taʼminlash uchun zarur. Bu qoʻllanma Angular ilovalarida marshrutlash funksionalligini testlashning turli strategiyalarini qamrab oladi.
 
-## Prerequisites
+## Dastlabki talablar {#prerequisites}
 
-This guide assumes you are familiar with the following tools and libraries:
+Bu qoʻllanma siz quyidagi vositalar va kutubxonalar bilan tanish ekaningizni nazarda tutadi:
 
-- **[Vitest](https://vitest.dev/)** - JavaScript testing framework that provides the testing syntax (`describe`, `it`, `expect`)
-- **[Angular Testing Utilities](guide/testing)** - Angular's built-in testing tools ([`TestBed`](api/core/testing/TestBed), [`ComponentFixture`](api/core/testing/ComponentFixture))
-- **[`RouterTestingHarness`](api/router/testing/RouterTestingHarness)** - Test harness for testing routed components with built-in navigation and component testing capabilities
+- **[Vitest](https://vitest.dev/)** - test sintaksisini (`describe`, `it`, `expect`) taqdim etuvchi JavaScript testlash freymvorki
+- **[Angular testlash vositalari](guide/testing)** - Angular'ning oʻrnatilgan testlash vositalari ([`TestBed`](api/core/testing/TestBed), [`ComponentFixture`](api/core/testing/ComponentFixture))
+- **[`RouterTestingHarness`](api/router/testing/RouterTestingHarness)** - oʻrnatilgan navigatsiya va komponent testlash imkoniyatlariga ega, marshrutlangan komponentlarni testlash uchun test harness'i
 
-## Testing scenarios
+## Testlash stsenariylari {#testing-scenarios}
 
-### Route parameters
+### Marshrut parametrlari {#route-parameters}
 
-Components often rely on route parameters from the URL to fetch data, like a user ID for a profile page.
+Komponentlar maʼlumot yuklash uchun koʻpincha URL'dagi marshrut parametrlariga, masalan, profil sahifasi uchun foydalanuvchi ID'siga tayanadi.
 
-The following example shows how to test a `UserProfile` component that displays a user ID from the route.
+Quyidagi misol marshrutdan foydalanuvchi ID'sini koʻrsatadigan `UserProfile` komponentini qanday testlashni koʻrsatadi.
 
 ```ts { header: 'user-profile.spec.ts'}
 import {TestBed} from '@angular/core/testing';
@@ -52,11 +52,11 @@ export class UserProfile {
 }
 ```
 
-### Route guards
+### Marshrut himoyachilari (guard) {#route-guards}
 
-Route guards control access to routes based on conditions like authentication or permissions. When testing guards, focus on mocking dependencies and verifying navigation outcomes.
+Marshrut himoyachilari (guard) autentifikatsiya yoki ruxsatlar kabi shartlarga qarab marshrutlarga kirishni boshqaradi. Guard'larni testlashda bogʻliqliklarni mock qilish va navigatsiya natijalarini tekshirishga eʼtibor qarating.
 
-The following example tests an `authGuard` that allows navigation for authenticated users and redirects unauthenticated users to a login page.
+Quyidagi misol autentifikatsiyadan oʻtgan foydalanuvchilar uchun navigatsiyaga ruxsat beradigan va autentifikatsiyadan oʻtmagan foydalanuvchilarni login sahifasiga yoʻnaltiradigan `authGuard`'ni testlaydi.
 
 ```ts {header: 'auth.guard.spec.ts'}
 import {describe, expect, it, vi, type Mocked} from 'vitest';
@@ -121,11 +121,11 @@ export const authGuard: CanActivateFn = () => {
 };
 ```
 
-### Router outlets
+### Router outlet'lar {#router-outlets}
 
-Router outlet tests are more of an integration test since you're essentially testing the integration between the [`Router`](api/router/Router), the outlet, and the components being displayed.
+Router outlet testlari koʻproq integratsiya testiga oʻxshaydi, chunki siz aslida [`Router`](api/router/Router), outlet va koʻrsatilayotgan komponentlar oʻrtasidagi integratsiyani testlaysiz.
 
-Here's an example of how to set up a test that verifies different components are displayed for different routes:
+Quyida turli marshrutlar uchun turli komponentlar koʻrsatilishini tekshiradigan testni qanday sozlashga misol keltirilgan:
 
 ```ts {header: 'app.spec.ts'}
 import {TestBed} from '@angular/core/testing';
@@ -192,17 +192,17 @@ import {RouterOutlet, RouterLink} from '@angular/router';
 export class App {}
 ```
 
-### Nested routes
+### Ichki marshrutlar {#nested-routes}
 
-Testing nested routes ensures that both the parent and child components render correctly when navigating to nested URLs. This is important because nested routes involve multiple layers.
+Ichki (nested) marshrutlarni testlash ichki URL'larga oʻtishda ota va bola komponentlarning ikkalasi ham toʻgʻri render qilinishini taʼminlaydi. Bu muhim, chunki ichki marshrutlar bir nechta qatlamni oʻz ichiga oladi.
 
-You need to verify that:
+Siz quyidagilarni tekshirishingiz kerak:
 
-1. The parent component renders properly.
-2. The child component renders within it.
-3. Ensure that both components can access their respective route data.
+1. Ota komponent toʻgʻri render qilinadi.
+2. Bola komponent uning ichida render qilinadi.
+3. Ikkala komponent ham oʻzlariga tegishli marshrut maʼlumotlariga murojaat qila olishiga ishonch hosil qiling.
 
-Here's an example of testing a parent-child route structure:
+Quyida ota-bola marshrut tuzilmasini testlashga misol keltirilgan:
 
 ```ts {header: 'nested-routes.spec.ts'}
 import {TestBed} from '@angular/core/testing';
@@ -258,13 +258,13 @@ export class Parent {}
 export class Child {}
 ```
 
-### Query parameters and fragments
+### Soʻrov parametrlari va fragmentlar {#query-parameters-and-fragments}
 
-Query parameters (like `?search=angular&category=web`) and URL fragments (like `#section1`) provide additional data through the URL that doesn't affect which component loads, but does affect how the component behaves. Components that read query parameters through [`ActivatedRoute.queryParams`](api/router/ActivatedRoute#queryParams) need to be tested to ensure they handle different parameter scenarios correctly.
+Soʻrov parametrlari (masalan, `?search=angular&category=web`) va URL fragmentlari (masalan, `#section1`) URL orqali qaysi komponent yuklanishiga taʼsir qilmaydigan, lekin komponentning qanday ishlashiga taʼsir qiladigan qoʻshimcha maʼlumotlarni taqdim etadi. Soʻrov parametrlarini [`ActivatedRoute.queryParams`](api/router/ActivatedRoute#queryParams) orqali oʻqiydigan komponentlar turli parametr stsenariylariga toʻgʻri ishlov berishini taʼminlash uchun testlanishi kerak.
 
-Unlike route parameters that are part of the route definition, query parameters are optional and can change without triggering route navigation. This means you need to test both the initial loading and the reactive updates when query parameters change.
+Marshrut taʼrifining bir qismi boʻlgan marshrut parametrlaridan farqli oʻlaroq, soʻrov parametrlari ixtiyoriy boʻlib, marshrut navigatsiyasini ishga tushirmasdan oʻzgarishi mumkin. Bu dastlabki yuklanishni ham, soʻrov parametrlari oʻzgarganda reaktiv yangilanishlarni ham testlashingiz kerakligini anglatadi.
 
-Here's an example of how to test query parameters and fragments:
+Quyida soʻrov parametrlari va fragmentlarni qanday testlashga misol keltirilgan:
 
 ```ts {header: 'search.spec.ts'}
 import {TestBed} from '@angular/core/testing';
@@ -309,11 +309,11 @@ export class Search {
 }
 ```
 
-## Best practices for router testing
+## Router testlash uchun eng yaxshi amaliyotlar {#best-practices-for-router-testing}
 
-1. **Use RouterTestingHarness** - For testing routed components, use [`RouterTestingHarness`](api/router/testing/RouterTestingHarness) which provides a cleaner API and eliminates the need for test host components. It offers direct component access, built-in navigation, and better type safety. However, it isn't as suitable for some scenarios, such as testing named outlets, where you may need to create custom host components.
-2. **Handle external dependencies thoughtfully** - Prefer real implementations when possible for more realistic tests. If real implementations aren't feasible (e.g., external APIs), use fakes that approximate the real behavior. Use mocks or stubs only as a last resort, as they can make tests brittle and less reliable.
-3. **Test navigation state** - Verify both the navigation action and the resulting application state, including URL changes and component rendering.
-4. **Handle asynchronous operations** - Router navigation is asynchronous. Use `async/await` to properly handle timing in your tests.
-5. **Test error scenarios** - Include tests for invalid routes, failed navigation, and guard rejections to ensure your application handles edge cases gracefully.
-6. **Do not mock Angular Router** - Instead, provide real route configurations and use the harness to navigate. This makes your tests more robust and less likely to break on internal Angular updates, while also ensuring you catch real issues when the router updates since mocks can hide breaking changes.
+1. **RouterTestingHarness'dan foydalaning** - Marshrutlangan komponentlarni testlash uchun toza API taqdim etuvchi va test host komponentlariga ehtiyojni bartaraf etuvchi [`RouterTestingHarness`](api/router/testing/RouterTestingHarness)'dan foydalaning. U komponentga toʻgʻridan-toʻgʻri murojaat, oʻrnatilgan navigatsiya va yaxshiroq tur xavfsizligini taklif qiladi. Biroq u baʼzi stsenariylar, masalan, nomlangan outlet'larni testlash uchun unchalik mos emas — bunday hollarda maxsus host komponentlar yaratishingiz kerak boʻlishi mumkin.
+2. **Tashqi bogʻliqliklarga oʻylab yondashing** - Yanada realistik testlar uchun imkon qadar haqiqiy implementatsiyalardan foydalaning. Haqiqiy implementatsiyalar imkonsiz boʻlsa (masalan, tashqi API'lar), haqiqiy xatti-harakatga yaqin fake'lardan foydalaning. Mock yoki stub'lardan faqat oxirgi chora sifatida foydalaning, chunki ular testlarni moʻrt va kamroq ishonchli qilishi mumkin.
+3. **Navigatsiya holatini testlang** - Navigatsiya harakatini ham, natijada hosil boʻlgan ilova holatini ham, jumladan URL oʻzgarishlari va komponent render qilinishini tekshiring.
+4. **Asinxron operatsiyalarga ishlov bering** - Router navigatsiyasi asinxron. Testlaringizda vaqtni toʻgʻri boshqarish uchun `async/await`'dan foydalaning.
+5. **Xato stsenariylarini testlang** - Ilovangiz chekka holatlarga toʻgʻri ishlov berishini taʼminlash uchun notoʻgʻri marshrutlar, muvaffaqiyatsiz navigatsiya va guard rad etishlari uchun testlar qoʻshing.
+6. **Angular Router'ni mock qilmang** - Buning oʻrniga haqiqiy marshrut konfiguratsiyalarini taqdim eting va navigatsiya uchun harness'dan foydalaning. Bu testlaringizni yanada mustahkam qiladi va Angular'ning ichki yangilanishlarida buzilish ehtimolini kamaytiradi, shu bilan birga router yangilanganda haqiqiy muammolarni aniqlashingizni taʼminlaydi, chunki mock'lar buzuvchi oʻzgarishlarni yashirishi mumkin.

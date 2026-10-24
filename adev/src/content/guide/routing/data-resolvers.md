@@ -1,31 +1,31 @@
-# Data resolvers
+# Maʼlumot resolver'lari
 
-Data resolvers allow you to fetch data before navigating to a route, ensuring that your components receive the data they need before rendering. This can help prevent the need for loading states and improve the user experience by pre-loading essential data.
+Maʼlumot resolver'lari (data resolvers) marshrutga oʻtishdan oldin maʼlumotlarni yuklab olish imkonini beradi va komponentlaringiz render qilinishidan oldin kerakli maʼlumotlarni olishini taʼminlaydi. Bu yuklanish holatlariga ehtiyojni bartaraf etishga va muhim maʼlumotlarni oldindan yuklash orqali foydalanuvchi tajribasini yaxshilashga yordam beradi.
 
-TIP: If your application uses Angular Signals, consider using [route resources](/guide/routing/data-fetching-with-resources) for reactive data fetching with `Resource` APIs and built-in support for non-blocking data loading.
+TIP: Ilovangiz Angular Signals'dan foydalansa, `Resource` API'lari bilan reaktiv maʼlumot yuklash va bloklamaydigan maʼlumot yuklashni oʻrnatilgan tarzda qoʻllab-quvvatlash uchun [marshrut resurslaridan](/guide/routing/data-fetching-with-resources) foydalanishni koʻrib chiqing.
 
-## What are data resolvers?
+## Maʼlumot resolver'lari nima? {#what-are-data-resolvers}
 
-A data resolver is a service that implements the `ResolveFn` function. It runs before a route activates and can fetch data from APIs, databases, or other sources. The resolved data becomes available to the component through the `ActivatedRoute`.
+Maʼlumot resolver'i — `ResolveFn` funksiyasini amalga oshiruvchi servis. U marshrut faollashishidan oldin ishga tushadi va API'lar, maʼlumotlar bazalari yoki boshqa manbalardan maʼlumot yuklab olishi mumkin. Olingan (resolved) maʼlumot komponentga `ActivatedRoute` orqali taqdim etiladi.
 
-Data resolvers have access to [services provided at the route level](guide/di/defining-dependency-providers#route-providers) as well as route-specific information via the `route` argument.
+Maʼlumot resolver'lari [marshrut darajasida taqdim etilgan servislarga](guide/di/defining-dependency-providers#route-providers), shuningdek `route` argumenti orqali marshrutga xos maʼlumotlarga murojaat qila oladi.
 
-## Why use data resolvers?
+## Nega maʼlumot resolver'laridan foydalanish kerak? {#why-use-data-resolvers}
 
-Data resolvers solve common routing challenges:
+Maʼlumot resolver'lari marshrutlashdagi keng tarqalgan muammolarni hal qiladi:
 
-- **Prevent empty states**: Components receive data immediately upon loading
-- **Better user experience**: No loading spinners for critical data
-- **Error handling**: Handle data fetching errors before navigation
-- **Data consistency**: Ensure required data is available before rendering which is important for SSR
+- **Boʻsh holatlarning oldini olish**: Komponentlar yuklanishi bilanoq maʼlumotlarni oladi
+- **Yaxshiroq foydalanuvchi tajribasi**: Muhim maʼlumotlar uchun yuklanish spinner'lari yoʻq
+- **Xatolarga ishlov berish**: Maʼlumot yuklash xatolariga navigatsiyadan oldin ishlov bering
+- **Maʼlumotlar izchilligi**: Render qilishdan oldin zarur maʼlumotlar mavjudligini taʼminlaydi, bu SSR uchun muhim
 
-## Creating a resolver
+## Resolver yaratish {#creating-a-resolver}
 
-You create a resolver by writing a function with the `ResolveFn` type.
+Resolver'ni `ResolveFn` turidagi funksiya yozish orqali yaratasiz.
 
-It receives the `ActivatedRouteSnapshot` and `RouterStateSnapshot` as parameters.
+U parametr sifatida `ActivatedRouteSnapshot` va `RouterStateSnapshot`'ni qabul qiladi.
 
-Here is a resolver that gets the user information before rendering a route using the [`inject`](api/core/inject) function:
+Quyida [`inject`](api/core/inject) funksiyasidan foydalanib, marshrutni render qilishdan oldin foydalanuvchi maʼlumotlarini oladigan resolver keltirilgan:
 
 ```ts
 import {inject} from '@angular/core';
@@ -52,9 +52,9 @@ export const settingsResolver: ResolveFn<Settings> = (
 };
 ```
 
-## Configuring routes with resolvers
+## Marshrutlarni resolver'lar bilan sozlash {#configuring-routes-with-resolvers}
 
-When you want to add one or more data resolvers to a route, you can add it under the `resolve` key in the route configuration. The `Routes` type defines the structure for route configurations:
+Marshrutga bir yoki bir nechta maʼlumot resolver'ini qoʻshmoqchi boʻlsangiz, ularni marshrut konfiguratsiyasidagi `resolve` kaliti ostiga qoʻshishingiz mumkin. `Routes` turi marshrut konfiguratsiyalarining tuzilmasini belgilaydi:
 
 ```ts
 import {Routes} from '@angular/router';
@@ -71,13 +71,13 @@ export const routes: Routes = [
 ];
 ```
 
-You can learn more about the [`resolve` configuration in the API docs](api/router/Route#resolve).
+[`resolve` konfiguratsiyasi haqida API hujjatlarida](api/router/Route#resolve) koʻproq bilib olishingiz mumkin.
 
-## Accessing resolved data in components
+## Komponentlarda olingan maʼlumotlarga murojaat qilish {#accessing-resolved-data-in-components}
 
-### Using ActivatedRoute
+### ActivatedRoute'dan foydalanish {#using-activatedroute}
 
-You can access the resolved data in a component by converting the `data` observable from the `ActivatedRoute` into a signal using the `toSignal` function:
+Komponentda olingan maʼlumotlarga `ActivatedRoute`'dagi `data` observable'ini `toSignal` funksiyasi yordamida signalga aylantirish orqali murojaat qilishingiz mumkin:
 
 ```angular-ts
 import {Component, inject, computed} from '@angular/core';
@@ -100,9 +100,9 @@ export class UserDetail {
 }
 ```
 
-### Using withComponentInputBinding
+### withComponentInputBinding'dan foydalanish {#using-withcomponentinputbinding}
 
-A different approach to accessing the resolved data is to use `withComponentInputBinding()` when configuring your router with `provideRouter`. This allows resolved data to be passed directly as component inputs:
+Olingan maʼlumotlarga murojaat qilishning boshqa yoʻli — router'ni `provideRouter` bilan sozlashda `withComponentInputBinding()`'dan foydalanish. Bu olingan maʼlumotlarni toʻgʻridan-toʻgʻri komponent input'lari sifatida uzatish imkonini beradi:
 
 ```ts
 import {bootstrapApplication} from '@angular/platform-browser';
@@ -114,7 +114,7 @@ bootstrapApplication(App, {
 });
 ```
 
-With this configuration, you can define inputs in your component that match the resolver keys using the `input` function and `input.required` for required inputs:
+Bu konfiguratsiya bilan komponentingizda resolver kalitlariga mos keluvchi input'larni `input` funksiyasi va majburiy input'lar uchun `input.required` yordamida aniqlashingiz mumkin:
 
 ```angular-ts
 import {Component, input} from '@angular/core';
@@ -133,21 +133,21 @@ export class UserDetail {
 }
 ```
 
-This approach provides better type safety and eliminates the need to inject `ActivatedRoute` just to access resolved data.
+Bu yondashuv yaxshiroq tur xavfsizligini taʼminlaydi va faqat olingan maʼlumotlarga murojaat qilish uchun `ActivatedRoute`'ni inyeksiya qilish zaruratini bartaraf etadi.
 
-## Error handling in resolvers
+## Resolver'larda xatolarga ishlov berish {#error-handling-in-resolvers}
 
-In the event of navigation failures, it is important to handle errors gracefully in your data resolvers. Otherwise, a `NavigationError` will occur and the navigation to the current route will fail which will lead to a poor experience for your users.
+Navigatsiya muvaffaqiyatsiz boʻlgan hollarda maʼlumot resolver'laringizda xatolarga toʻgʻri ishlov berish muhim. Aks holda `NavigationError` yuz beradi va joriy marshrutga navigatsiya muvaffaqiyatsiz tugaydi, bu esa foydalanuvchilaringiz uchun yomon tajribaga olib keladi.
 
-There are three primary ways to handle errors with data resolvers:
+Maʼlumot resolver'lari bilan xatolarga ishlov berishning uchta asosiy usuli mavjud:
 
-1. Centralize error handling in `withNavigationErrorHandler`
-2. Manage errors through a subscription to router events
-3. Handle errors directly in the resolver
+1. Xatolarga ishlov berishni `withNavigationErrorHandler`'da markazlashtirish
+2. Xatolarni router hodisalariga obuna orqali boshqarish
+3. Xatolarga toʻgʻridan-toʻgʻri resolver ichida ishlov berish
 
-### Centralize error handling in `withNavigationErrorHandler`
+### Xatolarga ishlov berishni `withNavigationErrorHandler`'da markazlashtirish {#centralize-error-handling-in-withnavigationerrorhandler}
 
-The [`withNavigationErrorHandler`](api/router/withNavigationErrorHandler) feature provides a centralized way to handle all navigation errors, including those from failed data resolvers. This approach keeps error handling logic in one place and prevents duplicate error handling code across resolvers.
+[`withNavigationErrorHandler`](api/router/withNavigationErrorHandler) imkoniyati barcha navigatsiya xatolariga, jumladan muvaffaqiyatsiz maʼlumot resolver'laridan kelib chiqqan xatolarga ishlov berishning markazlashgan usulini taqdim etadi. Bu yondashuv xatolarga ishlov berish logikasini bir joyda saqlaydi va resolver'lar boʻylab xatolarga ishlov beruvchi kodning takrorlanishini oldini oladi.
 
 ```ts
 import {bootstrapApplication} from '@angular/platform-browser';
@@ -173,7 +173,7 @@ bootstrapApplication(App, {
 });
 ```
 
-With this configuration, your resolvers can focus on data fetching while letting the centralized handler manage error scenarios:
+Bu konfiguratsiya bilan resolver'laringiz maʼlumot yuklashga eʼtibor qaratishi mumkin, xato holatlarini esa markazlashgan ishlov beruvchi boshqaradi:
 
 ```ts
 export const userResolver: ResolveFn<User> = (route) => {
@@ -184,9 +184,9 @@ export const userResolver: ResolveFn<User> = (route) => {
 };
 ```
 
-### Managing errors through a subscription to router events
+### Xatolarni router hodisalariga obuna orqali boshqarish {#managing-errors-through-a-subscription-to-router-events}
 
-You can also handle resolver errors by subscribing to router events and listening for `NavigationError` events. This approach gives you more granular control over error handling and allows you to implement custom error recovery logic.
+Resolver xatolariga router hodisalariga obuna boʻlib, `NavigationError` hodisalarini tinglash orqali ham ishlov berishingiz mumkin. Bu yondashuv xatolarga ishlov berish ustidan yanada aniq nazoratni beradi va maxsus xatodan tiklanish logikasini amalga oshirish imkonini yaratadi.
 
 ```angular-ts
 import {Component, inject, signal} from '@angular/core';
@@ -238,15 +238,15 @@ export class App {
 }
 ```
 
-This approach is particularly useful when you need to:
+Bu yondashuv quyidagilar kerak boʻlganda ayniqsa foydali:
 
-- Implement custom retry logic for failed navigation
-- Show specific error messages based on the type of failure
-- Track navigation failures for analytics purposes
+- Muvaffaqiyatsiz navigatsiya uchun maxsus qayta urinish logikasini amalga oshirish
+- Xato turiga qarab muayyan xato xabarlarini koʻrsatish
+- Analitika maqsadida navigatsiya xatolarini kuzatish
 
-### Handling errors directly in the resolver
+### Xatolarga toʻgʻridan-toʻgʻri resolver ichida ishlov berish {#handling-errors-directly-in-the-resolver}
 
-Here's an updated example of the `userResolver` that logs the error and navigates back to the generic `/users` page using the `Router` service:
+Quyida xatoni jurnalga yozib, `Router` servisi yordamida umumiy `/users` sahifasiga qaytib navigatsiya qiladigan `userResolver`'ning yangilangan misoli keltirilgan:
 
 ```ts
 import {inject} from '@angular/core';
@@ -269,15 +269,15 @@ export const userResolver: ResolveFn<User | RedirectCommand> = (route) => {
 };
 ```
 
-## Navigation loading considerations
+## Navigatsiya yuklanishi bilan bogʻliq mulohazalar {#navigation-loading-considerations}
 
-While data resolvers prevent loading states within components, they introduce a different UX consideration: navigation is blocked while resolvers execute. Users may experience delays between clicking a link and seeing the new route, especially with slow network requests.
+Maʼlumot resolver'lari komponentlar ichidagi yuklanish holatlarining oldini olsa-da, ular boshqa bir UX masalasini keltirib chiqaradi: resolver'lar bajarilayotgan vaqtda navigatsiya bloklanadi. Foydalanuvchilar havolani bosish va yangi marshrutni koʻrish oʻrtasida, ayniqsa sekin tarmoq soʻrovlarida, kechikishlarni sezishi mumkin.
 
-TIP: To avoid blocking navigation and render components immediately with skeleton or loading indicators, use [non-blocking route resources](/guide/routing/data-fetching-with-resources#blocking-and-non-blocking-resources).
+TIP: Navigatsiyani bloklamaslik va komponentlarni skelet yoki yuklanish indikatorlari bilan darhol render qilish uchun [bloklamaydigan marshrut resurslaridan](/guide/routing/data-fetching-with-resources#blocking-and-non-blocking-resources) foydalaning.
 
-### Providing navigation feedback
+### Navigatsiya haqida fikr bildirish {#providing-navigation-feedback}
 
-To improve user experience during resolver execution, you can listen to router events and show loading indicators:
+Resolver bajarilishi davomida foydalanuvchi tajribasini yaxshilash uchun router hodisalarini tinglab, yuklanish indikatorlarini koʻrsatishingiz mumkin:
 
 ```angular-ts
 import {Component, computed, inject} from '@angular/core';
@@ -298,22 +298,22 @@ export class App {
 }
 ```
 
-This approach ensures users receive visual feedback that navigation is in progress while resolvers fetch data.
+Bu yondashuv resolver'lar maʼlumot yuklayotgan vaqtda foydalanuvchilar navigatsiya davom etayotgani haqida vizual fikr olishini taʼminlaydi.
 
-## Best practices
+## Eng yaxshi amaliyotlar {#best-practices}
 
-- **Keep resolvers lightweight**: Resolvers should fetch essential data only and not everything the page could possibly need
-- **Handle errors**: Always remember to handle errors gracefully to provide the best experience possible to users
-- **Use caching**: Consider caching resolved data to improve performance
-- **Consider navigation UX**: Implement loading indicators for resolver execution since navigation is blocked during data fetching
-- **Set reasonable timeouts**: Avoid resolvers that could hang indefinitely and block navigation
-- **Type safety**: Use TypeScript interfaces for resolved data
+- **Resolver'larni yengil saqlang**: Resolver'lar sahifaga kerak boʻlishi mumkin boʻlgan hamma narsani emas, faqat zarur maʼlumotlarni yuklashi kerak
+- **Xatolarga ishlov bering**: Foydalanuvchilarga eng yaxshi tajribani taqdim etish uchun xatolarga toʻgʻri ishlov berishni doimo unutmang
+- **Keshlashdan foydalaning**: Unumdorlikni oshirish uchun olingan maʼlumotlarni keshlashni koʻrib chiqing
+- **Navigatsiya UX'ini hisobga oling**: Maʼlumot yuklash vaqtida navigatsiya bloklangani uchun resolver bajarilishiga yuklanish indikatorlarini qoʻshing
+- **Oqilona timeout'lar oʻrnating**: Cheksiz osilib qolishi va navigatsiyani bloklashi mumkin boʻlgan resolver'lardan qoching
+- **Tur xavfsizligi**: Olingan maʼlumotlar uchun TypeScript interfeyslaridan foydalaning
 
-## Reading parent resolved data in child resolvers
+## Bola resolver'larda ota marshrutning olingan maʼlumotlarini oʻqish {#reading-parent-resolved-data-in-child-resolvers}
 
-Resolvers execute sequentially from parent to child. When a parent route defines a resolver, its resolved data is available to child resolvers that run afterward.
+Resolver'lar otadan bolaga ketma-ket bajariladi. Ota marshrut resolver aniqlaganda, uning olingan maʼlumotlari keyin ishga tushadigan bola resolver'lar uchun mavjud boʻladi.
 
-NOTE: Because resolvers execute sequentially from parent to child, each nested level adds to the total navigation wait time (a network waterfall). If your child routes do not depend on parent data, consider [route resources](/guide/routing/data-fetching-with-resources), which execute concurrently across all routes.
+NOTE: Resolver'lar otadan bolaga ketma-ket bajarilgani uchun har bir ichki daraja umumiy navigatsiya kutish vaqtini oshiradi (tarmoq sharsharasi — network waterfall). Bola marshrutlaringiz ota maʼlumotlariga bogʻliq boʻlmasa, barcha marshrutlar boʻylab bir vaqtda bajariladigan [marshrut resurslarini](/guide/routing/data-fetching-with-resources) koʻrib chiqing.
 
 ```ts
 import {inject} from '@angular/core';
@@ -346,9 +346,9 @@ provideRouter([
 ]);
 ```
 
-## Next steps
+## Keyingi qadamlar {#next-steps}
 
 <docs-pill-row>
-  <docs-pill href="/guide/routing/data-fetching-with-resources" title="Data fetching with resources"/>
-  <docs-pill href="/guide/routing/route-guards" title="Control route access with guards"/>
+  <docs-pill href="/guide/routing/data-fetching-with-resources" title="Resurslar bilan maʼlumot yuklash"/>
+  <docs-pill href="/guide/routing/route-guards" title="Guard'lar bilan marshrutga kirishni boshqarish"/>
 </docs-pill-row>
